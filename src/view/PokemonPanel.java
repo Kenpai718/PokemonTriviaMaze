@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class PokemonPanel extends JPanel {
@@ -23,22 +22,28 @@ public class PokemonPanel extends JPanel {
 	 */
 	final Dimension PANEL_SIZE = new Dimension(1920, 1080);
 	
-	/*
+//	/*
+//	 * test image for a pokemon
+//	 */
+//	private final ImageIcon pika = new ImageIcon("./images/pokemon/pikachu.png");
+//	
+//	/* sparkle effect behind a pokemon */
+//	private final ImageIcon shine = new ImageIcon("./images/sparkle_formatted.png");
+	
+	/**
 	 * test image for a pokemon
 	 */
-	private final ImageIcon pika = new ImageIcon("./images/pokemon/pikachu.png");
-	
 	final BufferedImage impika = readImage("./images/pokemon/pikachu.png");
 	
+	/**
+	 * sparkle effect behind a pokemon
+	 */
 	final BufferedImage imshine = readImage("./images/sparkle_formatted.png");
 	
-	/*sparkle effect behind a pokemon*/
-	private final ImageIcon shine = new ImageIcon("./images/sparkle_formatted.png");
 	
+	// TODO Dev formatting, needs to be changed
 	private final int shineW, shineH;
-	private final int pokeW;
-
-    private final int pokeH;
+	private final int pokeW, pokeH;
 	
 	
 	
