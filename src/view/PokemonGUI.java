@@ -4,20 +4,12 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 
 import controller.movement_actions.DownAction;
@@ -25,63 +17,62 @@ import controller.movement_actions.LeftAction;
 import controller.movement_actions.RightAction;
 import controller.movement_actions.UpAction;
 
-import javax.swing.JList;
-
 /**
  * @author Kenneth Ahrens
+ * @author AJ Downey
  *
  */
 public class PokemonGUI {
 	
 	/* constants */
 	
-	/*
+	/**
 	 * Aspect Ratio of JFrame
 	 */
 	final int WIDTH = 1920, HEIGHT = 1080;
 	
 	/*Fields*/
 	
-	/*
+	/**
 	 * Icon of the program
 	 */
-	private ImageIcon myImageIcon = new ImageIcon("./images/TriviaIcon.png");
+	private final ImageIcon myImageIcon = new ImageIcon("./images/TriviaIcon.png");
 	
-	/*
+	/**
 	 * Window for GUI
 	 */
-	private JFrame myFrame;
+	private final JFrame myFrame;
 	
 	
-	/*
+	/**
 	 * Panel for the gameplay
 	 */
 	
-	private PokemonPanel myPanel;
+	private final PokemonPanel myPanel;
 	
-	/*
+	/**
 	 * Menubar
 	 */
-	private PokemonMenuBar myMB;
+	private final PokemonMenuBar myMB;
 	
-	/*
+	/**
 	 * Toolbar with controls
 	 */
-	private PokemonToolBar myTB;
+	private final PokemonToolBar myTB;
 
-	/*
+	/**
 	 * Array holding actions for controls
 	 */
-	private ArrayList<Action> myControlActions;
+	private final ArrayList<Action> myControlActions;
 	
-	/*
+	/**
 	 * ButtonGroup of movement controls
 	 */
-	private ButtonGroup myControlButtons;
+	private final ButtonGroup myControlButtons;
 	
 	
 	
-	/*
+	/**
 	 * Constructor to initialize GUI components
 	 */
 	public PokemonGUI() {
@@ -96,7 +87,7 @@ public class PokemonGUI {
 		setupControlButtons();
 	}
 	
-	/*
+	/**
 	 * Helper to initialize GUI components
 	 */
 	private void setupGUI() {
@@ -126,6 +117,9 @@ public class PokemonGUI {
 		myFrame.setResizable(false);
 	}
 	
+	/**
+	 * Sets up the Control Buttons for the maze
+	 */
 	private void setupControlButtons() {
 		myControlActions.add(new LeftAction());
 		myControlActions.add(new RightAction());
