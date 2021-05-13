@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -76,11 +75,11 @@ public class ControlPanel extends JPanel {
 
     }
 
-    private Icon getScaledImage(final ImageIcon theImage) {
-        ImageIcon imageIcon = theImage;
-        final Image image = imageIcon.getImage(); // transform it 
-        final Image newimg = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-        imageIcon = new ImageIcon(newimg);  // transform it back
-        return imageIcon;
-    }
+//    private Icon getScaledImage(final ImageIcon theImage) {
+//        ImageIcon imageIcon = theImage;
+//        final Image image = imageIcon.getImage(); // transform it 
+//        final Image newimg = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+//        imageIcon = new ImageIcon(newimg);  // transform it back
+//        return imageIcon;
+//    }
 }

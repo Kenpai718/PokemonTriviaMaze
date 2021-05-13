@@ -73,14 +73,14 @@ public class PokemonPanel extends JPanel {
                 add(mazeGUI);
                 add(questionRoomGUI);
                 
-                ControlPanel controlPanel = new ControlPanel();
+                final ControlPanel controlPanel = new ControlPanel();
                 springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60, SpringLayout.SOUTH, this);
                 springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
                 add(controlPanel);
                 
                 
-                impika = readImage("./images/pokemon/pikachu.png");
-                imshine = readImage("./images/sparkle_formatted.png");      
+                impika = readImage("./src/images/pokemon/pikachu.png");
+                imshine = readImage("./src/images/other/sparkle_formatted.png");      
                 if (impika != null && imshine != null) {
                     shineW = imshine.getWidth();
                     shineH = imshine.getHeight();
