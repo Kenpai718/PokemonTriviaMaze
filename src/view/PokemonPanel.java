@@ -132,8 +132,8 @@ public class PokemonPanel extends JPanel {
         @Override
         protected void paintComponent(final Graphics theG) {    
             super.paintComponent(theG);
-            theG.drawImage(imshine, 0, -50, shineW, shineH, this);
-            theG.drawImage(impika, 0, -50, pokeW, pokeH, this);
+            theG.drawImage(imshine, 0, 0, shineW, shineH, this);
+            theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
             
             
             
