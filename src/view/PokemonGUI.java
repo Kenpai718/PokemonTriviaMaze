@@ -54,11 +54,6 @@ public class PokemonGUI {
 	 * Menubar
 	 */
 	private final PokemonMenuBar myMB;
-	
-	/**
-	 * Toolbar with controls
-	 */
-	private final PokemonToolBar myTB;
 
 	/**
 	 * Array holding actions for controls
@@ -79,7 +74,6 @@ public class PokemonGUI {
 		myFrame = new JFrame("Pokemon Trivia");
 		myPanel = new PokemonPanel();
 		myMB = new PokemonMenuBar();
-		myTB = new PokemonToolBar();
 		myControlActions = new ArrayList<Action>();
 		myControlButtons = new ButtonGroup();
 		
@@ -98,13 +92,10 @@ public class PokemonGUI {
 		myFrame.setSize(WIDTH, HEIGHT);
 		
 		//setup game panel and add to frame
-		myFrame.add(myPanel);
+		myFrame.getContentPane().add(myPanel);
 		
 		//add menubar
-		myFrame.add(myMB, BorderLayout.NORTH);
-		
-		//add toolbar
-		myFrame.add(myTB, BorderLayout.SOUTH);
+		myFrame.getContentPane().add(myMB, BorderLayout.NORTH);
 		
 		
 		
@@ -129,7 +120,6 @@ public class PokemonGUI {
 		for (final Action act : myControlActions) {
 			final JToggleButton tb = new JToggleButton(act);
 			myControlButtons.add(tb);
-			myTB.add(tb);
 
 		}
 		
