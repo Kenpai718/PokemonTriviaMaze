@@ -7,8 +7,6 @@
 	</classpathentry>
 	<classpathentry excluding="fonts/|images/|images/arrows/|images/pokemon/|fonts/|images/" kind="src" path="src"/>
 	<classpathentry kind="src" path="src/images"/>
-	<classpathentry kind="lib" path="F:/Downloads/jgoodies-common-1_8_1/jgoodies-common-1.8.1/jgoodies-common-1.8.1.jar" sourcepath="jgoodies-common-1.8.0-sources.jar"/>
-	<classpathentry kind="lib" path="F:/Downloads/jgoodies-forms-1_8_0/jgoodies-forms-1.8.0/jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
