@@ -3,7 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +11,17 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import view.viewHelper.BrightnessUtility;
+
+/**
+ * @author ajdowney
+ * @author ken
+ */
 public class PokemonPanel extends JPanel {
 
+        //TODO This class needs amjor refactoring as of 5/13/21 -AJ 
+        
+        
 	/**
 	* 
 	*/
@@ -137,47 +145,12 @@ public class PokemonPanel extends JPanel {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
-		final BufferedImage black = (BufferedImage) adjustBrighness(impika, 0f);
+		final BufferedImage black = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
 		theG.drawImage(imshine, 0, 0, shineW, shineH, this);
 		theG.drawImage(black, 0, 0, pokeW, pokeH, this);
 //            theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
 
 	}
 
-	public static Image adjustBrighness(final Image source,
-			final float brightnessPercentage) {
 
-		final BufferedImage bi = new BufferedImage(source.getWidth(null),
-				source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-		final int[] pixel = { 0, 0, 0, 0 };
-		final float[] hsbvals = { 0, 0, 0 };
-
-		bi.getGraphics().drawImage(source, 0, 0, null);
-
-		// recalculare every pixel, changing the brightness
-		for (int i = 0; i < bi.getHeight(); i++) {
-			for (int j = 0; j < bi.getWidth(); j++) {
-
-				// get the pixel data
-				bi.getRaster().getPixel(j, i, pixel);
-
-				// converts its data to hsb to change brightness
-				Color.RGBtoHSB(pixel[0], pixel[1], pixel[2], hsbvals);
-
-				// create a new color with the changed brightness
-				final Color c = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1],
-						hsbvals[2] * brightnessPercentage));
-
-				// set the new pixel
-				bi.getRaster().setPixel(j, i, new int[] { c.getRed(),
-						c.getGreen(), c.getBlue(), pixel[3] });
-
-			}
-
-		}
-
-		return bi;
-
-	}
 }
