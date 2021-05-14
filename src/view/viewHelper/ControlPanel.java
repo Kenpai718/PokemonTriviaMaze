@@ -1,4 +1,4 @@
-package view;
+package view.viewHelper;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;

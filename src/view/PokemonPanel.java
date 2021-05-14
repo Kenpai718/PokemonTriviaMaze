@@ -12,6 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import view.viewHelper.BrightnessUtility;
+import view.viewHelper.ControlPanel;
+import view.viewHelper.MazeGUI;
+import view.viewHelper.QuestionRoomGUI;
 
 /**
  * @author ajdowney

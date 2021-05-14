@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import view.ControlPanel;
+import view.viewHelper.ControlPanel;
 
 public class DownAction extends AbstractAction {
 	private static final String NAME = "";
