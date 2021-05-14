@@ -36,7 +36,7 @@ public class PokemonGUI {
         /**
          * Icon of the program
          */
-        private final ImageIcon myImageIcon = new ImageIcon("./images/TriviaIcon.png");
+        private final ImageIcon myImageIcon = new ImageIcon("./src/images/other/TriviaIcon.png");
         
         /**
          * Window for GUI
