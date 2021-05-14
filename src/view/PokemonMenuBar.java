@@ -5,7 +5,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
+import controller.menu_actions.ExitAction;
+
+
+
 public class PokemonMenuBar extends JMenuBar{
+        private final ExitAction exitAction = new ExitAction();
 	
 
 	public PokemonMenuBar() {
@@ -16,34 +21,36 @@ public class PokemonMenuBar extends JMenuBar{
 	
 	private void setupMenuBar() {
 		
-		JMenu fileMenu = new JMenu("File");
+		final JMenu fileMenu = new JMenu("File");
 		this.add(fileMenu);
 		
-		JMenuItem save = new JMenuItem("Save");
+		final JMenuItem save = new JMenuItem("Save");
 		fileMenu.add(save);
 		
-		JMenuItem load = new JMenuItem("Load");
+		final JMenuItem load = new JMenuItem("Load");
 		fileMenu.add(load);
 		
-		JSeparator separator = new JSeparator();
+		final JSeparator separator = new JSeparator();
 		fileMenu.add(separator);
 		
-		JMenuItem exit = new JMenuItem("Exit");
+		final JMenuItem exit = new JMenuItem("Exit");
+		exit.setAction(exitAction);
 		fileMenu.add(exit);
 		
-		JMenu helpMenu = new JMenu("Help");
+		final JMenu helpMenu = new JMenu("Help");
 		this.add(helpMenu);
 		
-		JMenuItem about = new JMenuItem("About");
+		final JMenuItem about = new JMenuItem("About");
 		helpMenu.add(about);
 		
-		JMenuItem tutorial = new JMenuItem("Tutorial");
+		final JMenuItem tutorial = new JMenuItem("Tutorial");
 		helpMenu.add(tutorial);
 		
-		JMenuItem cheats = new JMenuItem("Cheats");
+		final JMenuItem cheats = new JMenuItem("Cheats");
 		helpMenu.add(cheats);
 		
 	
 	}
+	
 
 }
