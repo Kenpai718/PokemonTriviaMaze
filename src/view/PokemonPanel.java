@@ -70,7 +70,7 @@ public class PokemonPanel extends JPanel {
         super();
 
         mazeGUI = new MazeGUI();
-        Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
+        final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
         mazeGUI.setBorder(blueLine);
 
         questionRoomGUI = new QuestionRoomGUI();
@@ -150,8 +150,6 @@ public class PokemonPanel extends JPanel {
 
     }
 
-    public static Image adjustBrighness(final Image source, final float brightnessPercentage) {
 
-    }
 
 }
