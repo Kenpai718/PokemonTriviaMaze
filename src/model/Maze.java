@@ -14,8 +14,6 @@ public class Maze {
 	// keeps track of how many rooms are made
 	private int roomCounter;
 	
-	/*Keeps track on if the player can enter this room. Blocked or not blocked status. */
-	private boolean canEnter;
 	
 
 //       TODO Current win condition is that the player needs to get to the
@@ -26,7 +24,6 @@ public class Maze {
 		myMatrix = getRooms();
 //		winCondition = false;
 		myPlayerLocation = new int[] { 0, 0 };
-		canEnter = false;
 	}
 
 	private Room[][] getRooms() {
@@ -67,12 +64,5 @@ public class Maze {
 		return myMatrix;
 	}
 	
-	private void setBlocked() {
-		canEnter = false;
-	}
-	
-	private boolean canEnter() {
-		return canEnter;
-	}
 
 }
