@@ -16,7 +16,7 @@ public class Maze {
 	private final Room[][] myMatrix;
 
 //        private final boolean winCondition;
-	private int[] myPlayerLocation;
+	private final int[] myPlayerLocation;
 
 	// keeps track of how many rooms are made
 	private int roomCounter;
