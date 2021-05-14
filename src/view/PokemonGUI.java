@@ -73,7 +73,7 @@ public class PokemonGUI {
         public PokemonGUI() {
                 myFrame = new JFrame("Pokemon Trivia");
                 myPanel = new PokemonPanel();
-                myMB = new PokemonMenuBar();
+                myMB = new PokemonMenuBar(myFrame);
                 myControlActions = new ArrayList<Action>();
                 myControlButtons = new ButtonGroup();
                 
