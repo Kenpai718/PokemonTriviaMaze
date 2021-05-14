@@ -3,11 +3,13 @@ package view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 
@@ -17,12 +19,15 @@ public class PokemonMenuBar extends JMenuBar{
         private JMenu myHelpMenu;
         private JMenu myFileMenu;
         private final JFrame myFrame;
+        private final JPanel myPanel;
+
 	
 
-	public PokemonMenuBar(final JFrame theFrame) {
+	public PokemonMenuBar(final PokemonGUI theFrame) {
 		// TODO Auto-generated constructor stub
 		super();
-		myFrame = theFrame;
+		myFrame = theFrame.getFrame();
+		myPanel = theFrame.getPanel();
 		setupMenuBar();
 	}
 	
@@ -35,7 +40,6 @@ public class PokemonMenuBar extends JMenuBar{
 		myHelpMenu = new JMenu("Help");
 		setupHelpMenu();
 		this.add(myHelpMenu);
-	
 	}
 	
 	/**
@@ -77,11 +81,29 @@ public class PokemonMenuBar extends JMenuBar{
 		myHelpMenu.add(about);
 		
 		final JMenuItem tutorial = new JMenuItem("Tutorial");
+		tutorial.addActionListener(new ActionListener() {
+		        @Override
+                        public void actionPerformed(final ActionEvent e) {
+		                JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!", 
+                                                "About", JOptionPane.PLAIN_MESSAGE);
+		        }
+		});
 		myHelpMenu.add(tutorial);
 		
-		final JMenuItem cheats = new JMenuItem("Cheats");
-		myHelpMenu.add(cheats);
+		final JMenu cheats = new JMenu("Cheats");
+                myHelpMenu.add(cheats);
+                
+                final JCheckBoxMenuItem cheat1 = new JCheckBoxMenuItem("Reveal Pokemon");
+                cheats.add(cheat1);
+                
+                final JCheckBoxMenuItem cheat2 = new JCheckBoxMenuItem("Unlock All Doors");
+                cheats.add(cheat2);
+                
+                final JMenuItem teleport = new JMenuItem("Teleport");
+                cheats.add(teleport);
+        
 	}
 	
+
 
 }

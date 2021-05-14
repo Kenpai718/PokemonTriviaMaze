@@ -73,7 +73,7 @@ public class PokemonGUI {
         public PokemonGUI() {
                 myFrame = new JFrame("Pokemon Trivia");
                 myPanel = new PokemonPanel();
-                myMB = new PokemonMenuBar(myFrame);
+                myMB = new PokemonMenuBar(this);
                 myControlActions = new ArrayList<Action>();
                 myControlButtons = new ButtonGroup();
                 
@@ -124,6 +124,22 @@ public class PokemonGUI {
                 }
                 
         }
+
+        /**
+         * @return the myPanel
+         */
+        public JFrame getFrame() {
+                return myFrame;
+        }
+        
+        /**
+         * @return the myPanel
+         */
+        public PokemonPanel getPanel() {
+                return myPanel;
+        }
+        
+        
         
 
 
