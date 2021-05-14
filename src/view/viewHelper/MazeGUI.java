@@ -5,22 +5,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 
 import model.Maze;
 import model.Room;
@@ -50,12 +42,12 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Table used for GUI visual
 	 */
-	private JTable myTable;
+	private final JTable myTable;
 	
 	/*
 	 * Used to build the JTable rows and columns
 	 */
-	private DefaultTableModel myDTB;
+	private final DefaultTableModel myDTB;
 
 	/*
 	 * Maze that is to be visualized in the GUI
@@ -70,7 +62,7 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Used to draw onto table
 	 */
-	private Renderer myRenderer;
+	private final Renderer myRenderer;
 
 	/**
 	 * Constructor that create the maze visual
@@ -79,7 +71,7 @@ public class MazeGUI extends JPanel {
 	//TODO: Pass in the maze instead of making a new maze later
 	public MazeGUI() {
 		//initialize fields
-		myMaze = new Maze();
+		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
 
 		//prepare GUI 
@@ -91,6 +83,26 @@ public class MazeGUI extends JPanel {
 		//setup table for maze visual
 		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
 		myTable = new JTable(myDTB);
+//		myTable.getModel().addTableModelListener(new TableModelListener()  {
+//
+//                        @Override
+//                        public void tableChanged(final TableModelEvent e) {
+//                                // TODO Auto-generated method stub
+//                                myTable.repaint();
+//                                myTable.revalidate();
+//                        }
+//		        
+//		});
+//		myTable.addPropertyChangeListener(new PropertyChangeListener() {
+//		        @Override
+//                        public void propertyChange(final PropertyChangeEvent theEvt) {
+//		                if ("newpos".equals(theEvt.getPropertyName())) {
+//		                        myTable.repaint();
+//		                        myTable.revalidate();
+//		                        
+//		                }
+//		        }
+//		});
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
@@ -117,6 +129,8 @@ public class MazeGUI extends JPanel {
 					.setCellRenderer(myRenderer);
 		}
 	}
+	
+	
 
 	/*
 	 * Inner class that creates a JLabel with a room name or icon to render onto every JTable cell
@@ -145,24 +159,25 @@ public class MazeGUI extends JPanel {
 		public Renderer() {
 			super();
 		}
+		
+		
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
+		public Component getTableCellRendererComponent(final JTable table,
+				final Object value, final boolean isSelected, final boolean hasFocus, final int row,
+				final int column) {
 			
-			JLabel lbl = new JLabel(); //label put in cells
-			int[]playerLocation = myMaze.getPlayerLocation();
+			final JLabel lbl = new JLabel(); //label put in cells
+//			final int[]playerLocation = myMaze.getPlayerLocation();
+			final Room r = myMatrix[row][column];
 
-			if (row == playerLocation[0] && column == playerLocation[1]) { //player at this cell put player icon
-				ImageIcon scaled = new ImageIcon(PLAYER.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+			if (r.isPlayerHere()) { //player at this cell put player icon
+				final ImageIcon scaled = new ImageIcon(PLAYER.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 			//same process for blocked rooms put an else if here once we have a data structure for it
 
-			} else { //put the room name in cell
-
-				Room r = myMatrix[row][column];
-				String name = r.toString();
+			} else { //put the room name in cell				
+				final String name = r.toString();
 				lbl.setText(name);
 				lbl.setForeground(Color.WHITE);
 				lbl.setBackground(MAZE_BG);

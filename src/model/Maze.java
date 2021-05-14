@@ -16,27 +16,35 @@ public class Maze {
 	private final Room[][] myMatrix;
 
 //        private final boolean winCondition;
-	private final int[] myPlayerLocation;
+	private int[] myPlayerLocation;
 
 	// keeps track of how many rooms are made
 	private int roomCounter;
-
+	
+	private static Maze singleMaze = null;
 //       TODO Current win condition is that the player needs to get to the
 //        opposite corner that they are in.
 
 	/*
 	 * Constructor for maze
 	 */
-	public Maze() {
+	private Maze() {
 		roomCounter = 0;
 		myMatrix = getRooms();
 //		winCondition = false;
-		myPlayerLocation = new int[] { 0, 0 };
+		final int[] h = new int[] {0, 0};
+		setPlayerLocation(h);
 
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 	}
 
+	public static Maze getInstance() {
+	        if (singleMaze == null) {
+	                singleMaze = new Maze();
+	        }
+	        return singleMaze;
+	}
 	/*
 	 * Gets the room matrix
 	 * 
@@ -72,6 +80,14 @@ public class Maze {
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
+	}
+	
+	public void setPlayerLocation(final int[] theNewPos) {
+	        myMatrix[0][0].setPlayer(false);
+	        myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
+	        myPlayerLocation = theNewPos.clone();
+	        
+//	        System.out.println(myMaze.getPlayerLocation().toString());
 	}
 
 	/**

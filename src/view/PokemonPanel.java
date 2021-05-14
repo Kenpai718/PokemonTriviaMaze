@@ -58,7 +58,9 @@ public class PokemonPanel extends JPanel {
     private int pokeW = 0;
     private int pokeH = 0;
 
-    private final BufferedImage impika;
+    private final BufferedImage impikaLight;
+    private final BufferedImage impikaDark;
+    private BufferedImage impika;
     private final MazeGUI mazeGUI;
     private final QuestionRoomGUI questionRoomGUI;
 
@@ -91,7 +93,9 @@ public class PokemonPanel extends JPanel {
         springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
         add(controlPanel);
 
-        impika = readImage("./src/images/pokemon/pikachu.png");
+        impikaLight = readImage("./src/images/pokemon/pikachu.png");
+        impikaDark = (BufferedImage) BrightnessUtility.adjustBrighness(impikaLight, 0f);
+        impika = impikaDark;
         imshine = readImage("./src/images/other/sparkle_formatted.png");
         if (impika != null && imshine != null) {
             shineW = imshine.getWidth();
@@ -141,13 +145,19 @@ public class PokemonPanel extends JPanel {
      *
      */
     @Override
-    protected void paintComponent(final Graphics theG) {
+protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
-        final BufferedImage black = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
+//        final BufferedImage impika = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
         theG.drawImage(imshine, 0, 0, shineW, shineH, this);
-        theG.drawImage(black, 0, 0, pokeW, pokeH, this);
+        theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
         // theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
 
+    }
+    
+    public void setImgBrightness(final int thePercentage) {            
+            impika = thePercentage == 0 ? impikaDark : impikaLight;
+            repaint();
+            
     }
 
 

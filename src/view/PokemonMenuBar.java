@@ -9,8 +9,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JSeparator;
+
+import model.Maze;
 
 
 
@@ -18,8 +19,9 @@ public class PokemonMenuBar extends JMenuBar{
         
         private JMenu myHelpMenu;
         private JMenu myFileMenu;
+        private final Maze myMaze;
         private final JFrame myFrame;
-        private final JPanel myPanel;
+        private final PokemonPanel myPanel;
 
 	
 
@@ -28,6 +30,7 @@ public class PokemonMenuBar extends JMenuBar{
 		super();
 		myFrame = theFrame.getFrame();
 		myPanel = theFrame.getPanel();
+		myMaze = Maze.getInstance();
 		setupMenuBar();
 	}
 	
@@ -94,12 +97,39 @@ public class PokemonMenuBar extends JMenuBar{
                 myHelpMenu.add(cheats);
                 
                 final JCheckBoxMenuItem cheat1 = new JCheckBoxMenuItem("Reveal Pokemon");
+                cheat1.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                final boolean selected = cheat1.isSelected();
+                                if (selected) {
+                                        myPanel.setImgBrightness(1);
+                                } else {
+                                        myPanel.setImgBrightness(0);                                       
+                                }
+                                
+                                
+                        }
+                });
                 cheats.add(cheat1);
                 
                 final JCheckBoxMenuItem cheat2 = new JCheckBoxMenuItem("Unlock All Doors");
                 cheats.add(cheat2);
                 
                 final JMenuItem teleport = new JMenuItem("Teleport");
+                teleport.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                final int[] intpos = new int[] {3, 3};
+//                                try {
+//                                        final String[] pos = JOptionPane.showInputDialog("Please Enter a new pos, X Y:").split("\\s+");
+//                                        
+//                                } catch (final NumberFormatException e) {
+//                                        
+//                                } cathc ()
+                                                            
+                                myMaze.setPlayerLocation(intpos);
+                        }
+                });
                 cheats.add(teleport);
         
 	}
