@@ -36,7 +36,7 @@ public class PokemonGUI {
         /**
          * Icon of the program
          */
-        private final ImageIcon myImageIcon = new ImageIcon("./images/TriviaIcon.png");
+        private final ImageIcon myImageIcon = new ImageIcon("./src/images/other/TriviaIcon.png");
         
         /**
          * Window for GUI
@@ -73,7 +73,7 @@ public class PokemonGUI {
         public PokemonGUI() {
                 myFrame = new JFrame("Pokemon Trivia");
                 myPanel = new PokemonPanel();
-                myMB = new PokemonMenuBar();
+                myMB = new PokemonMenuBar(this);
                 myControlActions = new ArrayList<Action>();
                 myControlButtons = new ButtonGroup();
                 
@@ -124,6 +124,22 @@ public class PokemonGUI {
                 }
                 
         }
+
+        /**
+         * @return the myPanel
+         */
+        public JFrame getFrame() {
+                return myFrame;
+        }
+        
+        /**
+         * @return the myPanel
+         */
+        public PokemonPanel getPanel() {
+                return myPanel;
+        }
+        
+        
         
 
 
