@@ -6,38 +6,44 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import model.Maze;
 import model.Room;
 
-public class MazeGUI extends JPanel {
+public class MazeGUI extends JPanel implements PropertyChangeListener{
 
 	/*
 	 * Color used for the maze background
 	 */
-	Color MAZE_BG = new Color(51, 51, 51);
+	final Color MAZE_BG = new Color(51, 51, 51);
 	
 	/*
 	 * Color used for the font
 	 */
-	Color FONT_COLOR = Color.WHITE;
+	final Color FONT_COLOR = Color.WHITE;
 	
 	/*
 	 * Color used for the border
 	 */
-	Color BORDER_COLOR = new Color(51, 153, 204);
+	final Color BORDER_COLOR = new Color(51, 153, 204);
 	
 	/*
 	 * Pokemon font
 	 */
-	Font PKMN_FONT = new Font("PKMN RBYGSC", Font.PLAIN, 40);
+	final Font PKMN_FONT = new Font("PKMN RBYGSC", Font.PLAIN, 40);
 	
 	/*
 	 * Table used for GUI visual
@@ -64,6 +70,8 @@ public class MazeGUI extends JPanel {
 	 */
 	private final Renderer myRenderer;
 
+        private final CustomModel tableModel;
+
 	/**
 	 * Constructor that create the maze visual
 	 */
@@ -82,27 +90,23 @@ public class MazeGUI extends JPanel {
 
 		//setup table for maze visual
 		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
-		myTable = new JTable(myDTB);
-//		myTable.getModel().addTableModelListener(new TableModelListener()  {
-//
-//                        @Override
-//                        public void tableChanged(final TableModelEvent e) {
-//                                // TODO Auto-generated method stub
-//                                myTable.repaint();
-//                                myTable.revalidate();
-//                        }
-//		        
-//		});
-//		myTable.addPropertyChangeListener(new PropertyChangeListener() {
-//		        @Override
-//                        public void propertyChange(final PropertyChangeEvent theEvt) {
-//		                if ("newpos".equals(theEvt.getPropertyName())) {
-//		                        myTable.repaint();
-//		                        myTable.revalidate();
-//		                        
-//		                }
-//		        }
-//		});
+		tableModel = new CustomModel(myMatrix);
+		myTable = new JTable(tableModel);
+		myTable.getModel().addTableModelListener(new TableModelListener() {
+
+                        @Override
+                        public void tableChanged(final TableModelEvent e) {
+                                // TODO Auto-generated method stub
+                                System.out.println("test");
+                                final int row = e.getFirstRow();
+                                final int column = e.getColumn();
+                                final TableModel model = (TableModel) e.getSource();
+                               final Object data = model.getValueAt(row, column);
+                               
+                                
+                        }
+		        
+		});
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
@@ -130,7 +134,43 @@ public class MazeGUI extends JPanel {
 		}
 	}
 	
-	
+	class CustomModel extends AbstractTableModel {
+
+	        String col[];
+//	        ArrayList<Room> myData;
+                private final Room[][] myData;
+	        
+	        public CustomModel(final Room[][] theMatrix) {
+	                myData = myMatrix.clone();
+//	                myData = (ArrayList<Room>) Arrays.stream(theMatrix)
+//	                                .flatMap(Arrays::stream)
+//	                                .collect(Collectors.toList());
+	        }
+	        
+                @Override
+                public int getRowCount() {
+                        // TODO Auto-generated method stub
+                        return myData.length;
+                }
+
+                @Override
+                public int getColumnCount() {
+                        // TODO Auto-generated method stub
+                        return myData[0].length;
+                }
+
+                @Override
+                public Object getValueAt(final int rowIndex, final int columnIndex) {
+                        final Room room = myData[rowIndex][columnIndex];
+                        return room;
+                }
+                
+                public void setValueAt(final Room theRoom, final int rowIndex, final int columnIndex) {
+                    myData[rowIndex][columnIndex] = theRoom;
+                    fireTableCellUpdated(rowIndex, columnIndex);
+                }
+	        
+	}
 
 	/*
 	 * Inner class that creates a JLabel with a room name or icon to render onto every JTable cell
@@ -195,4 +235,17 @@ public class MazeGUI extends JPanel {
 		}
 	}
 
+        @Override
+        public void propertyChange(final PropertyChangeEvent theEvt) {
+                // TODO Auto-generated method stub
+                if ("newpos".equals(theEvt.getPropertyName())) {
+                      System.out.println("PropertyChange Called");
+                      myTable.invalidate();
+                      
+              }
+        }
+
+        public JTable getTable() {
+                return myTable;
+        }
 }

@@ -29,11 +29,11 @@ public class Room {
 		canEnter = false;
 	}
 	
-	private boolean canEnter() {
+	public boolean canEnter() {
 		return canEnter;
 	}
 	
-	protected void setPlayer(Boolean theBool) {
+	protected void setPlayer(final Boolean theBool) {
 		hasPlayer = theBool;
 	}
 	

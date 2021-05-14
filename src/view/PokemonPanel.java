@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
@@ -145,7 +146,7 @@ public class PokemonPanel extends JPanel {
      *
      */
     @Override
-protected void paintComponent(final Graphics theG) {
+    protected void paintComponent(final Graphics theG) {
         super.paintComponent(theG);
 //        final BufferedImage impika = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
         theG.drawImage(imshine, 0, 0, shineW, shineH, this);
@@ -160,6 +161,9 @@ protected void paintComponent(final Graphics theG) {
             
     }
 
+    public JTable getTable( ) {
+            return mazeGUI.getTable();
+    }
 
 
 }

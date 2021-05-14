@@ -119,15 +119,18 @@ public class PokemonMenuBar extends JMenuBar{
                 teleport.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
+                                System.out.println("Button Pressed");
+                                
                                 final int[] intpos = new int[] {3, 3};
+                                new
 //                                try {
 //                                        final String[] pos = JOptionPane.showInputDialog("Please Enter a new pos, X Y:").split("\\s+");
 //                                        
 //                                } catch (final NumberFormatException e) {
 //                                        
 //                                } cathc ()
-                                                            
-                                myMaze.setPlayerLocation(intpos);
+                                myMaze.setPlayerLocation(room);
+//                                repaint();                           
                         }
                 });
                 cheats.add(teleport);

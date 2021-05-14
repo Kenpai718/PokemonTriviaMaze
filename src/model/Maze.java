@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class Maze {
 
 	/*
@@ -33,7 +35,7 @@ public class Maze {
 		myMatrix = getRooms();
 //		winCondition = false;
 		final int[] h = new int[] {0, 0};
-		setPlayerLocation(h);
+		myPlayerLocation = h;
 
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
@@ -83,13 +85,17 @@ public class Maze {
 	}
 	
 	public void setPlayerLocation(final int[] theNewPos) {
-	        myMatrix[0][0].setPlayer(false);
+	        myMatrix[myPlayerLocation[0]][myPlayerLocation[0]].setPlayer(false);
 	        myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 	        myPlayerLocation = theNewPos.clone();
 	        
-//	        System.out.println(myMaze.getPlayerLocation().toString());
+	        System.out.println(Arrays.toString(getPlayerLocation()));
 	}
 
+	public Room getRoom(final int theR, final int theC) {
+	        return  myMatrix[theR][theC];
+	}
+	
 	/**
 	 * @return
 	 */
