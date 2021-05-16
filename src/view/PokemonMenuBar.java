@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
 import model.Maze;
+import view.viewHelper.MazeGUI.MazeModel;
 
 
 
@@ -116,26 +117,30 @@ public class PokemonMenuBar extends JMenuBar{
                 cheats.add(cheat2);
                 
                 final JMenuItem teleport = new JMenuItem("Teleport");
-                teleport.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                System.out.println("Button Pressed");
-                                
-                                final int[] intpos = new int[] {3, 3};
-                                new
-//                                try {
-//                                        final String[] pos = JOptionPane.showInputDialog("Please Enter a new pos, X Y:").split("\\s+");
-//                                        
-//                                } catch (final NumberFormatException e) {
-//                                        
-//                                } cathc ()
-                                myMaze.setPlayerLocation(room);
-//                                repaint();                           
-                        }
-                });
+                final MazeModel model = (MazeModel) myPanel.getTable().getModel();
+                teleport.addActionListener(new TeleportListener(model));
                 cheats.add(teleport);
         
 	}
+        
+        
+        public class TeleportListener implements ActionListener {
+                
+                private final MazeModel myModel;
+                
+                public TeleportListener(final MazeModel theModel) {
+                        myModel = theModel;
+                }
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                        // TODO Auto-generated method stub
+                        final int[] pos = new int[2];
+                        myMaze.setPlayerLocation(pos);
+                        myModel.refresh(myMaze.getMatrix());
+                }
+                
+        }
 	
 
 

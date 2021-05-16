@@ -13,19 +13,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import model.Maze;
 import model.Room;
 
 public class MazeGUI extends JPanel implements PropertyChangeListener{
 
-	/*
+	/**
+         * 
+         */
+        private static final long serialVersionUID = -5880241329362260869L;
+
+        /*
 	 * Color used for the maze background
 	 */
 	final Color MAZE_BG = new Color(51, 51, 51);
@@ -53,7 +54,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 	/*
 	 * Used to build the JTable rows and columns
 	 */
-	private final DefaultTableModel myDTB;
+//	private final DefaultTableModel myDTB;
 
 	/*
 	 * Maze that is to be visualized in the GUI
@@ -70,7 +71,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 	 */
 	private final Renderer myRenderer;
 
-        private final CustomModel tableModel;
 
 	/**
 	 * Constructor that create the maze visual
@@ -89,24 +89,9 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 		setLayout(new BorderLayout(0, 0));
 
 		//setup table for maze visual
-		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
-		tableModel = new CustomModel(myMatrix);
-		myTable = new JTable(tableModel);
-		myTable.getModel().addTableModelListener(new TableModelListener() {
-
-                        @Override
-                        public void tableChanged(final TableModelEvent e) {
-                                // TODO Auto-generated method stub
-                                System.out.println("test");
-                                final int row = e.getFirstRow();
-                                final int column = e.getColumn();
-                                final TableModel model = (TableModel) e.getSource();
-                               final Object data = model.getValueAt(row, column);
-                               
-                                
-                        }
-		        
-		});
+//		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
+		myTable = new JTable();
+		myTable.setModel(new MazeModel());
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
@@ -134,18 +119,23 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 		}
 	}
 	
-	class CustomModel extends AbstractTableModel {
+	public class MazeModel extends AbstractTableModel {
 
-	        String col[];
+	        /**
+                 * 
+                 */
+                private static final long serialVersionUID = -7659261425928249389L;
+                
+                String col[];
 //	        ArrayList<Room> myData;
-                private final Room[][] myData;
+                private Object[][] myData = myMatrix;
 	        
-	        public CustomModel(final Room[][] theMatrix) {
-	                myData = myMatrix.clone();
-//	                myData = (ArrayList<Room>) Arrays.stream(theMatrix)
-//	                                .flatMap(Arrays::stream)
-//	                                .collect(Collectors.toList());
-	        }
+//	        public CustomModel(final Room[][] theMatrix) {
+//	                myData ;
+////	                myData = (ArrayList<Room>) Arrays.stream(theMatrix)
+////	                                .flatMap(Arrays::stream)
+////	                                .collect(Collectors.toList());
+//	        }
 	        
                 @Override
                 public int getRowCount() {
@@ -161,13 +151,18 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 
                 @Override
                 public Object getValueAt(final int rowIndex, final int columnIndex) {
-                        final Room room = myData[rowIndex][columnIndex];
-                        return room;
+                        return myData[rowIndex][columnIndex];
                 }
                 
-                public void setValueAt(final Room theRoom, final int rowIndex, final int columnIndex) {
+                @Override
+                public void setValueAt(final Object theRoom, final int rowIndex, final int columnIndex) {
                     myData[rowIndex][columnIndex] = theRoom;
                     fireTableCellUpdated(rowIndex, columnIndex);
+                }
+                
+                public void refresh(final Object[][] theUpdate) {
+                        myData = theUpdate;
+                        fireTableDataChanged();
                 }
 	        
 	}
@@ -177,7 +172,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 	 */
 	class Renderer extends DefaultTableCellRenderer {
 		
-		/*
+		/**
+                 * 
+                 */
+                private static final long serialVersionUID = -2696460913971414868L;
+
+                /*
 		 * Icon that represents the player
 		 */
 		private final ImageIcon PLAYER = new ImageIcon(
