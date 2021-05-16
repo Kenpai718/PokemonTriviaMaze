@@ -3,7 +3,10 @@ package view.viewHelper;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,13 +16,19 @@ import controller.movement_actions.DownAction;
 import controller.movement_actions.LeftAction;
 import controller.movement_actions.RightAction;
 import controller.movement_actions.UpAction;
+import model.Maze;
 import view.PokemonPanel;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends JPanel implements PropertyChangeListener {
         private final DownAction downAction;
         private final LeftAction leftAction;
         private final RightAction rightAction;
         private final UpAction upAction;
+        final JButton up;
+        final JButton down;
+        final JButton left;
+        final JButton right;
+        private final ButtonGroup buttonGroup = new ButtonGroup();
 
     /**
      * Create the panel.
@@ -38,7 +47,8 @@ public class ControlPanel extends JPanel {
         final JLabel label = new JLabel("");
         add(label);
         
-        final JButton up = new JButton("");
+        up = new JButton("");
+        buttonGroup.add(up);
         up.setAction(upAction);
         up.setOpaque(false);
         up.setBorder(null);
@@ -47,7 +57,8 @@ public class ControlPanel extends JPanel {
         final JLabel label_1 = new JLabel("");
         add(label_1);
         
-        final JButton left = new JButton("");
+        left = new JButton("");
+        buttonGroup.add(left);
         left.setAction(leftAction);
         left.setOpaque(false);
         left.setBorder(null);
@@ -61,7 +72,8 @@ public class ControlPanel extends JPanel {
         player.setIcon(imageIcon);
         add(player);
         
-        final JButton right = new JButton("");
+        right = new JButton("");
+        buttonGroup.add(right);
         right.setAction(rightAction);
         right.setOpaque(false);
         right.setBorder(null);
@@ -70,7 +82,8 @@ public class ControlPanel extends JPanel {
         final JLabel label_3 = new JLabel("");
         add(label_3);
         
-        final JButton down = new JButton("");
+        down = new JButton("");
+        buttonGroup.add(down);
         down.setAction(downAction);
         down.setOpaque(false);
         down.setBorder(null);
@@ -80,6 +93,42 @@ public class ControlPanel extends JPanel {
         add(label_4);
 
     }
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+                // TODO Auto-generated method stub
+                System.out.println("Fired Change");
+                if ("newpos".equals(evt.getPropertyName())) {
+                        System.out.println("entered if");
+                        final Maze maze = Maze.getInstance();
+                        final int[] pos = maze.getPlayerLocation();
+                        for (int i = 0; i < pos.length; i++) {
+                                final int num = pos[i];
+                                if (i == 0 && (num + 1 >= maze.getRows())) {
+                                        down.setIcon(null);
+                                        down.setEnabled(false);
+                                        up.setAction(upAction);
+                                        up.setEnabled(true);
+                                } else if (i == 0 && (num - 1 <= -1)) {
+                                        up.setIcon(null);
+                                        up.setEnabled(false);
+                                        down.setEnabled(true);
+                                        down.setAction(downAction);
+                                } else if (i == 1 && (num + 1 >= maze.getCols())) {
+                                        right.setIcon(null);
+                                        right.setEnabled(false);
+                                        left.setEnabled(true);
+                                        left.setAction(leftAction);
+                                } else if (i == 1 && (num - 1 <= -1)) {
+                                        left.setIcon(null);
+                                        left.setEnabled(false);
+                                        right.setEnabled(true);
+                                        right.setAction(rightAction);
+                                }
+                        }
+                        
+                }
+        }
 
 //    private Icon getScaledImage(final ImageIcon theImage) {
 //        ImageIcon imageIcon = theImage;

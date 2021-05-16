@@ -22,7 +22,7 @@ public class MovementAction extends AbstractAction {
         protected Maze myMaze = Maze.getInstance();
         private final PokemonPanel myPanel;
         
-        public MovementAction(final String theName, final ImageIcon theIcon, final PokemonPanel thePanel) {
+        protected MovementAction(final String theName, final ImageIcon theIcon, final PokemonPanel thePanel) {
                 super(theName, theIcon);
                 myPanel = thePanel;
         }
@@ -41,6 +41,7 @@ public class MovementAction extends AbstractAction {
                 myMaze.setPlayerLocation(newPos);
                 final MazeModel model = (MazeModel) myPanel.getTable().getModel();
                 model.refresh(myMaze.getMatrix());
+                firePropertyChange("newpos", null, myMaze);
         }
 
 }
