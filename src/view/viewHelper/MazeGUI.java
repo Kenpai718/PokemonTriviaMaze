@@ -6,8 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -19,7 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.Maze;
 import model.Room;
 
-public class MazeGUI extends JPanel implements PropertyChangeListener{
+public class MazeGUI extends JPanel {
 
 	/**
          * 
@@ -91,6 +89,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 		//setup table for maze visual
 //		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
 		myTable = new JTable();
+		// Using Custom TableModel to correctly refresh the table when changes are made
 		myTable.setModel(new MazeModel());
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
@@ -121,45 +120,49 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 	
 	public class MazeModel extends AbstractTableModel {
 
-	        /**
-                 * 
-                 */
+	        /** Serial Version ID */
                 private static final long serialVersionUID = -7659261425928249389L;
                 
-                String col[];
-//	        ArrayList<Room> myData;
                 private Object[][] myData = myMatrix;
-	        
-//	        public CustomModel(final Room[][] theMatrix) {
-//	                myData ;
-////	                myData = (ArrayList<Room>) Arrays.stream(theMatrix)
-////	                                .flatMap(Arrays::stream)
-////	                                .collect(Collectors.toList());
-//	        }
-	        
+                
+                /**
+                 *
+                 */
                 @Override
                 public int getRowCount() {
                         // TODO Auto-generated method stub
                         return myData.length;
                 }
 
+                /**
+                 *
+                 */
                 @Override
                 public int getColumnCount() {
                         // TODO Auto-generated method stub
                         return myData[0].length;
                 }
 
+                /**
+                 *
+                 */
                 @Override
                 public Object getValueAt(final int rowIndex, final int columnIndex) {
                         return myData[rowIndex][columnIndex];
                 }
                 
+                /**
+                 *
+                 */
                 @Override
                 public void setValueAt(final Object theRoom, final int rowIndex, final int columnIndex) {
                     myData[rowIndex][columnIndex] = theRoom;
                     fireTableCellUpdated(rowIndex, columnIndex);
                 }
                 
+                /**
+                 * @param theUpdate
+                 */
                 public void refresh(final Object[][] theUpdate) {
                         myData = theUpdate;
                         fireTableDataChanged();
@@ -208,7 +211,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 				final int column) {
 			
 			final JLabel lbl = new JLabel(); //label put in cells
-//			final int[]playerLocation = myMaze.getPlayerLocation();
 			final Room r = myMatrix[row][column];
 
 			if (r.isPlayerHere()) { //player at this cell put player icon
@@ -235,15 +237,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener{
 		}
 	}
 
-        @Override
-        public void propertyChange(final PropertyChangeEvent theEvt) {
-                // TODO Auto-generated method stub
-                if ("newpos".equals(theEvt.getPropertyName())) {
-                      System.out.println("PropertyChange Called");
-                      myTable.invalidate();
-                      
-              }
-        }
 
         public JTable getTable() {
                 return myTable;

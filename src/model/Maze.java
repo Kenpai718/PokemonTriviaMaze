@@ -85,7 +85,7 @@ public class Maze {
 	}
 	
 	public void setPlayerLocation(final int[] theNewPos) {
-	        myMatrix[myPlayerLocation[0]][myPlayerLocation[0]].setPlayer(false);
+	        myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 	        myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 	        myPlayerLocation = theNewPos.clone();
 	        

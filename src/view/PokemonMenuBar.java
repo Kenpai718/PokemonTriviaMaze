@@ -2,6 +2,8 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -135,13 +137,53 @@ public class PokemonMenuBar extends JMenuBar{
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                         // TODO Auto-generated method stub
-                        final int[] pos = new int[2];
+                        final String message = "Please Enter a new position to teleport"
+                                                + " to.\n(X Y):";
+                        final int[] pos = readInput(message);
+//                        
                         myMaze.setPlayerLocation(pos);
                         myModel.refresh(myMaze.getMatrix());
                 }
                 
+                /**
+                 * Helper method to read the input from the Input Dialog
+                 * 
+                 * @param theInput a string of the input
+                 * @return an int[] of the two numbers input
+                 */
+                private int[] readInput(final String theMessage) {
+                        final StringBuilder input = new StringBuilder();
+                        input.append(JOptionPane.showInputDialog(theMessage));
+                        int[] res = myMaze.getPlayerLocation().clone();
+                        final Scanner scan;
+                        if ((input != null && !input.isEmpty()) && !(input.length() < 3)) {
+                                scan = new Scanner(input.toString());
+                                try {
+                                        for (int i = 0; i < 2; i++) {
+                                                final int num = scan.nextInt() - 1;
+                                                if (num < myMaze.getRows() && num < myMaze
+                                                                .getCols()) {
+                                                        res[i] = num;
+                                                } else {
+                                                        res = readInput("One or more numbers out "
+                                                                        + "of range of maze\n(X Y):");
+                                                        break;
+                                                }
+                                        }
+                                } catch (final InputMismatchException e) {
+                                         res = readInput("Please use integers only.\n(X Y):");
+                                }
+                                scan.close();
+                        } else {
+                                res = readInput(theMessage);
+                        }
+                        
+                        return res;
+                
+                }
         }
-	
+        
+        
 
 
 }
