@@ -89,7 +89,7 @@ public class PokemonPanel extends JPanel {
         add(mazeGUI);
         add(questionRoomGUI);
 
-        final ControlPanel controlPanel = new ControlPanel();
+        final ControlPanel controlPanel = new ControlPanel(this);
         springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60, SpringLayout.SOUTH, this);
         springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
         add(controlPanel);

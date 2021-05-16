@@ -10,12 +10,6 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JToggleButton;
-
-import controller.movement_actions.DownAction;
-import controller.movement_actions.LeftAction;
-import controller.movement_actions.RightAction;
-import controller.movement_actions.UpAction;
 
 /**
  * @author Kenneth Ahrens
@@ -112,16 +106,16 @@ public class PokemonGUI {
          * Sets up the Control Buttons for the maze
          */
         private void setupControlButtons() {
-                myControlActions.add(new LeftAction());
-                myControlActions.add(new RightAction());
-                myControlActions.add(new UpAction());
-                myControlActions.add(new DownAction());
-                
-                for (final Action act : myControlActions) {
-                        final JToggleButton tb = new JToggleButton(act);
-                        myControlButtons.add(tb);
-
-                }
+//                myControlActions.add(new LeftAction());
+//                myControlActions.add(new RightAction());
+//                myControlActions.add(new UpAction());
+//                myControlActions.add(new DownAction());
+//                
+//                for (final Action act : myControlActions) {
+//                        final JToggleButton tb = new JToggleButton(act);
+//                        myControlButtons.add(tb);
+//
+//                }
                 
         }
 
