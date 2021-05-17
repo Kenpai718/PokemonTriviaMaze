@@ -5,7 +5,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Enumeration;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,70 +36,81 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
      * Create the panel.
  * @param pokemonPanel 
      */
-    public ControlPanel(final PokemonPanel thePanel) {
-            upAction = new UpAction(thePanel);
-            leftAction = new LeftAction(thePanel);
-            rightAction = new RightAction(thePanel);
-            downAction = new DownAction(thePanel);
-        
-        setOpaque(false);
-        setPreferredSize(new Dimension(300, 300));
-        setLayout(new GridLayout(0, 3, 0, 0));
-        
-        final JLabel label = new JLabel("");
-        add(label);
-        
-        up = new JButton("");
-        buttonGroup.add(up);
-        up.setAction(upAction);
-        up.setOpaque(false);
-        up.setBorder(null);
-        add(up);
-        
-        final JLabel label_1 = new JLabel("");
-        add(label_1);
-        
-        left = new JButton("");
-        buttonGroup.add(left);
-        left.setAction(leftAction);
-        left.setOpaque(false);
-        left.setBorder(null);
-        add(left);
-        
-        final JLabel player = new JLabel("");
-        player.setInheritsPopupMenu(false);
-        player.setIconTextGap(0);
-        final ImageIcon imageIcon = new ImageIcon(new ImageIcon(ControlPanel.class.
-                   getResource("/other/Player.jpg")).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
-        player.setIcon(imageIcon);
-        add(player);
-        
-        right = new JButton("");
-        buttonGroup.add(right);
-        right.setAction(rightAction);
-        right.setOpaque(false);
-        right.setBorder(null);
-        add(right);
-        
-        final JLabel label_3 = new JLabel("");
-        add(label_3);
-        
-        down = new JButton("");
-        buttonGroup.add(down);
-        down.setAction(downAction);
-        down.setOpaque(false);
-        down.setBorder(null);
-        add(down);
-        
-        final JLabel label_4 = new JLabel("");
-        add(label_4);
+        public ControlPanel(final PokemonPanel thePanel) {
+                    upAction = new UpAction(thePanel);
+                    leftAction = new LeftAction(thePanel);
+                    rightAction = new RightAction(thePanel);
+                    downAction = new DownAction(thePanel);
+                
+                
+                setOpaque(false);
+                setPreferredSize(new Dimension(300, 300));
+                setLayout(new GridLayout(0, 3, 0, 0));
+                
+                final JLabel label = new JLabel("");
+                add(label);
+                
+                up = new JButton("");
+                up.setHideActionText(true);
+                buttonGroup.add(up);
+                up.setAction(upAction);
+                up.setBorder(null);
+                add(up);
+                
+                final JLabel label_1 = new JLabel("");
+                add(label_1);
+                
+                left = new JButton("");
+                left.setHideActionText(true);
+                buttonGroup.add(left);
+                left.setAction(leftAction);
+                left.setBorder(null);
+                add(left);
+                
+                final JLabel player = new JLabel("");
+                player.setInheritsPopupMenu(false);
+                player.setIconTextGap(0);
+                final ImageIcon imageIcon = new ImageIcon(new ImageIcon(ControlPanel.class.
+                           getResource("/other/Player.jpg")).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                player.setIcon(imageIcon);
+                add(player);
+                
+                right = new JButton("");
+                right.setHideActionText(true);
+                buttonGroup.add(right);
+                right.setAction(rightAction);
+                right.setBorder(null);
+                add(right);
+                
+                final JLabel label_3 = new JLabel("");
+                add(label_3);
+                
+                down = new JButton("");
+                down.setHideActionText(true);
+                buttonGroup.add(down);
+                down.setAction(downAction);
+                down.setBorder(null);
+                add(down);
+                
+                final JLabel label_4 = new JLabel("");
+                add(label_4);
+                addListeners();
+        //        firePropertyChange("newpos", null, null);
+                    }
 
-    }
+        private void addListeners() {
+        // TODO Auto-generated method stub
+                addPropertyChangeListener(this);
+                final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+                while (buttons.hasMoreElements()) {
+                        final JButton temp = (JButton) buttons.nextElement();
+                        temp.addPropertyChangeListener(this);
+                }
+        }
 
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
                 // TODO Auto-generated method stub
-                System.out.println("Fired Change");
                 if ("newpos".equals(evt.getPropertyName())) {
                         System.out.println("entered if");
                         final Maze maze = Maze.getInstance();
@@ -105,28 +118,29 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
                         for (int i = 0; i < pos.length; i++) {
                                 final int num = pos[i];
                                 if (i == 0 && (num + 1 >= maze.getRows())) {
-                                        down.setIcon(null);
+                                        down.setVisible(false);
                                         down.setEnabled(false);
-                                        up.setAction(upAction);
+                                        up.setVisible(true);
                                         up.setEnabled(true);
+                                        System.out.println("Disabled down, enabled up");
                                 } else if (i == 0 && (num - 1 <= -1)) {
-                                        up.setIcon(null);
+                                        up.setVisible(false);
                                         up.setEnabled(false);
+                                        down.setVisible(true);
                                         down.setEnabled(true);
-                                        down.setAction(downAction);
                                 } else if (i == 1 && (num + 1 >= maze.getCols())) {
-                                        right.setIcon(null);
+                                        right.setVisible(false);
                                         right.setEnabled(false);
+                                        left.setVisible(true);
                                         left.setEnabled(true);
-                                        left.setAction(leftAction);
                                 } else if (i == 1 && (num - 1 <= -1)) {
-                                        left.setIcon(null);
+                                        left.setVisible(false);
                                         left.setEnabled(false);
+                                        right.setVisible(true);
                                         right.setEnabled(true);
-                                        right.setAction(rightAction);
                                 }
                         }
-                        
+                        repaint();
                 }
         }
 

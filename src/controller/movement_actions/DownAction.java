@@ -5,11 +5,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
 import view.PokemonPanel;
-import view.viewHelper.ControlPanel;
 
 public class DownAction extends MovementAction {
-	private static final String NAME = "";
-	private static final ImageIcon ICON = new ImageIcon(ControlPanel.class.getResource("/arrows/down.png"));
+	private static final String NAME = "Down";
+	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
 	
 	//to control the maze
 	//private final Maze myMaze;

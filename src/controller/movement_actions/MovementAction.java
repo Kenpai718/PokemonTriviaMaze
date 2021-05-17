@@ -40,8 +40,10 @@ public class MovementAction extends AbstractAction {
                 }
                 myMaze.setPlayerLocation(newPos);
                 final MazeModel model = (MazeModel) myPanel.getTable().getModel();
+//                firePropertyChange("newpos", null, null);
                 model.refresh(myMaze.getMatrix());
-                firePropertyChange("newpos", null, myMaze);
+                firePropertyChange("newpos", null, null);
+                
         }
 
 }

@@ -92,6 +92,7 @@ public class PokemonPanel extends JPanel {
         final ControlPanel controlPanel = new ControlPanel(this);
         springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60, SpringLayout.SOUTH, this);
         springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
+        addPropertyChangeListener(controlPanel);
         add(controlPanel);
 
         impikaLight = readImage("./src/images/pokemon/pikachu.png");
@@ -151,6 +152,7 @@ public class PokemonPanel extends JPanel {
 //        final BufferedImage impika = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
         theG.drawImage(imshine, 0, 0, shineW, shineH, this);
         theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
+        firePropertyChange("newpos", null, null);
         // theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
 
     }
