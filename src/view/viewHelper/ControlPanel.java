@@ -107,48 +107,35 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
                         temp.addPropertyChangeListener(this);
                 }
         }
+        
+        private void changeButtonState(final int i, final int num, final Maze maze) {
+                // TODO Auto-generated method stub
+                if (i == 0) {
+                        down.setVisible(num + 1 < maze.getRows());
+                        down.setEnabled(num + 1 < maze.getRows());
+                        up.setVisible(num - 1 >= 0);
+                        up.setEnabled(num - 1 >= 0);
+                } else {
+                        right.setVisible(num + 1 < maze.getCols());
+                        right.setEnabled(num + 1 < maze.getCols());
+                        left.setVisible(num - 1 >= 0);
+                        left.setEnabled(num - 1 >= 0);
+
+                }
+        }
 
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
                 // TODO Auto-generated method stub
                 if ("newpos".equals(evt.getPropertyName())) {
-                        System.out.println("entered if");
+//                        System.out.println("entered if");
                         final Maze maze = Maze.getInstance();
                         final int[] pos = maze.getPlayerLocation();
                         for (int i = 0; i < pos.length; i++) {
                                 final int num = pos[i];
-                                if (i == 0 && (num + 1 >= maze.getRows())) {
-                                        down.setVisible(false);
-                                        down.setEnabled(false);
-                                        up.setVisible(true);
-                                        up.setEnabled(true);
-                                        System.out.println("Disabled down, enabled up");
-                                } else if (i == 0 && (num - 1 <= -1)) {
-                                        up.setVisible(false);
-                                        up.setEnabled(false);
-                                        down.setVisible(true);
-                                        down.setEnabled(true);
-                                } else if (i == 1 && (num + 1 >= maze.getCols())) {
-                                        right.setVisible(false);
-                                        right.setEnabled(false);
-                                        left.setVisible(true);
-                                        left.setEnabled(true);
-                                } else if (i == 1 && (num - 1 <= -1)) {
-                                        left.setVisible(false);
-                                        left.setEnabled(false);
-                                        right.setVisible(true);
-                                        right.setEnabled(true);
-                                }
+                                changeButtonState(i, num, maze);
                         }
                         repaint();
                 }
         }
-
-//    private Icon getScaledImage(final ImageIcon theImage) {
-//        ImageIcon imageIcon = theImage;
-//        final Image image = imageIcon.getImage(); // transform it 
-//        final Image newimg = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-//        imageIcon = new ImageIcon(newimg);  // transform it back
-//        return imageIcon;
-//    }
 }
