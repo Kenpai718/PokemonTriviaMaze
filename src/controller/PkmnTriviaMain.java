@@ -11,7 +11,11 @@ import view.PokemonGUI;
 
 
 /**
- * @author ajdow
+ * Runs the trivia maze game and starts up GUI
+ * 
+ * @author AJ Downey
+ * @author Ken Ahrens
+ * @author Katlyn Malone
  *
  */
 public class PkmnTriviaMain {

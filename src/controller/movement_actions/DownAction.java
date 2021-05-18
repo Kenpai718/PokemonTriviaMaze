@@ -2,27 +2,35 @@ package controller.movement_actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import view.viewHelper.ControlPanel;
+import view.PokemonPanel;
 
-public class DownAction extends AbstractAction {
-	private static final String NAME = "";
-	private static final ImageIcon ICON = new ImageIcon(ControlPanel.class.getResource("/arrows/down.png"));
+/**
+ * Move down on maze
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
+public class DownAction extends MovementAction {
+	private static final String NAME = "Down";
+	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
 	
 	//to control the maze
 	//private final Maze myMaze;
 	
-	public DownAction() {
-		super(NAME, ICON);
+	public DownAction(final PokemonPanel thePanel) {
+		super(NAME, ICON, thePanel);
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		// TODO Auto-generated method stub
-		//make the maze move left if possible
-		
+		//make the maze move down if possible
+	        final int[] move = new int[] {1, 0};
+                super.movePlayer(move);
 	}
 
 }
