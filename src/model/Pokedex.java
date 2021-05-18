@@ -23,7 +23,7 @@ public class Pokedex {
 	/*
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
 	 */
-	private Map<Integer, Pokemon> myPokedex;
+	private final Map<Integer, Pokemon> myPokedex;
 	
 	/*How many pokemon in pokedex*/
 	int myCounter;
@@ -39,7 +39,7 @@ public class Pokedex {
 		myCounter = 0;
 		
 		//"empty" pokemon used in the case where there is no pokemon found
-		Pokemon missingNo = new Pokemon("000", "MissingNo");
+		final Pokemon missingNo = new Pokemon("000", "MissingNo");
 		myPokedex.put(0, missingNo);
 		
 		//fill pokedex with database
@@ -58,7 +58,7 @@ public class Pokedex {
 		try {
 			ds = new SQLiteDataSource();
 			ds.setUrl("jdbc:sqlite:Pokedex.db");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -66,26 +66,26 @@ public class Pokedex {
 		System.out.println("Opened pokedex database successfully");
 
 		System.out.println("Selecting all rows from test table");
-		String query = "SELECT * FROM Pokedex";
+		final String query = "SELECT * FROM Pokedex";
 
 		try (Connection conn = ds.getConnection();
 				Statement stmt = conn.createStatement();) {
 
-			ResultSet rs = stmt.executeQuery(query);
+			final ResultSet rs = stmt.executeQuery(query);
 
 			// walk through each 'row' of results, grab data by column/field
 			// name
 			// and print it
 			while (rs.next()) {
-				String id = rs.getString("ID");
-				String name = rs.getString("NAME");
+				final String id = rs.getString("ID");
+				final String name = rs.getString("NAME");
 
 				addPokemon(id, name);
 			}
 			
 			System.out.println("Finished adding pokemon to pokedex.");
 			//System.out.println(myPokedex);
-		} catch (SQLException e) {
+		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -95,7 +95,7 @@ public class Pokedex {
 	 * Add a pokemon to the pokedex map
 	 */
 	public void addPokemon(final String theID, final String theName) {
-		Pokemon pkmn = new Pokemon(theID, theName);
+		final Pokemon pkmn = new Pokemon(theID, theName);
 		myPokedex.put(Integer.parseInt(theID), pkmn);
 		myCounter++;
 	}
@@ -106,7 +106,7 @@ public class Pokedex {
 	 * @return a map of pokemon
 	 */
 	public Map<Integer, Pokemon> getPokedex() {
-		Map<Integer, Pokemon> copy = myPokedex;
+		final Map<Integer, Pokemon> copy = myPokedex;
 		return copy;
 	}
 	
@@ -136,5 +136,6 @@ public class Pokedex {
 		return myPokedex.toString();
 		
 	}
+	
 
 }
