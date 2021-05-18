@@ -30,7 +30,7 @@ public class Maze {
 	/*
 	 * Constructor for maze
 	 */
-	private Maze() {
+	protected Maze() {
 		roomCounter = 0;
 		myMatrix = getRooms();
 //		winCondition = false;

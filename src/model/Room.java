@@ -10,6 +10,7 @@ public class Room {
 	private boolean canEnter;
 	
 	private boolean hasPlayer;
+	
 
 	public Room(final int theRoomNumber) {
 		// TODO Auto-generated constructor stub
@@ -17,6 +18,7 @@ public class Room {
 		myRoomName = (char) (theRoomNumber + 'A');
 		canEnter = true;
 		hasPlayer = false;
+		
 
 	}
 
