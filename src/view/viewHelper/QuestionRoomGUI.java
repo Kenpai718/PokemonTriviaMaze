@@ -3,7 +3,9 @@ package view.viewHelper;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Enumeration;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -23,9 +25,9 @@ public class QuestionRoomGUI extends JPanel {
     /*
      * Multiple choice
      */
-    private String[] myChoices;
+    private final String[] myChoices;
     
-    private Room myCurrRoom;
+    private final Room myCurrRoom;
     
     JRadioButton myA1;
     JRadioButton myA2;
@@ -36,7 +38,7 @@ public class QuestionRoomGUI extends JPanel {
     /**
      * Create the panel.
      */
-    public QuestionRoomGUI(Room theRoom) {
+    public QuestionRoomGUI(final Room theRoom) {
     	myCurrRoom = theRoom;
     	myChoices = theRoom.getChoices();
 
@@ -119,5 +121,16 @@ public class QuestionRoomGUI extends JPanel {
         buttonGroup.add(myA4);
         add(myA4);
     }
+
+        public void setButtons() {
+                // TODO Auto-generated method stub
+                final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+                int i = 0;
+                while (buttons.hasMoreElements()) {
+                        final JRadioButton temp = (JRadioButton) buttons.nextElement();
+                        temp.setText(myChoices[i]);
+                        i++;
+                }
+        }
     
 }

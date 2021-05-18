@@ -43,6 +43,8 @@ public class MovementAction extends AbstractAction {
 //                firePropertyChange("newpos", null, null);
                 model.refresh(myMaze.getMatrix());
                 firePropertyChange("newpos", null, null);
+                myPanel.setImage();
+                myPanel.getQustionGUI().setButtons();
                 
         }
 

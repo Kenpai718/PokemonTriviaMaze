@@ -75,11 +75,12 @@ public class PokemonPanel extends JPanel {
     private int pokeW = 0;
     private int pokeH = 0;
 
-    private final BufferedImage myPokeLight;
-    private final BufferedImage myPokeDark;
+    private BufferedImage myPokeLight;
+    private BufferedImage myPokeDark;
     private BufferedImage impika;
     private final MazeGUI mazeGUI;
     private final QuestionRoomGUI questionRoomGUI;
+    private boolean myDark;
   
 
     /*
@@ -120,9 +121,8 @@ public class PokemonPanel extends JPanel {
         addPropertyChangeListener(controlPanel);
         add(controlPanel);
 
-        myPokeLight = myPokePic;
-        myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokePic, 0f);
-        impika = myPokeDark;
+        setImage();
+        setImgBrightness(0);
         
         imshine = readImage("./src/images/other/sparkle_formatted.png");
         if (impika != null && imshine != null) {
@@ -137,7 +137,16 @@ public class PokemonPanel extends JPanel {
 
     }
 
-    private void setupPanels(final MazeGUI theMazeGUI, final QuestionRoomGUI theQuestionRoomGUI) {
+    public void setImage() {
+        // TODO Auto-generated method stub
+            myPokeLight = myPokePic;
+            myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokePic, 0f);
+            impika = myDark ? myPokeDark : myPokeLight;
+            repaint();
+        
+}
+
+private void setupPanels(final MazeGUI theMazeGUI, final QuestionRoomGUI theQuestionRoomGUI) {
 
     }
 
@@ -177,12 +186,17 @@ public class PokemonPanel extends JPanel {
     
     public void setImgBrightness(final int thePercentage) {            
             impika = thePercentage == 0 ? myPokeDark : myPokeLight;
+            myDark = thePercentage == 0;
             repaint();
             
     }
 
     public JTable getTable( ) {
             return mazeGUI.getTable();
+    } 
+    
+    public QuestionRoomGUI getQustionGUI() {
+            return questionRoomGUI;
     }
 
 
