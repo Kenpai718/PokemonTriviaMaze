@@ -4,10 +4,7 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -52,12 +49,12 @@ public class PokemonGUI {
         /**
          * Array holding actions for controls
          */
-        private final ArrayList<Action> myControlActions;
-        
-        /**
-         * ButtonGroup of movement controls
-         */
-        private final ButtonGroup myControlButtons;
+//        private final ArrayList<Action> myControlActions;
+//        
+//        /**
+//         * ButtonGroup of movement controls
+//         */
+//        private final ButtonGroup myControlButtons;
         
         
         
@@ -68,8 +65,8 @@ public class PokemonGUI {
                 myFrame = new JFrame("Pokemon Trivia");
                 myPanel = new PokemonPanel();
                 myMB = new PokemonMenuBar(this);
-                myControlActions = new ArrayList<Action>();
-                myControlButtons = new ButtonGroup();
+//                myControlActions = new ArrayList<Action>();
+//                myControlButtons = new ButtonGroup();
                 
                 setupGUI();
                 setupControlButtons();

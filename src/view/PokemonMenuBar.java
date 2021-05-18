@@ -104,6 +104,7 @@ public class PokemonMenuBar extends JMenuBar{
                         @Override
                         public void actionPerformed(final ActionEvent e) {
                                 final boolean selected = cheat1.isSelected();
+                                myPanel.setImage();
                                 if (selected) {
                                         myPanel.setImgBrightness(1);
                                 } else {

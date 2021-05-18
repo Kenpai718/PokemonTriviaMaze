@@ -15,7 +15,6 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
-import model.Room;
 import model.TriviaGame;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
@@ -64,9 +63,7 @@ public class PokemonPanel extends JPanel {
     //KEN: testing setting up the game
     private final TriviaGame myGame;
     private final Maze myMaze;
-    private final BufferedImage myPokePic;
     private BufferedImage myHiddenPic;
-    private final Room myCurrRoom;
     
 
     // TODO Dev formatting, needs to be changed
@@ -93,10 +90,8 @@ public class PokemonPanel extends JPanel {
         //start a new game on the panel
         myGame = new TriviaGame();
         myMaze = Maze.getInstance();
-        mazeGUI = new MazeGUI(myMaze);
-        myCurrRoom = myMaze.getCurrRoom();
-        myPokePic = myCurrRoom.getPokemon().getPNG();
-        questionRoomGUI = new QuestionRoomGUI(myCurrRoom);
+        mazeGUI = new MazeGUI();
+        questionRoomGUI = new QuestionRoomGUI();
       
         
         //put stuff on the panel
@@ -111,7 +106,6 @@ public class PokemonPanel extends JPanel {
         springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345, SpringLayout.WEST, this);
         springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10, SpringLayout.EAST, this);
         setLayout(springLayout);
-        setupPanels(mazeGUI, questionRoomGUI);
         add(mazeGUI);
         add(questionRoomGUI);
 
@@ -120,7 +114,7 @@ public class PokemonPanel extends JPanel {
         springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
         addPropertyChangeListener(controlPanel);
         add(controlPanel);
-
+        
         setImage();
         setImgBrightness(0);
         
@@ -139,16 +133,14 @@ public class PokemonPanel extends JPanel {
 
     public void setImage() {
         // TODO Auto-generated method stub
-            myPokeLight = myPokePic;
-            myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokePic, 0f);
+            
+            myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+            myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokeLight, 0f);
             impika = myDark ? myPokeDark : myPokeLight;
             repaint();
         
 }
 
-private void setupPanels(final MazeGUI theMazeGUI, final QuestionRoomGUI theQuestionRoomGUI) {
-
-    }
 
     private BufferedImage readImage(final String theLocation) {
         BufferedImage img = null;

@@ -74,9 +74,9 @@ public class MazeGUI extends JPanel {
 	 * Constructor that create the maze visual
 	 */
 	
-	public MazeGUI(Maze theMaze) {
+	public MazeGUI() {
 		//initialize fields
-		myMaze = theMaze.getInstance();
+		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
 
 		//prepare GUI 

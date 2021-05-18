@@ -13,8 +13,8 @@ import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
+import model.Maze;
 import model.QuestionAnswer;
-import model.Room;
 
 public class QuestionRoomGUI extends JPanel {
     private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -22,25 +22,21 @@ public class QuestionRoomGUI extends JPanel {
     private JTextPane myQPane;
     private SpringLayout myLayout;
     
-    /*
-     * Multiple choice
-     */
-    private final String[] myChoices;
+//    /*
+//     * Multiple choice
+//     */
+//    private final String[] myChoices;
+//    
+//    private final Room myCurrRoom;
     
-    private final Room myCurrRoom;
-    
-    JRadioButton myA1;
-    JRadioButton myA2;
-    JRadioButton myA3;
-    JRadioButton myA4;
     
 
     /**
      * Create the panel.
      */
-    public QuestionRoomGUI(final Room theRoom) {
-    	myCurrRoom = theRoom;
-    	myChoices = theRoom.getChoices();
+    public QuestionRoomGUI() {
+//    	myCurrRoom = theRoom;
+//    	myChoices = theRoom.getChoices();
 
     	
     	setupGUI();
@@ -75,7 +71,7 @@ public class QuestionRoomGUI extends JPanel {
     
     private void setupQuestions() {
     	
-        myA1 = new JRadioButton(myChoices[0]);
+        final JRadioButton myA1 = new JRadioButton("");
         myA1.setOpaque(false);
         myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH, myQPane);
         myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST, myA1);
@@ -86,7 +82,7 @@ public class QuestionRoomGUI extends JPanel {
         buttonGroup.add(myA1);
         add(myA1);
         
-        myA2 = new JRadioButton(myChoices[1]);
+        final JRadioButton myA2 = new JRadioButton("");
         myA2.setOpaque(false);
         myLayout.putConstraint(myLayout.SOUTH, myA1, -37, myLayout.NORTH, myA2);
         myLayout.putConstraint(myLayout.NORTH, myA2, 189, myLayout.NORTH, this);
@@ -97,7 +93,7 @@ public class QuestionRoomGUI extends JPanel {
         buttonGroup.add(myA2);
         add(myA2);
         
-        myA3 = new JRadioButton(myChoices[2]);
+        final JRadioButton myA3 = new JRadioButton("");
 
         myA3.setOpaque(false);
         myLayout.putConstraint(myLayout.WEST, myA3, 34, myLayout.WEST, this);
@@ -110,7 +106,7 @@ public class QuestionRoomGUI extends JPanel {
         buttonGroup.add(myA3);
         add(myA3);
         
-        myA4 = new JRadioButton(myChoices[3]);
+        final JRadioButton myA4 = new JRadioButton("");
         myA4.setOpaque(false);
         myLayout.putConstraint(myLayout.NORTH, myA4, 33, myLayout.SOUTH, myA3);
         myLayout.putConstraint(myLayout.WEST, myA4, 34, myLayout.WEST, this);
@@ -119,16 +115,19 @@ public class QuestionRoomGUI extends JPanel {
         myA4.setMnemonic('4');
         myA4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
         buttonGroup.add(myA4);
+        setButtons();
         add(myA4);
     }
 
         public void setButtons() {
                 // TODO Auto-generated method stub
+                final Maze maze = Maze.getInstance();
+                final String[] choices = maze.getCurrRoom().getChoices();                
                 final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
                 int i = 0;
                 while (buttons.hasMoreElements()) {
                         final JRadioButton temp = (JRadioButton) buttons.nextElement();
-                        temp.setText(myChoices[i]);
+                        temp.setText(choices[i]);
                         i++;
                 }
         }
