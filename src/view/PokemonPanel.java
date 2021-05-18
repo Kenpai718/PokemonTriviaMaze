@@ -62,11 +62,11 @@ public class PokemonPanel extends JPanel {
     private BufferedImage imshine = null;
     
     //KEN: testing setting up the game
-    private TriviaGame myGame;
-    private Maze myMaze;
-    private BufferedImage myPokePic;
+    private final TriviaGame myGame;
+    private final Maze myMaze;
+    private final BufferedImage myPokePic;
     private BufferedImage myHiddenPic;
-    private Room myCurrRoom;
+    private final Room myCurrRoom;
     
 
     // TODO Dev formatting, needs to be changed
@@ -91,7 +91,7 @@ public class PokemonPanel extends JPanel {
 
         //start a new game on the panel
         myGame = new TriviaGame();
-        myMaze = myGame.getMaze();
+        myMaze = Maze.getInstance();
         mazeGUI = new MazeGUI(myMaze);
         myCurrRoom = myMaze.getCurrRoom();
         myPokePic = myCurrRoom.getPokemon().getPNG();
