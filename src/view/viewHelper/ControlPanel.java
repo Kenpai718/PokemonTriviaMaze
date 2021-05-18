@@ -120,7 +120,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
                         right.setEnabled(num + 1 < maze.getCols());
                         left.setVisible(num - 1 >= 0);
                         left.setEnabled(num - 1 >= 0);
-
+                        //merge test comment
                 }
         }
 
