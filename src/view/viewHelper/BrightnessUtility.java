@@ -8,7 +8,11 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
+ * Utility to change the brightness of an image
+ * Source: https://stackoverflow.com/questions/46797579/how-can-i-control-the-brightness-of-an-image
+ * 
  * @author ajdowney
+ * @author kenneth ahrens
  *
  */
 public final class BrightnessUtility {
@@ -21,7 +25,7 @@ public final class BrightnessUtility {
 
         
         /**
-         * @param source
+         * @param Image source
          * @param brightnessPercentage
          * @return
          */

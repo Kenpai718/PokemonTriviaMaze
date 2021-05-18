@@ -3,7 +3,9 @@ package view.viewHelper;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Enumeration;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -11,78 +13,135 @@ import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
+import model.Maze;
+import model.QuestionAnswer;
+
+/**
+ * Has the multiple choice question for the room
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
 public class QuestionRoomGUI extends JPanel {
-    private final ButtonGroup buttonGroup = new ButtonGroup();
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private QuestionAnswer myQA;
+	private JTextPane myQPane;
+	private SpringLayout myLayout;
 
-    /**
-     * Create the panel.
-     */
-    public QuestionRoomGUI() {
-        setBorder(new LineBorder(Color.BLACK, 4, true));
-        setBackground(Color.WHITE);
-        setPreferredSize(new Dimension(350, 500));
-        setMaximumSize(new Dimension(350, 500));
-        final SpringLayout springLayout = new SpringLayout();
-        setLayout(springLayout);
-        
-        final JTextPane questionTextPane = new JTextPane();
-        springLayout.putConstraint(SpringLayout.NORTH, questionTextPane, 22, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, questionTextPane, 68, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.EAST, questionTextPane, -10, SpringLayout.EAST, this);
-        questionTextPane.setRequestFocusEnabled(false);
-        questionTextPane.setText("Who's that Pokemon?");
-        questionTextPane.setOpaque(false);
-        questionTextPane.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
-        questionTextPane.setFocusable(false);
-        questionTextPane.setEnabled(false);
-        questionTextPane.setDisabledTextColor(Color.BLACK);
-        questionTextPane.setBorder(null);
-        add(questionTextPane);
-        
-        final JRadioButton answer1 = new JRadioButton("Answer 1");
-        answer1.setOpaque(false);
-        springLayout.putConstraint(SpringLayout.NORTH, answer1, 29, SpringLayout.SOUTH, questionTextPane);
-        springLayout.putConstraint(SpringLayout.WEST, questionTextPane, -24, SpringLayout.WEST, answer1);
-        springLayout.putConstraint(SpringLayout.WEST, answer1, 34, SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.EAST, answer1, 0, SpringLayout.EAST, this);
-        answer1.setMnemonic('1');
-        answer1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-        buttonGroup.add(answer1);
-        add(answer1);
-        
-        final JRadioButton answer2 = new JRadioButton("Answer 2");
-        answer2.setOpaque(false);
-        springLayout.putConstraint(SpringLayout.SOUTH, answer1, -37, SpringLayout.NORTH, answer2);
-        springLayout.putConstraint(SpringLayout.NORTH, answer2, 189, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.WEST, answer2, 34, SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.EAST, answer2, 0, SpringLayout.EAST, this);
-        answer2.setMnemonic('2');
-        answer2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-        buttonGroup.add(answer2);
-        add(answer2);
-        
-        final JRadioButton answer3 = new JRadioButton("Answer 3");
-        answer3.setOpaque(false);
-        springLayout.putConstraint(SpringLayout.WEST, answer3, 34, SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.EAST, answer3, 0, SpringLayout.EAST, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, answer2, -42, SpringLayout.NORTH, answer3);
-        springLayout.putConstraint(SpringLayout.NORTH, answer3, 286, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, answer3, -159, SpringLayout.SOUTH, this);
-        answer3.setMnemonic('3');
-        answer3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-        buttonGroup.add(answer3);
-        add(answer3);
-        
-        final JRadioButton answer4 = new JRadioButton("Answer 4\r\n");
-        answer4.setOpaque(false);
-        springLayout.putConstraint(SpringLayout.NORTH, answer4, 33, SpringLayout.SOUTH, answer3);
-        springLayout.putConstraint(SpringLayout.WEST, answer4, 34, SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, answer4, -71, SpringLayout.SOUTH, this);
-        springLayout.putConstraint(SpringLayout.EAST, answer4, 0, SpringLayout.EAST, this);
-        answer4.setMnemonic('4');
-        answer4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-        buttonGroup.add(answer4);
-        add(answer4);
+//    /*
+//     * Multiple choice
+//     */
+//    private final String[] myChoices;
+//    
+//    private final Room myCurrRoom;
 
-    }
+	/**
+	 * Create the panel.
+	 */
+	public QuestionRoomGUI() {
+//    	myCurrRoom = theRoom;
+//    	myChoices = theRoom.getChoices();
+
+		setupGUI();
+
+	}
+
+	private void setupGUI() {
+		setBorder(new LineBorder(Color.BLACK, 4, true));
+		setBackground(Color.WHITE);
+		setPreferredSize(new Dimension(350, 500));
+		setMaximumSize(new Dimension(350, 500));
+		myLayout = new SpringLayout();
+		setLayout(myLayout);
+
+		myQPane = new JTextPane();
+		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,
+				this);
+		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH,
+				this);
+		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST,
+				this);
+		myQPane.setRequestFocusEnabled(false);
+		myQPane.setText("Who's that Pokemon?");
+		myQPane.setOpaque(false);
+		myQPane.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
+		myQPane.setFocusable(false);
+		myQPane.setEnabled(false);
+		myQPane.setDisabledTextColor(Color.BLACK);
+		myQPane.setBorder(null);
+		add(myQPane);
+
+		setupQuestions();
+
+	}
+
+	private void setupQuestions() {
+
+		final JRadioButton myA1 = new JRadioButton("");
+		myA1.setOpaque(false);
+		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
+				myQPane);
+		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST,
+				myA1);
+		myLayout.putConstraint(myLayout.WEST, myA1, 34, myLayout.WEST, this);
+		myLayout.putConstraint(myLayout.EAST, myA1, 0, myLayout.EAST, this);
+		myA1.setMnemonic('1');
+		myA1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		buttonGroup.add(myA1);
+		add(myA1);
+
+		final JRadioButton myA2 = new JRadioButton("");
+		myA2.setOpaque(false);
+		myLayout.putConstraint(myLayout.SOUTH, myA1, -37, myLayout.NORTH, myA2);
+		myLayout.putConstraint(myLayout.NORTH, myA2, 189, myLayout.NORTH, this);
+		myLayout.putConstraint(myLayout.WEST, myA2, 34, myLayout.WEST, this);
+		myLayout.putConstraint(myLayout.EAST, myA2, 0, myLayout.EAST, this);
+		myA2.setMnemonic('2');
+		myA2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		buttonGroup.add(myA2);
+		add(myA2);
+
+		final JRadioButton myA3 = new JRadioButton("");
+
+		myA3.setOpaque(false);
+		myLayout.putConstraint(myLayout.WEST, myA3, 34, myLayout.WEST, this);
+		myLayout.putConstraint(myLayout.EAST, myA3, 0, myLayout.EAST, this);
+		myLayout.putConstraint(myLayout.SOUTH, myA2, -42, myLayout.NORTH, myA3);
+		myLayout.putConstraint(myLayout.NORTH, myA3, 286, myLayout.NORTH, this);
+		myLayout.putConstraint(myLayout.SOUTH, myA3, -159, myLayout.SOUTH,
+				this);
+		myA3.setMnemonic('3');
+		myA3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		buttonGroup.add(myA3);
+		add(myA3);
+
+		final JRadioButton myA4 = new JRadioButton("");
+		myA4.setOpaque(false);
+		myLayout.putConstraint(myLayout.NORTH, myA4, 33, myLayout.SOUTH, myA3);
+		myLayout.putConstraint(myLayout.WEST, myA4, 34, myLayout.WEST, this);
+		myLayout.putConstraint(myLayout.SOUTH, myA4, -71, myLayout.SOUTH, this);
+		myLayout.putConstraint(myLayout.EAST, myA4, 0, myLayout.EAST, this);
+		myA4.setMnemonic('4');
+		myA4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		buttonGroup.add(myA4);
+		setButtons();
+		add(myA4);
+	}
+
+	public void setButtons() {
+		// TODO Auto-generated method stub
+		final Maze maze = Maze.getInstance();
+		final String[] choices = maze.getCurrRoom().getChoices();
+		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		int i = 0;
+		while (buttons.hasMoreElements()) {
+			final JRadioButton temp = (JRadioButton) buttons.nextElement();
+			temp.setText(choices[i]);
+			i++;
+		}
+	}
+
 }
