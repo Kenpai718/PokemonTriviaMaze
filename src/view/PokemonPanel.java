@@ -3,12 +3,16 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
@@ -41,17 +45,22 @@ public class PokemonPanel extends JPanel {
 	private final int Y_OFFSET = 230;
 
 	/*
-	 * Set sizes of pictures for scaling
+	 * default sizes of pokemon pictures for scaling
 	 */
-	private int SHINE_W = 0;
-	private int SHINE_H = 0;
 	private final int POKE_W = 600;
 	private final int POKE_H = 600;
+	
 
 	/*
 	 * default layout of the GUI
 	 */
 	private final SpringLayout springLayout = new SpringLayout();
+	
+	/*
+	 * Size of the shine background
+	 */
+	private int myShineW;
+	private int myShineH;
 
 	/*
 	 * Background color of the game (Crimson Red)
@@ -182,25 +191,64 @@ public class PokemonPanel extends JPanel {
 		// sparkly thing behind a pokemon
 		myShine = readImage("./src/images/other/sparkle_formatted.png");
 		if (myPoke != null && myShine != null) {
-			SHINE_W = myShine.getWidth();
-			SHINE_H = myShine.getHeight();
+			myShineW = myShine.getWidth();
+			myShineH = myShine.getHeight();
 		}
 
 	}
 
 	/**
 	 * Set pokemon pictures for dark and light depending on the current room
+	 * Resize them if they are not 600x600px
 	 * 
 	 */
 	public void setImage() {
 
 		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+		//resize if not the correct width or height
+		if(myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H || myPokeLight.getWidth() > POKE_W || myPokeLight.getHeight() > POKE_H) {
+			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
+		}
+		
+		
 		myPokeDark = (BufferedImage) BrightnessUtility
 				.adjustBrighness(myPokeLight, 0f);
 		myPoke = myDark ? myPokeDark : myPokeLight;
 		repaint();
 
 	}
+	
+	 /**
+	 * Resizes an image using a Graphics2D object backed by a BufferedImage.
+	 * It is scaled this way to prevent the picture from looking blurry.
+	 * 
+	 * SOURCE: https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
+	 * @param srcImg - source image to scale
+	 * @param w - desired width
+	 * @param h - desired height
+	 * @return - the new resized image
+	 */
+	private BufferedImage getScaledImage(Image srcImg, int w, int h){
+
+	    //Create a new image with good size that contains or might contain arbitrary alpha values between and including 0.0 and 1.0.
+	    BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
+
+	    //Create a device-independant object to draw the resized image
+	    Graphics2D g2 = resizedImg.createGraphics();
+
+	    //improve quality of rendering
+	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+	    //Finally draw the source image in the Graphics2D with the desired size.
+	    g2.drawImage(srcImg, 0, 0, w, h, null);
+
+	    //Disposes of this graphics context and releases any system resources that it is using
+	    g2.dispose();
+
+	    //Return the image used to create the Graphics2D 
+	    return resizedImg;
+	}
+	
 
 	/**
 	 * Helper method to read an Image given a filepath
@@ -218,6 +266,8 @@ public class PokemonPanel extends JPanel {
 
 		return img;
 	}
+	
+
 
 	/**
 	 * Paints the pokemon and background
@@ -226,7 +276,8 @@ public class PokemonPanel extends JPanel {
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
 //        final BufferedImage myPoke = (BufferedImage) BrightnessUtility.adjustBrighness(myPoke, 0f);
-		theG.drawImage(myShine, 0, 0, SHINE_W, SHINE_H, this);
+		
+		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
 		firePropertyChange("newpos", null, null);
 		// theG.drawImage(myPoke, 0, 0, POKE_W, POKE_H, this);
