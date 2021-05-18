@@ -17,38 +17,48 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.Maze;
 import model.Room;
 
+/**
+ * Visual of the maze GUI represented by a JTable. Shows location of player, all
+ * rooms in the maze matrix and blocked rooms.
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
 public class MazeGUI extends JPanel {
 
 	/**
-         * 
-         */
-        private static final long serialVersionUID = -5880241329362260869L;
+	     * 
+	     */
+	private static final long serialVersionUID = -5880241329362260869L;
 
-        /*
+	/*
 	 * Color used for the maze background
 	 */
 	final Color MAZE_BG = new Color(51, 51, 51);
-	
+
 	/*
 	 * Color used for the font
 	 */
 	final Color FONT_COLOR = Color.WHITE;
-	
+
 	/*
 	 * Color used for the border
 	 */
 	final Color BORDER_COLOR = new Color(51, 153, 204);
-	
+
 	/*
 	 * Pokemon font
 	 */
 	final Font PKMN_FONT = new Font("PKMN RBYGSC", Font.PLAIN, 40);
-	
+
 	/*
 	 * Table used for GUI visual
 	 */
 	private final JTable myTable;
-	
+
 	/*
 	 * Used to build the JTable rows and columns
 	 */
@@ -63,32 +73,32 @@ public class MazeGUI extends JPanel {
 	 * Matrix of the maze
 	 */
 	final private Room[][] myMatrix;
-	
+
 	/*
 	 * Used to draw onto table
 	 */
 	private final Renderer myRenderer;
 
-
 	/**
 	 * Constructor that create the maze visual
 	 */
-	
+
 	public MazeGUI() {
-		//initialize fields
+		// initialize fields
 		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
 
-		//prepare GUI 
+		// prepare GUI
 		setMaximumSize(new Dimension(500, 500));
 		setBackground(new Color(255, 0, 0));
 		setPreferredSize(new Dimension(500, 500));
 		setLayout(new BorderLayout(0, 0));
 
-		//setup table for maze visual
+		// setup table for maze visual
 //		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
 		myTable = new JTable();
-		// Using Custom TableModel to correctly refresh the table when changes are made
+		// Using Custom TableModel to correctly refresh the table when changes
+		// are made
 		myTable.setModel(new MazeModel());
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
@@ -105,95 +115,97 @@ public class MazeGUI extends JPanel {
 		fillTable();
 
 	}
-	
-	/*
-	 * Uses a custom renderer class to individually fill each cell with the corresponding icons/names
+
+	/**
+	 * Uses a custom renderer class to individually fill each cell with the
+	 * corresponding icons/names
 	 */
 	public void fillTable() {
-		
+
 		for (int i = 0; i < myMaze.getCols(); i++) {
-			myTable.getColumnModel().getColumn(i)
-					.setCellRenderer(myRenderer);
+			myTable.getColumnModel().getColumn(i).setCellRenderer(myRenderer);
 		}
 	}
-	
+
+	// inner class that creates a custom implementation of AbstractTableModel
+	// for the maze
 	public class MazeModel extends AbstractTableModel {
 
-	        /** Serial Version ID */
-                private static final long serialVersionUID = -7659261425928249389L;
-                
-                private Object[][] myData = myMatrix;
-                
-                /**
-                 *
-                 */
-                @Override
-                public int getRowCount() {
-                        // TODO Auto-generated method stub
-                        return myData.length;
-                }
+		/** Serial Version ID */
+		private static final long serialVersionUID = -7659261425928249389L;
 
-                /**
-                 *
-                 */
-                @Override
-                public int getColumnCount() {
-                        // TODO Auto-generated method stub
-                        return myData[0].length;
-                }
+		private Object[][] myData = myMatrix;
 
-                /**
-                 *
-                 */
-                @Override
-                public Object getValueAt(final int rowIndex, final int columnIndex) {
-                        return myData[rowIndex][columnIndex];
-                }
-                
-                /**
-                 *
-                 */
-                @Override
-                public void setValueAt(final Object theRoom, final int rowIndex, final int columnIndex) {
-                    myData[rowIndex][columnIndex] = theRoom;
-                    fireTableCellUpdated(rowIndex, columnIndex);
-                }
-                
-                /**
-                 * @param theUpdate
-                 */
-                public void refresh(final Object[][] theUpdate) {
-                        myData = theUpdate;
-                        fireTableDataChanged();
-                }
-	        
+		/**
+		 *
+		 */
+		@Override
+		public int getRowCount() {
+			// TODO Auto-generated method stub
+			return myData.length;
+		}
+
+		/**
+		 *
+		 */
+		@Override
+		public int getColumnCount() {
+			// TODO Auto-generated method stub
+			return myData[0].length;
+		}
+
+		/**
+		 *
+		 */
+		@Override
+		public Object getValueAt(final int rowIndex, final int columnIndex) {
+			return myData[rowIndex][columnIndex];
+		}
+
+		/**
+		 *
+		 */
+		@Override
+		public void setValueAt(final Object theRoom, final int rowIndex,
+				final int columnIndex) {
+			myData[rowIndex][columnIndex] = theRoom;
+			fireTableCellUpdated(rowIndex, columnIndex);
+		}
+
+		/**
+		 * @param theUpdate
+		 */
+		public void refresh(final Object[][] theUpdate) {
+			myData = theUpdate;
+			fireTableDataChanged();
+		}
+
 	}
 
 	/*
-	 * Inner class that creates a JLabel with a room name or icon to render onto every JTable cell
+	 * Inner class that creates a JLabel with a room name or icon to render onto
+	 * every JTable cell
 	 */
 	class Renderer extends DefaultTableCellRenderer {
-		
-		/**
-                 * 
-                 */
-                private static final long serialVersionUID = -2696460913971414868L;
 
-                /*
+		/**
+		         * 
+		         */
+		private static final long serialVersionUID = -2696460913971414868L;
+
+		/*
 		 * Icon that represents the player
 		 */
 		private final ImageIcon PLAYER = new ImageIcon(
 				"./src/images/other/PlayerIcon.png");
-		
+
 		/*
 		 * Icon that represents a blocked room
 		 */
 		private final ImageIcon TREE = new ImageIcon(
 				"./src/images/other/tree.png");
 
-
-
-		/*
+		/**
 		 * Constructor
 		 * 
 		 * @param Maze to get an updated maze to fill table with
@@ -201,23 +213,23 @@ public class MazeGUI extends JPanel {
 		public Renderer() {
 			super();
 		}
-		
-		
 
 		@Override
 		public Component getTableCellRendererComponent(final JTable table,
-				final Object value, final boolean isSelected, final boolean hasFocus, final int row,
-				final int column) {
-			
-			final JLabel lbl = new JLabel(); //label put in cells
+				final Object value, final boolean isSelected,
+				final boolean hasFocus, final int row, final int column) {
+
+			final JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
 
-			if (r.isPlayerHere()) { //player at this cell put player icon
-				final ImageIcon scaled = new ImageIcon(PLAYER.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+			if (r.isPlayerHere()) { // player at this cell put player icon
+				final ImageIcon scaled = new ImageIcon(PLAYER.getImage()
+						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
-			//same process for blocked rooms put an else if here once we have a data structure for it
+				// same process for blocked rooms put an else if here once we
+				// have a data structure for it
 
-			} else { //put the room name in cell				
+			} else { // put the room name in cell
 				final String name = r.toString();
 				lbl.setText(name);
 				lbl.setForeground(Color.WHITE);
@@ -226,8 +238,7 @@ public class MazeGUI extends JPanel {
 
 			}
 
-			
-			//format jlabel 
+			// format jlabel
 			lbl.setVisible(true);
 			lbl.setHorizontalAlignment(JLabel.CENTER);
 			lbl.setVerticalAlignment(JLabel.CENTER);
@@ -236,8 +247,7 @@ public class MazeGUI extends JPanel {
 		}
 	}
 
-
-        public JTable getTable() {
-                return myTable;
-        }
+	public JTable getTable() {
+		return myTable;
+	}
 }

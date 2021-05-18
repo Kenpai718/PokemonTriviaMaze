@@ -22,174 +22,243 @@ import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
 
 /**
+ * Setups playable game visuals on a panel
+ * 
  * @author ajdowney
  * @author ken
+ * @version Spring 2021
  */
 public class PokemonPanel extends JPanel {
-	/*
-	 * TO adjust the picture position
+	/**
+	 * Serialization
 	 */
-    private final int X_OFFSET = 120;
-    private final int Y_OFFSET = 230;
+	private static final long serialVersionUID = 8168838797214673243L;
 
-    /**
-    * 
-    */
-    private static final long serialVersionUID = 8168838797214673243L;
+	/*
+	 * TO adjust the picture position of a Pokemon PNG
+	 */
+	private final int X_OFFSET = 120;
+	private final int Y_OFFSET = 230;
 
-    /*
-     * Background color of the game (Crimson Red)
-     */
-    final Color BG_COLOR = new Color(220, 20, 60);
+	/*
+	 * Set sizes of pictures for scaling
+	 */
+	private int SHINE_W = 0;
+	private int SHINE_H = 0;
+	private final int POKE_W = 600;
+	private final int POKE_H = 600;
 
-    Color BORDER_COLOR = new Color(51, 153, 204);
+	/*
+	 * default layout of the GUI
+	 */
+	private final SpringLayout springLayout = new SpringLayout();
 
-    /*
-     * Aspect ratio of Jpanel
-     */
-    final Dimension PANEL_SIZE = new Dimension(1920, 1080);
+	/*
+	 * Background color of the game (Crimson Red)
+	 */
+	private final Color BG_COLOR = new Color(220, 20, 60);
 
-    // /*
-    // * test image for a pokemon
-    // */
-    // private final ImageIcon pika = new ImageIcon("./images/pokemon/pikachu.png");
-    //
-    // /* sparkle effect behind a pokemon */
-    // private final ImageIcon shine = new
-    // ImageIcon("./images/sparkle_formatted.png");
+	/*
+	 * Background color of border
+	 */
+	private final Color BORDER_COLOR = new Color(51, 153, 204);
 
-    private BufferedImage imshine = null;
-    
-    //KEN: testing setting up the game
-    private final TriviaGame myGame;
-    private final Maze myMaze;
-    private BufferedImage myHiddenPic;
-    
+	/*
+	 * Aspect ratio of Jpanel
+	 */
+	final Dimension PANEL_SIZE = new Dimension(1920, 1080);
 
-    // TODO Dev formatting, needs to be changed
-    private int shineW = 0;
-    private int shineH = 0;
-    private int pokeW = 0;
-    private int pokeH = 0;
+	/*
+	 * Background sparkle effect behind the pokemon
+	 */
+	private BufferedImage myShine = null;
 
-    private BufferedImage myPokeLight;
-    private BufferedImage myPokeDark;
-    private BufferedImage impika;
-    private final MazeGUI mazeGUI;
-    private final QuestionRoomGUI questionRoomGUI;
-    private boolean myDark;
-  
+	// TODO: (KEN) testing setting up the game
+	/*
+	 * Used to store the game pieces
+	 */
+	private final TriviaGame myGame;
+	/*
+	 * Maze of the game
+	 */
+	private final Maze myMaze;
 
-    /*
-     * Constructor
-     */
-    public PokemonPanel() {
-        // TODO Auto-generated constructor stub
-        super();
+	/*
+	 * Non hidden pokemon picture
+	 */
+	private BufferedImage myPokeLight;
+	/*
+	 * Hidden pokemon picture
+	 */
+	private BufferedImage myPokeDark;
+	/*
+	 * Picture of the pokemon: light or dark
+	 */
+	private BufferedImage myPoke;
+	/*
+	 * GUI visual of the maze
+	 */
+	private final MazeGUI mazeGUI;
+	/*
+	 * Question GUI
+	 */
+	private final QuestionRoomGUI questionRoomGUI;
 
-        //start a new game on the panel
-        myGame = new TriviaGame();
-        myMaze = Maze.getInstance();
-        mazeGUI = new MazeGUI();
-        questionRoomGUI = new QuestionRoomGUI();
-      
-        
-        //put stuff on the panel
-        final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
-        mazeGUI.setBorder(blueLine);
-        
-        final SpringLayout springLayout = new SpringLayout();
-        springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36, SpringLayout.SOUTH, this);
-        springLayout.putConstraint(SpringLayout.EAST, questionRoomGUI, -107, SpringLayout.EAST, this);
-        springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10, SpringLayout.NORTH, this);
-        springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345, SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10, SpringLayout.EAST, this);
-        setLayout(springLayout);
-        add(mazeGUI);
-        add(questionRoomGUI);
+	/*
+	 * Boolean to know if the picture is hidden or visible
+	 */
+	private boolean myDark;
 
-        final ControlPanel controlPanel = new ControlPanel(this);
-        springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60, SpringLayout.SOUTH, this);
-        springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
-        addPropertyChangeListener(controlPanel);
-        add(controlPanel);
-        
-        setImage();
-        setImgBrightness(0);
-        
-        imshine = readImage("./src/images/other/sparkle_formatted.png");
-        if (impika != null && imshine != null) {
-            shineW = imshine.getWidth();
-            shineH = imshine.getHeight();
-            pokeW = impika.getWidth();
-            pokeH = impika.getHeight();
-        }
+	/**
+	 * Constructor
+	 */
+	public PokemonPanel() {
 
+		super();
 
-        setupPanel();
+		// start a new game on the panel
+		// TODO: run the game off of myGame
+		myGame = new TriviaGame();
+		myMaze = Maze.getInstance();
+		mazeGUI = new MazeGUI();
+		questionRoomGUI = new QuestionRoomGUI();
 
-    }
+		/// initialize panel
+		setupPanel();
 
-    public void setImage() {
-        // TODO Auto-generated method stub
-            
-            myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
-            myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokeLight, 0f);
-            impika = myDark ? myPokeDark : myPokeLight;
-            repaint();
-        
-}
+		// control panel property change
+		final ControlPanel controlPanel = new ControlPanel(this);
+		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131,
+				SpringLayout.WEST, questionRoomGUI);
+		addPropertyChangeListener(controlPanel);
+		add(controlPanel);
 
+		// draw onto panel Pokemon and background
+		setupPictures();
 
-    private BufferedImage readImage(final String theLocation) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File(theLocation));
-        } catch (final IOException e) {
+	}
 
-        }
+	/**
+	 * Setup the panel for the game
+	 */
+	private void setupPanel() {
+		setBackground(BG_COLOR);
+		setPreferredSize(PANEL_SIZE);
 
-        return img;
-    }
+		// put stuff on the panel
+		final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
+		mazeGUI.setBorder(blueLine);
 
-    /**
-     * Setup the panel for the game
-     */
-    private void setupPanel() {
-        setBackground(BG_COLOR);
-        setPreferredSize(PANEL_SIZE);
+		springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, questionRoomGUI, -107,
+				SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345,
+				SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10,
+				SpringLayout.EAST, this);
+		setLayout(springLayout);
+		add(mazeGUI);
+		add(questionRoomGUI);
 
-    }
+	}
 
-    /**
-     *
-     */
-    @Override
-    protected void paintComponent(final Graphics theG) {
-        super.paintComponent(theG);
-//        final BufferedImage impika = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
-        theG.drawImage(imshine, 0, 0, shineW, shineH, this);
-        theG.drawImage(impika, X_OFFSET, Y_OFFSET, pokeW, pokeH, this);
-        firePropertyChange("newpos", null, null);
-        // theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
+	/**
+	 * Put initial pictures on the panel
+	 * 
+	 */
+	public void setupPictures() {
 
-    }
-    
-    public void setImgBrightness(final int thePercentage) {            
-            impika = thePercentage == 0 ? myPokeDark : myPokeLight;
-            myDark = thePercentage == 0;
-            repaint();
-            
-    }
+		// draw the pokemon
+		setImage();
+		setImgBrightness(0);
 
-    public JTable getTable( ) {
-            return mazeGUI.getTable();
-    } 
-    
-    public QuestionRoomGUI getQustionGUI() {
-            return questionRoomGUI;
-    }
+		// sparkly thing behind a pokemon
+		myShine = readImage("./src/images/other/sparkle_formatted.png");
+		if (myPoke != null && myShine != null) {
+			SHINE_W = myShine.getWidth();
+			SHINE_H = myShine.getHeight();
+		}
 
+	}
+
+	/**
+	 * Set pokemon pictures for dark and light depending on the current room
+	 * 
+	 */
+	public void setImage() {
+
+		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+		myPokeDark = (BufferedImage) BrightnessUtility
+				.adjustBrighness(myPokeLight, 0f);
+		myPoke = myDark ? myPokeDark : myPokeLight;
+		repaint();
+
+	}
+
+	/**
+	 * Helper method to read an Image given a filepath
+	 * 
+	 * @param String theLocation filepath
+	 * @return BufferedImage the new image
+	 */
+	private BufferedImage readImage(final String theLocation) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(theLocation));
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+
+		return img;
+	}
+
+	/**
+	 * Paints the pokemon and background
+	 */
+	@Override
+	protected void paintComponent(final Graphics theG) {
+		super.paintComponent(theG);
+//        final BufferedImage myPoke = (BufferedImage) BrightnessUtility.adjustBrighness(myPoke, 0f);
+		theG.drawImage(myShine, 0, 0, SHINE_W, SHINE_H, this);
+		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
+		firePropertyChange("newpos", null, null);
+		// theG.drawImage(myPoke, 0, 0, POKE_W, POKE_H, this);
+
+	}
+
+	/**
+	 * set dark variable
+	 */
+	public void setImgBrightness(final int thePercentage) {
+		myPoke = thePercentage == 0 ? myPokeDark : myPokeLight;
+		myDark = thePercentage == 0;
+		repaint();
+
+	}
+
+	/**
+	 * Getter MazeGUi table
+	 * 
+	 * @return JTable the table that represents the maze
+	 */
+	public JTable getTable() {
+		return mazeGUI.getTable();
+	}
+
+	/**
+	 * Getter QuestionRoomGUI
+	 * 
+	 * @return QuestionRoomGUI
+	 */
+	public QuestionRoomGUI getQuestionGUI() {
+		return questionRoomGUI;
+	}
 
 }

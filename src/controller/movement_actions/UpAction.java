@@ -6,6 +6,15 @@ import javax.swing.ImageIcon;
 
 import view.PokemonPanel;
 
+/**
+ * Make player move up
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
 public class UpAction extends MovementAction {
 	
 	private static final String NAME = "";
@@ -21,7 +30,7 @@ public class UpAction extends MovementAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		// TODO Auto-generated method stub
-		//make the maze move left if possible
+		//make the maze move up if possible
 	        final int[] move = new int[] {-1, 0};
 	        super.movePlayer(move);
 		

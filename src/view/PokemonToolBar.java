@@ -4,6 +4,15 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
 
+/**
+ * Make player move left
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
 public class PokemonToolBar extends JToolBar{
 	
 	private ButtonGroup myControls;

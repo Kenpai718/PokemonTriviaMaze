@@ -6,6 +6,15 @@ import javax.swing.ImageIcon;
 
 import view.PokemonPanel;
 
+/**
+ * Move down on maze
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
+
 public class DownAction extends MovementAction {
 	private static final String NAME = "Down";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
@@ -19,8 +28,7 @@ public class DownAction extends MovementAction {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		// TODO Auto-generated method stub
-		//make the maze move left if possible
+		//make the maze move down if possible
 	        final int[] move = new int[] {1, 0};
                 super.movePlayer(move);
 	}

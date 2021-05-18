@@ -23,9 +23,12 @@ public class TestingClass{
 		myPokedex = new Pokedex();
 		myQA = new QuestionAnswer(myPokedex);
 		myMaze = new Maze(myPokedex);
-		Room r = myMaze.getCurrRoom();
-		String[] choices = r.getChoices();
-		System.out.println(choices[1]);
+		/*
+		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
+		 * System.out.println(choices[1]);
+		 */
+		
+		printAll();
 		
 		 
 		

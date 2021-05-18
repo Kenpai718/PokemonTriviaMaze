@@ -13,8 +13,12 @@ import view.PokemonPanel;
 import view.viewHelper.MazeGUI.MazeModel;
 
 /**
- * @author ajdow
- *
+ * Controls player movement in the maze
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
  */
 public class MovementAction extends AbstractAction {
 
@@ -32,6 +36,11 @@ public class MovementAction extends AbstractAction {
                 // TODO Auto-generated method stub
                 // Do nothing
         }
+        /**
+         * Move player in given direction
+         * 
+         * @param theMove the directions to move [0] row, [1] = col
+         */
         
         protected void movePlayer(final int[] theMove) {
                 final int[] newPos = myMaze.getPlayerLocation().clone();
@@ -44,7 +53,7 @@ public class MovementAction extends AbstractAction {
                 model.refresh(myMaze.getMatrix());
                 firePropertyChange("newpos", null, null);
                 myPanel.setImage();
-                myPanel.getQustionGUI().setButtons();
+                myPanel.getQuestionGUI().setButtons();
                 
         }
 

@@ -6,6 +6,14 @@ import javax.swing.ImageIcon;
 
 import view.PokemonPanel;
 
+/**
+ * Make player move left
+ * 
+ * @author Kenneth Ahrens
+ * @author AJ Downey
+ * @author Katlyn Malone
+ * @version Spring 2021
+ */
 public class LeftAction extends MovementAction {
 	
 	private static final String NAME = "";
