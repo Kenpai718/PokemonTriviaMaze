@@ -23,6 +23,8 @@ public class Maze {
 	// keeps track of how many rooms are made
 	private int roomCounter;
 	
+	private static Pokedex myPokedex;
+	
 	private static Maze singleMaze = null;
 //       TODO Current win condition is that the player needs to get to the
 //        opposite corner that they are in.
@@ -30,7 +32,7 @@ public class Maze {
 	/*
 	 * Constructor for maze
 	 */
-	protected Maze() {
+	private Maze() {
 		roomCounter = 0;
 		myMatrix = getRooms();
 //		winCondition = false;
@@ -40,10 +42,22 @@ public class Maze {
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 	}
+	
+	public Maze(Pokedex thePokedex) {
+		myPokedex = thePokedex;
+		roomCounter = 0;
+		myMatrix = getRooms();
+		final int[] h = new int[] {0, 0};
+		myPlayerLocation = h;
+
+		// TODO: test stuff delete later
+		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+		
+	}
 
 	public static Maze getInstance() {
 	        if (singleMaze == null) {
-	                singleMaze = new Maze();
+	                singleMaze = new Maze(myPokedex);
 	        }
 	        return singleMaze;
 	}
@@ -57,7 +71,7 @@ public class Maze {
 		final Room[][] res = new Room[ROWS][COLS];
 		for (int i = 0; i < res.length; i++) {
 			for (int j = 0; j < res[0].length; j++) {
-				res[i][j] = new Room(roomCounter);
+				res[i][j] = new Room(roomCounter, myPokedex);
 				roomCounter++;
 			}
 		}
@@ -109,6 +123,13 @@ public class Maze {
 
 	public int getCols() {
 		return COLS;
+	}
+	
+	/*
+	 * Return current room player is in
+	 */
+	public Room getCurrRoom() {
+		return myMatrix[myPlayerLocation[0]][myPlayerLocation[1]];
 	}
 
 }

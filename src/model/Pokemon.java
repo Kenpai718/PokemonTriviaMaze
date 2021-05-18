@@ -56,16 +56,16 @@ public class Pokemon {
 		return myName;
 	}
 	
-	public String myID() {
+	public String getID() {
 		return myID;
 	}
 	
-	public int myIDNum() {
+	public int getNum() {
 		return myIDNum;
 	}
 	
 	
-	public BufferedImage myModel() {
+	public BufferedImage getPNG() {
 		return myPNG;
 		
 	}

@@ -7,7 +7,10 @@ package test;
 
 import model.Maze;
 import model.Pokedex;
+import model.Pokemon;
 import model.QuestionAnswer;
+import model.Room;
+import view.viewHelper.QuestionRoomGUI;
 
 public class TestingClass{
 	
@@ -19,9 +22,25 @@ public class TestingClass{
 	public static void main(String[] args) {
 		myPokedex = new Pokedex();
 		myQA = new QuestionAnswer(myPokedex);
-		System.out.println(myQA);
-		System.out.println(myQA.getAnswer());
+		myMaze = new Maze(myPokedex);
+		Room r = myMaze.getCurrRoom();
+		String[] choices = r.getChoices();
+		System.out.println(choices[1]);
 		
+		 
+		
+		
+	}
+	
+	public static void printAll() {
+		for(int i = 0; i < myPokedex.getCount(); i ++) {
+			try {
+				Pokemon p = myPokedex.findPokemon(i);
+				System.out.println(p.getName());
+			} catch (Exception e) {
+				System.out.println(i + " not found");
+			}
+		}
 	}
 	
 	

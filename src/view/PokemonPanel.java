@@ -14,6 +14,9 @@ import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
+import model.Maze;
+import model.Room;
+import model.TriviaGame;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.MazeGUI;
@@ -24,6 +27,11 @@ import view.viewHelper.QuestionRoomGUI;
  * @author ken
  */
 public class PokemonPanel extends JPanel {
+	/*
+	 * TO adjust the picture position
+	 */
+    private final int X_OFFSET = 120;
+    private final int Y_OFFSET = 230;
 
     /**
     * 
@@ -52,6 +60,14 @@ public class PokemonPanel extends JPanel {
     // ImageIcon("./images/sparkle_formatted.png");
 
     private BufferedImage imshine = null;
+    
+    //KEN: testing setting up the game
+    private TriviaGame myGame;
+    private Maze myMaze;
+    private BufferedImage myPokePic;
+    private BufferedImage myHiddenPic;
+    private Room myCurrRoom;
+    
 
     // TODO Dev formatting, needs to be changed
     private int shineW = 0;
@@ -59,11 +75,12 @@ public class PokemonPanel extends JPanel {
     private int pokeW = 0;
     private int pokeH = 0;
 
-    private final BufferedImage impikaLight;
-    private final BufferedImage impikaDark;
+    private final BufferedImage myPokeLight;
+    private final BufferedImage myPokeDark;
     private BufferedImage impika;
     private final MazeGUI mazeGUI;
     private final QuestionRoomGUI questionRoomGUI;
+  
 
     /*
      * Constructor
@@ -72,11 +89,19 @@ public class PokemonPanel extends JPanel {
         // TODO Auto-generated constructor stub
         super();
 
-        mazeGUI = new MazeGUI();
+        //start a new game on the panel
+        myGame = new TriviaGame();
+        myMaze = myGame.getMaze();
+        mazeGUI = new MazeGUI(myMaze);
+        myCurrRoom = myMaze.getCurrRoom();
+        myPokePic = myCurrRoom.getPokemon().getPNG();
+        questionRoomGUI = new QuestionRoomGUI(myCurrRoom);
+      
+        
+        //put stuff on the panel
         final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
         mazeGUI.setBorder(blueLine);
-
-        questionRoomGUI = new QuestionRoomGUI();
+        
         final SpringLayout springLayout = new SpringLayout();
         springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553, SpringLayout.NORTH, this);
         springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36, SpringLayout.SOUTH, this);
@@ -95,9 +120,10 @@ public class PokemonPanel extends JPanel {
         addPropertyChangeListener(controlPanel);
         add(controlPanel);
 
-        impikaLight = readImage("./src/images/pokemon/pikachu.png");
-        impikaDark = (BufferedImage) BrightnessUtility.adjustBrighness(impikaLight, 0f);
-        impika = impikaDark;
+        myPokeLight = myPokePic;
+        myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokePic, 0f);
+        impika = myPokeDark;
+        
         imshine = readImage("./src/images/other/sparkle_formatted.png");
         if (impika != null && imshine != null) {
             shineW = imshine.getWidth();
@@ -106,14 +132,6 @@ public class PokemonPanel extends JPanel {
             pokeH = impika.getHeight();
         }
 
-        // note: the pictures below are just a test rn I will delete later
-        // final JLabel pikachu = new JLabel("");
-        // pikachu.setIcon(pika);
-        // add(pikachu);
-        //
-        // final JLabel sparkle = new JLabel("");
-        // sparkle.setIcon(shine);
-        // add(sparkle);
 
         setupPanel();
 
@@ -151,14 +169,14 @@ public class PokemonPanel extends JPanel {
         super.paintComponent(theG);
 //        final BufferedImage impika = (BufferedImage) BrightnessUtility.adjustBrighness(impika, 0f);
         theG.drawImage(imshine, 0, 0, shineW, shineH, this);
-        theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
+        theG.drawImage(impika, X_OFFSET, Y_OFFSET, pokeW, pokeH, this);
         firePropertyChange("newpos", null, null);
         // theG.drawImage(impika, 0, 0, pokeW, pokeH, this);
 
     }
     
     public void setImgBrightness(final int thePercentage) {            
-            impika = thePercentage == 0 ? impikaDark : impikaLight;
+            impika = thePercentage == 0 ? myPokeDark : myPokeLight;
             repaint();
             
     }
