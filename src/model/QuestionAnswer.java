@@ -110,7 +110,7 @@ public class QuestionAnswer {
 	 */
 	private Pokemon generatePokemon() {
 //	        final Maze maze = Maze.getInstance();
-		final Pokemon pkmn = generatePokemonHelper();
+		Pokemon pkmn = generatePokemonHelper();
 		
 		if (!USED.contains(pkmn)) {
 		        USED.add(pkmn);
