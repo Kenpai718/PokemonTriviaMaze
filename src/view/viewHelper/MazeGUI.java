@@ -204,7 +204,9 @@ public class MazeGUI extends JPanel {
 		 */
 		private final ImageIcon TREE = new ImageIcon(
 				"./src/images/other/tree.png");
-
+		
+		private final ImageIcon WIN = new ImageIcon(
+				"./src/images/other/pokestar.png");
 		/**
 		 * Constructor
 		 * 
@@ -221,21 +223,29 @@ public class MazeGUI extends JPanel {
 
 			final JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
-
+			
 			if (r.isPlayerHere()) { // player at this cell put player icon
 				final ImageIcon scaled = new ImageIcon(PLAYER.getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 				// same process for blocked rooms put an else if here once we
 				// have a data structure for it
-
-			} else { // put the room name in cell
-				final String name = r.toString();
+			} else if (!r.canEnter()) {
+				final ImageIcon scaled = new ImageIcon(TREE.getImage()
+						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+				lbl.setIcon(scaled);
+		    } else { // put the room name in cell
+		    	if(r == myMatrix[3][3]) {
+					final ImageIcon scaled = new ImageIcon(WIN.getImage()
+							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+					lbl.setIcon(scaled);
+		    	} else {
+		    	final String name = r.toString();
 				lbl.setText(name);
 				lbl.setForeground(Color.WHITE);
 				lbl.setBackground(MAZE_BG);
 				lbl.setFont(PKMN_FONT);
-
+		    	}
 			}
 
 			// format jlabel

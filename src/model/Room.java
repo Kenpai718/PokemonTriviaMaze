@@ -25,7 +25,7 @@ public class Room extends QuestionAnswer {
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
 	 */
-	private boolean canEnter;
+	private static boolean canEnter;
 
 	/*
 	 * If player is currently in this room

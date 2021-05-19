@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Random;
+import view.viewHelper.QuestionRoomGUI;
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -38,6 +39,7 @@ public class QuestionAnswer {
 	 * Upperbound of random generator
 	 */
 	private int myUpper;
+	
 
 	/**
 	 * Constructor
@@ -45,7 +47,6 @@ public class QuestionAnswer {
 	 * @param thePokedex data used to fill the questions with
 	 */
 	public QuestionAnswer(Pokedex thePokedex) {
-		// TODO Auto-generated constructor stub
 		myPokedex = thePokedex;
 		myChoices = new String[NUM_CHOICES];
 		myUpper = myPokedex.getCount();
@@ -57,6 +58,7 @@ public class QuestionAnswer {
 
 		// randomly fill out myChoices
 		fillChoices();
+		displayAnswer();
 	}
 
 	/**
@@ -133,6 +135,23 @@ public class QuestionAnswer {
 		}
 
 		return sb.toString();
+	}
+	
+	public void displayAnswer() {
+		//char[] theAnswers = {'1', '2', '3', '4'};
+		//int index = getAnswer();
+		//if (theAnswers[index] != '1') {
+	//		QuestionRoomGUI.
+		//}
+	//	if (theAnswers[index] != '2') {
+	//		
+	//	}
+		//if (theAnswers[index] != '3') {
+			
+	//	}
+		//if (theAnswers[index] != '4') {
+			
+		//}
 	}
 
 }

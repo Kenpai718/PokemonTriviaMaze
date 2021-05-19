@@ -49,6 +49,7 @@ public class QuestionRoomGUI extends JPanel {
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void setupGUI() {
 		setBorder(new LineBorder(Color.BLACK, 4, true));
 		setBackground(Color.WHITE);
@@ -78,6 +79,7 @@ public class QuestionRoomGUI extends JPanel {
 
 	}
 
+	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
 		final JRadioButton myA1 = new JRadioButton("");
@@ -132,7 +134,6 @@ public class QuestionRoomGUI extends JPanel {
 	}
 
 	public void setButtons() {
-		// TODO Auto-generated method stub
 		final Maze maze = Maze.getInstance();
 		final String[] choices = maze.getCurrRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
@@ -143,5 +144,4 @@ public class QuestionRoomGUI extends JPanel {
 			i++;
 		}
 	}
-
 }
