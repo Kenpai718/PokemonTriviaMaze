@@ -162,29 +162,34 @@ public class PokemonMenuBar extends JMenuBar {
 		 * @return an int[] of the two numbers input
 		 */
 		private int[] readInput(final String theMessage) {
-			final StringBuilder input = new StringBuilder();
-			input.append(JOptionPane.showInputDialog(theMessage));
+			final String input = JOptionPane.showInputDialog(theMessage);
 			int[] res = myMaze.getPlayerLocation().clone();
 			final Scanner scan;
-			if ((input != null && !input.isEmpty()) && !(input.length() < 3)) {
-				scan = new Scanner(input.toString());
-				try {
-					for (int i = 0; i < 2; i++) {
-						final int num = scan.nextInt() - 1;
-						if (num < myMaze.getRows() && num < myMaze.getCols()) {
-							res[i] = num;
-						} else {
-							res = readInput("One or more numbers out "
-									+ "of range of maze\n(X Y):");
-							break;
-						}
-					}
-				} catch (final InputMismatchException e) {
-					res = readInput("Please use integers only.\n(X Y):");
-				}
-				scan.close();
+			if (input != null && !input.isEmpty()) {
+				if (!(input.length() < 3)) {
+                                        scan = new Scanner(input.toString());
+                                        try {
+                                                for (int i = 0; i < 2; i++) {
+                                                        final int num = scan.nextInt()
+                                                                        - 1;
+                                                        if (num < myMaze.getRows()
+                                                                        && num < myMaze.getCols()) {
+                                                                res[i] = num;
+                                                        } else {
+                                                                res = readInput("One or more numbers out "
+                                                                                + "of range of maze\n(X Y):");
+                                                                break;
+                                                        }
+                                                }
+                                        } catch (final InputMismatchException e) {
+                                                res = readInput("Please use integers only.\n(X Y):");
+                                        }
+                                        scan.close();
+                                } else {
+                                        res = readInput("Invalid Input\n(X Y):");
+                                }
 			} else {
-				res = readInput(theMessage);
+			        // do nothing
 			}
 
 			return res;

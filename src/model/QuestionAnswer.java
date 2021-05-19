@@ -76,27 +76,31 @@ public class QuestionAnswer {
 	        myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-		        addName();
-		        
-//			if (i == myAnswerIndex) { // answer
-//				myChoices[i] = myPokemon.getName();
-//			} else { // other choices
-//				myChoices[i] = generatePokemon().getName();
-//			}
+		        addName();		        
 		}
 		Collections.shuffle(myChoices);
 	}
 
+	/**
+	 * Adds names to the choices list. checks for duplicates
+	 */
 	private void addName() {
                 // TODO Auto-generated method stub
                 final String name = generatePokemonHelper().getName();
+                // check if the name was used
 	        if (!myChoices.contains(name)) {
 	                myChoices.add(name);
 	        } else {
+	                // get a new pokemon
 	                addName();
 	        }
         }
 
+        /**
+         * Method helper that returns a random pokemon from the pokedex
+         * 
+         * @return returns a random pokemon
+         */
         private Pokemon generatePokemonHelper() {
                 final int num = (int) (Math.random() * (myUpper - 1) + 1);
                 return myPokedex.findPokemon(num);
