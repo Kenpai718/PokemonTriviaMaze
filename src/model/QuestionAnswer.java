@@ -89,7 +89,7 @@ public class QuestionAnswer {
 
 	private void addName() {
                 // TODO Auto-generated method stub
-                final String name = generatePokemonName();
+                final String name = generatePokemonHelper().getName();
 	        if (!myChoices.contains(name)) {
 	                myChoices.add(name);
 	        } else {
@@ -97,9 +97,9 @@ public class QuestionAnswer {
 	        }
         }
 
-        private String generatePokemonName() {
+        private Pokemon generatePokemonHelper() {
                 final int num = (int) (Math.random() * (myUpper - 1) + 1);
-                return myPokedex.findPokemon(num).getName();
+                return myPokedex.findPokemon(num);
         }
 
         /**
@@ -110,9 +110,7 @@ public class QuestionAnswer {
 	 */
 	private Pokemon generatePokemon() {
 //	        final Maze maze = Maze.getInstance();
-		final int num = (int) (Math.random() * (myUpper - 1) + 1);
-		// System.out.println("Random num is " + num);
-		Pokemon pkmn = myPokedex.findPokemon(num);
+		final Pokemon pkmn = generatePokemonHelper();
 		
 		if (!USED.contains(pkmn)) {
 		        USED.add(pkmn);
