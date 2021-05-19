@@ -11,18 +11,18 @@ public class TriviaGame {
 	/*
 	 * Holds a map that stores info on all Pokemon
 	 */
-	private Pokedex myPokedex;
+	private final Pokedex myPokedex;
 	/*
 	 * Maze that is played on
 	 */
-	private Maze myMaze;
+	private final Maze myMaze;
 
 	/*
 	 * Constructor
 	 */
 	public TriviaGame() {
-		myPokedex = new Pokedex();
-		myMaze = new Maze(myPokedex);
+		myPokedex = Pokedex.getInstance();
+		myMaze = Maze.getInstance();
 	}
 
 	/**

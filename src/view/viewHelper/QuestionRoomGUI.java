@@ -3,6 +3,7 @@ package view.viewHelper;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
@@ -134,12 +135,12 @@ public class QuestionRoomGUI extends JPanel {
 	public void setButtons() {
 		// TODO Auto-generated method stub
 		final Maze maze = Maze.getInstance();
-		final String[] choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
-			temp.setText(choices[i]);
+			temp.setText(choices.get(i));
 			i++;
 		}
 	}

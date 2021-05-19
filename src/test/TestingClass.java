@@ -9,8 +9,6 @@ import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
 import model.QuestionAnswer;
-import model.Room;
-import view.viewHelper.QuestionRoomGUI;
 
 public class TestingClass{
 	
@@ -19,10 +17,10 @@ public class TestingClass{
 	static QuestionAnswer myQA;
 	
 
-	public static void main(String[] args) {
-		myPokedex = new Pokedex();
-		myQA = new QuestionAnswer(myPokedex);
-		myMaze = new Maze(myPokedex);
+	public static void main(final String[] args) {
+		myPokedex = Pokedex.getInstance();
+		myQA = new QuestionAnswer();
+		myMaze = Maze.getInstance();
 		/*
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
 		 * System.out.println(choices[1]);
@@ -38,9 +36,9 @@ public class TestingClass{
 	public static void printAll() {
 		for(int i = 0; i < myPokedex.getCount(); i ++) {
 			try {
-				Pokemon p = myPokedex.findPokemon(i);
+				final Pokemon p = myPokedex.findPokemon(i);
 				System.out.println(p.getName());
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				System.out.println(i + " not found");
 			}
 		}

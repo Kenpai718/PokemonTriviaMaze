@@ -18,6 +18,8 @@ import org.sqlite.SQLiteDataSource;
  */
 
 public class Pokedex {
+        
+        public static Pokedex singleDex = null;
 
 	/*
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
@@ -30,7 +32,7 @@ public class Pokedex {
 	/**
 	 * Constructor to initialize pokedex
 	 */
-	public Pokedex() {
+	private Pokedex() {
 		// TODO Auto-generated constructor stub
 		myPokedex = new HashMap<Integer, Pokemon>();
 		myCounter = 0;
@@ -41,6 +43,13 @@ public class Pokedex {
 
 		// fill pokedex with database
 		fillPokedex();
+	}
+	
+	public static Pokedex getInstance() {
+	        if (singleDex == null) {
+	                singleDex = new Pokedex();
+	        }
+	        return singleDex;
 	}
 
 	/*

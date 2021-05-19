@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
@@ -41,11 +41,13 @@ public class Maze {
 	 * debugging.
 	 */
 	private int roomCounter;
+	
+        private final ArrayList<Pokemon> myPokemonList;
 
-	/*
-	 * Big data storage of all pokemon info
-	 */
-	private static Pokedex myPokedex;
+//	/*
+//	 * Big data storage of all pokemon info
+//	 */
+//	private static Pokedex myPokedex;
 
 	/*
 	 * Singleton maze instantiation
@@ -60,42 +62,52 @@ public class Maze {
 	 * Constructor for maze
 	 */
 	private Maze() {
-		roomCounter = 0;
-		myMatrix = fillRooms();
-//		winCondition = false;
-		final int[] h = new int[] { 0, 0 };
-		myPlayerLocation = h;
-		myMatrix[0][0].setPlayer(true); // put player location at 0,0
-	}
-
-	/**
-	 * Constructor for maze given pokedex info
-	 * 
-	 * @param thePokedex
-	 */
-	public Maze(Pokedex thePokedex) {
-		myPokedex = thePokedex;
-		roomCounter = 0;
-		myMatrix = fillRooms();
-		final int[] h = new int[] { 0, 0 };
-		myPlayerLocation = h;
-
-		// TODO: test stuff delete later
-		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+	        roomCounter = 0;
+                myMatrix = fillRooms();
+                myPlayerLocation = new int[] { 0, 0 };
+                myPokemonList = fillPokemonList();
+                // TODO: test stuff delete later
+                myMatrix[0][0].setPlayer(true); // put player location at 0,0
 
 	}
 
-	/**
+//	/**
+//	 * Constructor for maze given pokedex info
+//	 * 
+//	 * @param thePokedex
+//	 */
+//	private Maze(final Pokedex thePokedex) {
+//		myPokedex = thePokedex;
+//		roomCounter = 0;
+//		myMatrix = fillRooms();
+//		myPlayerLocation = new int[] { 0, 0 };
+//		myPokemonList = fillPokemonList();
+//		// TODO: test stuff delete later
+//		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+//
+//	}
+
+	
+
+        /**
 	 * Singleton maze instantiation
 	 * 
 	 * @return Maze
 	 */
 	public static Maze getInstance() {
 		if (singleMaze == null) {
-			singleMaze = new Maze(myPokedex);
+			singleMaze = new Maze();
 		}
 		return singleMaze;
 	}
+	
+//        public static Maze getInstance(final Pokedex thePokedex) {
+//                if (singleMaze == null) {
+//                        singleMaze = new Maze(thePokedex);
+//                }
+//                return singleMaze;
+//        }
+
 
 	/**
 	 * Fills matrix with new rooms that have questions.
@@ -107,7 +119,7 @@ public class Maze {
 		final Room[][] res = new Room[ROWS][COLS];
 		for (int i = 0; i < res.length; i++) {
 			for (int j = 0; j < res[0].length; j++) {
-				res[i][j] = new Room(roomCounter, myPokedex);
+				res[i][j] = new Room(roomCounter);
 				roomCounter++;
 			}
 		}
@@ -153,7 +165,7 @@ public class Maze {
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -184,12 +196,27 @@ public class Maze {
 			}
 		}
 
-		catch (Exception e) {
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 		
 		return null;
 
+	}
+	
+	private ArrayList<Pokemon> fillPokemonList() {
+                // TODO Auto-generated method stub
+                final ArrayList<Pokemon> res = new ArrayList<>();
+                for (int i = 0; i < ROWS; i++) {
+                        for (int j = 0; j < COLS; j++) {
+                                res.add(myMatrix[i][j].getPokemon());
+                        }
+                }
+                return res;
+        }
+	
+	public ArrayList<Pokemon> getPokemonList() {
+	        return myPokemonList;
 	}
 
 	/**
@@ -218,5 +245,6 @@ public class Maze {
 	public int getCols() {
 		return COLS;
 	}
+
 
 }

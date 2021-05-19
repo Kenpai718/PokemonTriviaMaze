@@ -151,6 +151,8 @@ public class PokemonMenuBar extends JMenuBar {
 //                        
 			myMaze.setPlayerLocation(pos);
 			myModel.refresh(myMaze.getMatrix());
+			myPanel.setImage();
+			myPanel.getQuestionGUI().setButtons();
 		}
 
 		/**
