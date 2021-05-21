@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Random;
-import view.viewHelper.QuestionRoomGUI;
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -58,7 +56,6 @@ public class QuestionAnswer {
 
 		// randomly fill out myChoices
 		fillChoices();
-		displayAnswer();
 	}
 
 	/**
@@ -121,6 +118,10 @@ public class QuestionAnswer {
 
 		return myChoices.clone();
 	}
+	
+	public int getAnswerIndex() {
+		return myAnswerIndex;
+	}
 
 	/**
 	 * Formats to a string the choices for debugging
@@ -137,21 +138,7 @@ public class QuestionAnswer {
 		return sb.toString();
 	}
 	
-	public void displayAnswer() {
-		//char[] theAnswers = {'1', '2', '3', '4'};
-		//int index = getAnswer();
-		//if (theAnswers[index] != '1') {
-	//		QuestionRoomGUI.
-		//}
-	//	if (theAnswers[index] != '2') {
-	//		
-	//	}
-		//if (theAnswers[index] != '3') {
-			
-	//	}
-		//if (theAnswers[index] != '4') {
-			
-		//}
-	}
+	
+	
 
 }
