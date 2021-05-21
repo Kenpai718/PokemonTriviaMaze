@@ -2,9 +2,6 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,11 +12,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
 import model.Maze;
 import view.viewHelper.MazeGUI.MazeModel;
-import javax.swing.JRadioButton;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -149,27 +146,29 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupGamemodesMenu() {
 
 		myGamemodes = new ButtonGroup();
-		JRadioButton choice = new JRadioButton("Multiple Choice");
+		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
 		myGamemodeMenu.add(choice);
 		myGamemodes.add(choice);
 		choice.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				firePropertyChange("choicegm", null, null);
+			public void actionPerformed(final ActionEvent e) {
+			        System.out.println("action fired");
+				firePropertyChange("choicegm", null, true);
 
 			}
 
 		});
 
-		JRadioButton input = new JRadioButton("User Input");
+		final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
 		myGamemodeMenu.add(input);
 		myGamemodes.add(input);
 		input.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				firePropertyChange("inputgm", null, null);
+			public void actionPerformed(final ActionEvent e) {
+			        System.out.println("action fired");
+				firePropertyChange("inputgm", null, true);
 
 			}
 

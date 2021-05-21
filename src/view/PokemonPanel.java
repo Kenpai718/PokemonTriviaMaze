@@ -9,13 +9,11 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
@@ -27,6 +25,7 @@ import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
+import view.viewHelper.RoomPanel;
 import view.viewHelper.TextRoomGUI;
 
 /**
@@ -123,6 +122,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private boolean myDark;
 
+        private final RoomPanel myRoomPanel;
+
 
 	/**
 	 * Constructor
@@ -130,6 +131,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public PokemonPanel() {
 
 		super();
+		
 
 
 
@@ -138,6 +140,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myGame = new TriviaGame();
 		myMaze = Maze.getInstance();
 		mazeGUI = new MazeGUI();
+		myRoomPanel = new RoomPanel();
 		questionRoomGUI = new QuestionRoomGUI();
 		myTextRoomGUI = new TextRoomGUI();
 
@@ -156,6 +159,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		// draw onto panel Pokemon and background
 		setupPictures();
 		addPropertyChangeListener(this);
+		
+		final RoomPanel roomPanel = new RoomPanel();
+//		springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211, SpringLayout.NORTH, controlPanel);
+//		springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51, SpringLayout.WEST, questionRoomGUI);
+//		add(roomPanel);
 
 	}
 
@@ -254,15 +262,15 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * @param h      - desired height
 	 * @return - the new resized image
 	 */
-	private BufferedImage getScaledImage(Image srcImg, int w, int h) {
+	private BufferedImage getScaledImage(final Image srcImg, final int w, final int h) {
 
 		// Create a new image with good size that contains or might contain
 		// arbitrary alpha values between and including 0.0 and 1.0.
-		BufferedImage resizedImg = new BufferedImage(w, h,
+		final BufferedImage resizedImg = new BufferedImage(w, h,
 				BufferedImage.TRANSLUCENT);
 
 		// Create a device-independant object to draw the resized image
-		Graphics2D g2 = resizedImg.createGraphics();
+		final Graphics2D g2 = resizedImg.createGraphics();
 
 		// improve quality of rendering
 		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -341,18 +349,17 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		if ("choicegm".equals(evt.getPropertyName())) {
 			System.out.println("in panel choice");
-			questionRoomGUI.setVisible(true);
-			myTextRoomGUI.setVisible(false);
+			questionRoomGUI.setVisible((boolean) evt.getNewValue());
+			myTextRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
 		} else if ("inputgm".equals(evt.getPropertyName())){
 			System.out.println("in panel input");
-			myTextRoomGUI.setVisible(true);
-			questionRoomGUI.setVisible(false);
+			myTextRoomGUI.setVisible((boolean) evt.getNewValue());
+			questionRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
 		}
 	}
-
 }
