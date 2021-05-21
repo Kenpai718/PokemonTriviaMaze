@@ -2,9 +2,13 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,6 +19,7 @@ import javax.swing.JSeparator;
 
 import model.Maze;
 import view.viewHelper.MazeGUI.MazeModel;
+import javax.swing.JRadioButton;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -27,12 +32,14 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public class PokemonMenuBar extends JMenuBar {
 
-	
 	private JMenu myHelpMenu;
 	private JMenu myFileMenu;
+	private JMenu myGamemodeMenu;
+	private ButtonGroup myGamemodes;
 	private final Maze myMaze;
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
+
 
 	public PokemonMenuBar(final PokemonGUI theFrame) {
 		// TODO Auto-generated constructor stub
@@ -52,6 +59,11 @@ public class PokemonMenuBar extends JMenuBar {
 		myHelpMenu = new JMenu("Help");
 		setupHelpMenu();
 		this.add(myHelpMenu);
+
+		myGamemodeMenu = new JMenu("Gamemode");
+		setupGamemodesMenu();
+		this.add(myGamemodeMenu);
+
 	}
 
 	/**
@@ -134,6 +146,37 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
+	private void setupGamemodesMenu() {
+
+		myGamemodes = new ButtonGroup();
+		JRadioButton choice = new JRadioButton("Multiple Choice");
+		myGamemodeMenu.add(choice);
+		myGamemodes.add(choice);
+		choice.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				firePropertyChange("choicegm", null, null);
+
+			}
+
+		});
+
+		JRadioButton input = new JRadioButton("User Input");
+		myGamemodeMenu.add(input);
+		myGamemodes.add(input);
+		input.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				firePropertyChange("inputgm", null, null);
+
+			}
+
+		});
+
+	}
+
 	public class TeleportListener implements ActionListener {
 
 		private final MazeModel myModel;
@@ -167,29 +210,28 @@ public class PokemonMenuBar extends JMenuBar {
 			final Scanner scan;
 			if (input != null && !input.isEmpty()) {
 				if (!(input.length() < 3)) {
-                                        scan = new Scanner(input.toString());
-                                        try {
-                                                for (int i = 0; i < 2; i++) {
-                                                        final int num = scan.nextInt()
-                                                                        - 1;
-                                                        if (num < myMaze.getRows()
-                                                                        && num < myMaze.getCols()) {
-                                                                res[i] = num;
-                                                        } else {
-                                                                res = readInput("One or more numbers out "
-                                                                                + "of range of maze\n(X Y):");
-                                                                break;
-                                                        }
-                                                }
-                                        } catch (final InputMismatchException e) {
-                                                res = readInput("Please use integers only.\n(X Y):");
-                                        }
-                                        scan.close();
-                                } else {
-                                        res = readInput("Invalid Input\n(X Y):");
-                                }
+					scan = new Scanner(input.toString());
+					try {
+						for (int i = 0; i < 2; i++) {
+							final int num = scan.nextInt() - 1;
+							if (num < myMaze.getRows()
+									&& num < myMaze.getCols()) {
+								res[i] = num;
+							} else {
+								res = readInput("One or more numbers out "
+										+ "of range of maze\n(X Y):");
+								break;
+							}
+						}
+					} catch (final InputMismatchException e) {
+						res = readInput("Please use integers only.\n(X Y):");
+					}
+					scan.close();
+				} else {
+					res = readInput("Invalid Input\n(X Y):");
+				}
 			} else {
-			        // do nothing
+				// do nothing
 			}
 
 			return res;
