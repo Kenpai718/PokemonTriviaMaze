@@ -8,7 +8,9 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -16,6 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Maze;
 import model.Room;
+import view.PokemonGUI;
 
 /**
  * Visual of the maze GUI represented by a JTable. Shows location of player, all
@@ -236,7 +239,7 @@ public class MazeGUI extends JPanel {
 				lbl.setIcon(scaled);
 		    } else { // put the room name in cell
 		    	if(r == myMatrix[3][3]) {
-					final ImageIcon scaled = new ImageIcon(WIN.getImage()
+		    		final ImageIcon scaled = new ImageIcon(WIN.getImage()
 							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 					lbl.setIcon(scaled);
 		    	} else {

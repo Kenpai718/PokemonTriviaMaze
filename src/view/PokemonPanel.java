@@ -265,10 +265,8 @@ public class PokemonPanel extends JPanel {
 		}
 
 		return img;
-	}
+	}	
 	
-
-
 	/**
 	 * Paints the pokemon and background
 	 */
@@ -293,7 +291,7 @@ public class PokemonPanel extends JPanel {
 		repaint();
 
 	}
-
+	
 	/**
 	 * Getter MazeGUi table
 	 * 
@@ -311,5 +309,6 @@ public class PokemonPanel extends JPanel {
 	public QuestionRoomGUI getQuestionGUI() {
 		return questionRoomGUI;
 	}
-
+	
+	
 }

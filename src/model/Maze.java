@@ -2,6 +2,9 @@ package model;
 
 import java.util.Arrays;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -21,9 +24,9 @@ public class Maze {
 	/*
 	 * Constants
 	 */
-	private final int ROWS = 4;
-	private final int COLS = 4;
-	private final int[] WIN_LOCATION = new int[] { (ROWS * COLS - 1),
+	private final static int ROWS = 4;
+	private final static int COLS = 4;
+	private final static int[] WIN_LOCATION = new int[] { (ROWS * COLS - 1),
 			(ROWS * COLS - 1) }; // end of maze
 
 	/*
@@ -82,7 +85,6 @@ public class Maze {
 
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
-
 	}
 
 	/**

@@ -5,10 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextPane;
@@ -16,7 +19,9 @@ import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
-import model.Room;
+import view.PokemonGUI;
+import view.PokemonPanel;
+
 
 /**
  * Has the multiple choice question for the room
@@ -37,6 +42,15 @@ public class QuestionRoomGUI extends JPanel {
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
 	
+	private JRadioButton myA1;
+	private JRadioButton myA2;
+	private JRadioButton myA3;
+	private JRadioButton myA4;
+	private final int POKE_W = 600;
+	private final int POKE_H = 600;
+
+	
+	
 
 //    /*
 //     * Multiple choice
@@ -51,7 +65,7 @@ public class QuestionRoomGUI extends JPanel {
 	public QuestionRoomGUI() {
 //    	myCurrRoom = theRoom;
 //    	myChoices = theRoom.getChoices();
-
+		
 		setupGUI();
 
 	}
@@ -89,7 +103,7 @@ public class QuestionRoomGUI extends JPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		final JRadioButton myA1 = new JRadioButton("");
+		myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
 		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
 				myQPane);
@@ -122,8 +136,6 @@ public class QuestionRoomGUI extends JPanel {
 		myLayout.putConstraint(myLayout.EAST, myA3, 0, myLayout.EAST, this);
 		myLayout.putConstraint(myLayout.SOUTH, myA2, -42, myLayout.NORTH, myA3);
 		myLayout.putConstraint(myLayout.NORTH, myA3, 276, myLayout.NORTH, this);
-		//myLayout.putConstraint(myLayout.SOUTH, myA3, -159, myLayout.SOUTH,
-				//this);
 		myA3.setMnemonic('3');
 		myA3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		myA3.addActionListener(new AnswerDisplay());
@@ -159,11 +171,10 @@ public class QuestionRoomGUI extends JPanel {
 	}
 	
 	public void setButtonsAnswer() {
-
 		final Maze maze = Maze.getInstance();
 		final String[] choices = maze.getCurrRoom().getChoices();
-		int roomIndex = maze.getCurrRoom().getAnswerIndex();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		int roomIndex = maze.getCurrRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
@@ -177,11 +188,35 @@ public class QuestionRoomGUI extends JPanel {
 		}
 	}
 	
+	public void answerPopUp() {
+		String pkmn = "";
+		final Maze maze = Maze.getInstance();
+		final String[] choices = maze.getCurrRoom().getChoices();
+		int roomIndex = maze.getCurrRoom().getAnswerIndex();
+		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                pkmn = button.getText();
+            }
+        }
+		if(pkmn == choices[roomIndex]) {
+			JOptionPane.showMessageDialog(null, "It was " + choices[roomIndex] + "!", "Correct", JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, "It was " + choices[roomIndex] + "!", "Incorrect", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
+	public void displayPokemon() {
+		
+	}
+	
 	class AnswerDisplay implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-				setButtonsAnswer();
+			setButtonsAnswer();
+			answerPopUp();
+			displayPokemon();
 		}
 	}
 }

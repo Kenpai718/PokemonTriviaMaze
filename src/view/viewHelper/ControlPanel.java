@@ -32,6 +32,10 @@ import view.PokemonPanel;
  */
 
 public class ControlPanel extends JPanel implements PropertyChangeListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final DownAction downAction;
 	private final LeftAction leftAction;
 	private final RightAction rightAction;

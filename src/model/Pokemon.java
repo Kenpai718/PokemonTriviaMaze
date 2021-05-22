@@ -58,7 +58,7 @@ public class Pokemon {
 	public Pokemon(final String theID, final String theName) {
 		myID = theID;
 		myIDNum = Integer.parseInt(myID);
-		myName = theName;
+		myName = theName.replaceAll("_", "");
 		myFileName = PATH + theID + theName + ".png";
 		myPNG = readImage(myFileName);
 

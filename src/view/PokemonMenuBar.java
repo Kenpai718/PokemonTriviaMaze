@@ -28,11 +28,15 @@ import view.viewHelper.MazeGUI.MazeModel;
 public class PokemonMenuBar extends JMenuBar {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2139646030569655705L;
 	private JMenu myHelpMenu;
 	private JMenu myFileMenu;
 	private final Maze myMaze;
 	private final JFrame myFrame;
-	private final PokemonPanel myPanel;
+	public final PokemonPanel myPanel;
 
 	public PokemonMenuBar(final PokemonGUI theFrame) {
 		// TODO Auto-generated constructor stub
@@ -86,7 +90,7 @@ public class PokemonMenuBar extends JMenuBar {
 				// TODO Auto-generated method stub
 				JOptionPane.showMessageDialog(myFrame,
 						"Created by: AJ Downey, Kenneth Ahrens, "
-								+ "Katelyn Malone\n Spring 2021",
+								+ "Katlyn Malone\n Spring 2021",
 						"About", JOptionPane.PLAIN_MESSAGE);
 			}
 
@@ -121,7 +125,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 			}
 		});
-		cheats.add(cheat1);
+		cheats.add(cheat1); 
 
 		final JCheckBoxMenuItem cheat2 = new JCheckBoxMenuItem(
 				"Unlock All Doors");
