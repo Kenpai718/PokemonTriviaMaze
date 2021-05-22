@@ -329,6 +329,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		repaint();
 
 	}
+	
+	public void setPanels(final boolean theValue ) {
+	        questionRoomGUI.setVisible(theValue);
+                myTextRoomGUI.setVisible(!theValue);
+	}
 
 	/**
 	 * Getter MazeGUi table
