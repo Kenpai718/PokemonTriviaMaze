@@ -10,14 +10,16 @@ import java.util.Map;
 import org.sqlite.SQLiteDataSource;
 
 /**
- * Stores information about every Pokemon such as their ID number and name. Initially
- * reads off an SQL database file to get Pokemon information.
+ * Stores information about every Pokemon such as their ID number and name.
+ * Initially reads off an SQL database file to get Pokemon information.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
  */
 
 public class Pokedex {
+
+	public static Pokedex singleDex = null;
 
 	/*
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
@@ -30,7 +32,7 @@ public class Pokedex {
 	/**
 	 * Constructor to initialize pokedex
 	 */
-	public Pokedex() {
+	private Pokedex() {
 		// TODO Auto-generated constructor stub
 		myPokedex = new HashMap<Integer, Pokemon>();
 		myCounter = 0;
@@ -41,6 +43,13 @@ public class Pokedex {
 
 		// fill pokedex with database
 		fillPokedex();
+	}
+
+	public static Pokedex getInstance() {
+		if (singleDex == null) {
+			singleDex = new Pokedex();
+		}
+		return singleDex;
 	}
 
 	/*

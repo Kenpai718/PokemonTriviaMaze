@@ -32,6 +32,10 @@ import view.PokemonPanel;
  */
 
 public class ControlPanel extends JPanel implements PropertyChangeListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final DownAction downAction;
 	private final LeftAction leftAction;
 	private final RightAction rightAction;
@@ -81,7 +85,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		player.setInheritsPopupMenu(false);
 		player.setIconTextGap(0);
 		final ImageIcon imageIcon = new ImageIcon(new ImageIcon(
-				ControlPanel.class.getResource("/other/Player.jpg")).getImage()
+				ControlPanel.class.getResource("/other/Player.png")).getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 		player.setIcon(imageIcon);
 		add(player);

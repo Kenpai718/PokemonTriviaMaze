@@ -1,18 +1,20 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
@@ -24,6 +26,8 @@ import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
+import view.viewHelper.RoomPanel;
+import view.viewHelper.TextRoomGUI;
 
 /**
  * Setups playable game visuals on a panel
@@ -32,7 +36,7 @@ import view.viewHelper.QuestionRoomGUI;
  * @author ken
  * @version Spring 2021
  */
-public class PokemonPanel extends JPanel {
+public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	/**
 	 * Serialization
 	 */
@@ -49,13 +53,12 @@ public class PokemonPanel extends JPanel {
 	 */
 	private final int POKE_W = 600;
 	private final int POKE_H = 600;
-	
 
 	/*
 	 * default layout of the GUI
 	 */
 	private final SpringLayout springLayout = new SpringLayout();
-	
+
 	/*
 	 * Size of the shine background
 	 */
@@ -111,7 +114,9 @@ public class PokemonPanel extends JPanel {
 	/*
 	 * Question GUI
 	 */
-	private final QuestionRoomGUI questionRoomGUI;
+	private final QuestionRoomGUI myQuestionRoomGUI;
+
+	private final TextRoomGUI myTextRoomGUI;
 
 	/*
 	 * Boolean to know if the picture is hidden or visible
@@ -122,7 +127,6 @@ public class PokemonPanel extends JPanel {
 	 * Constructor
 	 */
 	public PokemonPanel() {
-
 		super();
 
 		// start a new game on the panel
@@ -130,7 +134,10 @@ public class PokemonPanel extends JPanel {
 		myGame = new TriviaGame();
 		myMaze = Maze.getInstance();
 		mazeGUI = new MazeGUI();
-		questionRoomGUI = new QuestionRoomGUI();
+		myQuestionRoomGUI = new QuestionRoomGUI();
+		myTextRoomGUI = new TextRoomGUI();
+		addListener(myQuestionRoomGUI);
+		addListener(myTextRoomGUI);
 
 		/// initialize panel
 		setupPanel();
@@ -140,12 +147,17 @@ public class PokemonPanel extends JPanel {
 		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60,
 				SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131,
-				SpringLayout.WEST, questionRoomGUI);
+				SpringLayout.WEST, myQuestionRoomGUI);
 		addPropertyChangeListener(controlPanel);
 		add(controlPanel);
 
 		// draw onto panel Pokemon and background
 		setupPictures();
+
+		final RoomPanel roomPanel = new RoomPanel();
+//		springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211, SpringLayout.NORTH, controlPanel);
+//		springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51, SpringLayout.WEST, myQuestionRoomGUI);
+//		add(roomPanel);
 
 	}
 
@@ -160,22 +172,36 @@ public class PokemonPanel extends JPanel {
 		final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 		mazeGUI.setBorder(blueLine);
 
-		springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553,
+		// question room
+		springLayout.putConstraint(SpringLayout.NORTH, myQuestionRoomGUI, 553,
 				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36,
+		springLayout.putConstraint(SpringLayout.SOUTH, myQuestionRoomGUI, -36,
 				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, questionRoomGUI, -107,
+		springLayout.putConstraint(SpringLayout.EAST, myQuestionRoomGUI, -107,
 				SpringLayout.EAST, this);
+		// myQuestionRoomGUI.setVisible(false);
+
+		// maze gui
 		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10,
 				SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345,
 				SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10,
 				SpringLayout.EAST, this);
+		// text room
+		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92,
+				SpringLayout.EAST, this);
+
 		setLayout(springLayout);
 		add(mazeGUI);
-		add(questionRoomGUI);
+		add(myQuestionRoomGUI);
+		add(myTextRoomGUI);
 
+		// disable one of the question/text room gui's
+		myTextRoomGUI.setVisible(false);
+		//myQuestionRoomGUI.setVisible(false);
 	}
 
 	/**
@@ -205,50 +231,58 @@ public class PokemonPanel extends JPanel {
 	public void setImage() {
 
 		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
-		//resize if not the correct width or height
-		if(myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H || myPokeLight.getWidth() > POKE_W || myPokeLight.getHeight() > POKE_H) {
+		// resize if not the correct width or height
+		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
+				|| myPokeLight.getWidth() > POKE_W
+				|| myPokeLight.getHeight() > POKE_H) {
 			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
 		}
-		
-		
+
 		myPokeDark = (BufferedImage) BrightnessUtility
 				.adjustBrighness(myPokeLight, 0f);
 		myPoke = myDark ? myPokeDark : myPokeLight;
 		repaint();
 
 	}
-	
-	 /**
-	 * Resizes an image using a Graphics2D object backed by a BufferedImage.
-	 * It is scaled this way to prevent the picture from looking blurry.
+
+	/**
+	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It
+	 * is scaled this way to prevent the picture from looking blurry.
 	 * 
-	 * SOURCE: https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
+	 * SOURCE:
+	 * https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
+	 * 
 	 * @param srcImg - source image to scale
-	 * @param w - desired width
-	 * @param h - desired height
+	 * @param w      - desired width
+	 * @param h      - desired height
 	 * @return - the new resized image
 	 */
-	private BufferedImage getScaledImage(Image srcImg, int w, int h){
+	private BufferedImage getScaledImage(final Image srcImg, final int w,
+			final int h) {
 
-	    //Create a new image with good size that contains or might contain arbitrary alpha values between and including 0.0 and 1.0.
-	    BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
+		// Create a new image with good size that contains or might contain
+		// arbitrary alpha values between and including 0.0 and 1.0.
+		final BufferedImage resizedImg = new BufferedImage(w, h,
+				BufferedImage.TRANSLUCENT);
 
-	    //Create a device-independant object to draw the resized image
-	    Graphics2D g2 = resizedImg.createGraphics();
+		// Create a device-independant object to draw the resized image
+		final Graphics2D g2 = resizedImg.createGraphics();
 
-	    //improve quality of rendering
-	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		// improve quality of rendering
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-	    //Finally draw the source image in the Graphics2D with the desired size.
-	    g2.drawImage(srcImg, 0, 0, w, h, null);
+		// Finally draw the source image in the Graphics2D with the desired
+		// size.
+		g2.drawImage(srcImg, 0, 0, w, h, null);
 
-	    //Disposes of this graphics context and releases any system resources that it is using
-	    g2.dispose();
+		// Disposes of this graphics context and releases any system resources
+		// that it is using
+		g2.dispose();
 
-	    //Return the image used to create the Graphics2D 
-	    return resizedImg;
+		// Return the image used to create the Graphics2D
+		return resizedImg;
 	}
-	
 
 	/**
 	 * Helper method to read an Image given a filepath
@@ -266,8 +300,6 @@ public class PokemonPanel extends JPanel {
 
 		return img;
 	}
-	
-
 
 	/**
 	 * Paints the pokemon and background
@@ -276,7 +308,7 @@ public class PokemonPanel extends JPanel {
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
 //        final BufferedImage myPoke = (BufferedImage) BrightnessUtility.adjustBrighness(myPoke, 0f);
-		
+
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
 		firePropertyChange("newpos", null, null);
@@ -294,6 +326,11 @@ public class PokemonPanel extends JPanel {
 
 	}
 
+	public void setPanels(final boolean theValue) {
+		myQuestionRoomGUI.setVisible(theValue);
+		myTextRoomGUI.setVisible(!theValue);
+	}
+
 	/**
 	 * Getter MazeGUi table
 	 * 
@@ -309,7 +346,38 @@ public class PokemonPanel extends JPanel {
 	 * @return QuestionRoomGUI
 	 */
 	public QuestionRoomGUI getQuestionGUI() {
-		return questionRoomGUI;
+		return myQuestionRoomGUI;
 	}
 
+	/*
+	 * Add an object that this panel will listen for property changes.
+	 * 
+	 * @param Container the GUI object
+	 */
+	public void addListener(Container theObj) {
+		((Container) theObj).addPropertyChangeListener(this);
+	}
+
+	
+	/*
+	 * Property changes that update the panel
+	 * 
+	 */
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		String prop = evt.getPropertyName();
+		if (evt.getNewValue() instanceof Boolean) {
+			Boolean res = (Boolean) evt.getNewValue();
+			if ("changegm".equals(prop)) { //change the gamemode panel
+				// System.out.println("in panel changes question panel");
+				setPanels(res);
+			}
+
+			if ("showpkmn".equals(prop)) { //reveal or hide the pokemon
+				//System.out.println("in panel reveal");
+				myPoke = res ? myPokeLight : myPokeDark;
+				repaint();
+			}
+		}
+	}
 }

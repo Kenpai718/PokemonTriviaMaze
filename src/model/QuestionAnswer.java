@@ -1,6 +1,10 @@
 package model;
 
-import java.util.Random;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -13,50 +17,55 @@ import java.util.Random;
 public class QuestionAnswer {
 
 	private final int NUM_CHOICES = 4;
+	
+	private static List<Pokemon> USED = new ArrayList<Pokemon>();
 
 	/*
 	 * Question/answer
 	 */
-	private Pokemon myPokemon;
+	private final Pokemon myPokemon;
 
 	/*
 	 * Multiple choice answers
 	 */
-	private String[] myChoices;
+	private final List<String> myChoices;
 
 	/*
 	 * index of the answer in choices
 	 */
-	private int myAnswerIndex;
+	private final int myAnswerIndex;
 
 	/*
 	 * List of pokemon in a map for #ID lookup
 	 */
-	private Pokedex myPokedex;
+	private final Pokedex myPokedex;
 
 	/*
 	 * Upperbound of random generator
 	 */
-	private int myUpper;
+	private final int myUpper;
+	
 
 	/**
 	 * Constructor
 	 * 
 	 * @param thePokedex data used to fill the questions with
 	 */
-	public QuestionAnswer(Pokedex thePokedex) {
+	public QuestionAnswer() {
 		// TODO Auto-generated constructor stub
-		myPokedex = thePokedex;
-		myChoices = new String[NUM_CHOICES];
+		myPokedex = Pokedex.getInstance();
+		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = generatePokemon();
-
-		// random location 0-3
-		myAnswerIndex = (int) (Math.random() * (NUM_CHOICES));
+		
+		
+		fillChoices();
+		// get index of shuffled array list
+		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 		// System.out.println("my answer num is " + myAnswerIndex);
 
 		// randomly fill out myChoices
-		fillChoices();
+		
 	}
 
 	/**
@@ -65,28 +74,55 @@ public class QuestionAnswer {
 	 * question choices.
 	 */
 	private void fillChoices() {
-
-		for (int i = 0; i < NUM_CHOICES; i++) {
+	        
+	        myChoices.add(myPokemon.getName());
+		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-			if (i == myAnswerIndex) { // answer
-				myChoices[i] = myPokemon.getName();
-			} else { // other choices
-				myChoices[i] = generatePokemon().getName();
-			}
-
+		        addName();		        
 		}
+		Collections.shuffle(myChoices);
 	}
 
 	/**
+	 * Adds names to the choices list. checks for duplicates
+	 */
+	private void addName() {
+                // TODO Auto-generated method stub
+                final String name = generatePokemonHelper().getName();
+                // check if the name was used
+	        if (!myChoices.contains(name)) {
+	                myChoices.add(name);
+	        } else {
+	                // get a new pokemon
+	                addName();
+	        }
+        }
+
+        /**
+         * Method helper that returns a random pokemon from the pokedex
+         * 
+         * @return returns a random pokemon
+         */
+        private Pokemon generatePokemonHelper() {
+                final int num = (int) (Math.random() * (myUpper - 1) + 1);
+                return myPokedex.findPokemon(num);
+        }
+
+        /**
 	 * Randomly generate a pokemon with ID 1-myUpper and get it from the
 	 * pokedex.
 	 * 
 	 * @return Pokemon randomly generated pokemon
 	 */
 	private Pokemon generatePokemon() {
-		int num = (int) (Math.random() * (myUpper - 1) + 1);
-		// System.out.println("Random num is " + num);
-		Pokemon pkmn = myPokedex.findPokemon(num);
+//	        final Maze maze = Maze.getInstance();
+		Pokemon pkmn = generatePokemonHelper();
+		
+		if (!USED.contains(pkmn)) {
+		        USED.add(pkmn);
+		} else {
+		        pkmn = generatePokemon();
+		}
 		return pkmn;
 	}
 
@@ -97,7 +133,6 @@ public class QuestionAnswer {
 	 */
 	public String getAnswer() {
 		return myPokemon.getName();
-
 	}
 
 	/**
@@ -115,9 +150,13 @@ public class QuestionAnswer {
 	 * 
 	 * @return String[]
 	 */
-	public String[] getChoices() {
+	public ArrayList<String> getChoices() {
 
-		return myChoices.clone();
+		return (ArrayList<String>) myChoices;
+	}
+	
+	public int getAnswerIndex() {
+		return myAnswerIndex;
 	}
 
 	/**
@@ -126,13 +165,16 @@ public class QuestionAnswer {
 	 * @return String the choices
 	 */
 	public String getChoicesStr() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < NUM_CHOICES; i++) {
-			sb.append((i + 1) + ") " + myChoices[i] + "\n");
+			sb.append((i + 1) + ") " + myChoices.get(i) + "\n");
 		}
 
 		return sb.toString();
 	}
+	
+	
+	
 
 }

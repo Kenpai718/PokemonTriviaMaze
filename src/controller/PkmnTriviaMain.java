@@ -4,9 +4,9 @@
 package controller;
 
 import java.awt.EventQueue;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import view.PokemonGUI;
 
 
@@ -43,7 +43,7 @@ public class PkmnTriviaMain {
         
         EventQueue.invokeLater(new Runnable() {
             @Override
-            public void run() {
+            public void run() {                
                 new PokemonGUI();
             }
         });

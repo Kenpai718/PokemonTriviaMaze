@@ -25,27 +25,26 @@ public class Room extends QuestionAnswer {
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
 	 */
-	private boolean canEnter;
+	private static boolean canEnter;
 
 	/*
 	 * If player is currently in this room
 	 */
 	private boolean hasPlayer;
+	
 
 	/**
 	 * Constructor
 	 * 
 	 * @param theRoomNumber how much to increment the room name letter
-	 * @param thePokedex    data of all the pokemon to fill the room questions
-	 *                      with
 	 */
-	public Room(final int theRoomNumber, Pokedex thePokedex) {
+	public Room(final int theRoomNumber) {
 
-		super(thePokedex); // put a pokemon and question in this room
+		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z
 		myRoomName = (char) (theRoomNumber + START_LETTER);
-		canEnter = true;
+		setEntry(true);
 		hasPlayer = false;
 
 	}
@@ -55,7 +54,7 @@ public class Room extends QuestionAnswer {
 	 * 
 	 * @return boolean T = canEnter room, F = blocked room
 	 */
-	private void setEntry(Boolean theChoice) {
+	private void setEntry(final Boolean theChoice) {
 		canEnter = theChoice;
 	}
 	
