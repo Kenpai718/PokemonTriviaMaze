@@ -51,7 +51,7 @@ public class TextRoomGUI extends JPanel {
 		question.setEditable(false);
 		add(question);
 		
-		myUserAns = new JTextField();
+		myUserAns = new JTextField(PUT_TEXT);
 		myUserAns.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 11));
 		springLayout.putConstraint(SpringLayout.NORTH, myUserAns, 6, SpringLayout.SOUTH, question);
 		springLayout.putConstraint(SpringLayout.WEST, myUserAns, 0, SpringLayout.WEST, question);
@@ -107,12 +107,14 @@ public class TextRoomGUI extends JPanel {
         		correctAns = correctAns.toLowerCase().strip();
         		userAns = userAns.toLowerCase().strip();
         		
+        		firePropertyChange("showpkmn", null, true);
         		if(userAns.equals(correctAns)) {
-        			JOptionPane.showMessageDialog(null, "Good job! " + correct);
+        			JOptionPane.showMessageDialog(null, "Good job! " + correct, "Correct!", JOptionPane.INFORMATION_MESSAGE);
         			
         		} else {
-        			JOptionPane.showMessageDialog(null, incorrect + correct);
+        			JOptionPane.showMessageDialog(null, incorrect + correct, "Incorrect!", JOptionPane.INFORMATION_MESSAGE);
         		}
+        		firePropertyChange("showpkmn", null, false);
         		
         		myUserAns.setText(""); //return to default
             }
