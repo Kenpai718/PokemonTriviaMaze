@@ -122,7 +122,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private boolean myDark;
 
-	private final RoomPanel myRoomPanel;
+        private final RoomPanel myRoomPanel;
+
 
 	/**
 	 * Constructor
@@ -130,6 +131,9 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public PokemonPanel() {
 
 		super();
+		
+
+
 
 		// start a new game on the panel
 		// TODO: run the game off of myGame
@@ -155,7 +159,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		// draw onto panel Pokemon and background
 		setupPictures();
 		addPropertyChangeListener(this);
-
+		
 		final RoomPanel roomPanel = new RoomPanel();
 //		springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211, SpringLayout.NORTH, controlPanel);
 //		springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51, SpringLayout.WEST, questionRoomGUI);
@@ -200,10 +204,9 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		add(mazeGUI);
 		add(questionRoomGUI);
 		add(myTextRoomGUI);
-
-		// disable one of the question/text room gui's
-		// questionRoomGUI.setVisible(false);
-		myTextRoomGUI.setVisible(false);
+		
+		//disable one of the question/text room gui's
+		questionRoomGUI.setVisible(false);
 	}
 
 	/**
@@ -232,25 +235,18 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public void setImage() {
 
-		try {
-			myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
-			// resize if not the correct width or height
-			if (myPokeLight.getWidth() < POKE_W
-					|| myPokeLight.getHeight() < POKE_H
-					|| myPokeLight.getWidth() > POKE_W
-					|| myPokeLight.getHeight() > POKE_H) {
-				myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
-			}
-
-			myPokeDark = (BufferedImage) BrightnessUtility
-					.adjustBrighness(myPokeLight, 0f);
-			myPoke = myDark ? myPokeDark : myPokeLight;
-
-			repaint();
-		} catch (Exception e) {
-			e.printStackTrace();
-			
+		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+		// resize if not the correct width or height
+		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
+				|| myPokeLight.getWidth() > POKE_W
+				|| myPokeLight.getHeight() > POKE_H) {
+			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
 		}
+
+		myPokeDark = (BufferedImage) BrightnessUtility
+				.adjustBrighness(myPokeLight, 0f);
+		myPoke = myDark ? myPokeDark : myPokeLight;
+		repaint();
 
 	}
 
@@ -266,8 +262,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * @param h      - desired height
 	 * @return - the new resized image
 	 */
-	private BufferedImage getScaledImage(final Image srcImg, final int w,
-			final int h) {
+	private BufferedImage getScaledImage(final Image srcImg, final int w, final int h) {
 
 		// Create a new image with good size that contains or might contain
 		// arbitrary alpha values between and including 0.0 and 1.0.
@@ -334,10 +329,10 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		repaint();
 
 	}
-
-	public void setPanels(final boolean theValue) {
-		questionRoomGUI.setVisible(theValue);
-		myTextRoomGUI.setVisible(!theValue);
+	
+	public void setPanels(final boolean theValue ) {
+	        questionRoomGUI.setVisible(theValue);
+                myTextRoomGUI.setVisible(!theValue);
 	}
 
 	/**
@@ -365,13 +360,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 			questionRoomGUI.setVisible((boolean) evt.getNewValue());
 			myTextRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
-		} else if ("inputgm".equals(evt.getPropertyName())) {
+		} else if ("inputgm".equals(evt.getPropertyName())){
 			System.out.println("in panel input");
 			myTextRoomGUI.setVisible((boolean) evt.getNewValue());
 			questionRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
 		}
-
 	}
-
 }
