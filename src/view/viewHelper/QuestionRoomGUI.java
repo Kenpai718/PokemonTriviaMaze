@@ -164,6 +164,7 @@ public class QuestionRoomGUI extends RoomPanel {
 
 	public void setButtons() {
 		// TODO Auto-generated method stub
+		buttonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
@@ -171,6 +172,7 @@ public class QuestionRoomGUI extends RoomPanel {
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
 			temp.setText(choices.get(i));
+			temp.setForeground(Color.BLACK);
 			i++;
 		}
 	}

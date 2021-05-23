@@ -19,6 +19,9 @@ import org.sqlite.SQLiteDataSource;
 
 public class Pokedex {
 
+	/*
+	 * Singleton pokedex
+	 */
 	public static Pokedex singleDex = null;
 
 	/*
@@ -45,6 +48,9 @@ public class Pokedex {
 		fillPokedex();
 	}
 
+	/*
+	 * Singleton instantiation 
+	 */
 	public static Pokedex getInstance() {
 		if (singleDex == null) {
 			singleDex = new Pokedex();
@@ -73,7 +79,7 @@ public class Pokedex {
 
 		System.out.println("Opened pokedex database successfully");
 
-		System.out.println("Selecting all rows from test table");
+		System.out.println("Selecting all rows from pokedex table");
 		final String query = "SELECT * FROM Pokedex";
 
 		try (Connection conn = ds.getConnection();
