@@ -156,6 +156,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				firePropertyChange("choicegm", null, null);
 
 			}

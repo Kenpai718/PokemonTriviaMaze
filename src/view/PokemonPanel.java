@@ -123,15 +123,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private boolean myDark;
 
-
 	/**
 	 * Constructor
 	 */
 	public PokemonPanel() {
 
 		super();
-
-
 
 		// start a new game on the panel
 		// TODO: run the game off of myGame
@@ -196,9 +193,10 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		add(mazeGUI);
 		add(questionRoomGUI);
 		add(myTextRoomGUI);
-		
-		//disable one of the question/text room gui's
-		questionRoomGUI.setVisible(false);
+
+		// disable one of the question/text room gui's
+		// questionRoomGUI.setVisible(false);
+		myTextRoomGUI.setVisible(false);
 	}
 
 	/**
@@ -342,17 +340,19 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+
 		if ("choicegm".equals(evt.getPropertyName())) {
 			System.out.println("in panel choice");
 			questionRoomGUI.setVisible(true);
 			myTextRoomGUI.setVisible(false);
 
-		} else if ("inputgm".equals(evt.getPropertyName())){
+		} else if ("inputgm".equals(evt.getPropertyName())) {
 			System.out.println("in panel input");
 			myTextRoomGUI.setVisible(true);
 			questionRoomGUI.setVisible(false);
 
 		}
+
 	}
 
 }
