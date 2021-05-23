@@ -162,29 +162,28 @@ public class QuestionRoomGUI extends JPanel {
 		add(myA4);
 	}
 
-	public void setButtons() {
-		buttonGroup.clearSelection();
-		final Maze maze = Maze.getInstance();
-		final String[] choices = maze.getCurrRoom().getChoices();
-		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
-		int i = 0;
-		while (buttons.hasMoreElements()) {
-			final JRadioButton temp = (JRadioButton) buttons.nextElement();
-			temp.setText(choices[i]);
-			temp.setForeground(Color.BLACK);
-			i++;
-		}
-	}
+    public void setButtons() {
+        // TODO Auto-generated method stub
+        final Maze maze = Maze.getInstance();
+        final ArrayList<String> choices = maze.getCurrRoom().getChoices();
+        final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+        int i = 0;
+        while (buttons.hasMoreElements()) {
+                final JRadioButton temp = (JRadioButton) buttons.nextElement();
+                temp.setText(choices.get(i));
+                i++;
+        }
+}
 	
 	public void setButtonsAnswer() {
 		final Maze maze = Maze.getInstance();
-		final String[] choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
 		int roomIndex = maze.getCurrRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
-			temp.setText(choices[i]);
+			temp.setText(choices.get(i));
 			if(i == roomIndex) {
 				temp.setForeground(Color.GREEN);
 			} else {
@@ -197,7 +196,7 @@ public class QuestionRoomGUI extends JPanel {
 	public void answerPopUp() {
 		String pkmn = "";
 		final Maze maze = Maze.getInstance();
-		final String[] choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
 		int roomIndex = maze.getCurrRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
@@ -205,10 +204,10 @@ public class QuestionRoomGUI extends JPanel {
                 pkmn = button.getText();
             }
         }
-		if(pkmn == choices[roomIndex]) {
-			JOptionPane.showMessageDialog(null, "It was " + choices[roomIndex] + "!", "Correct", JOptionPane.INFORMATION_MESSAGE);
+		if(pkmn == choices.get(roomIndex)) {
+			JOptionPane.showMessageDialog(null, "It was " + choices.get(roomIndex) + "!", "Correct", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null, "It was " + choices[roomIndex] + "!", "Incorrect", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "It was " + choices.get(roomIndex) + "!", "Incorrect", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	

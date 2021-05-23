@@ -4,7 +4,7 @@ import java.io.*;
 import javax.sound.sampled.*;
 import javax.sound.sampled.Clip;
 
-public class musicBackground {
+public class BackgroundMusic {
 	
 	public static void playMusic() {	   
 		try {

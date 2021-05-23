@@ -59,6 +59,10 @@ public class Pokemon {
 		myID = theID;
 		myIDNum = Integer.parseInt(myID);
 		myName = theName.replaceAll("_", ""); //i.e: Mr._Mime -> Mr.Mime
+		myFileName = PATH + theID + theName + ".png";
+		myPNG = readImage(myFileName);
+		
+	}
 
 	/**
 	 * Finds the pokemon picture based on filepath If not found return missing
