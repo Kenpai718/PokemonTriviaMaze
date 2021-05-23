@@ -122,8 +122,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private boolean myDark;
 
-        private final RoomPanel myRoomPanel;
-
+	private final RoomPanel myRoomPanel;
 
 	/**
 	 * Constructor
@@ -131,9 +130,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public PokemonPanel() {
 
 		super();
-		
-
-
 
 		// start a new game on the panel
 		// TODO: run the game off of myGame
@@ -149,21 +145,28 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		// control panel property change
 		final ControlPanel controlPanel = new ControlPanel(this);
-		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131,
-				SpringLayout.WEST, questionRoomGUI);
+		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131, SpringLayout.WEST, questionRoomGUI);
 		addPropertyChangeListener(controlPanel);
 		add(controlPanel);
 
 		// draw onto panel Pokemon and background
 		setupPictures();
 		addPropertyChangeListener(this);
-		
+
 		final RoomPanel roomPanel = new RoomPanel();
-//		springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211, SpringLayout.NORTH, controlPanel);
-//		springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51, SpringLayout.WEST, questionRoomGUI);
-//		add(roomPanel);
+		// springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211,
+		// SpringLayout.NORTH, controlPanel);
+		// springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51,
+		// SpringLayout.WEST, questionRoomGUI);
+		// add(roomPanel);
+
+		final RoomPanel roomPanel = new RoomPanel();
+		// springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211,
+		// SpringLayout.NORTH, controlPanel);
+		// springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51,
+		// SpringLayout.WEST, questionRoomGUI);
+		// add(roomPanel);
 
 	}
 
@@ -179,34 +182,27 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		mazeGUI.setBorder(blueLine);
 
 		// question room
-		springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, questionRoomGUI, -107,
-				SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, questionRoomGUI, 553, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, questionRoomGUI, -36, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, questionRoomGUI, -107, SpringLayout.EAST, this);
 		// questionRoomGUI.setVisible(false);
 
 		// maze gui
-		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345,
-				SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10,
-				SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10, SpringLayout.EAST, this);
 		// text room
-		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92,
-				SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92, SpringLayout.EAST, this);
 
 		setLayout(springLayout);
 		add(mazeGUI);
 		add(questionRoomGUI);
 		add(myTextRoomGUI);
-		
-		//disable one of the question/text room gui's
-		questionRoomGUI.setVisible(false);
+
+		// disable one of the question/text room gui's
+		// questionRoomGUI.setVisible(false);
+		myTextRoomGUI.setVisible(false);
 	}
 
 	/**
@@ -229,30 +225,34 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Set pokemon pictures for dark and light depending on the current room
-	 * Resize them if they are not 600x600px
+	 * Set pokemon pictures for dark and light depending on the current room Resize
+	 * them if they are not 600x600px
 	 * 
 	 */
 	public void setImage() {
 
-		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
-		// resize if not the correct width or height
-		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
-				|| myPokeLight.getWidth() > POKE_W
-				|| myPokeLight.getHeight() > POKE_H) {
-			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
-		}
+		try {
+			myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+			// resize if not the correct width or height
+			if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H || myPokeLight.getWidth() > POKE_W
+					|| myPokeLight.getHeight() > POKE_H) {
+				myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
+			}
 
-		myPokeDark = (BufferedImage) BrightnessUtility
-				.adjustBrighness(myPokeLight, 0f);
-		myPoke = myDark ? myPokeDark : myPokeLight;
-		repaint();
+			myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokeLight, 0f);
+			myPoke = myDark ? myPokeDark : myPokeLight;
+
+			repaint();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
 
 	}
 
 	/**
-	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It
-	 * is scaled this way to prevent the picture from looking blurry.
+	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It is
+	 * scaled this way to prevent the picture from looking blurry.
 	 * 
 	 * SOURCE:
 	 * https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
@@ -266,15 +266,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		// Create a new image with good size that contains or might contain
 		// arbitrary alpha values between and including 0.0 and 1.0.
-		final BufferedImage resizedImg = new BufferedImage(w, h,
-				BufferedImage.TRANSLUCENT);
+		final BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
 
 		// Create a device-independant object to draw the resized image
 		final Graphics2D g2 = resizedImg.createGraphics();
 
 		// improve quality of rendering
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		// Finally draw the source image in the Graphics2D with the desired
 		// size.
@@ -311,7 +309,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
-//        final BufferedImage myPoke = (BufferedImage) BrightnessUtility.adjustBrighness(myPoke, 0f);
+		// final BufferedImage myPoke = (BufferedImage)
+		// BrightnessUtility.adjustBrighness(myPoke, 0f);
 
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
@@ -329,10 +328,15 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		repaint();
 
 	}
-	
-	public void setPanels(final boolean theValue ) {
-	        questionRoomGUI.setVisible(theValue);
-                myTextRoomGUI.setVisible(!theValue);
+
+	public void setPanels(final boolean theValue) {
+		questionRoomGUI.setVisible(theValue);
+		myTextRoomGUI.setVisible(!theValue);
+	}
+
+	public void setPanels(final boolean theValue) {
+		questionRoomGUI.setVisible(theValue);
+		myTextRoomGUI.setVisible(!theValue);
 	}
 
 	/**
@@ -360,11 +364,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 			questionRoomGUI.setVisible((boolean) evt.getNewValue());
 			myTextRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
-		} else if ("inputgm".equals(evt.getPropertyName())){
+		} else if ("inputgm".equals(evt.getPropertyName())) {
 			System.out.println("in panel input");
 			myTextRoomGUI.setVisible((boolean) evt.getNewValue());
 			questionRoomGUI.setVisible(!(boolean) evt.getNewValue());
 
 		}
+
 	}
 }

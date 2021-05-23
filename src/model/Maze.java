@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -21,9 +24,9 @@ public class Maze {
 	/*
 	 * Constants
 	 */
-	private final int ROWS = 4;
-	private final int COLS = 4;
-	private final int[] WIN_LOCATION = new int[] { (ROWS * COLS - 1),
+	private final static int ROWS = 4;
+	private final static int COLS = 4;
+	private final static int[] WIN_LOCATION = new int[] { (ROWS * COLS - 1),
 			(ROWS * COLS - 1) }; // end of maze
 
 	/*
@@ -41,8 +44,8 @@ public class Maze {
 	 * debugging.
 	 */
 	private int roomCounter;
-	
-        private final ArrayList<Pokemon> myPokemonList;
+
+	private final ArrayList<Pokemon> myPokemonList;
 
 //	/*
 //	 * Big data storage of all pokemon info
@@ -62,13 +65,12 @@ public class Maze {
 	 * Constructor for maze
 	 */
 	private Maze() {
-	        roomCounter = 0;
-                myMatrix = fillRooms();
-                myPlayerLocation = new int[] { 0, 0 };
-                myPokemonList = fillPokemonList();
-                // TODO: test stuff delete later
-                myMatrix[0][0].setPlayer(true); // put player location at 0,0
-
+		roomCounter = 0;
+		myMatrix = fillRooms();
+		myPlayerLocation = new int[] { 0, 0 };
+		myPokemonList = fillPokemonList();
+		// TODO: test stuff delete later
+		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 	}
 
 //	/**
@@ -87,9 +89,7 @@ public class Maze {
 //
 //	}
 
-	
-
-        /**
+	/**
 	 * Singleton maze instantiation
 	 * 
 	 * @return Maze
@@ -100,14 +100,13 @@ public class Maze {
 		}
 		return singleMaze;
 	}
-	
+
 //        public static Maze getInstance(final Pokedex thePokedex) {
 //                if (singleMaze == null) {
 //                        singleMaze = new Maze(thePokedex);
 //                }
 //                return singleMaze;
 //        }
-
 
 	/**
 	 * Fills matrix with new rooms that have questions.
@@ -199,24 +198,24 @@ public class Maze {
 		catch (final Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 
 	}
-	
+
 	private ArrayList<Pokemon> fillPokemonList() {
-                // TODO Auto-generated method stub
-                final ArrayList<Pokemon> res = new ArrayList<>();
-                for (int i = 0; i < ROWS; i++) {
-                        for (int j = 0; j < COLS; j++) {
-                                res.add(myMatrix[i][j].getPokemon());
-                        }
-                }
-                return res;
-        }
-	
+		// TODO Auto-generated method stub
+		final ArrayList<Pokemon> res = new ArrayList<>();
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				res.add(myMatrix[i][j].getPokemon());
+			}
+		}
+		return res;
+	}
+
 	public ArrayList<Pokemon> getPokemonList() {
-	        return myPokemonList;
+		return myPokemonList;
 	}
 
 	/**
@@ -245,6 +244,5 @@ public class Maze {
 	public int getCols() {
 		return COLS;
 	}
-
 
 }

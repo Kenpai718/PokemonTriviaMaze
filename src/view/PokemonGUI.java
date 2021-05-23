@@ -4,9 +4,10 @@
 package view;
 
 import java.awt.BorderLayout;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+
+import sound.BackgroundMusic;
 
 /**
  * Sets up the JFrame and components to see game
@@ -70,6 +71,7 @@ public class PokemonGUI {
 
 		setupGUI();
 		setupControlButtons();
+		BackgroundMusic.playMusic();
 	}
 
 	/**
@@ -126,5 +128,4 @@ public class PokemonGUI {
 	public PokemonPanel getPanel() {
 		return myPanel;
 	}
-
 }
