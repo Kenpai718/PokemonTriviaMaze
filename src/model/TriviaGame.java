@@ -1,22 +1,16 @@
 package model;
 
-import javax.swing.JPanel;
-import java.awt.Dimension;
 import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ImageIcon;
-
-import java.awt.Point;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+import java.awt.Dimension;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListCellRenderer;
 
 /**
  * Used to initialize a trivia maze game
@@ -60,10 +54,10 @@ public class TriviaGame extends JPanel{
 		setBackground(BG);
 		setPreferredSize(new Dimension(1920, 1080));
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TriviaGame.class.getResource("/other/WhoPKMNLogo.png")));
+		final JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon("/src/images/other/WhoPKMNLogo.png"));
 		
-		JButton btnNewButton = new JButton("Start Game");
+		final JButton btnNewButton = new JButton("Start Game");
 		
 		JComboBox gamemodeBox = new JComboBox(GAMEMODES);
 		
