@@ -66,6 +66,8 @@ public class PokemonGUI {
 		myFrame = new JFrame("Pokemon Trivia");
 		myPanel = new PokemonPanel();
 		myMB = new PokemonMenuBar(this);
+		myPanel.addListener(myMB);
+
 //                myControlActions = new ArrayList<Action>();
 //                myControlButtons = new ButtonGroup();
 

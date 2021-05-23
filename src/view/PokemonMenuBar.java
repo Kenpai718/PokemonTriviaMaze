@@ -27,7 +27,7 @@ import view.viewHelper.MazeGUI.MazeModel;
  * @version Spring 2021
  */
 
-public class PokemonMenuBar extends JMenuBar {
+public class PokemonMenuBar extends JMenuBar{
 
         private JMenu myHelpMenu;
         private JMenu myFileMenu;
@@ -153,9 +153,9 @@ public class PokemonMenuBar extends JMenuBar {
 
                         @Override
                         public void actionPerformed(final ActionEvent e) {
-                                System.out.println("action fired");
-                                myPanel.setPanels(true);
-                                firePropertyChange("choicegm", null, true);
+                                //System.out.println("action fired");
+                                //myPanel.setPanels(true);
+                                firePropertyChange("changegm", null, true);
 
                         }
 
@@ -164,18 +164,20 @@ public class PokemonMenuBar extends JMenuBar {
                 final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
                 myGamemodeMenu.add(input);
                 myGamemodes.add(input);
-                input.setSelected(true);
                 input.addActionListener(new ActionListener() {
 
                         @Override
                         public void actionPerformed(final ActionEvent e) {
-                                System.out.println("action fired");
-                                myPanel.setPanels(false);
-                                firePropertyChange("inputgm", null, true);
+                                //System.out.println("action fired");
+                                //myPanel.setPanels(false);
+                                firePropertyChange("changegm", null, false);
 
                         }
 
                 });
+                
+                //set initial gamemodechoice
+                choice.setSelected(true);
 
         }
 

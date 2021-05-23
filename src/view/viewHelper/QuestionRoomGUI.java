@@ -23,6 +23,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
+import model.Room;
 import view.PokemonGUI;
 import view.PokemonPanel;
 
@@ -53,6 +54,8 @@ public class QuestionRoomGUI extends JPanel {
 	private final int POKE_W = 600;
 	private final int POKE_H = 600;
 
+	private Maze myMaze;
+
 	// /*
 	// * Multiple choice
 	// */
@@ -67,6 +70,7 @@ public class QuestionRoomGUI extends JPanel {
 		// myCurrRoom = theRoom;
 		// myChoices = theRoom.getChoices();
 
+		myMaze = Maze.getInstance();
 		setupGUI();
 
 	}
@@ -148,6 +152,7 @@ public class QuestionRoomGUI extends JPanel {
 		myA4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
 		myA4.addActionListener(new AnswerDisplay());
 		buttonGroup.add(myA4);
+
 		setButtons();
 		add(myA4);
 	}
@@ -169,12 +174,12 @@ public class QuestionRoomGUI extends JPanel {
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
-		int roomIndex = maze.getCurrRoom().getAnswerIndex();
+		int answerIndex = maze.getCurrRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
 			temp.setText(choices.get(i));
-			if (i == roomIndex) {
+			if (i == answerIndex) {
 				temp.setForeground(Color.GREEN);
 			} else {
 				temp.setForeground(Color.RED);
@@ -184,26 +189,38 @@ public class QuestionRoomGUI extends JPanel {
 	}
 
 	public void answerPopUp() {
-		String pkmn = "";
+		String userAns = "";
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
-		int roomIndex = maze.getCurrRoom().getAnswerIndex();
+		int answerIndex = maze.getCurrRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
-				pkmn = button.getText();
+				userAns = button.getText();
 			}
 		}
-		if (pkmn == choices.get(roomIndex)) {
-			JOptionPane.showMessageDialog(null, "It was " + choices.get(roomIndex) + "!", "Correct",
-					JOptionPane.INFORMATION_MESSAGE);
+		// obtain info for answer
+		final Room curr = myMaze.getCurrRoom();
+		String correctAns = curr.getAnswer();
+		final String correct = correctAns + " was the correct answer!";
+		final String incorrect = "Sorry, but " + userAns + " is incorrect... ";
+
+		firePropertyChange("showpkmn", null, true);
+		if (userAns.equals(correctAns)) {
+			JOptionPane.showMessageDialog(null, "Good job! " + correct, "Correct!", JOptionPane.INFORMATION_MESSAGE);
+
 		} else {
-			JOptionPane.showMessageDialog(null, "It was " + choices.get(roomIndex) + "!", "Incorrect",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, incorrect + correct, "Incorrect!", JOptionPane.INFORMATION_MESSAGE);
 		}
+		firePropertyChange("showpkmn", null, false);
+
 	}
 
 	public void displayPokemon() {
+
+	}
+
+	public void reset() {
 
 	}
 
