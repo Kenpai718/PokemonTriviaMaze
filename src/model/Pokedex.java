@@ -136,6 +136,7 @@ public class Pokedex {
 	 * @return Pokemon at that ID number
 	 */
 	public Pokemon findPokemon(final int theID) {
+		@SuppressWarnings("unlikely-arg-type")
 		Pokemon res = myPokedex.get("000"); // missingno in case not found
 		if (myPokedex.containsKey(theID)) {
 			res = (myPokedex.get(theID)); // if found return pokemon

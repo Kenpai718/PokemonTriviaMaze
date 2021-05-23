@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 /**
  * Stores information about a Pokemon such as the ID number, name and picture

@@ -20,6 +20,10 @@ import javax.swing.LayoutStyle.ComponentPlacement;
  */
 public class TriviaGame extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6120690860808618390L;
 	private final Color BG= new Color(220, 20, 60);
 	ImageIcon PLAYER_M = new ImageIcon("./src/images/other/Player.png");
 	ImageIcon PLAYER_F = new ImageIcon("./src/images/other/PlayerF.png");

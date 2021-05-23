@@ -2,9 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -185,6 +182,7 @@ public class Maze {
 	 * @return the room at that index
 	 */
 	public Room getRoom(final int theR, final int theC) {
+		@SuppressWarnings("unused")
 		Room res = null;
 		try {
 			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {

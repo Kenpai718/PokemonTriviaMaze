@@ -7,6 +7,11 @@ import javax.swing.JPanel;
 public class RoomPanel extends JPanel {
 
         /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4314694184931278150L;
+
+		/**
          * Create the panel.
          */
         public RoomPanel() {

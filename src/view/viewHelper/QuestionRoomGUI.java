@@ -8,13 +8,11 @@ import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -24,8 +22,6 @@ import javax.swing.border.LineBorder;
 
 import model.Maze;
 import model.Room;
-import view.PokemonGUI;
-import view.PokemonPanel;
 
 /**
  * Has the multiple choice question for the room
@@ -46,13 +42,6 @@ public class QuestionRoomGUI extends JPanel {
 	// private QuestionAnswer myQA;
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
-
-	private JRadioButton myA1;
-	private JRadioButton myA2;
-	private JRadioButton myA3;
-	private JRadioButton myA4;
-	private final int POKE_W = 600;
-	private final int POKE_H = 600;
 
 	private Maze myMaze;
 
@@ -108,7 +97,7 @@ public class QuestionRoomGUI extends JPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		myA1 = new JRadioButton("");
+		final JRadioButton myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
 		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
 				myQPane);
@@ -197,9 +186,6 @@ public class QuestionRoomGUI extends JPanel {
 
 	public void answerPopUp() {
 		String userAns = "";
-		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
-		int answerIndex = maze.getCurrRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup
 				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
@@ -226,10 +212,6 @@ public class QuestionRoomGUI extends JPanel {
 
 	}
 
-	public void displayPokemon() {
-
-	}
-
 	public void reset() {
 
 	}
@@ -240,7 +222,6 @@ public class QuestionRoomGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			setButtonsAnswer();
 			answerPopUp();
-			displayPokemon();
 		}
 	}
 

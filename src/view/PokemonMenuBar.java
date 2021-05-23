@@ -29,7 +29,11 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public class PokemonMenuBar extends JMenuBar{
 
-        private JMenu myHelpMenu;
+        /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6748686814206614562L;
+		private JMenu myHelpMenu;
         private JMenu myFileMenu;
         private JMenu myGamemodeMenu;
         private ButtonGroup myGamemodes;
