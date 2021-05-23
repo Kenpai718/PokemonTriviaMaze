@@ -1,8 +1,10 @@
 package model;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -152,6 +154,10 @@ public class QuestionAnswer {
 
 		return (ArrayList<String>) myChoices;
 	}
+	
+	public int getAnswerIndex() {
+		return myAnswerIndex;
+	}
 
 	/**
 	 * Formats to a string the choices for debugging
@@ -167,5 +173,8 @@ public class QuestionAnswer {
 
 		return sb.toString();
 	}
+	
+	
+	
 
 }

@@ -352,6 +352,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		return questionRoomGUI;
 	}
 
+
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if ("choicegm".equals(evt.getPropertyName())) {
@@ -367,4 +368,5 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		}
 
 	}
+
 }
