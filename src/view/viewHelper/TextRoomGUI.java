@@ -21,7 +21,7 @@ import model.Room;
  * Used in the case of a input text gamemode
  */
 
-public class TextRoomGUI extends JPanel {
+public class TextRoomGUI extends RoomPanel {
 	
 	Dimension SIZE = new Dimension(350,100);
 	private final Color BORDER_COLOR = new Color(51, 153, 204);
@@ -30,7 +30,7 @@ public class TextRoomGUI extends JPanel {
 	private final String PUT_TEXT = "Type answer here.";
 	
 	private final JTextField myUserAns;
-	Maze myMaze;
+	private Maze myMaze;
 	
 	
 	
@@ -96,25 +96,8 @@ public class TextRoomGUI extends JPanel {
         {
             if(evt.getKeyCode() == KeyEvent.VK_ENTER)
             {
-            	//obtain info for answer
-        		final Room curr = myMaze.getCurrRoom();
-        		String correctAns = curr.getAnswer();
-        		String userAns = myUserAns.getText();
-        		final String correct = correctAns + " was the correct answer!";
-        		final String incorrect = "Sorry, but " + userAns + " is incorrect... ";
-        		
-        		//format answer to prevent errors
-        		correctAns = correctAns.toLowerCase().strip();
-        		userAns = userAns.toLowerCase().strip();
-        		
-        		firePropertyChange("showpkmn", null, true);
-        		if(userAns.equals(correctAns)) {
-        			JOptionPane.showMessageDialog(null, "Good job! " + correct, "Correct!", JOptionPane.INFORMATION_MESSAGE);
-        			
-        		} else {
-        			JOptionPane.showMessageDialog(null, incorrect + correct, "Incorrect!", JOptionPane.INFORMATION_MESSAGE);
-        		}
-        		firePropertyChange("showpkmn", null, false);
+
+        		verifyAnswer(myUserAns.getText());
         		
         		myUserAns.setText(""); //return to default
             }

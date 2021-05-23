@@ -36,7 +36,7 @@ import view.PokemonPanel;
  * @version Spring 2021
  */
 
-public class QuestionRoomGUI extends JPanel {
+public class QuestionRoomGUI extends RoomPanel {
 
 	/**
 	 * 
@@ -205,26 +205,10 @@ public class QuestionRoomGUI extends JPanel {
 				userAns = button.getText();
 			}
 		}
-		// obtain info for answer
-		final Room curr = myMaze.getCurrRoom();
-		String correctAns = curr.getAnswer();
-		final String correct = correctAns + " was the correct answer!";
-		final String incorrect = "Sorry, but " + userAns + " is incorrect... ";
 
-		firePropertyChange("showpkmn", null, true);
-		if (userAns.equals(correctAns)) {
-			JOptionPane.showMessageDialog(null, "Good job! " + correct,
-					"Correct!", JOptionPane.INFORMATION_MESSAGE);
+		verifyAnswer(userAns);
+		
 
-		} else {
-			JOptionPane.showMessageDialog(null, incorrect + correct,
-					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
-		}
-		firePropertyChange("showpkmn", null, false);
-
-	}
-
-	public void displayPokemon() {
 
 	}
 
@@ -238,7 +222,6 @@ public class QuestionRoomGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			setButtonsAnswer();
 			answerPopUp();
-			displayPokemon();
 		}
 	}
 

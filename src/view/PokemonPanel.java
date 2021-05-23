@@ -326,6 +326,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	}
 
+	/*
+	 * Set which question panel is visible
+	 * 
+	 * @param theVal false = user input, true = multiple choice
+	 */
 	public void setPanels(final boolean theValue) {
 		myQuestionRoomGUI.setVisible(theValue);
 		myTextRoomGUI.setVisible(!theValue);
