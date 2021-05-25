@@ -12,7 +12,7 @@ import model.Maze;
 import model.Room;
 import view.PokemonPanel;
 import view.viewHelper.MazeGUI.MazeModel;
-import view.viewHelper.RoomPanel;
+import view.viewHelper.AbstractRoomPanel;
 
 /**
  * Controls player movement in the maze

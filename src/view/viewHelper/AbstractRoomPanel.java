@@ -8,19 +8,24 @@ import model.Room;
 import view.PokemonPanel;
 import view.viewHelper.MazeGUI.MazeModel;
 
-/*
- * Used for QuestionRoomGUI and TextRoomGUI for behaviors that
- * they both have.
+/**
+ * Used for QuestionRoomGUI and TextRoomGUI for behaviors that they both have.
  * 
- * Main use is to verify answers and sends property changes for correct and incorrect answers.
+ * Main use is to verify answers and sends property changes for correct and
+ * incorrect answers.
+ * 
+ * Abstract to prevent instantiation because it does nothing on its own.
+ * 
+ * @author Kenneth Ahrens
+ * @version Spring 2021
  */
 
-public class RoomPanel extends JPanel {
+public abstract class AbstractRoomPanel extends JPanel {
 
 	private Maze myMaze;
 	private PokemonPanel myPP;
 
-	public RoomPanel(PokemonPanel thePP) {
+	public AbstractRoomPanel(PokemonPanel thePP) {
 		super();
 		myPP = thePP;
 		myMaze = Maze.getInstance();
@@ -31,7 +36,7 @@ public class RoomPanel extends JPanel {
 	 * Compare user answer and the actual answer and tell user if it was correct
 	 * via option pane.
 	 * 
-	 * @param String theUserAns to compare to
+	 * @param String theUserAns to compare to the correct answer
 	 */
 	public void verifyAnswer(final String theUserAns) {
 

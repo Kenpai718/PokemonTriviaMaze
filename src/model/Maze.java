@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import view.viewHelper.RoomPanel;
+import view.viewHelper.AbstractRoomPanel;
 
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
@@ -321,13 +321,13 @@ public class Maze implements PropertyChangeListener {
 		 */
 		if ("correctans".equals(prop)) {
 			boolean correct = (boolean) evt.getNewValue();
-			System.out.println("answer was " + correct);
+			//System.out.println("answer was " + correct);
 			if (correct) { //answered correctly
-				System.out.println("correct");
+				//System.out.println("correct");
 				setPlayerLocation(myAttemptLocation);
 				// System.out.println(getCurrRoom().getPokemon());
 			} else { //answered incorrectly
-				System.out.println("incorrect");
+				//System.out.println("incorrect");
 				getAttemptRoom().setEntry(false); //block that room
 				//reset attempt location to default
 				setAttemptLocation(myPlayerLocation);
