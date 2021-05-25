@@ -5,11 +5,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import view.viewHelper.AbstractRoomPanel;
-
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -171,7 +166,7 @@ public class Maze implements PropertyChangeListener {
 			e.printStackTrace();
 		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
-
+		getCurrRoom().setVisited(true);
 		myWinCondition = isWinCondition();
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
@@ -189,21 +184,15 @@ public class Maze implements PropertyChangeListener {
 	 * @param theR the row
 	 * @param theC the col
 	 * @return the room at that index
+	 * @throws Exception Handled by the room checker
 	 */
-	public Room getRoom(final int theR, final int theC) {
+	public Room getRoom(final int theR, final int theC) throws Exception {
 		Room res = null;
-		try {
-			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
-			} else {
-				res = myMatrix[theR][theC];
-			}
+		if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
+			throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
+		} else {
+			res = myMatrix[theR][theC];
 		}
-
-		catch (final Exception e) {
-			// e.printStackTrace();
-		}
-
 		return res;
 
 	}
@@ -309,10 +298,11 @@ public class Maze implements PropertyChangeListener {
 		 * if they were right/wrong Block the room if they were wrong
 		 */
 		if ("correctans".equals(prop)) {
-			boolean correct = (boolean) evt.getNewValue();
+			final boolean correct = (boolean) evt.getNewValue();
 			// System.out.println("answer was " + correct);
 			if (correct) { // answered correctly
 				// System.out.println("correct");
+			        getCurrRoom().setVisited(correct);
 				setPlayerLocation(myAttemptLocation);
 				// System.out.println(getCurrRoom().getPokemon());
 			} else { // answered incorrectly

@@ -8,9 +8,7 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -18,7 +16,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Maze;
 import model.Room;
-import view.PokemonGUI;
 
 /**
  * Visual of the maze GUI represented by a JTable. Shows location of player, all
@@ -238,8 +235,14 @@ public class MazeGUI extends JPanel {
 				final ImageIcon scaled = new ImageIcon(TREE.getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
+			} else if (r.hasVisited()) {
+			        final String name = r.toString();
+                                lbl.setText(name);
+                                lbl.setForeground(Color.CYAN);
+                                lbl.setBackground(MAZE_BG);
+                                lbl.setFont(PKMN_FONT);
 			} else { //win icon, blocked or normal room name
-				int[] winpos = myMaze.getWinLocation();
+				final int[] winpos = myMaze.getWinLocation();
 				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
 															// icon
 					final ImageIcon scaled = new ImageIcon(WIN.getImage()

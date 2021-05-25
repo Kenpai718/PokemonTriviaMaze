@@ -32,6 +32,8 @@ public class Room extends QuestionAnswer {
 	 */
 	private boolean hasPlayer;
 	
+	private boolean myVisit;
+	
 
 	/**
 	 * Constructor
@@ -46,7 +48,7 @@ public class Room extends QuestionAnswer {
 		myRoomName = (char) (theRoomNumber + START_LETTER);
 		setEntry(true);
 		hasPlayer = false;
-
+		myVisit = false;
 	}
 
 	/**
@@ -58,6 +60,14 @@ public class Room extends QuestionAnswer {
 		canEnter = theChoice;
 	}
 	
+	/**
+         * Setter for blocked room
+         * 
+         * @return boolean T = canEnter room, F = blocked room
+         */
+        public void setVisited(final Boolean theChoice) {
+                myVisit = theChoice;
+        }
 
 	/**
 	 * Getter to inform if the room is blocked or not
@@ -84,6 +94,10 @@ public class Room extends QuestionAnswer {
 	 */
 	public Boolean isPlayerHere() {
 		return hasPlayer;
+	}
+	
+	public Boolean hasVisited() {
+	        return myVisit;
 	}
 
 	/**

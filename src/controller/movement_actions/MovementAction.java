@@ -11,7 +11,6 @@ import javax.swing.ImageIcon;
 import model.Maze;
 import view.PokemonPanel;
 import view.viewHelper.MazeGUI.MazeModel;
-import view.viewHelper.AbstractRoomPanel;
 
 /**
  * Controls player movement in the maze
@@ -52,6 +51,9 @@ public class MovementAction extends AbstractAction {
 
 		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
+		if (myMaze.getAttemptRoom().hasVisited()) {
+		        myMaze.setPlayerLocation(newPos);
+		}
 		updateGUI();
 
 	}
