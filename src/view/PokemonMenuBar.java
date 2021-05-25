@@ -99,7 +99,7 @@ public class PokemonMenuBar extends JMenuBar{
                                 // TODO Auto-generated method stub
                                 JOptionPane.showMessageDialog(myFrame,
                                                 "Created by: AJ Downey, Kenneth Ahrens, "
-                                                                + "Katelyn Malone\n Spring 2021",
+                                                                + "Katlyn Malone\n Spring 2021",
                                                 "About", JOptionPane.PLAIN_MESSAGE);
                         }
 

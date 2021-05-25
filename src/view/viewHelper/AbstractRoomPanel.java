@@ -22,6 +22,10 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public abstract class AbstractRoomPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8127362927701254911L;
 	private Maze myMaze;
 	private PokemonPanel myPP;
 

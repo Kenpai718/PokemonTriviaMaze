@@ -5,11 +5,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import view.viewHelper.AbstractRoomPanel;
-
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -198,6 +193,7 @@ public class Maze implements PropertyChangeListener {
 	 * @return the room at that index
 	 */
 	public Room getRoom(final int theR, final int theC) {
+		@SuppressWarnings("unused")
 		Room res = null;
 		try {
 			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
@@ -217,7 +213,6 @@ public class Maze implements PropertyChangeListener {
 	}
 
 	private ArrayList<Pokemon> fillPokemonList() {
-		// TODO Auto-generated method stub
 		final ArrayList<Pokemon> res = new ArrayList<>();
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLS; j++) {

@@ -36,7 +36,6 @@ public class Pokedex {
 	 * Constructor to initialize pokedex
 	 */
 	private Pokedex() {
-		// TODO Auto-generated constructor stub
 		myPokedex = new HashMap<Integer, Pokemon>();
 		myCounter = 0;
 
