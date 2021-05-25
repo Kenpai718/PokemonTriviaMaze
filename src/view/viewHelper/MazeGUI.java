@@ -204,9 +204,10 @@ public class MazeGUI extends JPanel {
 		 */
 		private final ImageIcon TREE = new ImageIcon(
 				"./src/images/other/tree.png");
-		
+
 		private final ImageIcon WIN = new ImageIcon(
 				"./src/images/other/pokestar.png");
+
 		/**
 		 * Constructor
 		 * 
@@ -223,29 +224,32 @@ public class MazeGUI extends JPanel {
 
 			final JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
-			
+
 			if (r.isPlayerHere()) { // player at this cell put player icon
 				final ImageIcon scaled = new ImageIcon(PLAYER.getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 				// same process for blocked rooms put an else if here once we
 				// have a data structure for it
-			} else if (!r.canEnter()) {
+			} else if (!r.canEnter()) { // blocked room icon
 				final ImageIcon scaled = new ImageIcon(TREE.getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
-		    } else { // put the room name in cell
-		    	if(r == myMatrix[3][3]) {
-		    		final ImageIcon scaled = new ImageIcon(WIN.getImage()
+			} else { //win icon, blocked or normal room name
+				int[] winpos = myMaze.getWinLocation();
+				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
+															// icon
+					final ImageIcon scaled = new ImageIcon(WIN.getImage()
 							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 					lbl.setIcon(scaled);
-		    	} else {
-		    	final String name = r.toString();
-				lbl.setText(name);
-				lbl.setForeground(Color.WHITE);
-				lbl.setBackground(MAZE_BG);
-				lbl.setFont(PKMN_FONT);
-		    	}
+
+				} else { // normal room name
+					final String name = r.toString();
+					lbl.setText(name);
+					lbl.setForeground(Color.WHITE);
+					lbl.setBackground(MAZE_BG);
+					lbl.setFont(PKMN_FONT);
+				}
 			}
 
 			// format jlabel

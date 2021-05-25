@@ -25,7 +25,7 @@ public class Room extends QuestionAnswer {
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
 	 */
-	private static boolean canEnter;
+	private boolean canEnter;
 
 	/*
 	 * If player is currently in this room
@@ -54,7 +54,7 @@ public class Room extends QuestionAnswer {
 	 * 
 	 * @return boolean T = canEnter room, F = blocked room
 	 */
-	private void setEntry(final Boolean theChoice) {
+	public void setEntry(final Boolean theChoice) {
 		canEnter = theChoice;
 	}
 	

@@ -8,11 +8,13 @@ import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -22,6 +24,8 @@ import javax.swing.border.LineBorder;
 
 import model.Maze;
 import model.Room;
+import view.PokemonGUI;
+import view.PokemonPanel;
 
 /**
  * Has the multiple choice question for the room
@@ -32,7 +36,7 @@ import model.Room;
  * @version Spring 2021
  */
 
-public class QuestionRoomGUI extends JPanel {
+public class QuestionRoomGUI extends AbstractRoomPanel {
 
 	/**
 	 * 
@@ -42,6 +46,13 @@ public class QuestionRoomGUI extends JPanel {
 	// private QuestionAnswer myQA;
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
+
+	private JRadioButton myA1;
+	private JRadioButton myA2;
+	private JRadioButton myA3;
+	private JRadioButton myA4;
+	private final int POKE_W = 600;
+	private final int POKE_H = 600;
 
 	private Maze myMaze;
 
@@ -55,7 +66,8 @@ public class QuestionRoomGUI extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public QuestionRoomGUI() {
+	public QuestionRoomGUI(PokemonPanel thePP) {
+		super(thePP);
 //    	myCurrRoom = theRoom;
 //    	myChoices = theRoom.getChoices();
 
@@ -97,7 +109,7 @@ public class QuestionRoomGUI extends JPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		final JRadioButton myA1 = new JRadioButton("");
+		myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
 		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
 				myQPane);
@@ -155,7 +167,7 @@ public class QuestionRoomGUI extends JPanel {
 		// TODO Auto-generated method stub
 		buttonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
@@ -168,9 +180,9 @@ public class QuestionRoomGUI extends JPanel {
 
 	public void setButtonsAnswer() {
 		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
-		int answerIndex = maze.getCurrRoom().getAnswerIndex();
+		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
@@ -186,6 +198,9 @@ public class QuestionRoomGUI extends JPanel {
 
 	public void answerPopUp() {
 		String userAns = "";
+		final Maze maze = Maze.getInstance();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
+		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup
 				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
@@ -193,22 +208,10 @@ public class QuestionRoomGUI extends JPanel {
 				userAns = button.getText();
 			}
 		}
-		// obtain info for answer
-		final Room curr = myMaze.getCurrRoom();
-		String correctAns = curr.getAnswer();
-		final String correct = correctAns + " was the correct answer!";
-		final String incorrect = "Sorry, but " + userAns + " is incorrect... ";
 
-		firePropertyChange("showpkmn", null, true);
-		if (userAns.equals(correctAns)) {
-			JOptionPane.showMessageDialog(null, "Good job! " + correct,
-					"Correct!", JOptionPane.INFORMATION_MESSAGE);
+		verifyAnswer(userAns);
+		
 
-		} else {
-			JOptionPane.showMessageDialog(null, incorrect + correct,
-					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
-		}
-		firePropertyChange("showpkmn", null, false);
 
 	}
 
