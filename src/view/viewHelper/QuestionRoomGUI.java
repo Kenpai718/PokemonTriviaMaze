@@ -8,17 +8,23 @@ import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
+import model.Room;
+import view.PokemonGUI;
 import view.PokemonPanel;
 
 /**
@@ -41,20 +47,31 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
 
-//    /*
-//     * Multiple choice
-//     */
-//    private final String[] myChoices;
-//    
-//    private final Room myCurrRoom;
+	private JRadioButton myA1;
+	private JRadioButton myA2;
+	private JRadioButton myA3;
+	private JRadioButton myA4;
+	private final int POKE_W = 600;
+	private final int POKE_H = 600;
+
+	private Maze myMaze;
+
+	// /*
+	// * Multiple choice
+	// */
+	// private final String[] myChoices;
+	//
+	// private final Room myCurrRoom;
 
 	/**
 	 * Create the panel.
 	 */
 	public QuestionRoomGUI(PokemonPanel thePP) {
 		super(thePP);
-//    	myCurrRoom = theRoom;
-//    	myChoices = theRoom.getChoices();
+		// myCurrRoom = theRoom;
+		// myChoices = theRoom.getChoices();
+
+		myMaze = Maze.getInstance();
 		setupGUI();
 
 	}
@@ -69,12 +86,9 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 		setLayout(myLayout);
 
 		myQPane = new JTextPane();
-		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,
-				this);
-		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH,
-				this);
-		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST,
-				this);
+		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH, this);
+		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH, this);
+		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST, this);
 		myQPane.setRequestFocusEnabled(false);
 		myQPane.setText("Who's that Pokemon?");
 		myQPane.setOpaque(false);
@@ -92,12 +106,10 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		final JRadioButton myA1 = new JRadioButton("");
+		myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
-		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
-				myQPane);
-		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST,
-				myA1);
+		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH, myQPane);
+		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST, myA1);
 		myLayout.putConstraint(myLayout.WEST, myA1, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.EAST, myA1, 0, myLayout.EAST, this);
 		myA1.setMnemonic('1');
@@ -147,6 +159,7 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 	}
 
 	public void setButtons() {
+		// TODO Auto-generated method stub
 		buttonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
@@ -180,14 +193,18 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 
 	public void answerPopUp() {
 		String userAns = "";
-		for (Enumeration<AbstractButton> buttons = buttonGroup
-				.getElements(); buttons.hasMoreElements();) {
+		final Maze maze = Maze.getInstance();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
+		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
+		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
 				userAns = button.getText();
 			}
 		}
+
 		verifyAnswer(userAns);
+
 	}
 
 	public void reset() {
