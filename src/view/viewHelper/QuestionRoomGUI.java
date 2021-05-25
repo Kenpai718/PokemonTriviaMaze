@@ -66,7 +66,8 @@ public class QuestionRoomGUI extends RoomPanel {
 	/**
 	 * Create the panel.
 	 */
-	public QuestionRoomGUI() {
+	public QuestionRoomGUI(PokemonPanel thePP) {
+		super(thePP);
 //    	myCurrRoom = theRoom;
 //    	myChoices = theRoom.getChoices();
 
@@ -166,7 +167,7 @@ public class QuestionRoomGUI extends RoomPanel {
 		// TODO Auto-generated method stub
 		buttonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
@@ -179,9 +180,9 @@ public class QuestionRoomGUI extends RoomPanel {
 
 	public void setButtonsAnswer() {
 		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
-		int answerIndex = maze.getCurrRoom().getAnswerIndex();
+		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
@@ -198,8 +199,8 @@ public class QuestionRoomGUI extends RoomPanel {
 	public void answerPopUp() {
 		String userAns = "";
 		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getCurrRoom().getChoices();
-		int answerIndex = maze.getCurrRoom().getAnswerIndex();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
+		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup
 				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();

@@ -45,6 +45,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	final JButton left;
 	final JButton right;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private Maze myMaze;
 
 	/**
 	 * Create the panel.
@@ -56,6 +57,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		leftAction = new LeftAction(thePanel);
 		rightAction = new RightAction(thePanel);
 		downAction = new DownAction(thePanel);
+		myMaze = Maze.getInstance();
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(300, 300));
@@ -120,6 +122,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
+			myMaze.addListener(temp);
 		}
 	}
 
@@ -144,12 +147,12 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		if ("newpos".equals(evt.getPropertyName())) {
-//                        System.out.println("entered if");
-			final Maze maze = Maze.getInstance();
-			final int[] pos = maze.getPlayerLocation();
+            //System.out.println("entered if");
+
+			final int[] pos = myMaze.getPlayerLocation();
 			for (int i = 0; i < pos.length; i++) {
 				final int num = pos[i];
-				changeButtonState(i, num, maze);
+				changeButtonState(i, num, myMaze);
 			}
 			repaint();
 		}

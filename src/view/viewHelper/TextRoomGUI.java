@@ -16,6 +16,7 @@ import javax.swing.SpringLayout;
 
 import model.Maze;
 import model.Room;
+import view.PokemonPanel;
 
 /*
  * Used in the case of a input text gamemode
@@ -31,11 +32,13 @@ public class TextRoomGUI extends RoomPanel {
 	
 	private final JTextField myUserAns;
 	private Maze myMaze;
+	private PokemonPanel myPP;
 	
 	
 	
 
-	public TextRoomGUI() {
+	public TextRoomGUI(PokemonPanel thePP) {
+		super(thePP);
 		setBackground(BORDER_COLOR);
 		setPreferredSize(SIZE);
 		final SpringLayout springLayout = new SpringLayout();

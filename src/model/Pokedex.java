@@ -77,9 +77,9 @@ public class Pokedex {
 			System.exit(0);
 		}
 
-		System.out.println("Opened pokedex database successfully");
+		//System.out.println("Opened pokedex database successfully");
 
-		System.out.println("Selecting all rows from pokedex table");
+		//System.out.println("Selecting all rows from pokedex table");
 		final String query = "SELECT * FROM Pokedex";
 
 		try (Connection conn = ds.getConnection();
@@ -97,7 +97,7 @@ public class Pokedex {
 				addPokemon(id, name);
 			}
 
-			System.out.println("Finished adding pokemon to pokedex.");
+			//System.out.println("Finished adding pokemon to pokedex.");
 			// System.out.println(myPokedex);
 		} catch (final SQLException e) {
 			e.printStackTrace();
