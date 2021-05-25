@@ -5,11 +5,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import view.viewHelper.RoomPanel;
-
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -209,10 +204,10 @@ public class Maze implements PropertyChangeListener {
 		}
 
 		catch (final Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 
-		return null;
+		return res;
 
 	}
 
@@ -278,7 +273,7 @@ public class Maze implements PropertyChangeListener {
 	 * @param int[] theNewPos [0] = row, [1] = col
 	 */
 
-	public void setAttemptLocation(int[] theNewPos) {
+	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
 			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
 					|| theNewPos[1] > COLS) {
@@ -306,21 +301,21 @@ public class Maze implements PropertyChangeListener {
 	 * 
 	 * @param Container the GUI object
 	 */
-	public void addListener(Container theObj) {
-		((Container) theObj).addPropertyChangeListener(this);
+	public void addListener(final Container theObj) {
+		theObj.addPropertyChangeListener(this);
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
-		String prop = evt.getPropertyName();
+		final String prop = evt.getPropertyName();
 
 		/*
 		 * User answered from a room panel question gui Update player/attempt
 		 * location if they were right/wrong Block the room if they were wrong
 		 */
 		if ("correctans".equals(prop)) {
-			boolean correct = (boolean) evt.getNewValue();
+			final boolean correct = (boolean) evt.getNewValue();
 			System.out.println("answer was " + correct);
 			if (correct) { //answered correctly
 				System.out.println("correct");
@@ -341,12 +336,12 @@ public class Maze implements PropertyChangeListener {
 	// used to visually check which rooms are set to blocked
 	// not sure why but when answering incorrect all rooms are blocked off
 	public void printBlockedDebugger() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("What rooms are blocked?");
 		for (int i = 0; i < ROWS; i++) {
 			sb.append("\n");
 			for (int j = 0; j < COLS; j++) {
-				Room r = myMatrix[i][j];
+				final Room r = myMatrix[i][j];
 				sb.append(r.getRoomName() + " " + r.canEnter() + ", ");
 			}
 		}

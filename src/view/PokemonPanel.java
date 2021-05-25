@@ -15,8 +15,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,7 +28,6 @@ import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.RoomPanel;
 import view.viewHelper.StartRoomPanel;
 import view.viewHelper.TextRoomGUI;
 
@@ -400,8 +397,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * 
 	 * @param Container the GUI object
 	 */
-	public void addListener(Container theObj) {
-		((Container) theObj).addPropertyChangeListener(this);
+	public void addListener(final Container theObj) {
+		theObj.addPropertyChangeListener(this);
 	}
 
 	/*
@@ -410,10 +407,10 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+		final String prop = evt.getPropertyName();
 
 		if (evt.getNewValue() instanceof Boolean) {
-			Boolean res = (Boolean) evt.getNewValue();
+			final Boolean res = (Boolean) evt.getNewValue();
 			if ("changegm".equals(prop)) { // change the gamemode panel
 				// System.out.println("in panel changes question panel");
 				setPanels(res);
