@@ -36,7 +36,7 @@ import view.PokemonPanel;
  * @version Spring 2021
  */
 
-public class QuestionRoomGUI extends RoomPanel {
+public class QuestionRoomGUI extends AbstractRoomPanel {
 
 	/**
 	 * 

@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import model.Maze;
 import view.PokemonPanel;
 import view.viewHelper.MazeGUI.MazeModel;
+import view.viewHelper.AbstractRoomPanel;
 
 /**
  * Controls player movement in the maze
@@ -25,8 +26,7 @@ public class MovementAction extends AbstractAction {
 	protected Maze myMaze = Maze.getInstance();
 	private final PokemonPanel myPanel;
 
-	protected MovementAction(final String theName, final ImageIcon theIcon,
-			final PokemonPanel thePanel) {
+	protected MovementAction(final String theName, final ImageIcon theIcon, final PokemonPanel thePanel) {
 		super(theName, theIcon);
 		myPanel = thePanel;
 	}
@@ -44,18 +44,18 @@ public class MovementAction extends AbstractAction {
 	 */
 
 	protected void movePlayer(final int[] theMove) {
-		//System.out.println("clicked a button");
+		// System.out.println("clicked a button");
 		final int[] newPos = myMaze.getPlayerLocation().clone();
 		for (int i = 0; i < newPos.length; i++) {
 			newPos[i] = newPos[i] + theMove[i];
 		}
 
-		//set the attempted move location of the direction pressed
+		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
 		updateGUI();
 
 	}
-	
+
 	private void updateGUI() {
 		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
 		model.refresh(myMaze.getMatrix());

@@ -5,6 +5,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import view.viewHelper.AbstractRoomPanel;
+
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
  * Main gameplay element where the player starts in one location and tries to
@@ -26,8 +31,7 @@ public class Maze implements PropertyChangeListener {
 	 */
 	private final static int ROWS = 4;
 	private final static int COLS = 4;
-	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
-			(ROWS - 1) }; // end of maze
+	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (ROWS - 1) }; // end of maze
 
 	/*
 	 * 2D array to store rooms in the maze
@@ -60,19 +64,19 @@ public class Maze implements PropertyChangeListener {
 	 */
 	private boolean myWinCondition;
 
-//	/*
-//	 * Big data storage of all pokemon info
-//	 */
-//	private static Pokedex myPokedex;
+	// /*
+	// * Big data storage of all pokemon info
+	// */
+	// private static Pokedex myPokedex;
 
 	/*
 	 * Singleton maze instantiation
 	 */
 	private static Maze singleMaze = null;
 
-//       TODO Current win condition is that the player needs to get to the
-//        opposite corner that they are in.
-//TODO:        private final boolean winCondition;
+	// TODO Current win condition is that the player needs to get to the
+	// opposite corner that they are in.
+	// TODO: private final boolean winCondition;
 
 	/**
 	 * Constructor for maze
@@ -89,7 +93,6 @@ public class Maze implements PropertyChangeListener {
 
 	}
 
-
 	/**
 	 * Singleton maze instantiation
 	 * 
@@ -101,7 +104,6 @@ public class Maze implements PropertyChangeListener {
 		}
 		return singleMaze;
 	}
-
 
 	/**
 	 * Fills matrix with new rooms that have questions.
@@ -127,8 +129,7 @@ public class Maze implements PropertyChangeListener {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		return myPlayerLocation[0] == WIN_LOCATION[0]
-				&& myPlayerLocation[1] == WIN_LOCATION[1];
+		return myPlayerLocation[0] == WIN_LOCATION[0] && myPlayerLocation[1] == WIN_LOCATION[1];
 	}
 
 	/**
@@ -143,8 +144,8 @@ public class Maze implements PropertyChangeListener {
 	/**
 	 * Returns the players current location
 	 * 
-	 * @return int[] an integer array of the players current location 0 = row, 1
-	 *         = col
+	 * @return int[] an integer array of the players current location 0 = row, 1 =
+	 *         col
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
@@ -158,14 +159,11 @@ public class Maze implements PropertyChangeListener {
 	 */
 	public void setPlayerLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set player location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS || theNewPos[1] > COLS) {
+				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 
-				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]]
-						.setPlayer(false);
+				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
@@ -196,15 +194,14 @@ public class Maze implements PropertyChangeListener {
 		Room res = null;
 		try {
 			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-				throw new Exception(
-						"Room does not exist at [" + theR + ", " + theC + "]");
+				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 			} else {
 				res = myMatrix[theR][theC];
 			}
 		}
 
 		catch (final Exception e) {
-//			e.printStackTrace();
+			// e.printStackTrace();
 		}
 
 		return res;
@@ -275,10 +272,8 @@ public class Maze implements PropertyChangeListener {
 
 	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set attempt location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS || theNewPos[1] > COLS) {
+				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
@@ -292,8 +287,7 @@ public class Maze implements PropertyChangeListener {
 	 * 
 	 */
 	public boolean hasNotMoved() {
-		return myPlayerLocation[0] == myAttemptLocation[0]
-				&& myPlayerLocation[1] == myAttemptLocation[1];
+		return myPlayerLocation[0] == myAttemptLocation[0] && myPlayerLocation[1] == myAttemptLocation[1];
 	}
 
 	/**
@@ -311,27 +305,27 @@ public class Maze implements PropertyChangeListener {
 		final String prop = evt.getPropertyName();
 
 		/*
-		 * User answered from a room panel question gui Update player/attempt
-		 * location if they were right/wrong Block the room if they were wrong
+		 * User answered from a room panel question gui Update player/attempt location
+		 * if they were right/wrong Block the room if they were wrong
 		 */
 		if ("correctans".equals(prop)) {
-			final boolean correct = (boolean) evt.getNewValue();
-			System.out.println("answer was " + correct);
-			if (correct) { //answered correctly
-				System.out.println("correct");
+			boolean correct = (boolean) evt.getNewValue();
+			// System.out.println("answer was " + correct);
+			if (correct) { // answered correctly
+				// System.out.println("correct");
 				setPlayerLocation(myAttemptLocation);
 				// System.out.println(getCurrRoom().getPokemon());
-			} else { //answered incorrectly
-				System.out.println("incorrect");
-				getAttemptRoom().setEntry(false); //block that room
-				//reset attempt location to default
+			} else { // answered incorrectly
+				// System.out.println("incorrect");
+				getAttemptRoom().setEntry(false); // block that room
+				// reset attempt location to default
 				setAttemptLocation(myPlayerLocation);
 			}
 
 		}
 
 	}
-	
+
 	// TODO: DELETE LATER
 	// used to visually check which rooms are set to blocked
 	// not sure why but when answering incorrect all rooms are blocked off
