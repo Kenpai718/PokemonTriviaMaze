@@ -130,15 +130,15 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			final Maze maze) {
 		// TODO Auto-generated method stub
 		if (i == 0) {
-		        final Boolean dc = num + 1 < maze.getRows() && checkRooms("down");
-		        final Boolean uc = num - 1 >= 0 && checkRooms("up");
+                        final Boolean dc = checkRooms("down");
+                        final Boolean uc = checkRooms("up");
 			down.setVisible(dc);
 			down.setEnabled(dc);
 			up.setVisible(uc);
 			up.setEnabled(uc);
 		} else {
-		        final Boolean rc = num + 1 < maze.getCols() && checkRooms("right");
-                        final Boolean lc = num - 1 >= 0 && checkRooms("left");
+                        final Boolean rc = checkRooms("right");
+                        final Boolean lc = checkRooms("left");
 			right.setVisible(rc);
 			right.setEnabled(rc);
 			left.setVisible(lc);
