@@ -71,19 +71,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * default layout of the GUI
 	 */
 	private final SpringLayout springLayout = new SpringLayout();
-
-	/*
-	 * Size of the shine background
-	 */
-	private int myShineW;
-	private int myShineH;
-
-	/*
-	 * size of question mark
-	 */
-	private int myQuestW;
-	private int myQuestH;
-
+	
 	/*
 	 * Background color of the game (Crimson Red)
 	 */
@@ -108,6 +96,20 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Aspect ratio of Jpanel
 	 */
 	final Dimension PANEL_SIZE = new Dimension(1920, 1080);
+
+	/*
+	 * Size of the shine background
+	 */
+	private int myShineW;
+	private int myShineH;
+
+	/*
+	 * size of question mark
+	 */
+	private int myQuestW;
+	private int myQuestH;
+
+
 
 	/*
 	 * Background sparkle effect behind the pokemon
