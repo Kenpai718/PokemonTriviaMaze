@@ -16,6 +16,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
 import model.Maze;
+import model.Room;
 import view.viewHelper.MazeGUI.MazeModel;
 
 /**
@@ -38,6 +39,12 @@ public class PokemonMenuBar extends JMenuBar{
         private final PokemonPanel myPanel;
 
 
+        /**
+         *  The constructor for the Menu Bar that sets up the the fields and
+         *  starts the menubar gui setup
+         * 
+         * @param theFrame
+         */
         public PokemonMenuBar(final PokemonGUI theFrame) {
                 // TODO Auto-generated constructor stub
                 super();
@@ -47,6 +54,9 @@ public class PokemonMenuBar extends JMenuBar{
                 setupMenuBar();
         }
 
+        /**
+         * Adds the base menus to the menu bar
+         */
         private void setupMenuBar() {
 
                 myFileMenu = new JMenu("File");
@@ -64,7 +74,7 @@ public class PokemonMenuBar extends JMenuBar{
         }
 
         /**
-         * 
+         * Sets up the file menu
          */
         private void setupFileMenu() {
                 // TODO Auto-generated method stub
@@ -83,10 +93,12 @@ public class PokemonMenuBar extends JMenuBar{
         }
 
         /**
-         * 
+         * Sets up the Help Menu, 
          */
         private void setupHelpMenu() {
                 // TODO Auto-generated method stub
+                
+
                 final JMenuItem about = new JMenuItem("About");
                 about.addActionListener(new ActionListener() {
 
@@ -111,9 +123,20 @@ public class PokemonMenuBar extends JMenuBar{
                         }
                 });
                 myHelpMenu.add(tutorial);
+                setUpCheats();
+                
 
+        }
+
+        /**
+         * Sets up the cheats menu for all of the dev cheats for debugging
+         */
+        private void setUpCheats() {
+                // TODO Auto-generated method stub
+                final MazeModel model = (MazeModel) myPanel.getTable().getModel();
                 final JMenu cheats = new JMenu("Cheats");
                 myHelpMenu.add(cheats);
+                
 
                 final JCheckBoxMenuItem cheat1 = new JCheckBoxMenuItem(
                                 "Reveal Pokemon");
@@ -132,17 +155,54 @@ public class PokemonMenuBar extends JMenuBar{
                 });
                 cheats.add(cheat1);
 
-                final JCheckBoxMenuItem cheat2 = new JCheckBoxMenuItem(
+                final JMenuItem unlock = new JMenuItem(
                                 "Unlock All Doors");
-                cheats.add(cheat2);
+                unlock.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                final Room[][] rooms = myMaze.getMatrix();
+                                for (int i = 0; i < myMaze.getRows(); i++) {
+                                        for (int j = 0; j < myMaze.getCols(); j++) {
+                                                rooms[i][j].setVisited(true);
+                                                repaint();
+                                        }
+                                }
+                        }
+                                
+                });
+                cheats.add(unlock);
+                
+                final JMenuItem removeBlocked = new JMenuItem(
+                                "Reset Blocked Rooms");
+                removeBlocked.addActionListener(new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                final Room[][] rooms = myMaze.getMatrix();
+                                for (int i = 0; i < myMaze.getRows(); i++) {
+                                        for (int j = 0; j < myMaze.getCols(); j++) {
+                                                rooms[i][j].setEntry(true);
+                                                repaint();
+                                        }
+                                }
+                        }
+                                
+                });
+                cheats.add(removeBlocked);
+                
 
                 final JMenuItem teleport = new JMenuItem("Teleport");
-                final MazeModel model = (MazeModel) myPanel.getTable().getModel();
+                
                 teleport.addActionListener(new TeleportListener(model));
                 cheats.add(teleport);
-
         }
 
+        /**
+         * Sets up the gamemode menu for changing the gamemode
+         */
         private void setupGamemodesMenu() {
 
                 myGamemodes = new ButtonGroup();
@@ -181,21 +241,36 @@ public class PokemonMenuBar extends JMenuBar{
 
         }
 
-        public class TeleportListener implements ActionListener {
+        /**
+         * The action listener for the teleport cheat. 
+         * 
+         * @author ajdow
+         *
+         */
+        class TeleportListener implements ActionListener {
 
                 private final MazeModel myModel;
 
+                /**
+                 * Gets the table model to refresh the maze GUI
+                 * 
+                 * @param theModel the table model connected to the maze
+                 */
                 public TeleportListener(final MazeModel theModel) {
                         myModel = theModel;
                 }
 
+                /**
+                 * Displays a input dialog that reads the new location and moves the
+                 * player to that location
+                 */
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                         // TODO Auto-generated method stub
                         final String message = "Please Enter a new position to teleport"
                                         + " to.\n(X Y):";
                         final int[] pos = readInput(message);
-//                        
+                        
                         myMaze.setPlayerLocation(pos);
                         myModel.refresh(myMaze.getMatrix());
                         myPanel.setImage();
@@ -229,7 +304,7 @@ public class PokemonMenuBar extends JMenuBar{
                                                 }
                                         } catch (final InputMismatchException e) {
                                                 res = readInput("Please use integers only.\n(X Y):");
-                                        }
+                                        } 
                                         scan.close();
                                 } else {
                                         res = readInput("Invalid Input\n(X Y):");
