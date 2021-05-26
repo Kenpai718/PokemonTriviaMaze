@@ -76,6 +76,7 @@ public abstract class AbstractRoomPanel extends JPanel {
 	 */
 	private void updateGUI() {
 
+		this.enableButtons(false);
 		final MazeModel model = (MazeModel) myPP.getTable().getModel();
 		model.refresh(myMaze.getMatrix());
 		firePropertyChange("newpos", null, null);
@@ -89,5 +90,15 @@ public abstract class AbstractRoomPanel extends JPanel {
 		}
 
 	}
+	
+	/**
+	 * Enable or disable the answer fields
+	 */
+	public abstract void enableButtons(Boolean theBool);
+	
+	/**
+	 * alter the answer fields to the default
+	 */
+	public abstract void setButtons();
 
 }

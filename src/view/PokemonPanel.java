@@ -373,14 +373,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
 
-		
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
 		firePropertyChange("newpos", null, null);
 		updateLabels(); // debugger
 
 	}
-
 
 	/**
 	 * set dark variable
@@ -405,6 +403,17 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
+	 * Used to allow/unallow the user to answer the question Used for when the
+	 * user already answered the room so it shouldn't be answered again.
+	 * 
+	 * @param theBool true = enable buttons, false = disable
+	 */
+	public void enableAnswerFields(final Boolean theBool) {
+		myTextRoomGUI.enableButtons(theBool);
+		myQuestionRoomGUI.enableButtons(theBool);
+	}
+
+	/**
 	 * Getter MazeGUi table
 	 * 
 	 * @return JTable the table that represents the maze
@@ -420,6 +429,15 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public QuestionRoomGUI getQuestionGUI() {
 		return myQuestionRoomGUI;
+	}
+	
+	/**
+	 * Getter TextRoomGUI
+	 * 
+	 * @return TextRoomGUI
+	 */
+	public TextRoomGUI getTextGUI() {
+		return myTextRoomGUI;
 	}
 
 	/*
@@ -448,7 +466,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// System.out.println("in panel reveal");
-				int brightness = res ? 1 : 0; //true = light, false = dark
+				int brightness = res ? 1 : 0; // true = light, false = dark
 				setImgBrightness(brightness);
 				repaint();
 			}

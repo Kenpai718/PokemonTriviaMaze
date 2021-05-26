@@ -46,6 +46,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	final JButton right;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final Maze myMaze;
+	private PokemonPanel myPanel;
 
 	/**
 	 * Create the panel.
@@ -58,6 +59,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		rightAction = new RightAction(thePanel);
 		downAction = new DownAction(thePanel);
 		myMaze = Maze.getInstance();
+		myPanel = thePanel;
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(300, 300));

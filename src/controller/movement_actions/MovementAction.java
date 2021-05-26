@@ -25,9 +25,11 @@ public class MovementAction extends AbstractAction {
 	protected Maze myMaze = Maze.getInstance();
 	private final PokemonPanel myPanel;
 
-	protected MovementAction(final String theName, final ImageIcon theIcon, final PokemonPanel thePanel) {
+	protected MovementAction(final String theName, final ImageIcon theIcon,
+			final PokemonPanel thePanel) {
 		super(theName, theIcon);
 		myPanel = thePanel;
+
 	}
 
 	@Override
@@ -52,8 +54,9 @@ public class MovementAction extends AbstractAction {
 		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
 		if (myMaze.getAttemptRoom().hasVisited()) {
-				myPanel.setImgBrightness(1); //keep pokemon revealed if it has been visited
-		        myMaze.setPlayerLocation(newPos);
+			myPanel.setImgBrightness(1); // keep pokemon revealed if it has been
+											// visited
+			myMaze.setPlayerLocation(newPos);
 		} else {
 			myPanel.setImgBrightness(0);
 		}
@@ -61,12 +64,25 @@ public class MovementAction extends AbstractAction {
 
 	}
 
+	/**
+	 * Update components of the GUI that are modifed when the player tries to
+	 * move to a new room
+	 * 
+	 */
 	private void updateGUI() {
 		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
 		model.refresh(myMaze.getMatrix());
 		firePropertyChange("newpos", null, null);
 		myPanel.setImage();
+
+		if (myMaze.getAttemptRoom().hasVisited()) {
+			myPanel.enableAnswerFields(false);
+		} else {
+			myPanel.enableAnswerFields(true);
+		}
+
 		myPanel.getQuestionGUI().setButtons();
+		myPanel.getTextGUI().setButtons();
 	}
 
 }

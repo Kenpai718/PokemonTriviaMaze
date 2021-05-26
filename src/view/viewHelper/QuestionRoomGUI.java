@@ -86,9 +86,12 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 		setLayout(myLayout);
 
 		myQPane = new JTextPane();
-		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH, this);
-		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH, this);
-		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST, this);
+		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,
+				this);
+		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH,
+				this);
+		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST,
+				this);
 		myQPane.setRequestFocusEnabled(false);
 		myQPane.setText("Who's that Pokemon?");
 		myQPane.setOpaque(false);
@@ -108,8 +111,10 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 
 		myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
-		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH, myQPane);
-		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST, myA1);
+		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
+				myQPane);
+		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST,
+				myA1);
 		myLayout.putConstraint(myLayout.WEST, myA1, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.EAST, myA1, 0, myLayout.EAST, this);
 		myA1.setMnemonic('1');
@@ -196,7 +201,8 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
-		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+		for (Enumeration<AbstractButton> buttons = buttonGroup
+				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
 				userAns = button.getText();
@@ -207,10 +213,6 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 
 	}
 
-	public void reset() {
-
-	}
-
 	class AnswerDisplay implements ActionListener {
 
 		@Override
@@ -218,6 +220,21 @@ public class QuestionRoomGUI extends AbstractRoomPanel {
 			setButtonsAnswer();
 			answerPopUp();
 		}
+	}
+
+	@Override
+	public void enableButtons(Boolean theBool) {
+		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		while (buttons.hasMoreElements()) {
+			JRadioButton temp = (JRadioButton) buttons.nextElement();
+			if (theBool) {
+				temp.setEnabled(true);
+			} else {
+				temp.setEnabled(false);
+			}
+
+		}
+
 	}
 
 }
