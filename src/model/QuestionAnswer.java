@@ -49,7 +49,6 @@ public class QuestionAnswer {
 	/**
 	 * Constructor
 	 * 
-	 * @param thePokedex data used to fill the questions with
 	 */
 	public QuestionAnswer() {
 		// TODO Auto-generated constructor stub
@@ -57,6 +56,28 @@ public class QuestionAnswer {
 		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = generatePokemon();
+		
+		
+		fillChoices();
+		// get index of shuffled array list
+		myAnswerIndex = myChoices.indexOf(this.getAnswer());
+		// System.out.println("my answer num is " + myAnswerIndex);
+
+		// randomly fill out myChoices
+		
+	}
+	
+	/**
+	 * Manually add a pokemon for a question
+	 * 
+	 * @param Pokemon that represents the question
+	 */
+	public QuestionAnswer(Pokemon thePokemon) {
+		// TODO Auto-generated constructor stub
+		myPokedex = Pokedex.getInstance();
+		myChoices = new ArrayList<String>();
+		myUpper = myPokedex.getCount();
+		myPokemon = thePokemon;
 		
 		
 		fillChoices();

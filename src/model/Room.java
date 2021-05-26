@@ -25,12 +25,14 @@ public class Room extends QuestionAnswer {
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
 	 */
-	private static boolean canEnter;
+	private boolean canEnter;
 
 	/*
 	 * If player is currently in this room
 	 */
 	private boolean hasPlayer;
+	
+	private boolean myVisit;
 	
 
 	/**
@@ -46,7 +48,24 @@ public class Room extends QuestionAnswer {
 		myRoomName = (char) (theRoomNumber + START_LETTER);
 		setEntry(true);
 		hasPlayer = false;
+		myVisit = false;
+	}
+	
+	/**
+	 * Manually add a pokemon to the room
+	 * 
+	 * @param theRoomNumber how much to increment the room name letter
+	 * @param thePokemon the pokemon to put in this room
+	 */
+	public Room(final int theRoomNumber, Pokemon thePokemon) {
+		super(); // put a pokemon and question in this room
 
+		// increment the starting letter for each room to go from A-Z
+		myRoomName = (char) (theRoomNumber + START_LETTER);
+		setEntry(true);
+		hasPlayer = false;
+		myVisit = false;
+		
 	}
 
 	/**
@@ -54,10 +73,18 @@ public class Room extends QuestionAnswer {
 	 * 
 	 * @return boolean T = canEnter room, F = blocked room
 	 */
-	private void setEntry(final Boolean theChoice) {
+	public void setEntry(final Boolean theChoice) {
 		canEnter = theChoice;
 	}
 	
+	/**
+         * Setter for blocked room
+         * 
+         * @return boolean T = canEnter room, F = blocked room
+         */
+        public void setVisited(final Boolean theChoice) {
+                myVisit = theChoice;
+        }
 
 	/**
 	 * Getter to inform if the room is blocked or not
@@ -84,6 +111,10 @@ public class Room extends QuestionAnswer {
 	 */
 	public Boolean isPlayerHere() {
 		return hasPlayer;
+	}
+	
+	public Boolean hasVisited() {
+	        return myVisit;
 	}
 
 	/**

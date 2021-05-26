@@ -45,6 +45,8 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	final JButton left;
 	final JButton right;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private final Maze myMaze;
+	private PokemonPanel myPanel;
 
 	/**
 	 * Create the panel.
@@ -56,6 +58,8 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		leftAction = new LeftAction(thePanel);
 		rightAction = new RightAction(thePanel);
 		downAction = new DownAction(thePanel);
+		myMaze = Maze.getInstance();
+		myPanel = thePanel;
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(300, 300));
@@ -120,6 +124,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
+
 		}
 	}
 
@@ -127,29 +132,59 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			final Maze maze) {
 		// TODO Auto-generated method stub
 		if (i == 0) {
-			down.setVisible(num + 1 < maze.getRows());
-			down.setEnabled(num + 1 < maze.getRows());
-			up.setVisible(num - 1 >= 0);
-			up.setEnabled(num - 1 >= 0);
+                        final Boolean dc = checkRooms("down");
+                        final Boolean uc = checkRooms("up");
+			down.setVisible(dc);
+			down.setEnabled(dc);
+			up.setVisible(uc);
+			up.setEnabled(uc);
 		} else {
-			right.setVisible(num + 1 < maze.getCols());
-			right.setEnabled(num + 1 < maze.getCols());
-			left.setVisible(num - 1 >= 0);
-			left.setEnabled(num - 1 >= 0);
+                        final Boolean rc = checkRooms("right");
+                        final Boolean lc = checkRooms("left");
+			right.setVisible(rc);
+			right.setEnabled(rc);
+			left.setVisible(lc);
+			left.setEnabled(lc);
 			// merge test comment
 		}
 	}
 
-	@Override
+	private Boolean checkRooms(final String theDir) {
+	        Boolean res = null;
+	        final int[] currRoom = myMaze.getPlayerLocation();
+	        try {
+        	        switch (theDir) {
+        	                case "down":
+        	                        res = myMaze.getRoom(currRoom[0] + 1, currRoom[1]).canEnter();
+        	                        break;
+        	                case "up":
+                                        res = myMaze.getRoom(currRoom[0] - 1, currRoom[1]).canEnter();
+                                        break;
+        	                case "right":
+                                        res = myMaze.getRoom(currRoom[0], currRoom[1] + 1).canEnter();
+                                        break;
+        	                case "left":
+                                        res = myMaze.getRoom(currRoom[0], currRoom[1] - 1).canEnter();
+                                        break;
+                                default:
+                                        res = true;
+        	        }
+	        } catch (final Exception e) {
+	                res = false;
+	        }
+                return res;
+        }
+
+        @Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		if ("newpos".equals(evt.getPropertyName())) {
-//                        System.out.println("entered if");
-			final Maze maze = Maze.getInstance();
-			final int[] pos = maze.getPlayerLocation();
+            //System.out.println("entered if");
+
+			final int[] pos = myMaze.getPlayerLocation();
 			for (int i = 0; i < pos.length; i++) {
 				final int num = pos[i];
-				changeButtonState(i, num, maze);
+				changeButtonState(i, num, myMaze);
 			}
 			repaint();
 		}

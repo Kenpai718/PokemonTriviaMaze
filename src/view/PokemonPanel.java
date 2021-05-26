@@ -15,6 +15,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
@@ -24,10 +26,13 @@ import model.Maze;
 import model.TriviaGame;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
+import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.RoomPanel;
+import view.viewHelper.AbstractQuestionPanel;
+import view.viewHelper.StartRoomPanel;
 import view.viewHelper.TextRoomGUI;
+import java.awt.Font;
 
 /**
  * Setups playable game visuals on a panel
@@ -53,6 +58,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private final int POKE_W = 600;
 	private final int POKE_H = 600;
+	
+	/*
+	 * question mark offset for positioning
+	 */
+	private final int X_OFFSET_QUEST = 820;
+	private final int Y_OFFSET_QUEST = 280;
+	
 
 	/*
 	 * default layout of the GUI
@@ -64,16 +76,34 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private int myShineW;
 	private int myShineH;
+	
+	/*
+	 * size of question mark
+	 */
+	private int myQuestW;
+	private int myQuestH;
+	
+	
 
 	/*
 	 * Background color of the game (Crimson Red)
 	 */
 	private final Color BG_COLOR = new Color(220, 20, 60);
+	
+	/*
+	 * Color of maze
+	 */
+	final Color MAZE_BG = new Color(51, 51, 51);
 
 	/*
 	 * Background color of border
 	 */
 	private final Color BORDER_COLOR = new Color(51, 153, 204);
+	
+	/*
+	 * Border 
+	 */
+	final Border BLUE_BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 
 	/*
 	 * Aspect ratio of Jpanel
@@ -107,16 +137,41 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Picture of the pokemon: light or dark
 	 */
 	private BufferedImage myPoke;
+
+	/*
+	 * Question mark icon. Used at the start of the game
+	 */
+	private BufferedImage myQuestionImg;
+
 	/*
 	 * GUI visual of the maze
 	 */
 	private final MazeGUI mazeGUI;
 	/*
-	 * Question GUI
+	 * Question multiple choice GUI
 	 */
 	private final QuestionRoomGUI myQuestionRoomGUI;
 
+	
+	/*
+	 * user input gui
+	 */
 	private final TextRoomGUI myTextRoomGUI;
+
+	/*
+	 * Control button visuals
+	 */
+	private final ControlPanel myControlPanel;
+
+	/*
+	 * TODO: panel for the starting room instead of questions
+	 */
+	private final StartRoomPanel myStartPanel;
+
+	/*
+	 * Panel with labels that tell game state
+	 */
+	private LabelPanel myLabelPanel;
 
 	/*
 	 * Boolean to know if the picture is hidden or visible
@@ -134,43 +189,43 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myGame = new TriviaGame();
 		myMaze = Maze.getInstance();
 		mazeGUI = new MazeGUI();
-		myQuestionRoomGUI = new QuestionRoomGUI();
-		myTextRoomGUI = new TextRoomGUI();
+		myQuestionRoomGUI = new QuestionRoomGUI(this);
 		addListener(myQuestionRoomGUI);
+		myTextRoomGUI = new TextRoomGUI(this);
 		addListener(myTextRoomGUI);
+		myControlPanel = new ControlPanel(this);
+		addPropertyChangeListener(myControlPanel);
+		add(myControlPanel);
+		myStartPanel = new StartRoomPanel(myControlPanel);
+		myLabelPanel = new LabelPanel();
+
+		addPropertyChangeListener(this);
 
 		/// initialize panel
 		setupPanel();
 
-		// control panel property change
-		final ControlPanel controlPanel = new ControlPanel(this);
-		springLayout.putConstraint(SpringLayout.SOUTH, controlPanel, -60,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, controlPanel, -131,
-				SpringLayout.WEST, myQuestionRoomGUI);
-		addPropertyChangeListener(controlPanel);
-		add(controlPanel);
-
 		// draw onto panel Pokemon and background
 		setupPictures();
 
-		final RoomPanel roomPanel = new RoomPanel();
-//		springLayout.putConstraint(SpringLayout.SOUTH, roomPanel, -211, SpringLayout.NORTH, controlPanel);
-//		springLayout.putConstraint(SpringLayout.EAST, roomPanel, -51, SpringLayout.WEST, myQuestionRoomGUI);
-//		add(roomPanel);
-
 	}
 
+
 	/**
-	 * Setup the panel for the game
+	 * Setup the components on the panel for the game
 	 */
 	private void setupPanel() {
 		setBackground(BG_COLOR);
 		setPreferredSize(PANEL_SIZE);
 
 		// put stuff on the panel
-		final Border blueLine = BorderFactory.createLineBorder(BORDER_COLOR, 5);
-		mazeGUI.setBorder(blueLine);
+
+		mazeGUI.setBorder(BLUE_BORDER);
+
+		// control panel property change
+		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -60,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, -131,
+				SpringLayout.WEST, myQuestionRoomGUI);
 
 		// question room
 		springLayout.putConstraint(SpringLayout.NORTH, myQuestionRoomGUI, 553,
@@ -188,20 +243,35 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 				SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10,
 				SpringLayout.EAST, this);
-		// text room
+
+		// text room GUI
 		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159,
 				SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92,
 				SpringLayout.EAST, this);
 
+		// myStartPanel
+		springLayout.putConstraint(SpringLayout.SOUTH, myStartPanel, 450,
+				SpringLayout.SOUTH, mazeGUI);
+		springLayout.putConstraint(SpringLayout.WEST, myStartPanel, 1450,
+				SpringLayout.WEST, this);
+		
+		//label panel
+		springLayout.putConstraint(SpringLayout.NORTH, myLabelPanel, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myLabelPanel, -22, SpringLayout.WEST, mazeGUI);
+
 		setLayout(springLayout);
 		add(mazeGUI);
 		add(myQuestionRoomGUI);
 		add(myTextRoomGUI);
+		// add(myStartPanel);
+		add(myControlPanel);
+		add(myLabelPanel);
 
-		// disable one of the question/text room gui's
+		// disable question rooms until player selects a direction
 		myTextRoomGUI.setVisible(false);
-		//myQuestionRoomGUI.setVisible(false);
+		// myQuestionRoomGUI.setVisible(false);
+
 	}
 
 	/**
@@ -210,16 +280,23 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public void setupPictures() {
 
-		// draw the pokemon
-		setImage();
-		setImgBrightness(0);
+		//iconic question mark
+		myQuestionImg = readImage("./src/images/other/questionmark.png");
+		if (myQuestionImg != null) {
+			myQuestW = myQuestionImg.getWidth();
+			myQuestH = myQuestionImg.getHeight();
+		}
 
 		// sparkly thing behind a pokemon
 		myShine = readImage("./src/images/other/sparkle_formatted.png");
-		if (myPoke != null && myShine != null) {
+		if (myShine != null) {
 			myShineW = myShine.getWidth();
 			myShineH = myShine.getHeight();
 		}
+		
+		// draw the pokemon for the room we are in/attempting to go to
+		setImage();
+		setImgBrightness(0);
 
 	}
 
@@ -230,7 +307,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public void setImage() {
 
-		myPokeLight = myMaze.getCurrRoom().getPokemon().getPNG();
+		myPokeLight = myMaze.getAttemptRoom().getPokemon().getPNG();
 		// resize if not the correct width or height
 		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
 				|| myPokeLight.getWidth() > POKE_W
@@ -241,6 +318,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myPokeDark = (BufferedImage) BrightnessUtility
 				.adjustBrighness(myPokeLight, 0f);
 		myPoke = myDark ? myPokeDark : myPokeLight;
+
 		repaint();
 
 	}
@@ -307,12 +385,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
-//        final BufferedImage myPoke = (BufferedImage) BrightnessUtility.adjustBrighness(myPoke, 0f);
 
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
+		theG.drawImage(myQuestionImg, X_OFFSET_QUEST, Y_OFFSET_QUEST, myQuestW, myQuestH, this);
+		
 		firePropertyChange("newpos", null, null);
-		// theG.drawImage(myPoke, 0, 0, POKE_W, POKE_H, this);
+		myLabelPanel.updateLabels(); // debugger
 
 	}
 
@@ -320,15 +399,33 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * set dark variable
 	 */
 	public void setImgBrightness(final int thePercentage) {
+
 		myPoke = thePercentage == 0 ? myPokeDark : myPokeLight;
 		myDark = thePercentage == 0;
+
 		repaint();
 
 	}
 
+	/*
+	 * Set which question panel is visible
+	 * 
+	 * @param theVal false = user input, true = multiple choice
+	 */
 	public void setPanels(final boolean theValue) {
 		myQuestionRoomGUI.setVisible(theValue);
 		myTextRoomGUI.setVisible(!theValue);
+	}
+
+	/**
+	 * Used to allow/unallow the user to answer the question Used for when the
+	 * user already answered the room so it shouldn't be answered again.
+	 * 
+	 * @param theBool true = enable buttons, false = disable
+	 */
+	public void enableAnswerFields(final Boolean theBool) {
+		myTextRoomGUI.enableButtons(theBool);
+		myQuestionRoomGUI.enableButtons(theBool);
 	}
 
 	/**
@@ -348,36 +445,68 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public QuestionRoomGUI getQuestionGUI() {
 		return myQuestionRoomGUI;
 	}
+	
+	/**
+	 * Getter TextRoomGUI
+	 * 
+	 * @return TextRoomGUI
+	 */
+	public TextRoomGUI getTextGUI() {
+		return myTextRoomGUI;
+	}
+	
+	/**
+	 * Getter TextRoomGUI
+	 * 
+	 * @return TextRoomGUI
+	 */
+	public LabelPanel getLabelPanel() {
+		return myLabelPanel;
+	}
 
 	/*
 	 * Add an object that this panel will listen for property changes.
 	 * 
 	 * @param Container the GUI object
 	 */
-	public void addListener(Container theObj) {
-		((Container) theObj).addPropertyChangeListener(this);
+	public void addListener(final Container theObj) {
+		theObj.addPropertyChangeListener(this);
 	}
 
-	
 	/*
 	 * Property changes that update the panel
 	 * 
 	 */
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+		final String prop = evt.getPropertyName();
+
 		if (evt.getNewValue() instanceof Boolean) {
-			Boolean res = (Boolean) evt.getNewValue();
-			if ("changegm".equals(prop)) { //change the gamemode panel
+			final Boolean res = (Boolean) evt.getNewValue();
+			if ("changegm".equals(prop)) { // change the gamemode panel
 				// System.out.println("in panel changes question panel");
 				setPanels(res);
 			}
 
-			if ("showpkmn".equals(prop)) { //reveal or hide the pokemon
-				//System.out.println("in panel reveal");
-				myPoke = res ? myPokeLight : myPokeDark;
+			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
+				// System.out.println("in panel reveal");
+				int brightness = res ? 1 : 0; // true = light, false = dark
+				setImgBrightness(brightness);
 				repaint();
 			}
+
+		} else {
+			if ("win".equals(prop)) {
+				// TODO: add more to this win message
+				JOptionPane.showMessageDialog(null, "You win!");
+			}
+
+			if ("lose".equals(prop)) {
+				// TODO: add more to this lose message
+				JOptionPane.showMessageDialog(null, "You lose!");
+			}
+
 		}
+
 	}
 }
