@@ -19,7 +19,7 @@ import view.PokemonPanel;
  * Used in the case of a input text gamemode
  */
 
-public class TextRoomGUI extends AbstractRoomPanel {
+public class TextRoomGUI extends AbstractQuestionPanel {
 	
 	/**
 	 * 
@@ -30,7 +30,7 @@ public class TextRoomGUI extends AbstractRoomPanel {
 	
 	@SuppressWarnings("unused")
 	private final String QUESTION = "Who's that Pokemon?";
-	private final String PUT_TEXT = "Type answer here.";
+	private final String PUT_TEXT = "Enter the answer here.";
 	
 	private final JTextField myUserAns;
 	private Maze myMaze;
@@ -91,6 +91,22 @@ public class TextRoomGUI extends AbstractRoomPanel {
 	public void setupGUI() {
 		
 	}
+	
+	@Override
+	public void enableButtons(Boolean theBool) {
+		if(theBool) {
+			myUserAns.setEnabled(true);
+		} else {
+			myUserAns.setEnabled(false);
+		}
+		
+	}
+
+	@Override
+	public void setButtons() {
+		myUserAns.setText(PUT_TEXT);
+		
+	}
 
 	
 	public class EnterListener extends KeyAdapter {
@@ -111,4 +127,7 @@ public class TextRoomGUI extends AbstractRoomPanel {
 
 		
 	}
+
+
+
 }

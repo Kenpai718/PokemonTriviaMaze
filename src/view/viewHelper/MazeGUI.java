@@ -235,21 +235,22 @@ public class MazeGUI extends JPanel {
 				final ImageIcon scaled = new ImageIcon(TREE.getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
-			} else if (r.hasVisited()) {
-			        final String name = r.toString();
-                                lbl.setText(name);
-                                lbl.setForeground(Color.CYAN);
-                                lbl.setBackground(MAZE_BG);
-                                lbl.setFont(PKMN_FONT);
-			} else { //win icon, blocked or normal room name
+			}  else { //win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
+				
 				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
 															// icon
 					final ImageIcon scaled = new ImageIcon(WIN.getImage()
 							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 					lbl.setIcon(scaled);
-
-				} else { // normal room name
+					// set visited color
+				} else if (r.hasVisited()) {
+	                                final String name = r.toString();
+	                                lbl.setText(name);
+	                                lbl.setForeground(Color.CYAN);
+	                                lbl.setBackground(MAZE_BG);
+	                                lbl.setFont(PKMN_FONT);
+	                        } else { // normal room name
 					final String name = r.toString();
 					lbl.setText(name);
 					lbl.setForeground(Color.WHITE);

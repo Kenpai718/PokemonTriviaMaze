@@ -1,14 +1,7 @@
 package view;
 
-import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -21,10 +14,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
 
 import model.Maze;
-import sound.BackgroundMusic;
+import model.Room;
+import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI.MazeModel;
 
 /**
@@ -36,372 +29,309 @@ import view.viewHelper.MazeGUI.MazeModel;
  * @version Spring 2021
  */
 
-public class PokemonMenuBar extends JMenuBar{
+public class PokemonMenuBar extends JMenuBar {
 
-        /**
+	private JMenu myHelpMenu;
+	private JMenu myFileMenu;
+	private JMenu myGamemodeMenu;
+	private ButtonGroup myGamemodes;
+	private final Maze myMaze;
+	private final JFrame myFrame;
+	private final PokemonPanel myPanel;
+
+	/**
+	 * The constructor for the Menu Bar that sets up the the fields and starts
+	 * the menubar gui setup
 	 * 
+	 * @param theFrame
 	 */
-	private static final long serialVersionUID = -6748686814206614562L;
-		private JMenu myHelpMenu;
-        private JMenu myFileMenu;
-        private JMenu myGamemodeMenu;
-        private ButtonGroup myGamemodes;
-        private final Maze myMaze;
-        private final JFrame myFrame;
-        private final PokemonPanel myPanel;
+	public PokemonMenuBar(final PokemonGUI theFrame) {
+		// TODO Auto-generated constructor stub
+		super();
+		myFrame = theFrame.getFrame();
+		myPanel = theFrame.getPanel();
+		myMaze = Maze.getInstance();
+		setupMenuBar();
+	}
 
+	/**
+	 * Adds the base menus to the menu bar
+	 */
+	private void setupMenuBar() {
 
-        public PokemonMenuBar(final PokemonGUI theFrame) {
-                super();
-                myFrame = theFrame.getFrame();
-                myPanel = theFrame.getPanel();
-                myMaze = Maze.getInstance();
-                setupMenuBar();
-        }
+		myFileMenu = new JMenu("File");
+		setupFileMenu();
+		this.add(myFileMenu);
 
-        private void setupMenuBar() {
+		myHelpMenu = new JMenu("Help");
+		setupHelpMenu();
+		this.add(myHelpMenu);
 
-                myFileMenu = new JMenu("File");
-                myFileMenu.setMnemonic(KeyEvent.VK_F);
-                setupFileMenu();
-                this.add(myFileMenu);
+		myGamemodeMenu = new JMenu("Gamemode");
+		setupGamemodesMenu();
+		this.add(myGamemodeMenu);
 
-                myHelpMenu = new JMenu("Help");
-                myHelpMenu.setMnemonic(KeyEvent.VK_H);
-                setupHelpMenu();
-                this.add(myHelpMenu);
+	}
 
-                myGamemodeMenu = new JMenu("Gamemode");
-                myGamemodeMenu.setMnemonic(KeyEvent.VK_G);
-                setupGamemodesMenu();
-                this.add(myGamemodeMenu);
+	/**
+	 * Sets up the file menu
+	 */
+	private void setupFileMenu() {
+		// TODO Auto-generated method stub
+		final JMenuItem save = new JMenuItem("Save");
+		myFileMenu.add(save);
 
-        }
+		final JMenuItem load = new JMenuItem("Load");
+		myFileMenu.add(load);
 
-        /**
-         * 
-         */
-        private void setupFileMenu() {
-                final JMenuItem save = new JMenuItem("Save");
-                save.setMnemonic(KeyEvent.VK_S);
-                save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-                myFileMenu.add(save);
-                
-              //  save.addActionListener(new ActionListener() {
+		final JSeparator separator = new JSeparator();
+		myFileMenu.add(separator);
 
-        	//	});
+		final JMenuItem exit = new JMenuItem("Exit");
+		exit.addActionListener(theEvent -> System.exit(0));
+		myFileMenu.add(exit);
+	}
 
+	/**
+	 * Sets up the Help Menu,
+	 */
+	private void setupHelpMenu() {
+		// TODO Auto-generated method stub
 
-                final JMenuItem load = new JMenuItem("Load");
-                load.setMnemonic(KeyEvent.VK_L);
-                load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
-                myFileMenu.add(load);
-                
-              //  load.addActionListener(new ActionListener() {
-        		
-        		//});
+		final JMenuItem about = new JMenuItem("About");
+		about.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(myFrame,
+						"Created by: AJ Downey, Kenneth Ahrens, "
+								+ "Katelyn Malone\n Spring 2021",
+						"About", JOptionPane.PLAIN_MESSAGE);
+			}
 
-                final JSeparator separator = new JSeparator();
-                myFileMenu.add(separator);
-                
-                final JMenuItem reset = new JMenuItem("Reset");
-                reset.setMnemonic(KeyEvent.VK_R);
-                myFileMenu.add(reset);
-                
-                reset.addActionListener(new ActionListener() {
+		});
+		myHelpMenu.add(about);
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						
+		final JMenuItem tutorial = new JMenuItem("Tutorial");
+		tutorial.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!",
+						"About", JOptionPane.PLAIN_MESSAGE);
+			}
+		});
+		myHelpMenu.add(tutorial);
+		setUpCheats();
+
+	}
+
+	/**
+	 * Sets up the cheats menu for all of the dev cheats for debugging
+	 */
+	private void setUpCheats() {
+		// TODO Auto-generated method stub
+		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
+		final JMenu cheats = new JMenu("Cheats");
+		myHelpMenu.add(cheats);
+
+		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem(
+				"Reveal Pokemon");
+		reveal.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				final boolean selected = reveal.isSelected();
+				myPanel.setImage();
+				if (selected) {
+					myPanel.setImgBrightness(1);
+				} else {
+					myPanel.setImgBrightness(0);
+				}
+
+			}
+		});
+		cheats.add(reveal);
+		
+		
+		final JMenuItem answer = new JCheckBoxMenuItem("Show Answer");
+		answer.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				final boolean selected = answer.isSelected();
+				LabelPanel labels = myPanel.getLabelPanel();
+				myPanel.setImage();
+				if (selected) {
+					labels.enableShowAnswer(true);
+				} else {
+					labels.enableShowAnswer(false);
+				}
+
+			}
+		});
+		cheats.add(answer);
+
+		final JMenuItem unlock = new JMenuItem("Unlock All Doors");
+		unlock.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				final Room[][] rooms = myMaze.getMatrix();
+				for (int i = 0; i < myMaze.getRows(); i++) {
+					for (int j = 0; j < myMaze.getCols(); j++) {
+						rooms[i][j].setVisited(true);
+						repaint();
 					}
-                });
-                
-                myFileMenu.add(separator);
-                
-                final JMenuItem exit = new JMenuItem("Exit");
-                exit.setMnemonic(KeyEvent.VK_E);
-                exit.addActionListener(theEvent -> System.exit(0));
-                myFileMenu.add(exit);
-        }
-        
-        /**
-    	 * Creates the saved file and saves it to the computer
-    	 * 
-    	 * @param theFrame                 the window that opens when you save the file
-    	 * @throws FileNotFoundException   
-    	 * @throws IOException
-    	 */
-    	public void saveToFile(JFrame theFrame)
-    			throws FileNotFoundException, IOException {
+				}
+			}
 
-    		/**FileDialog fd; // A file dialog box that will let the user
-    						// specify the output file.
+		});
+		cheats.add(unlock);
+		
 
-    		// start file dialog to prompt user for file name/location to save to
-    		fd = new FileDialog(theFrame, "Save to File", FileDialog.SAVE);
+		final JMenuItem removeBlocked = new JMenuItem("Reset Blocked Rooms");
+		removeBlocked.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				final Room[][] rooms = myMaze.getMatrix();
+				for (int i = 0; i < myMaze.getRows(); i++) {
+					for (int j = 0; j < myMaze.getCols(); j++) {
+						rooms[i][j].setEntry(true);
+						repaint();
+					}
+				}
+			}
 
-    		String fileName = fd.getFile(); // gets what the user input for file
-    										// name
+		});
+		cheats.add(removeBlocked);
 
-    		// if user closes without entering a name
-    		if (fileName == null) {
-    			JOptionPane.showMessageDialog(null, "Save was canceled.");
-    			return;
-    		} else {
+		final JMenuItem teleport = new JMenuItem("Teleport");
 
-    			// add a file extension if user did not do so
-    			if (!fileName.endsWith(".pkmn"))
-    				fileName += ".pkmn";
+		teleport.addActionListener(new TeleportListener(model));
+		cheats.add(teleport);
 
-    			String directoryName = fd.getDirectory();
+	}
 
-    			// make the file
-    			File file = new File(directoryName, fileName);
+	/**
+	 * Sets up the gamemode menu for changing the gamemode
+	 */
+	private void setupGamemodesMenu() {
 
-    			//write object to a file
-    			ObjectOutputStream out;
+		myGamemodes = new ButtonGroup();
+		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem(
+				"Multiple Choice");
+		myGamemodeMenu.add(choice);
+		myGamemodes.add(choice);
+		choice.addActionListener(new ActionListener() {
 
-    			try {
-    				// write info the file
-    				out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// System.out.println("action fired");
+				// myPanel.setPanels(true);
+				firePropertyChange("changegm", null, true);
 
-    				// get the current list of shapes from the panel
-    				Stack<PaintShape> shapesList = myPanel.getMaze();
+			}
 
-    				// save the serialized object to the file
-    				out.writeObject(shapesList);
-    				out.close();
+		});
 
-    				// tell user it worked
-    				JOptionPane.showMessageDialog(null,
-    						fileName + " saved sucessfully!");
-    				
-    			//error catching
-    			} catch (FileNotFoundException e) {
-    				JOptionPane.showMessageDialog(null, e);
-    			} catch (IOException e) {
-    				JOptionPane.showMessageDialog(null, e);
-    			}
-    		}*/
+		final JRadioButtonMenuItem input = new JRadioButtonMenuItem(
+				"User Input");
+		myGamemodeMenu.add(input);
+		myGamemodes.add(input);
+		input.addActionListener(new ActionListener() {
 
-    	}
-    	
-    	/**
-    	 * Reads the saved files and loads it in
-    	 * 
-    	 * @param theFrame the window that opens when you load the file
-    	 */
-    	public void loadFromFile(JFrame theFrame) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// System.out.println("action fired");
+				// myPanel.setPanels(false);
+				firePropertyChange("changegm", null, false);
 
-    		/**FileDialog fd; // A file dialog box that will let the user
-    		// specify the input file.
+			}
 
-    		// start file dialog to prompt user for file name/location to load from
-    		fd = new FileDialog(theFrame, "Save to File", FileDialog.LOAD);
+		});
 
-    		String fileName = fd.getFile();
+		// set initial gamemodechoice
+		choice.setSelected(true);
 
-    		// cancel load if user doesnt input anything
-    		if (fileName == null) {
-    			JOptionPane.showMessageDialog(null, "Load was canceled.");
-    			return;
-    		} else {
+	}
 
-    			String directoryName = fd.getDirectory();
+	/**
+	 * The action listener for the teleport cheat.
+	 * 
+	 * @author ajdow
+	 *
+	 */
+	class TeleportListener implements ActionListener {
 
-    			File file = new File(directoryName, fileName);
+		private final MazeModel myModel;
 
-    			ObjectInputStream in;
+		/**
+		 * Gets the table model to refresh the maze GUI
+		 * 
+		 * @param theModel the table model connected to the maze
+		 */
+		public TeleportListener(final MazeModel theModel) {
+			myModel = theModel;
+		}
 
-    			try {
-    				in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
+		/**
+		 * Displays a input dialog that reads the new location and moves the
+		 * player to that location
+		 */
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			// TODO Auto-generated method stub
+			final String message = "Please Enter a new position to teleport"
+					+ " to.\n(X Y):";
+			final int[] pos = readInput(message);
 
-    				//get the paintshape data from the input file
-    				Object obj = in.readObject();
-    				Stack<PaintShape> shapeData = (Stack<PaintShape>) obj;
-    				
-    				//send the loaded shapes to panel to redraw
-    				myPanel.loadShapes(shapeData);
+			myMaze.setPlayerLocation(pos);
+			myModel.refresh(myMaze.getMatrix());
+			myPanel.setImage();
+			myPanel.getQuestionGUI().setButtons();
+		}
 
-    				//tell user it worked
-    				JOptionPane.showMessageDialog(null,
-    						fileName + " loaded successfully!");
-    				
-    			//error catching below
-    			} catch (FileNotFoundException e) {
-    				JOptionPane.showMessageDialog(null, e);
-    			} catch (IOException e) {
-    				JOptionPane.showMessageDialog(null, e);
-    			} catch (ClassNotFoundException e) {
-    				JOptionPane.showMessageDialog(null, e);
-    			}
-    		}*/
+		/**
+		 * Helper method to read the input from the Input Dialog
+		 * 
+		 * @param theInput a string of the input
+		 * @return an int[] of the two numbers input
+		 */
+		private int[] readInput(final String theMessage) {
+			final String input = JOptionPane.showInputDialog(theMessage);
+			int[] res = myMaze.getPlayerLocation().clone();
+			final Scanner scan;
+			if (input != null && !input.isEmpty()) {
+				if (!(input.length() < 3)) {
+					scan = new Scanner(input.toString());
+					try {
+						for (int i = 0; i < 2; i++) {
+							final int num = scan.nextInt() - 1;
+							if (num < myMaze.getRows()
+									&& num < myMaze.getCols()) {
+								res[i] = num;
+							} else {
+								res = readInput("One or more numbers out "
+										+ "of range of maze\n(X Y):");
+								break;
+							}
+						}
+					} catch (final InputMismatchException e) {
+						res = readInput("Please use integers only.\n(X Y):");
+					}
+					scan.close();
+				} else {
+					res = readInput("Invalid Input\n(X Y):");
+				}
+			} else {
+				// do nothing
+			}
 
-    	}
+			return res;
 
-
-        /**
-         * 
-         */
-        private void setupHelpMenu() {
-                final JMenuItem about = new JMenuItem("About");
-                about.setMnemonic(KeyEvent.VK_A);
-                about.addActionListener(new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                JOptionPane.showMessageDialog(myFrame,
-                                                "Created by: AJ Downey, Kenneth Ahrens, "
-                                                                + "Katlyn Malone\n Spring 2021",
-                                                "About", JOptionPane.PLAIN_MESSAGE);
-                        }
-
-                });
-                myHelpMenu.add(about);
-
-                final JMenuItem tutorial = new JMenuItem("Tutorial");
-                tutorial.setMnemonic(KeyEvent.VK_E);
-                tutorial.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!",
-                                                "About", JOptionPane.PLAIN_MESSAGE);
-                        }
-                });
-                myHelpMenu.add(tutorial);
-
-                final JMenu cheats = new JMenu("Cheats");
-                cheats.setMnemonic(KeyEvent.VK_C);
-                myHelpMenu.add(cheats);
-
-                final JCheckBoxMenuItem cheat1 = new JCheckBoxMenuItem(
-                                "Reveal Pokemon");
-                cheat1.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                final boolean selected = cheat1.isSelected();
-                                myPanel.setImage();
-                                if (selected) {
-                                        myPanel.setImgBrightness(1);
-                                } else {
-                                        myPanel.setImgBrightness(0);
-                                }
-
-                        }
-                });
-                cheats.add(cheat1);
-
-                final JCheckBoxMenuItem cheat2 = new JCheckBoxMenuItem(
-                                "Unlock All Doors");
-                cheats.add(cheat2);
-
-                final JMenuItem teleport = new JMenuItem("Teleport");
-                final MazeModel model = (MazeModel) myPanel.getTable().getModel();
-                teleport.addActionListener(new TeleportListener(model));
-                cheats.add(teleport);
-
-        }
-
-        private void setupGamemodesMenu() {
-
-                myGamemodes = new ButtonGroup();
-                final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
-                myGamemodeMenu.add(choice);
-                myGamemodes.add(choice);
-                choice.addActionListener(new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                //System.out.println("action fired");
-                                //myPanel.setPanels(true);
-                                firePropertyChange("changegm", null, true);
-
-                        }
-
-                });
-
-                final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
-                myGamemodeMenu.add(input);
-                myGamemodes.add(input);
-                input.addActionListener(new ActionListener() {
-
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                //System.out.println("action fired");
-                                //myPanel.setPanels(false);
-                                firePropertyChange("changegm", null, false);
-
-                        }
-
-                });
-                
-                //set initial gamemodechoice
-                choice.setSelected(true);
-
-        }
-
-        public class TeleportListener implements ActionListener {
-
-                private final MazeModel myModel;
-
-                public TeleportListener(final MazeModel theModel) {
-                        myModel = theModel;
-                }
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                        final String message = "Please Enter a new position to teleport"
-                                        + " to.\n(X Y):";
-                        final int[] pos = readInput(message);
-//                        
-                        myMaze.setPlayerLocation(pos);
-                        myModel.refresh(myMaze.getMatrix());
-                        myPanel.setImage();
-                        myPanel.getQuestionGUI().setButtons();
-                }
-
-                /**
-                 * Helper method to read the input from the Input Dialog
-                 * 
-                 * @param theInput a string of the input
-                 * @return an int[] of the two numbers input
-                 */
-                private int[] readInput(final String theMessage) {
-                        final String input = JOptionPane.showInputDialog(theMessage);
-                        int[] res = myMaze.getPlayerLocation().clone();
-                        final Scanner scan;
-                        if (input != null && !input.isEmpty()) {
-                                if (!(input.length() < 3)) {
-                                        scan = new Scanner(input.toString());
-                                        try {
-                                                for (int i = 0; i < 2; i++) {
-                                                        final int num = scan.nextInt() - 1;
-                                                        if (num < myMaze.getRows()
-                                                                        && num < myMaze.getCols()) {
-                                                                res[i] = num;
-                                                        } else {
-                                                                res = readInput("One or more numbers out "
-                                                                                + "of range of maze\n(X Y):");
-                                                                break;
-                                                        }
-                                                }
-                                        } catch (final InputMismatchException e) {
-                                                res = readInput("Please use integers only.\n(X Y):");
-                                        }
-                                        scan.close();
-                                } else {
-                                        res = readInput("Invalid Input\n(X Y):");
-                                }
-                        } else {
-                                // do nothing
-                        }
-
-                        return res;
-
-                }
-        }
+		}
+	}
 
 }
