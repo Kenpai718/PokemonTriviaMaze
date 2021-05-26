@@ -22,7 +22,7 @@ import view.PokemonPanel;
  * Used in the case of a input text gamemode
  */
 
-public class TextRoomGUI extends AbstractRoomPanel {
+public class TextRoomGUI extends AbstractQuestionPanel {
 	
 	Dimension SIZE = new Dimension(350,100);
 	private final Color BORDER_COLOR = new Color(51, 153, 204);

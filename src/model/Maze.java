@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * @version Spring 2021
  */
 
-public class Maze implements PropertyChangeListener {
+public class Maze  {
 
 	/*
 	 * Constants
@@ -285,46 +285,8 @@ public class Maze implements PropertyChangeListener {
 	public int getCols() {
 		return COLS;
 	}
+	
 
-
-	/**
-	 * Add an object that the maze will listen for property changes.
-	 * 
-	 * @param Container the GUI object
-	 */
-	public void addListener(final Container theObj) {
-		theObj.addPropertyChangeListener(this);
-	}
-
-	@Override
-	public void propertyChange(final PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		final String prop = evt.getPropertyName();
-
-		/*
-		 * User answered from a room panel question gui Update player/attempt location
-		 * if they were right/wrong Block the room if they were wrong
-		 */
-		if ("correctans".equals(prop)) {
-			final boolean correct = (boolean) evt.getNewValue();
-			// System.out.println("answer was " + correct);
-			if (correct) { // answered correctly
-				// System.out.println("correct");
-				//set current player room and attempted room to visited
-			    getCurrRoom().setVisited(correct);
-			    getAttemptRoom().setVisited(correct);
-				setPlayerLocation(myAttemptLocation);
-				// System.out.println(getCurrRoom().getPokemon());
-			} else { // answered incorrectly
-				// System.out.println("incorrect");
-				getAttemptRoom().setEntry(false); // block that room
-				// reset attempt location to default
-				setAttemptLocation(myPlayerLocation);
-			}
-
-		}
-
-	}
 
 	// TODO: DELETE LATER
 	// used to visually check which rooms are set to blocked

@@ -15,21 +15,21 @@ import view.viewHelper.MazeGUI.MazeModel;
  * incorrect answers.
  * 
  * Abstract to prevent instantiation because it does nothing on its own.
+ * Technically a controller and a view.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
  */
 
-public abstract class AbstractRoomPanel extends JPanel {
+public abstract class AbstractQuestionPanel extends JPanel {
 
 	private Maze myMaze;
 	private PokemonPanel myPP;
 
-	public AbstractRoomPanel(PokemonPanel thePP) {
+	public AbstractQuestionPanel(PokemonPanel thePP) {
 		super();
 		myPP = thePP;
 		myMaze = Maze.getInstance();
-		myMaze.addListener(this);
 	}
 
 	/**
@@ -49,25 +49,52 @@ public abstract class AbstractRoomPanel extends JPanel {
 		// format answer to prevent errors
 		correctAns = correctAns.toLowerCase().strip();
 		String userAns = theUserAns.toLowerCase().strip();
+		Boolean isCorrect = userAns.equals(correctAns);
 
+		// call method to change the maze
+		doUserAnswer(isCorrect);
 
-		// correct
-		if (userAns.equals(correctAns)) {
+		if (isCorrect) {
 
-			firePropertyChange("correctans", null, true);
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, "Good job! " + correct,
 					"Correct!", JOptionPane.INFORMATION_MESSAGE);
 
 		} else { // incorrect
 
-			firePropertyChange("correctans", null, false);
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, incorrect + correct,
 					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 		updateGUI();
+
+	}
+
+	/**
+	 * User answered from a room panel question gui. Read a boolean for if they
+	 * were right/wrong. Update player/attempt statuses and locations in maze
+	 * based on answer result.
+	 * 
+	 * 
+	 * @param Boolean theRes true = user answered correctly set curr and attempt
+	 *                room to visited, false = incorrect, set visited false and
+	 *                block the room
+	 */
+	private void doUserAnswer(Boolean theResult) {
+
+		Room curr = myMaze.getCurrRoom();
+		Room attempt = myMaze.getAttemptRoom();
+		if (theResult) { // answered correctly
+			// set current player room and attempted room to visited
+			curr.setVisited(theResult);
+			attempt.setVisited(theResult);
+			myMaze.setPlayerLocation(myMaze.getAttemptedLocation());
+		} else { // answered incorrectly
+			attempt.setEntry(false); // block that room
+			// reset attempt location to default
+			myMaze.setAttemptLocation(myMaze.getPlayerLocation());
+		}
 
 	}
 
@@ -82,20 +109,20 @@ public abstract class AbstractRoomPanel extends JPanel {
 		firePropertyChange("newpos", null, null);
 		myPP.setImage();
 		myPP.getQuestionGUI().setButtons();
-		//firePropertyChange("showpkmn", null, false);
 
 		if (myMaze.isWinCondition()) {
-			//System.out.println("In room panel player wins");
 			firePropertyChange("win", null, null);
 		}
 
+		// TODO: if maze isLoseCondition() fire lose
+
 	}
-	
+
 	/**
 	 * Enable or disable the answer fields
 	 */
 	public abstract void enableButtons(Boolean theBool);
-	
+
 	/**
 	 * alter the answer fields to the default
 	 */
