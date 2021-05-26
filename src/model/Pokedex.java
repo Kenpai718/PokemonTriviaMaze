@@ -28,6 +28,11 @@ public class Pokedex {
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
 	 */
 	private final Map<Integer, Pokemon> myPokedex;
+	
+	/*
+	 * Alternative map for looking up the name
+	 */
+	private final Map<String, Pokemon> myNameDex;
 
 	/* How many pokemon in pokedex */
 	int myCounter;
@@ -36,7 +41,9 @@ public class Pokedex {
 	 * Constructor to initialize pokedex
 	 */
 	private Pokedex() {
+		// TODO Auto-generated constructor stub
 		myPokedex = new HashMap<Integer, Pokemon>();
+		myNameDex = new HashMap<String, Pokemon>();
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
@@ -105,14 +112,16 @@ public class Pokedex {
 	}
 
 	/**
-	 * Add a pokemon to the pokedex map
+	 * Add a pokemon to the pokedex map and the name map
 	 * 
 	 * @param String theID of the pokemon based on official pokedex
 	 * @param String theName of the pokemon
 	 */
 	public void addPokemon(final String theID, final String theName) {
 		final Pokemon pkmn = new Pokemon(theID, theName);
+		String formatName = formatString(theName);
 		myPokedex.put(Integer.parseInt(theID), pkmn);
+		myNameDex.put(formatName, pkmn);
 		myCounter++;
 	}
 
@@ -134,6 +143,16 @@ public class Pokedex {
 	public int getCount() {
 		return myCounter;
 	}
+	
+	/**
+	 * Method to format string the same to put in name map
+	 * 
+	 * @param theString
+	 * @return formatted string lowercase and stripped
+	 */
+	private String formatString(final String theString) {
+		return theString.toLowerCase().strip();
+	}
 
 	/**
 	 * Lookup pokemon based on id number in map. If not found return missingno.
@@ -141,15 +160,59 @@ public class Pokedex {
 	 * @return Pokemon at that ID number
 	 */
 	public Pokemon findPokemon(final int theID) {
-		@SuppressWarnings("unlikely-arg-type")
-		Pokemon res = myPokedex.get("000"); // missingno in case not found
+		Pokemon res = myPokedex.get(0); // missingno in case not found
 		if (myPokedex.containsKey(theID)) {
 			res = (myPokedex.get(theID)); // if found return pokemon
 		}
 
 		return res;
 	}
+	
+	/**
+	 * Lookup pokemon based on name in map. If not found return missingno.
+	 * 
+	 * @return Pokemon with that name
+	 */
+	public Pokemon findPokemon(final String theName) {
+		final String formatName = formatString(theName);
+		Pokemon res = myPokedex.get(0); // missingno in case not found
+		if (myNameDex.containsKey(formatName)) {
+			res = (myNameDex.get(formatName)); // if found return pokemon
+		}
 
+		return res;
+	}
+	
+	/**
+	 * Lookup pokemon based on name in map. If not found return false
+	 * 
+	 * @return boolean if that pokemon is in pokedex
+	 */
+	public Boolean hasPokemon(final int theID) {
+		boolean res = false;
+		if (myPokedex.containsKey(theID)) {
+			res = true;
+		}
+
+		return res;
+	}
+	
+	/**
+	 * Lookup pokemon based on name in map. If not found return false
+	 * 
+	 * @return boolean if that pokemon is in pokedex
+	 */
+	public Boolean hasPokemon(final String theName) {
+		final String formatName = formatString(theName);
+		boolean res = false;
+		if (myNameDex.containsKey(formatName)) {
+			res = true;
+		}
+
+		return res;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return myPokedex.toString();

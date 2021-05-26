@@ -70,10 +70,9 @@ public class MovementAction extends AbstractAction {
 	 * 
 	 */
 	private void updateGUI() {
-		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
-		model.refresh(myMaze.getMatrix());
+		
 		firePropertyChange("newpos", null, null);
-		myPanel.setImage();
+		myPanel.refreshGUI();
 
 		if (myMaze.getAttemptRoom().hasVisited()) {
 			myPanel.enableAnswerFields(false);
@@ -81,8 +80,6 @@ public class MovementAction extends AbstractAction {
 			myPanel.enableAnswerFields(true);
 		}
 
-		myPanel.getQuestionGUI().setButtons();
-		myPanel.getTextGUI().setButtons();
 	}
 
 }

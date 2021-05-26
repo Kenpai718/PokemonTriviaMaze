@@ -1,18 +1,23 @@
 package view.viewHelper;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import controller.movement_actions.DownAction;
 import controller.movement_actions.LeftAction;
@@ -124,6 +129,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
+			temp.addMouseListener(new HoverListener(temp));
 
 		}
 	}
@@ -132,15 +138,15 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			final Maze maze) {
 		// TODO Auto-generated method stub
 		if (i == 0) {
-                        final Boolean dc = checkRooms("down");
-                        final Boolean uc = checkRooms("up");
+			final Boolean dc = checkRooms("down");
+			final Boolean uc = checkRooms("up");
 			down.setVisible(dc);
 			down.setEnabled(dc);
 			up.setVisible(uc);
 			up.setEnabled(uc);
 		} else {
-                        final Boolean rc = checkRooms("right");
-                        final Boolean lc = checkRooms("left");
+			final Boolean rc = checkRooms("right");
+			final Boolean lc = checkRooms("left");
 			right.setVisible(rc);
 			right.setEnabled(rc);
 			left.setVisible(lc);
@@ -150,36 +156,36 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	private Boolean checkRooms(final String theDir) {
-	        Boolean res = null;
-	        final int[] currRoom = myMaze.getPlayerLocation();
-	        try {
-        	        switch (theDir) {
-        	                case "down":
-        	                        res = myMaze.getRoom(currRoom[0] + 1, currRoom[1]).canEnter();
-        	                        break;
-        	                case "up":
-                                        res = myMaze.getRoom(currRoom[0] - 1, currRoom[1]).canEnter();
-                                        break;
-        	                case "right":
-                                        res = myMaze.getRoom(currRoom[0], currRoom[1] + 1).canEnter();
-                                        break;
-        	                case "left":
-                                        res = myMaze.getRoom(currRoom[0], currRoom[1] - 1).canEnter();
-                                        break;
-                                default:
-                                        res = true;
-        	        }
-	        } catch (final Exception e) {
-	                res = false;
-	        }
-                return res;
-        }
+		Boolean res = null;
+		final int[] currRoom = myMaze.getPlayerLocation();
+		try {
+			switch (theDir) {
+			case "down":
+				res = myMaze.getRoom(currRoom[0] + 1, currRoom[1]).canEnter();
+				break;
+			case "up":
+				res = myMaze.getRoom(currRoom[0] - 1, currRoom[1]).canEnter();
+				break;
+			case "right":
+				res = myMaze.getRoom(currRoom[0], currRoom[1] + 1).canEnter();
+				break;
+			case "left":
+				res = myMaze.getRoom(currRoom[0], currRoom[1] - 1).canEnter();
+				break;
+			default:
+				res = true;
+			}
+		} catch (final Exception e) {
+			res = false;
+		}
+		return res;
+	}
 
-        @Override
+	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		if ("newpos".equals(evt.getPropertyName())) {
-            //System.out.println("entered if");
+			// System.out.println("entered if");
 
 			final int[] pos = myMaze.getPlayerLocation();
 			for (int i = 0; i < pos.length; i++) {
@@ -187,6 +193,36 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 				changeButtonState(i, num, myMaze);
 			}
 			repaint();
+		}
+	}
+
+	/*
+	 * Highlight the button when user hovers over it
+	 */
+	public class HoverListener extends MouseAdapter {
+		private Color B_COLOR = new Color(58,175,220); //highlighter blue
+		final Border BLUE_BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
+		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
+		private JButton myButton;
+		
+		public HoverListener(JButton theButton) {
+			myButton = theButton;
+		}
+
+		/*
+		 * Add border if user hovers mouse
+		 */
+		public void mouseEntered(MouseEvent me) {
+			//System.out.println("hovering");
+			myButton.setBorder(BLUE_BORDER);
+		}
+
+		/*
+		 * Remove border after user scrolls off
+		 */
+		public void mouseExited(MouseEvent me) {
+			//System.out.println("not hovering");
+			myButton.setBorder(EMPTY_BORDER);
 		}
 	}
 }

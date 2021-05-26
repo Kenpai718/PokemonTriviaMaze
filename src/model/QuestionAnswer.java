@@ -23,17 +23,17 @@ public class QuestionAnswer {
 	/*
 	 * Question/answer
 	 */
-	private final Pokemon myPokemon;
+	private Pokemon myPokemon;
 
 	/*
 	 * Multiple choice answers
 	 */
-	private final List<String> myChoices;
+	private List<String> myChoices;
 
 	/*
 	 * index of the answer in choices
 	 */
-	private final int myAnswerIndex;
+	private int myAnswerIndex;
 
 	/*
 	 * List of pokemon in a map for #ID lookup
@@ -57,13 +57,7 @@ public class QuestionAnswer {
 		myUpper = myPokedex.getCount();
 		myPokemon = generatePokemon();
 		
-		
-		fillChoices();
-		// get index of shuffled array list
-		myAnswerIndex = myChoices.indexOf(this.getAnswer());
-		// System.out.println("my answer num is " + myAnswerIndex);
-
-		// randomly fill out myChoices
+		createMC();
 		
 	}
 	
@@ -87,6 +81,15 @@ public class QuestionAnswer {
 
 		// randomly fill out myChoices
 		
+	}
+	
+	/*
+	 * Create multiple choice answers
+	 */
+	public void createMC() {
+		myChoices = new ArrayList<String>();
+		fillChoices();
+		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 	}
 
 	/**
@@ -165,6 +168,15 @@ public class QuestionAnswer {
 		return myPokemon;
 
 	}
+	
+	/**
+	 * Set new pokemon for the question/answer
+	 */
+	public void setNewPokemon(final Pokemon thePkmn) {
+		myPokemon = thePkmn;
+		createMC();
+	}
+	
 
 	/**
 	 * Get a deep copy of the choices array

@@ -73,10 +73,11 @@ public class LabelPanel extends JPanel {
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(320, 110));
+
 		
-		myRoomLbl = buildLabel("Room Label");
-		myDirLbl = buildLabel("Attempted Room Label");
-		myAnsLbl = buildLabel("Room answer label");
+		myRoomLbl = buildLabel("Current Room: " + myMaze.getCurrRoom());
+		myDirLbl = buildLabel("Attempted Room: None" );
+		myAnsLbl = buildLabel("Room Answer: N/A");
 		
 		
 		add(myRoomLbl);

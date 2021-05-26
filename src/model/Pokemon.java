@@ -125,6 +125,23 @@ public class Pokemon {
 		return myPNG;
 
 	}
+	
+	/** 
+	 * Used to compare Pokemon objects
+	 * 
+	 * @return int -1 = not the same, 1 = same
+	 */
+	public int compareTo(Object theObj) {
+		int res = -1;
+		if(theObj instanceof Pokemon) {
+			if(((Pokemon) theObj).getNum() == this.myIDNum) {
+				if(((Pokemon) theObj).getName() == this.myName) {
+					res = 1;
+				}
+			}
+		}
+		return res;
+	}
 
 	@Override
 	public String toString() {

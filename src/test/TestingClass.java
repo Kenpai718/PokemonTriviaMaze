@@ -5,6 +5,8 @@ package test;
  * Only used to test parts of the program
  */
 
+import java.util.Map;
+
 import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
@@ -19,14 +21,18 @@ public class TestingClass{
 
 	public static void main(final String[] args) {
 		myPokedex = Pokedex.getInstance();
-		myQA = new QuestionAnswer();
+		//myQA = new QuestionAnswer();
 		myMaze = Maze.getInstance();
 		/*
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
 		 * System.out.println(choices[1]);
 		 */
 		
-		printAll();
+		//printAll();
+		
+		Pokemon p = new Pokemon("001", "Bulbasaur");
+		Map<Integer, Pokemon> pk = myPokedex.getPokedex();
+		System.out.println(myPokedex.findPokemon("pikachu"));
 		
 		 
 		
