@@ -86,9 +86,11 @@ public abstract class AbstractRoomPanel extends JPanel {
 		myPP.getQuestionGUI().setButtons();
 		firePropertyChange("showpkmn", null, false);
 
-		if (myMaze.isWinCondition()) {
+		if (myMaze.isWinCondition() && myMaze.getCurrRoom().canEnter()) {
 			System.out.println("In room panel player wins");
 			firePropertyChange("win", null, null);
+		} else if (myMaze.isWinCondition() && !myMaze.getCurrRoom().canEnter()) {
+			firePropertyChange("lose", null, null);
 		}
 
 	}

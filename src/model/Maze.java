@@ -99,6 +99,10 @@ public class Maze implements PropertyChangeListener {
 		}
 		return singleMaze;
 	}
+	
+	public static void reset() {
+		singleMaze = null;
+	}
 
 	/**
 	 * Fills matrix with new rooms that have questions.

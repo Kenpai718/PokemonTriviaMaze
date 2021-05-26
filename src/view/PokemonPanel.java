@@ -3,6 +3,7 @@ package view;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,20 +16,23 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
+import javax.swing.SwingUtilities;
 
 import model.Maze;
 import model.TriviaGame;
+import sound.BackgroundMusic;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.AbstractRoomPanel;
 import view.viewHelper.StartRoomPanel;
 import view.viewHelper.TextRoomGUI;
 
@@ -425,13 +429,41 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		} else {
 			if ("win".equals(prop)) {
-				// TODO: add more to this win message
-				JOptionPane.showMessageDialog(null, "You win!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "You really are a Pokemon Master!", 
+					"Congratulations!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+					case 0:
+						Maze.reset();
+						Maze.getInstance();
+						BackgroundMusic.stopMusic();
+						// need to get the frame so you can dispose of it
+						//final JFrame frame = (JFrame) this.getParent();
+						//frame.dispose();
+						new PokemonGUI();
+					case 1:
+						System.exit(0);
+				}
 			}
 
 			if ("lose".equals(prop)) {
-				// TODO: add more to this lose message
-				JOptionPane.showMessageDialog(null, "You lose!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "Looks like you should have brought HM Cut with you!", 
+						"Better luck next time!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+				case 0:
+					Maze.reset();
+					Maze.getInstance();
+					BackgroundMusic.stopMusic();
+					// need to get the frame to dispose of it
+					//JFrame frame = mazeGUI.getParent().getParent();
+					//frame.dispose();
+					new PokemonGUI();
+				case 1:
+					System.exit(0);
+				}
 			}
 
 		}
