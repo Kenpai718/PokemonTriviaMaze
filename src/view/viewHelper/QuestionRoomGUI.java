@@ -8,23 +8,17 @@ import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
-import model.Room;
-import view.PokemonGUI;
 import view.PokemonPanel;
 
 /**
@@ -47,15 +41,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
 
-	private JRadioButton myA1;
-	private JRadioButton myA2;
-	private JRadioButton myA3;
-	private JRadioButton myA4;
-	private final int POKE_W = 600;
-	private final int POKE_H = 600;
-
-	private Maze myMaze;
-
 	// /*
 	// * Multiple choice
 	// */
@@ -70,8 +55,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		super(thePP);
 		// myCurrRoom = theRoom;
 		// myChoices = theRoom.getChoices();
-
-		myMaze = Maze.getInstance();
 		setupGUI();
 
 	}
@@ -109,7 +92,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		myA1 = new JRadioButton("");
+		final JRadioButton myA1 = new JRadioButton("");
 		myA1.setOpaque(false);
 		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
 				myQPane);
@@ -164,7 +147,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	}
 
 	public void setButtons() {
-		// TODO Auto-generated method stub
 		buttonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
@@ -198,9 +180,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	public void answerPopUp() {
 		String userAns = "";
-		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
-		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		for (Enumeration<AbstractButton> buttons = buttonGroup
 				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();

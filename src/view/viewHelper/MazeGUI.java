@@ -141,7 +141,6 @@ public class MazeGUI extends JPanel {
 		 */
 		@Override
 		public int getRowCount() {
-			// TODO Auto-generated method stub
 			return myData.length;
 		}
 
@@ -150,7 +149,6 @@ public class MazeGUI extends JPanel {
 		 */
 		@Override
 		public int getColumnCount() {
-			// TODO Auto-generated method stub
 			return myData[0].length;
 		}
 

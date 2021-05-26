@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -24,15 +23,14 @@ import javax.swing.border.Border;
 
 import model.Maze;
 import model.TriviaGame;
+import sound.BackgroundMusic;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.AbstractQuestionPanel;
 import view.viewHelper.StartRoomPanel;
 import view.viewHelper.TextRoomGUI;
-import java.awt.Font;
 
 /**
  * Setups playable game visuals on a panel
@@ -497,13 +495,41 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		} else {
 			if ("win".equals(prop)) {
-				// TODO: add more to this win message
-				JOptionPane.showMessageDialog(null, "You win!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "You really are a Pokemon Master!", 
+					"Congratulations!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+					case 0:
+						Maze.reset();
+						Maze.getInstance();
+						BackgroundMusic.stopMusic();
+						// need to get the frame so you can dispose of it
+						//final JFrame frame = (JFrame) this.getParent();
+						//frame.dispose();
+						new PokemonGUI();
+					case 1:
+						System.exit(0);
+				}
 			}
 
 			if ("lose".equals(prop)) {
-				// TODO: add more to this lose message
-				JOptionPane.showMessageDialog(null, "You lose!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "Looks like you should have brought HM Cut with you!", 
+						"Better luck next time!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+				case 0:
+					Maze.reset();
+					Maze.getInstance();
+					BackgroundMusic.stopMusic();
+					// need to get the frame to dispose of it
+					//JFrame frame = mazeGUI.getParent().getParent();
+					//frame.dispose();
+					new PokemonGUI();
+				case 1:
+					System.exit(0);
+				}
 			}
 
 		}

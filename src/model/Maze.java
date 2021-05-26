@@ -1,8 +1,5 @@
 package model;
 
-import java.awt.Container;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -58,7 +55,11 @@ public class Maze  {
 	/*
 	 * Boolean to verify when the player has won the game
 	 */
+	@SuppressWarnings("unused")
 	private boolean myWinCondition;
+	
+	@SuppressWarnings("unused")
+	private boolean myLoseCondition;
 
 	// /*
 	// * Big data storage of all pokemon info
@@ -69,10 +70,6 @@ public class Maze  {
 	 * Singleton maze instantiation
 	 */
 	private static Maze singleMaze = null;
-
-	// TODO Current win condition is that the player needs to get to the
-	// opposite corner that they are in.
-	// TODO: private final boolean winCondition;
 
 	/**
 	 * Constructor for maze
@@ -104,7 +101,9 @@ public class Maze  {
 		return singleMaze;
 	}
 	
-	
+	public static void reset() {
+		singleMaze = null;
+	}
 
 	/**
 	 * Fills matrix with new rooms that have questions and pokemon
@@ -141,6 +140,10 @@ public class Maze  {
 	 */
 	public int[] getWinLocation() {
 		return WIN_LOCATION.clone();
+	}
+	
+	public boolean isLoseCondition() {
+		return false;
 	}
 
 	/**
@@ -191,6 +194,10 @@ public class Maze  {
 	 */
 	public Room getAttemptRoom() {
 		return myMatrix[myAttemptLocation[0]][myAttemptLocation[1]];
+	}
+	
+	public Room getWinRoom() {
+		return myMatrix[ROWS - 1][COLS - 1];
 	}
 
 	/*

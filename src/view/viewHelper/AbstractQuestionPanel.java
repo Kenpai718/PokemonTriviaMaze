@@ -23,6 +23,10 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public abstract class AbstractQuestionPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1939324042246867008L;
 	private Maze myMaze;
 	private PokemonPanel myPP;
 
@@ -106,16 +110,18 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		this.enableButtons(false);
 		final MazeModel model = (MazeModel) myPP.getTable().getModel();
 		model.refresh(myMaze.getMatrix());
-		firePropertyChange("newpos", null, null);
+		firePropertyChange("newpos", null, null); 
 		myPP.setImage();
 		myPP.getQuestionGUI().setButtons();
 
 		if (myMaze.isWinCondition()) {
+			System.out.println("In room panel player wins");
 			firePropertyChange("win", null, null);
+		} else if (!myMaze.getWinRoom().canEnter()) {
+			firePropertyChange("lose", null, null);
+		} else if (myMaze.isLoseCondition()) {
+			firePropertyChange("lose", null, null);
 		}
-
-		// TODO: if maze isLoseCondition() fire lose
-
 	}
 
 	/**

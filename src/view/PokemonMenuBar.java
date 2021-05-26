@@ -2,6 +2,7 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
 
 import model.Maze;
 import model.Room;
@@ -31,6 +33,10 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public class PokemonMenuBar extends JMenuBar {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6748686814206614562L;
 	private JMenu myHelpMenu;
 	private JMenu myFileMenu;
 	private JMenu myGamemodeMenu;
@@ -60,16 +66,19 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupMenuBar() {
 
 		myFileMenu = new JMenu("File");
-		setupFileMenu();
-		this.add(myFileMenu);
+        myFileMenu.setMnemonic(KeyEvent.VK_F);
+        setupFileMenu();
+        this.add(myFileMenu);
 
-		myHelpMenu = new JMenu("Help");
-		setupHelpMenu();
-		this.add(myHelpMenu);
+        myHelpMenu = new JMenu("Help");
+        myHelpMenu.setMnemonic(KeyEvent.VK_H);
+        setupHelpMenu();
+        this.add(myHelpMenu);
 
-		myGamemodeMenu = new JMenu("Gamemode");
-		setupGamemodesMenu();
-		this.add(myGamemodeMenu);
+        myGamemodeMenu = new JMenu("Gamemode");
+        myGamemodeMenu.setMnemonic(KeyEvent.VK_G);
+        setupGamemodesMenu();
+        this.add(myGamemodeMenu);
 
 	}
 
@@ -79,17 +88,47 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupFileMenu() {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
-		myFileMenu.add(save);
+        save.setMnemonic(KeyEvent.VK_S);
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+        myFileMenu.add(save);
 
-		final JMenuItem load = new JMenuItem("Load");
-		myFileMenu.add(load);
+      //  save.addActionListener(new ActionListener() {
 
-		final JSeparator separator = new JSeparator();
-		myFileMenu.add(separator);
+	//	});
 
-		final JMenuItem exit = new JMenuItem("Exit");
-		exit.addActionListener(theEvent -> System.exit(0));
-		myFileMenu.add(exit);
+
+        final JMenuItem load = new JMenuItem("Load");
+        load.setMnemonic(KeyEvent.VK_L);
+        load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+        myFileMenu.add(load);
+
+      //  load.addActionListener(new ActionListener() {
+
+		//});
+
+
+        final JSeparator separator = new JSeparator();
+        myFileMenu.add(separator);
+
+        final JMenuItem reset = new JMenuItem("Reset");
+        reset.setMnemonic(KeyEvent.VK_R);
+        myFileMenu.add(reset);
+
+        reset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+        });
+
+        myFileMenu.add(separator);
+
+        final JMenuItem exit = new JMenuItem("Exit");
+        exit.setMnemonic(KeyEvent.VK_E);
+        exit.addActionListener(theEvent -> System.exit(0));
+        myFileMenu.add(exit);
 	}
 
 	/**
@@ -99,6 +138,7 @@ public class PokemonMenuBar extends JMenuBar {
 		// TODO Auto-generated method stub
 
 		final JMenuItem about = new JMenuItem("About");
+		about.setMnemonic(KeyEvent.VK_A);
 		about.addActionListener(new ActionListener() {
 
 			@Override
@@ -114,6 +154,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myHelpMenu.add(about);
 
 		final JMenuItem tutorial = new JMenuItem("Tutorial");
+		tutorial.setMnemonic(KeyEvent.VK_T);
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -133,6 +174,7 @@ public class PokemonMenuBar extends JMenuBar {
 		// TODO Auto-generated method stub
 		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
 		final JMenu cheats = new JMenu("Cheats");
+		cheats.setMnemonic(KeyEvent.VK_C);
 		myHelpMenu.add(cheats);
 
 		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem(
