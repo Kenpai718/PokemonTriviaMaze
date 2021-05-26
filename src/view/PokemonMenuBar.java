@@ -89,11 +89,11 @@ public class PokemonMenuBar extends JMenuBar {
 		myFileMenu.add(load);
 
 		myFileMenu.addSeparator();
-		
-		//TODO: game reset button
+
+		// TODO: game reset button
 		final JMenuItem reset = new JMenuItem("Reset");
 		myFileMenu.add(reset);
-	
+
 		myFileMenu.addSeparator();
 
 		final JMenuItem exit = new JMenuItem("Exit");
@@ -266,8 +266,8 @@ public class PokemonMenuBar extends JMenuBar {
 		choice.setSelected(true);
 
 	}
-	
-	/* Listener classes*/
+
+	/* Listener classes */
 
 	/**
 	 * The action listener to add a new Pokemon to the maze at a specified
@@ -283,13 +283,13 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		private final ImageIcon myDittoIcon = new ImageIcon(
 				"./src/images/other/dittoicon.gif");
-		
+
 		/*
 		 * Abra icon to represent teleport
 		 */
 		private final ImageIcon myTeleportIcon = new ImageIcon(
 				"./src/images/other/abra_teleport.gif");
-		
+
 		/*
 		 * Data map
 		 */
@@ -318,7 +318,7 @@ public class PokemonMenuBar extends JMenuBar {
 					+ "\n(X Y):";
 			final String promptPokemon = "What is the name of the Pokemon?";
 			myPos = readCordinateInput(promptCords, myTeleportIcon);
-			if (!myCancel) {
+			if (myPos[0] != -1) {
 				myNewMon = readNewPokemonInput(promptPokemon);
 				if (!myCancel) {
 					putPokemon(myPos, myNewMon);
@@ -400,21 +400,24 @@ public class PokemonMenuBar extends JMenuBar {
 					+ " to.\n(X Y):";
 			final int[] pos = readCordinateInput(message, myTeleportIcon);
 
-			myMaze.setPlayerLocation(pos);
-			myPanel.refreshGUI();
+			if (pos[0] != -1) {
+				myMaze.setPlayerLocation(pos);
+				myPanel.refreshGUI();
+			}
 		}
 
 	}
-	
+
 	/**
-	 * Helper method to read the input from the Input Dialog
-	 * Used for the teleport cheat
+	 * Helper method to read the input from the Input Dialog Used for the
+	 * teleport cheat
 	 * 
 	 * @param theInput a string of the input
-	 * @param icon for the option pane
+	 * @param icon     for the option pane
 	 * @return an int[] of the two numbers input
 	 */
-	private int[] readCordinateInput(final String theMessage, final ImageIcon theIcon) {
+	private int[] readCordinateInput(final String theMessage,
+			final ImageIcon theIcon) {
 		final String input = (String) JOptionPane.showInputDialog(null,
 				theMessage, "Choose teleport location",
 				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
@@ -432,7 +435,8 @@ public class PokemonMenuBar extends JMenuBar {
 						} else {
 							res = readCordinateInput(
 									"One or more numbers out "
-											+ "of range of maze\n(X Y):", theIcon);
+											+ "of range of maze\n(X Y):",
+									theIcon);
 							break;
 						}
 					}
@@ -445,7 +449,8 @@ public class PokemonMenuBar extends JMenuBar {
 				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
 			}
 		} else {
-			// do nothing if they cancel
+			//put -1 to signify user canceled
+			res = new int[] {-1, -1};
 		}
 
 		return res;
