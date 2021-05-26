@@ -50,6 +50,23 @@ public class Room extends QuestionAnswer {
 		hasPlayer = false;
 		myVisit = false;
 	}
+	
+	/**
+	 * Manually add a pokemon to the room
+	 * 
+	 * @param theRoomNumber how much to increment the room name letter
+	 * @param thePokemon the pokemon to put in this room
+	 */
+	public Room(final int theRoomNumber, Pokemon thePokemon) {
+		super(); // put a pokemon and question in this room
+
+		// increment the starting letter for each room to go from A-Z
+		myRoomName = (char) (theRoomNumber + START_LETTER);
+		setEntry(true);
+		hasPlayer = false;
+		myVisit = false;
+		
+	}
 
 	/**
 	 * Setter for blocked room
