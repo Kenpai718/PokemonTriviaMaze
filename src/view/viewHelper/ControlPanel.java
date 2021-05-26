@@ -124,7 +124,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
-			myMaze.addListener(temp);
+
 		}
 	}
 
