@@ -50,20 +50,21 @@ public abstract class AbstractRoomPanel extends JPanel {
 		correctAns = correctAns.toLowerCase().strip();
 		String userAns = theUserAns.toLowerCase().strip();
 
-		firePropertyChange("showpkmn", null, true);
 
 		// correct
 		if (userAns.equals(correctAns)) {
+
+			firePropertyChange("correctans", null, true);
+			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, "Good job! " + correct,
 					"Correct!", JOptionPane.INFORMATION_MESSAGE);
 
-			firePropertyChange("correctans", null, true);
-
 		} else { // incorrect
-			JOptionPane.showMessageDialog(null, incorrect + correct,
-					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
 
 			firePropertyChange("correctans", null, false);
+			firePropertyChange("showpkmn", null, true);
+			JOptionPane.showMessageDialog(null, incorrect + correct,
+					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 		updateGUI();
@@ -80,7 +81,7 @@ public abstract class AbstractRoomPanel extends JPanel {
 		firePropertyChange("newpos", null, null);
 		myPP.setImage();
 		myPP.getQuestionGUI().setButtons();
-		firePropertyChange("showpkmn", null, false);
+		//firePropertyChange("showpkmn", null, false);
 
 		if (myMaze.isWinCondition()) {
 			//System.out.println("In room panel player wins");

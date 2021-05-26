@@ -110,6 +110,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Picture of the pokemon: light or dark
 	 */
 	private BufferedImage myPoke;
+
+	/*
+	 * Question mark icon. Used at the start of the game
+	 */
+	private BufferedImage myQuestionImg;
+
 	/*
 	 * GUI visual of the maze
 	 */
@@ -177,9 +183,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myAnsLbl = new JLabel();
 		myAnsLbl.setForeground(Color.WHITE);
 
-		springLayout.putConstraint(SpringLayout.NORTH, myDirLbl, 20, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.NORTH, myDirLbl, 20,
+				SpringLayout.NORTH, this);
 
-		springLayout.putConstraint(SpringLayout.NORTH, myAnsLbl, 20, SpringLayout.NORTH, myDirLbl);
+		springLayout.putConstraint(SpringLayout.NORTH, myAnsLbl, 20,
+				SpringLayout.NORTH, myDirLbl);
 		add(myRoomLbl);
 		add(myDirLbl);
 		add(myAnsLbl);
@@ -194,7 +202,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		if (myMaze.hasNotMoved()) {
 			myDirLbl.setText("Chosen Direction: None");
 		} else {
-			myDirLbl.setText("Attempting to go to Room " + myMaze.getAttemptRoom());
+			myDirLbl.setText(
+					"Attempting to go to Room " + myMaze.getAttemptRoom());
 		}
 	}
 
@@ -210,27 +219,39 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		mazeGUI.setBorder(blueLine);
 
 		// control panel property change
-		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -60, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, -131, SpringLayout.WEST, myQuestionRoomGUI);
+		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -60,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, -131,
+				SpringLayout.WEST, myQuestionRoomGUI);
 
 		// question room
-		springLayout.putConstraint(SpringLayout.NORTH, myQuestionRoomGUI, 553, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, myQuestionRoomGUI, -36, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myQuestionRoomGUI, -107, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, myQuestionRoomGUI, 553,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myQuestionRoomGUI, -36,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myQuestionRoomGUI, -107,
+				SpringLayout.EAST, this);
 		// myQuestionRoomGUI.setVisible(false);
 
 		// maze gui
-		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, mazeGUI, 10,
+				SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, mazeGUI, 1345,
+				SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.EAST, mazeGUI, -10,
+				SpringLayout.EAST, this);
 
 		// text room GUI
-		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myTextRoomGUI, -159,
+				SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myTextRoomGUI, -92,
+				SpringLayout.EAST, this);
 
 		// myStartPanel
-		springLayout.putConstraint(SpringLayout.SOUTH, myStartPanel, 450, SpringLayout.SOUTH, mazeGUI);
-		springLayout.putConstraint(SpringLayout.WEST, myStartPanel, 1450, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myStartPanel, 450,
+				SpringLayout.SOUTH, mazeGUI);
+		springLayout.putConstraint(SpringLayout.WEST, myStartPanel, 1450,
+				SpringLayout.WEST, this);
 
 		setLayout(springLayout);
 		add(mazeGUI);
@@ -252,42 +273,46 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public void setupPictures() {
 
+		myQuestionImg = readImage("./src/images/other/questionmark.png");
+
+		// sparkly thing behind a pokemon
+		myShine = readImage("./src/images/other/sparkle_formatted.png");
+		if (myShine != null) {
+			myShineW = myShine.getWidth();
+			myShineH = myShine.getHeight();
+		}
 		// draw the pokemon
 		setImage();
 		setImgBrightness(0);
 
-		// sparkly thing behind a pokemon
-		myShine = readImage("./src/images/other/sparkle_formatted.png");
-		if (myPoke != null && myShine != null) {
-			myShineW = myShine.getWidth();
-			myShineH = myShine.getHeight();
-		}
-
 	}
 
 	/**
-	 * Set pokemon pictures for dark and light depending on the current room Resize
-	 * them if they are not 600x600px
+	 * Set pokemon pictures for dark and light depending on the current room
+	 * Resize them if they are not 600x600px
 	 * 
 	 */
 	public void setImage() {
 
 		myPokeLight = myMaze.getAttemptRoom().getPokemon().getPNG();
 		// resize if not the correct width or height
-		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H || myPokeLight.getWidth() > POKE_W
+		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
+				|| myPokeLight.getWidth() > POKE_W
 				|| myPokeLight.getHeight() > POKE_H) {
 			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
 		}
 
-		myPokeDark = (BufferedImage) BrightnessUtility.adjustBrighness(myPokeLight, 0f);
+		myPokeDark = (BufferedImage) BrightnessUtility
+				.adjustBrighness(myPokeLight, 0f);
 		myPoke = myDark ? myPokeDark : myPokeLight;
+
 		repaint();
 
 	}
 
 	/**
-	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It is
-	 * scaled this way to prevent the picture from looking blurry.
+	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It
+	 * is scaled this way to prevent the picture from looking blurry.
 	 * 
 	 * SOURCE:
 	 * https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
@@ -297,17 +322,20 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * @param h      - desired height
 	 * @return - the new resized image
 	 */
-	private BufferedImage getScaledImage(final Image srcImg, final int w, final int h) {
+	private BufferedImage getScaledImage(final Image srcImg, final int w,
+			final int h) {
 
 		// Create a new image with good size that contains or might contain
 		// arbitrary alpha values between and including 0.0 and 1.0.
-		final BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
+		final BufferedImage resizedImg = new BufferedImage(w, h,
+				BufferedImage.TRANSLUCENT);
 
 		// Create a device-independant object to draw the resized image
 		final Graphics2D g2 = resizedImg.createGraphics();
 
 		// improve quality of rendering
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 		// Finally draw the source image in the Graphics2D with the desired
 		// size.
@@ -344,23 +372,24 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
-		// final BufferedImage myPoke = (BufferedImage)
-		// BrightnessUtility.adjustBrighness(myPoke, 0f);
 
+		
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
 		firePropertyChange("newpos", null, null);
 		updateLabels(); // debugger
-		// theG.drawImage(myPoke, 0, 0, POKE_W, POKE_H, this);
 
 	}
+
 
 	/**
 	 * set dark variable
 	 */
 	public void setImgBrightness(final int thePercentage) {
+
 		myPoke = thePercentage == 0 ? myPokeDark : myPokeLight;
 		myDark = thePercentage == 0;
+
 		repaint();
 
 	}
@@ -419,7 +448,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// System.out.println("in panel reveal");
-				myPoke = res ? myPokeLight : myPokeDark;
+				int brightness = res ? 1 : 0; //true = light, false = dark
+				setImgBrightness(brightness);
 				repaint();
 			}
 

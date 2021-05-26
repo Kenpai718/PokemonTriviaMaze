@@ -52,7 +52,10 @@ public class MovementAction extends AbstractAction {
 		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
 		if (myMaze.getAttemptRoom().hasVisited()) {
+				myPanel.setImgBrightness(1); //keep pokemon revealed if it has been visited
 		        myMaze.setPlayerLocation(newPos);
+		} else {
+			myPanel.setImgBrightness(0);
 		}
 		updateGUI();
 
