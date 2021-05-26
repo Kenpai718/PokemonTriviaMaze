@@ -1,5 +1,6 @@
 package view.viewHelper;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -11,7 +12,7 @@ import view.viewHelper.MazeGUI.MazeModel;
 /**
  * Used for QuestionRoomGUI and TextRoomGUI for behaviors that they both have.
  * 
- * Main use is to verify answers and sends property changes for correct and
+ * Main use is to verify answers and changes maze player location on correct and
  * incorrect answers.
  * 
  * Abstract to prevent instantiation because it does nothing on its own.
@@ -22,10 +23,27 @@ import view.viewHelper.MazeGUI.MazeModel;
  */
 
 public abstract class AbstractQuestionPanel extends JPanel {
-
+	
+	/*
+	 * Icons for the option pane
+	 */
+	private final ImageIcon CORRECT_ICON = new ImageIcon("./src/images/other/correct_icon.png");
+	private final ImageIcon INCORRECT_ICON = new ImageIcon("./src/images/other/incorrect_icon.png");
+	
+	/*
+	 * Maze
+	 */
 	private Maze myMaze;
+	/*
+	 * Game panel
+	 */
 	private PokemonPanel myPP;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param thePP so the panel can be modified after user answers
+	 */
 	public AbstractQuestionPanel(PokemonPanel thePP) {
 		super();
 		myPP = thePP;
@@ -57,14 +75,14 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		if (isCorrect) {
 
 			firePropertyChange("showpkmn", null, true);
-			JOptionPane.showMessageDialog(null, "Good job! " + correct,
-					"Correct!", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, correct,
+					"Correct! Good job!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
 
 		} else { // incorrect
 
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, incorrect + correct,
-					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
+					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);
 		}
 
 		updateGUI();
@@ -104,11 +122,8 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	private void updateGUI() {
 
 		this.enableButtons(false);
-		final MazeModel model = (MazeModel) myPP.getTable().getModel();
-		model.refresh(myMaze.getMatrix());
 		firePropertyChange("newpos", null, null);
-		myPP.setImage();
-		myPP.getQuestionGUI().setButtons();
+		myPP.refreshGUI();
 
 		if (myMaze.isWinCondition()) {
 			firePropertyChange("win", null, null);

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 /**
- * Used to initialize a trivia maze game
+ * TODO: Used to initialize a trivia maze game
  * 
  * @author ajdowney
  * @author ken

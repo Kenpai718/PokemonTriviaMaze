@@ -8,61 +8,70 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
- * Utility to change the brightness of an image
- * Source: https://stackoverflow.com/questions/46797579/how-can-i-control-the-brightness-of-an-image
+ * Utility to change the brightness of an image Source:
+ * https://stackoverflow.com/questions/46797579/how-can-i-control-the-brightness-of-an-image
  * 
  * @author ajdowney
  * @author kenneth ahrens
  *
  */
 public final class BrightnessUtility {
-        
-        //private constructor to prevent instantiation
-        
-        private BrightnessUtility() {
-                throw new UnsupportedOperationException();
-        }
 
-        
-        /**
-         * @param Image source
-         * @param brightnessPercentage
-         * @return
-         */
-        public static Image adjustBrighness(final Image theSource,
-                        final float theBrightnessPercentage) {
+	// private constructor to prevent instantiation
 
-                final BufferedImage bi = new BufferedImage(theSource.getWidth(null),
-                                theSource.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+	/**
+	 * Darkens image to black
+	 */
+	private final static float MIN_BRIGHT = (float) 0.0f;
 
-                final int[] pixel = { 0, 0, 0, 0 };
-                final float[] hsbvals = { 0, 0, 0 };
+	private BrightnessUtility() {
+		throw new UnsupportedOperationException();
+	}
 
-                bi.getGraphics().drawImage(theSource, 0, 0, null);
+	/**
+	 * @param Image                source
+	 * @param brightnessPercentage
+	 * @return
+	 */
+	public static Image adjustBrighness(final Image theSource,
+			final float theBrightnessPercentage) {
 
-                // recalculare every pixel, changing the brightness
-                for (int i = 0; i < bi.getHeight(); i++) {
-                        for (int j = 0; j < bi.getWidth(); j++) {
+		final BufferedImage bi = new BufferedImage(theSource.getWidth(null),
+				theSource.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-                                // get the pixel data
-                                bi.getRaster().getPixel(j, i, pixel);
+		final int[] pixel = { 0, 0, 0, 0 };
+		final float[] hsbvals = { 0, 0, 0 };
 
-                                // converts its data to hsb to change brightness
-                                Color.RGBtoHSB(pixel[0], pixel[1], pixel[2], hsbvals);
+		bi.getGraphics().drawImage(theSource, 0, 0, null);
 
-                                // create a new color with the changed brightness
-                                final Color c = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1],
-                                                hsbvals[2] * theBrightnessPercentage));
+		// recalculare every pixel, changing the brightness
+		for (int i = 0; i < bi.getHeight(); i++) {
+			for (int j = 0; j < bi.getWidth(); j++) {
 
-                                // set the new pixel
-                                bi.getRaster().setPixel(j, i, new int[] { c.getRed(),
-                                                c.getGreen(), c.getBlue(), pixel[3] });
+				// get the pixel data
+				bi.getRaster().getPixel(j, i, pixel);
 
-                        }
+				// converts its data to hsb to change brightness
+				Color.RGBtoHSB(pixel[0], pixel[1], pixel[2], hsbvals);
 
-                }
+				// create a new color with the changed brightness
+				final Color c = new Color(Color.HSBtoRGB(hsbvals[0], hsbvals[1],
+						hsbvals[2] * theBrightnessPercentage));
 
-                return bi;
+				// set the new pixel
+				bi.getRaster().setPixel(j, i, new int[] { c.getRed(),
+						c.getGreen(), c.getBlue(), pixel[3] });
 
-        }
+			}
+
+		}
+
+		return bi;
+
+	}
+
+	public static Image setToBlack(final Image theSource) {
+		return adjustBrighness(theSource, MIN_BRIGHT);
+	}
+
 }
