@@ -32,6 +32,9 @@ public class Room extends QuestionAnswer {
 	 */
 	private boolean hasPlayer;
 	
+	/*
+	 * If player has been to this room before and cleared it
+	 */
 	private boolean myVisit;
 	
 

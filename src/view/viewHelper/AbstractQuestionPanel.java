@@ -11,7 +11,7 @@ import view.viewHelper.MazeGUI.MazeModel;
 /**
  * Used for QuestionRoomGUI and TextRoomGUI for behaviors that they both have.
  * 
- * Main use is to verify answers and sends property changes for correct and
+ * Main use is to verify answers and changes maze player location on correct and
  * incorrect answers.
  * 
  * Abstract to prevent instantiation because it does nothing on its own.
@@ -104,11 +104,8 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	private void updateGUI() {
 
 		this.enableButtons(false);
-		final MazeModel model = (MazeModel) myPP.getTable().getModel();
-		model.refresh(myMaze.getMatrix());
 		firePropertyChange("newpos", null, null);
-		myPP.setImage();
-		myPP.getQuestionGUI().setButtons();
+		myPP.refreshGUI();
 
 		if (myMaze.isWinCondition()) {
 			firePropertyChange("win", null, null);
