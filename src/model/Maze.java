@@ -174,7 +174,9 @@ public class Maze {
 			e.printStackTrace();
 		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
-		getCurrRoom().setVisited(true);
+		if (!getCurrRoom().hasVisited()) {
+		      getCurrRoom().setVisited(true);  
+		}		
 		myWinCondition = isWinCondition();
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat

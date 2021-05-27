@@ -39,6 +39,7 @@ public class PokemonMenuBar extends JMenuBar {
 	private final Maze myMaze;
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
+	private boolean myReveal;
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts
@@ -59,8 +60,10 @@ public class PokemonMenuBar extends JMenuBar {
 
 	private void addListeners() {
                 // TODO Auto-generated method stub
+	        this.addPropertyChangeListener(myPanel);
 	        this.addPropertyChangeListener(myPanel.getMazeGUI());
 	        this.addPropertyChangeListener(myPanel.getMyControlPanel());
+	        
         }
 
         /**
@@ -151,15 +154,15 @@ public class PokemonMenuBar extends JMenuBar {
 		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem(
 				"Reveal Pokemon");
 		reveal.addActionListener(new ActionListener() {
-			@Override
+			
+
+                        @Override
 			public void actionPerformed(final ActionEvent e) {
-				final boolean selected = reveal.isSelected();
+				myReveal = reveal.isSelected();
+				myPanel.setMyReveal(myReveal);
+				firePropertyChange("showpkmn",null,true);
 				myPanel.setImage();
-				if (selected) {
-					myPanel.setImgBrightness(1);
-				} else {
-					myPanel.setImgBrightness(0);
-				}
+				
 
 			}
 		});
@@ -191,13 +194,21 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
 				final Room[][] rooms = myMaze.getMatrix();
+				final boolean change = rooms[2][2].hasVisited();
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
-						rooms[i][j].setVisited(true);
-						repaint();
+					        final Room room = rooms[i][j];
+						rooms[i][j].setVisited(!room.hasVisited());
+						
+//						repaint();
 					}
 				}
-				firePropertyChange("model", null, rooms);
+				if (change) {
+				        unlock.setText("Unlock All Doors");
+				} else {
+				        unlock.setText("Relock All Doors");
+				}
+				myPanel.refreshGUI();
 			}
 
 		});
@@ -213,11 +224,10 @@ public class PokemonMenuBar extends JMenuBar {
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
 						rooms[i][j].setEntry(true);
-						repaint();
+//						repaint();
 					}
 				}
-				firePropertyChange("newpos", null, null);
-				firePropertyChange("model", null, rooms);
+				myPanel.refreshGUI();
 			}
 
 		});
@@ -233,7 +243,9 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/**
+
+
+        /**
 	 * Sets up the gamemode menu for changing the gamemode
 	 */
 	private void setupGamemodesMenu() {

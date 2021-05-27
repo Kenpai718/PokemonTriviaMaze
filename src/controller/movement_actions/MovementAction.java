@@ -52,11 +52,12 @@ public class MovementAction extends AbstractAction {
 		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
 		if (myMaze.getAttemptRoom().hasVisited()) {
-			myPanel.setImgBrightness(1); // keep pokemon revealed if it has been
-											// visited
+//		        myPanel.setMyReveal(true);
+			myPanel.setImgBrightness(); // keep pokemon revealed if it has been
 			myMaze.setPlayerLocation(newPos);
 		} else {
-			myPanel.setImgBrightness(0);
+//		        myPanel.setMyReveal(false);
+			myPanel.setImgBrightness();
 		}
 		updateGUI();
 
@@ -69,7 +70,7 @@ public class MovementAction extends AbstractAction {
 	 */
 	private void updateGUI() {
 		
-		firePropertyChange("newpos", null, null);
+//		firePropertyChange("newpos", null, null);
 		myPanel.refreshGUI();
 
 		if (myMaze.getAttemptRoom().hasVisited()) {

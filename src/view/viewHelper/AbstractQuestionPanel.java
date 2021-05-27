@@ -72,12 +72,13 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		doUserAnswer(isCorrect);
 
 		if (isCorrect) {
-
+//		        myPP.setMyReveal(isCorrect);
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, correct,
 					"Correct! Good job!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
 
 		} else { // incorrect
+//		        myPP.setMyReveal(isCorrect);
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, incorrect + correct,
 					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);

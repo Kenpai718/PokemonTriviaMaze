@@ -182,8 +182,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private boolean myDark;
 
+
+        private Boolean myReveal;
+
 	
-	/**
+	
+
+        /**
 	 * Constructor
 	 */
 	public PokemonPanel() {
@@ -193,6 +198,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		// TODO: run the game off of myGame
 		myGame = new TriviaGame();
 		myMaze = Maze.getInstance();
+		myReveal = false;
 		myMazeGUI = new MazeGUI();
 		addListener(myMazeGUI);
 		myMazeModel = (MazeModel) getTable().getModel();
@@ -423,10 +429,10 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * 
 	 * @param 0 = dark, anything else = light
 	 */
-	public void setImgBrightness(final int thePercentage) {
-
-		myPoke = thePercentage == 0 ? myPokeDark : myPokeLight;
-		myDark = thePercentage == 0;
+	public void setImgBrightness() {
+                myDark = !(myReveal || (myMaze.hasNotMoved() ? myMaze.getCurrRoom().hasVisited() : myMaze.getAttemptRoom().hasVisited()));
+//		myPoke = myDark ? myPokeDark : myPokeLight;
+		
 
 		repaint();
 
@@ -504,6 +510,20 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
         public ControlPanel getMyControlPanel() {
                 return myControlPanel;
         }
+        
+        /**
+         * @return the myReveal
+         */
+        public Boolean getMyReveal() {
+                return myReveal;
+        }
+
+        /**
+         * @param myReveal the myReveal to set
+         */
+        public void setMyReveal(final Boolean theReveal) {
+                myReveal = theReveal;
+        }
 
 	/**
 	 * Add an object that this panel will listen for property changes.
@@ -523,17 +543,18 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		final String prop = evt.getPropertyName();
 
 		if (evt.getNewValue() instanceof Boolean) {
-			final Boolean res = (Boolean) evt.getNewValue();
+			final boolean res = (Boolean) evt.getNewValue();
 			if ("changegm".equals(prop)) { // change the gamemode panel
 				// System.out.println("in panel changes question panel");
 				setPanels(res);
 			}
 
 			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
-				// System.out.println("in panel reveal");
-				final int brightness = res ? 1 : 0; // true = light, false = dark
-				setImgBrightness(brightness);
-				repaint();
+//			        myReveal = res ;
+			        System.out.println("Test");
+//				final int brightness = myReveal ? 1 : 0; // true = light, false = dark
+				setImgBrightness();
+//				repaint();
 			}
 
 		} else {
