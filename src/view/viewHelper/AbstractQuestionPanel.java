@@ -138,8 +138,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 * Update gui components to ensure everything is current
 	 */
 	private void updateGUI() {
-		myPP.setImgBrightness();
-		myPP.setImage();
+		myPP.refreshPokemonImage();
 		firePropertyChange("newpos", null, null);
 
 
