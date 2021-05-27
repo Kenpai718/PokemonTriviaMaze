@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import model.Maze;
 import model.Room;
 import view.PokemonPanel;
-import view.viewHelper.MazeGUI.MazeModel;
 
 /**
  * Used for QuestionRoomGUI and TextRoomGUI for behaviors that they both have.
@@ -33,18 +32,18 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	/*
 	 * Maze
 	 */
-	private Maze myMaze;
+	private final Maze myMaze;
 	/*
 	 * Game panel
 	 */
-	private PokemonPanel myPP;
+	private final PokemonPanel myPP;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param thePP so the panel can be modified after user answers
 	 */
-	public AbstractQuestionPanel(PokemonPanel thePP) {
+	public AbstractQuestionPanel(final PokemonPanel thePP) {
 		super();
 		myPP = thePP;
 		myMaze = Maze.getInstance();
@@ -66,8 +65,8 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		// format answer to prevent errors
 		correctAns = correctAns.toLowerCase().strip();
-		String userAns = theUserAns.toLowerCase().strip();
-		Boolean isCorrect = userAns.equals(correctAns);
+		final String userAns = theUserAns.toLowerCase().strip();
+		final Boolean isCorrect = userAns.equals(correctAns);
 
 		// call method to change the maze
 		doUserAnswer(isCorrect);
@@ -79,7 +78,6 @@ public abstract class AbstractQuestionPanel extends JPanel {
 					"Correct! Good job!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
 
 		} else { // incorrect
-
 			firePropertyChange("showpkmn", null, true);
 			JOptionPane.showMessageDialog(null, incorrect + correct,
 					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);
@@ -99,10 +97,10 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 *                room to visited, false = incorrect, set visited false and
 	 *                block the room
 	 */
-	private void doUserAnswer(Boolean theResult) {
+	private void doUserAnswer(final Boolean theResult) {
 
-		Room curr = myMaze.getCurrRoom();
-		Room attempt = myMaze.getAttemptRoom();
+		final Room curr = myMaze.getCurrRoom();
+		final Room attempt = myMaze.getAttemptRoom();
 		if (theResult) { // answered correctly
 			// set current player room and attempted room to visited
 			curr.setVisited(theResult);

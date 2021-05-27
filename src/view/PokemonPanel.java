@@ -15,7 +15,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -28,13 +27,10 @@ import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
+import view.viewHelper.MazeGUI.MazeModel;
 import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.AbstractQuestionPanel;
 import view.viewHelper.StartRoomPanel;
 import view.viewHelper.TextRoomGUI;
-import view.viewHelper.MazeGUI.MazeModel;
-
-import java.awt.Font;
 
 /**
  * Setups playable game visuals on a panel
@@ -177,13 +173,14 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	/*
 	 * Panel with labels that tell game state
 	 */
-	private LabelPanel myLabelPanel;
+	private final LabelPanel myLabelPanel;
 
 	/*
 	 * Boolean to know if the picture is hidden or visible
 	 */
 	private boolean myDark;
 
+	
 	/**
 	 * Constructor
 	 */
@@ -512,7 +509,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// System.out.println("in panel reveal");
-				int brightness = res ? 1 : 0; // true = light, false = dark
+				final int brightness = res ? 1 : 0; // true = light, false = dark
 				setImgBrightness(brightness);
 				repaint();
 			}
