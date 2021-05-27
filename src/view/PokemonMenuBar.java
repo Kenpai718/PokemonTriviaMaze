@@ -92,6 +92,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 		// TODO: game reset button
 		final JMenuItem reset = new JMenuItem("Reset");
+		reset.addActionListener(new ResetListener());
 		myFileMenu.add(reset);
 
 		myFileMenu.addSeparator();
@@ -268,6 +269,27 @@ public class PokemonMenuBar extends JMenuBar {
 	}
 
 	/* Listener classes */
+	
+	/**
+	 * Resets the maze to start a new game
+	 * 
+	 * @author ken
+	 *
+	 */
+	class ResetListener implements ActionListener {
+
+		/**
+		 * Displays a input dialog that reads the new location and moves the
+		 * player to that location
+		 */
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			myMaze.reset();
+			myPanel.refreshGUI();
+			
+		}
+
+	}
 
 	/**
 	 * The action listener to add a new Pokemon to the maze at a specified

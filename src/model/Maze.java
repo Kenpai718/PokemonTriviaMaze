@@ -32,7 +32,7 @@ public class Maze {
 	/*
 	 * 2D array to store rooms in the maze
 	 */
-	private final Room[][] myMatrix;
+	private Room[][] myMatrix;
 
 	/*
 	 * Location of the player in the maze
@@ -53,7 +53,9 @@ public class Maze {
 	/*
 	 * List of Pokemon objects
 	 */
-	private final ArrayList<Pokemon> myPokemonList;
+	private ArrayList<Pokemon> myPokemonList;
+	
+	private final Pokedex myPokedex;
 
 	/*
 	 * Boolean to verify when the player has won the game
@@ -89,6 +91,7 @@ public class Maze {
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
+		myPokedex = Pokedex.getInstance();
 
 	}
 
@@ -314,10 +317,31 @@ public class Maze {
 	}
 	
 	/**
-	 * TODO:
 	 * Reset the maze to default and instantiate new rooms
+	 * Make a new instance of the maze
 	 */
 	public void reset() {
+		
+		roomCounter = 0;
+		myMatrix = fillRooms();
+		myPlayerLocation = new int[] { 0, 0 };
+		myAttemptLocation = myPlayerLocation.clone();
+		// TODO: test stuff delete later
+		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+		myWinCondition = false;
+
+		// set the first room to be visited since we dont play that room
+		myMatrix[0][0].setVisited(true);
+	
+		if(myPokedex.getCount() == myPokemonList.size()) {
+			myPokemonList.clear();
+			myPokemonList = fillPokemonList();
+		} else {
+			myPokemonList = fillPokemonList();
+		}
+		
+		
+		
 		
 	}
 

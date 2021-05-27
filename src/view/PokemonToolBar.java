@@ -15,6 +15,11 @@ import javax.swing.JToolBar;
 
 public class PokemonToolBar extends JToolBar{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4929301655633315425L;
+
 	private ButtonGroup myControls;
 	
 	/*

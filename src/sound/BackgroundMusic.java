@@ -6,19 +6,25 @@ import javax.sound.sampled.Clip;
 
 public class BackgroundMusic {
 	
-	public static void playMusic() {	   
+	static Clip myClip;
+	
+	private BackgroundMusic() {
+		
+	}
+	
+	public static void loadMusic() {	   
 		try {
 	         // Open an audio input stream.
 	    	 File soundFile = new File("Background.wav");
 	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
 	         // Get a sound clip resource.
-	         Clip clip = AudioSystem.getClip();
+	         myClip = AudioSystem.getClip();
 	         // Open audio clip and load samples from the audio input stream.
-	         clip.open(audioIn);
-	         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+	         myClip.open(audioIn);
+	         FloatControl gainControl = (FloatControl) myClip.getControl(FloatControl.Type.MASTER_GAIN);
 	         gainControl.setValue(-20.0f);
-	         clip.start();
-	         clip.loop(Clip.LOOP_CONTINUOUSLY);
+	         myClip.start();
+	         myClip.loop(Clip.LOOP_CONTINUOUSLY);
 	      } catch (UnsupportedAudioFileException e) {
 	         e.printStackTrace();
 	      } catch (IOException e) {
@@ -27,4 +33,8 @@ public class BackgroundMusic {
 	         e.printStackTrace();
 	      }
 	   }
+	
+	public static void stopMusic() {
+		myClip.stop();
+	}
 }

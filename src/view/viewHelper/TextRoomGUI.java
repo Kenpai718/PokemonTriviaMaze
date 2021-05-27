@@ -8,14 +8,11 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
 
 import model.Maze;
-import model.Room;
 import view.PokemonPanel;
 
 /*
@@ -24,9 +21,14 @@ import view.PokemonPanel;
 
 public class TextRoomGUI extends AbstractQuestionPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8894683351403359585L;
 	Dimension SIZE = new Dimension(350,100);
 	private final Color BORDER_COLOR = new Color(51, 153, 204);
 	
+	@SuppressWarnings("unused")
 	private final String QUESTION = "Who's that Pokemon?";
 	private final String PUT_TEXT = "Enter the answer here.";
 	
@@ -82,7 +84,6 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 			
 		});
 		
-		// TODO Auto-generated constructor stub
 		//setupGUI();
 		myMaze = Maze.getInstance();
 	}
