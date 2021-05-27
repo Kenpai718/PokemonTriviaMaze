@@ -29,6 +29,10 @@ import java.beans.PropertyChangeListener;
 
 public class StartRoomPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2790036593831393567L;
 	final Color MAZE_BG = new Color(51, 51, 51);
 	private final Color BORDER_COLOR = new Color(51, 153, 204);
 	

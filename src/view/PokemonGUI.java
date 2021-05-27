@@ -73,7 +73,7 @@ public class PokemonGUI {
 
 		setupGUI();
 		setupControlButtons();
-		BackgroundMusic.playMusic();
+		BackgroundMusic.loadMusic();
 	}
 
 	/**
