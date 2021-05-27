@@ -73,18 +73,19 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		if (isCorrect) {
 //		        myPP.setMyReveal(isCorrect);
-			firePropertyChange("showpkmn", null, null);
+			firePropertyChange("showpkmn", null, true);
+			updateGUI();
 			JOptionPane.showMessageDialog(null, correct,
 					"Correct! Good job!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
 
 		} else { // incorrect
 //		        myPP.setMyReveal(isCorrect);
-			firePropertyChange("showpkmn", null, null);
+			firePropertyChange("showpkmn", null, false);
+			updateGUI();
 			JOptionPane.showMessageDialog(null, incorrect + correct,
 					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);
 		}
 
-		updateGUI();
 
 	}
 

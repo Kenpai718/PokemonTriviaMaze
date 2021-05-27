@@ -42,8 +42,8 @@ public class PokemonMenuBar extends JMenuBar {
 	private boolean myReveal;
 
 	/**
-	 * The constructor for the Menu Bar that sets up the the fields and starts
-	 * the menubar gui setup
+	 * The constructor for the Menu Bar that sets up the the fields and starts the
+	 * menubar gui setup
 	 * 
 	 * @param theFrame
 	 */
@@ -55,18 +55,18 @@ public class PokemonMenuBar extends JMenuBar {
 		myMaze = Maze.getInstance();
 		setupMenuBar();
 		addListeners();
-		
+
 	}
 
 	private void addListeners() {
-                // TODO Auto-generated method stub
-	        this.addPropertyChangeListener(myPanel);
-	        this.addPropertyChangeListener(myPanel.getMazeGUI());
-	        this.addPropertyChangeListener(myPanel.getMyControlPanel());
-	        
-        }
+		// TODO Auto-generated method stub
+		this.addPropertyChangeListener(myPanel);
+		this.addPropertyChangeListener(myPanel.getMazeGUI());
+		this.addPropertyChangeListener(myPanel.getMyControlPanel());
 
-        /**
+	}
+
+	/**
 	 * Adds the base menus to the menu bar
 	 */
 	private void setupMenuBar() {
@@ -123,9 +123,8 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
 				JOptionPane.showMessageDialog(myFrame,
-						"Created by: AJ Downey, Kenneth Ahrens, "
-								+ "Katelyn Malone\n Spring 2021",
-						"About", JOptionPane.PLAIN_MESSAGE);
+						"Created by: AJ Downey, Kenneth Ahrens, " + "Katelyn Malone\nSpring 2021", "About",
+						JOptionPane.PLAIN_MESSAGE);
 			}
 
 		});
@@ -135,8 +134,8 @@ public class PokemonMenuBar extends JMenuBar {
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!",
-						"About", JOptionPane.PLAIN_MESSAGE);
+				//TODO:
+				JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!", "About", JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 		myHelpMenu.add(tutorial);
@@ -151,18 +150,15 @@ public class PokemonMenuBar extends JMenuBar {
 		final JMenu cheats = new JMenu("Cheats");
 		myHelpMenu.add(cheats);
 
-		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem(
-				"Reveal Pokemon");
+		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem("Reveal Pokemon");
 		reveal.addActionListener(new ActionListener() {
-			
 
-                        @Override
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				myReveal = reveal.isSelected();
 				myPanel.setMyReveal(myReveal);
-				firePropertyChange("showpkmn",null,null);
+				firePropertyChange("showpkmn", null, null);
 				myPanel.setImage();
-				
 
 			}
 		});
@@ -197,20 +193,20 @@ public class PokemonMenuBar extends JMenuBar {
 				boolean change = true;
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
-					        final Room room = rooms[i][j];
-					        change = change && room.hasVisited();
+						final Room room = rooms[i][j];
+						change = change && room.hasVisited();
 						rooms[i][j].setVisited(!change);
 						if (room.isPlayerHere()) {
-						        rooms[i][j].setVisited(true);
+							rooms[i][j].setVisited(true);
 						}
-						 
+
 //						repaint();
 					}
 				}
 				if (change) {
-				        unlock.setText("Unlock All Doors");
+					unlock.setText("Unlock All Doors");
 				} else {
-				        unlock.setText("Relock All Doors");
+					unlock.setText("Relock All Doors");
 				}
 				myPanel.refreshGUI();
 			}
@@ -247,16 +243,13 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-
-
-        /**
+	/**
 	 * Sets up the gamemode menu for changing the gamemode
 	 */
 	private void setupGamemodesMenu() {
 
 		myGamemodes = new ButtonGroup();
-		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem(
-				"Multiple Choice");
+		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
 		myGamemodeMenu.add(choice);
 		myGamemodes.add(choice);
 		choice.addActionListener(new ActionListener() {
@@ -271,8 +264,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 		});
 
-		final JRadioButtonMenuItem input = new JRadioButtonMenuItem(
-				"User Input");
+		final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
 		myGamemodeMenu.add(input);
 		myGamemodes.add(input);
 		input.addActionListener(new ActionListener() {
@@ -293,7 +285,7 @@ public class PokemonMenuBar extends JMenuBar {
 	}
 
 	/* Listener classes */
-	
+
 	/**
 	 * Resets the maze to start a new game
 	 * 
@@ -303,22 +295,21 @@ public class PokemonMenuBar extends JMenuBar {
 	class ResetListener implements ActionListener {
 
 		/**
-		 * Displays a input dialog that reads the new location and moves the
-		 * player to that location
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			myMaze.reset();
-			firePropertyChange("model", null, myMaze.getMatrix()); 
+			firePropertyChange("model", null, myMaze.getMatrix());
 			myPanel.refreshGUI();
-			
+
 		}
 
 	}
 
 	/**
-	 * The action listener to add a new Pokemon to the maze at a specified
-	 * location
+	 * The action listener to add a new Pokemon to the maze at a specified location
 	 * 
 	 * @author Kenneth Ahrens
 	 *
@@ -328,14 +319,12 @@ public class PokemonMenuBar extends JMenuBar {
 		/*
 		 * Icon for ditto
 		 */
-		private final ImageIcon myDittoIcon = new ImageIcon(
-				"./src/images/other/dittoicon.gif");
+		private final ImageIcon myDittoIcon = new ImageIcon("./src/images/other/dittoicon.gif");
 
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/*
 		 * Data map
@@ -361,8 +350,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			final String promptCords = "Where to put a new Pokemon in maze? "
-					+ "\n(X Y):";
+			final String promptCords = "Where to put a new Pokemon in maze? " + "\nInteger (X Y) or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
 			myPos = readCordinateInput(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
@@ -393,15 +381,13 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		/**
-		 * Prompt user for a pokemon and looks for that pokemon name in the
-		 * pokedex
+		 * Prompt user for a pokemon and looks for that pokemon name in the pokedex
 		 * 
 		 * @param theMsg
 		 * @return user inputed Pokemon if found
 		 */
 		public Pokemon readNewPokemonInput(final String theMsg) {
-			final String input = (String) JOptionPane.showInputDialog(null,
-					theMsg, "Type a Pokemon name to insert",
+			final String input = (String) JOptionPane.showInputDialog(null, theMsg, "Type a Pokemon name to insert",
 					JOptionPane.INFORMATION_MESSAGE, myDittoIcon, null, "");
 			final Scanner scan;
 			Pokemon res = myPokedex.findPokemon(0);
@@ -410,8 +396,7 @@ public class PokemonMenuBar extends JMenuBar {
 				if (myPokedex.hasPokemon(input)) {
 					res = myPokedex.findPokemon(input);
 				} else {
-					readNewPokemonInput(input
-							+ " does not exist in Pokedex. Try again with a new name!");
+					res = readNewPokemonInput(input + " does not exist in Pokedex. Try again with a new name!");
 				}
 			} else {
 				myCancel = true;
@@ -433,18 +418,16 @@ public class PokemonMenuBar extends JMenuBar {
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/**
-		 * Displays a input dialog that reads the new location and moves the
-		 * player to that location
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
-			final String message = "Please enter a new position to teleport"
-					+ " to.\n(X Y):";
+			final String message = "Please enter a new position to teleport" + " to.\n(X Y)";
 			final int[] pos = readCordinateInput(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
@@ -456,17 +439,15 @@ public class PokemonMenuBar extends JMenuBar {
 	}
 
 	/**
-	 * Helper method to read the input from the Input Dialog Used for the
-	 * teleport cheat
+	 * Helper method to read the input from the Input Dialog Used for the teleport
+	 * cheat
 	 * 
 	 * @param theInput a string of the input
 	 * @param icon     for the option pane
 	 * @return an int[] of the two numbers input
 	 */
-	private int[] readCordinateInput(final String theMessage,
-			final ImageIcon theIcon) {
-		final String input = (String) JOptionPane.showInputDialog(null,
-				theMessage, "Choose teleport location",
+	private int[] readCordinateInput(final String theMessage, final ImageIcon theIcon) {
+		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
 				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
 		int[] res = myMaze.getPlayerLocation().clone();
 		final Scanner scan;
@@ -476,28 +457,31 @@ public class PokemonMenuBar extends JMenuBar {
 				try {
 					for (int i = 0; i < 2; i++) {
 						final int num = scan.nextInt() - 1;
-						if (num < myMaze.getRows() && num < myMaze.getCols()
-								&& num >= 0) {
+						if (num < myMaze.getRows() && num < myMaze.getCols() && num >= 0) {
 							res[i] = num;
+
 						} else {
-							res = readCordinateInput(
-									"One or more numbers out "
-											+ "of range of maze\n(X Y):",
-									theIcon);
+							res = readCordinateInput("One or more numbers out " + "of range of maze\n(X Y):", theIcon);
 							break;
 						}
 					}
 				} catch (final InputMismatchException e) {
-					res = readCordinateInput(
-							"Please use integers only.\n(X Y):", theIcon);
+					if (input.toLowerCase().strip().equals("here")) {
+						/*
+						 * Quick shortcut with "here" to put it at player pos
+						 */
+						res = myMaze.getAttemptedLocation();
+					} else {
+						res = readCordinateInput("Please use integers only.\n(X Y):", theIcon);
+					}
 				}
 				scan.close();
 			} else {
 				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
 			}
 		} else {
-			//put -1 to signify user canceled
-			res = new int[] {-1, -1};
+			// put -1 to signify user canceled
+			res = new int[] { -1, -1 };
 		}
 
 		return res;
