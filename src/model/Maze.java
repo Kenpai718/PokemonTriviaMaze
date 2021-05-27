@@ -23,8 +23,8 @@ public class Maze {
 	 */
 	private final static int ROWS = 4;
 	private final static int COLS = 4;
-	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
-			(ROWS - 1) }; // end of maze
+	private final static int START = 0;
+	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (ROWS - 1) }; // end of maze
 
 	/*
 	 * 2D array to store rooms in the maze
@@ -51,7 +51,7 @@ public class Maze {
 	 * List of Pokemon objects
 	 */
 	private ArrayList<Pokemon> myPokemonList;
-	
+
 	private final Pokedex myPokedex;
 
 	/*
@@ -79,15 +79,15 @@ public class Maze {
 	private Maze() {
 		roomCounter = 0;
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { 0, 0 };
+		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
 		myPokemonList = fillPokemonList();
 		// TODO: test stuff delete later
-		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+		myMatrix[START][START].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
 
 		// set the first room to be visited since we dont play that room
-		myMatrix[0][0].setVisited(true);
+		myMatrix[START][START].setVisited(true);
 		myPokedex = Pokedex.getInstance();
 
 	}
@@ -128,8 +128,7 @@ public class Maze {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		return myPlayerLocation[0] == WIN_LOCATION[0]
-				&& myPlayerLocation[1] == WIN_LOCATION[1];
+		return myPlayerLocation[0] == WIN_LOCATION[0] && myPlayerLocation[1] == WIN_LOCATION[1];
 	}
 
 	/**
@@ -144,8 +143,8 @@ public class Maze {
 	/**
 	 * Returns the players current location
 	 * 
-	 * @return int[] an integer array of the players current location 0 = row, 1
-	 *         = col
+	 * @return int[] an integer array of the players current location 0 = row, 1 =
+	 *         col
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
@@ -159,14 +158,11 @@ public class Maze {
 	 */
 	public void setPlayerLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set player location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS || theNewPos[1] > COLS) {
+				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 
-				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]]
-						.setPlayer(false);
+				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
@@ -175,8 +171,8 @@ public class Maze {
 		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
 		if (!getCurrRoom().hasVisited()) {
-		      getCurrRoom().setVisited(true);  
-		}		
+			getCurrRoom().setVisited(true);
+		}
 		myWinCondition = isWinCondition();
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
@@ -211,10 +207,8 @@ public class Maze {
 
 	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set attempt location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS || theNewPos[1] > COLS) {
+				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
@@ -228,8 +222,7 @@ public class Maze {
 	 * 
 	 */
 	public boolean hasNotMoved() {
-		return myPlayerLocation[0] == myAttemptLocation[0]
-				&& myPlayerLocation[1] == myAttemptLocation[1];
+		return myPlayerLocation[0] == myAttemptLocation[0] && myPlayerLocation[1] == myAttemptLocation[1];
 	}
 
 	/**
@@ -242,8 +235,7 @@ public class Maze {
 	public Room getRoom(final int theR, final int theC) throws Exception {
 		Room res = null;
 		if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-			throw new Exception(
-					"Room does not exist at [" + theR + ", " + theC + "]");
+			throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 		} else {
 			res = myMatrix[theR][theC];
 		}
@@ -254,16 +246,14 @@ public class Maze {
 	/**
 	 * Set a new room at a location in matrix
 	 * 
-	 * @param the new room
+	 * @param the  new room
 	 * @param theR the row index
 	 * @param theC the col index
 	 */
-	public void setRoomInMatrix(final Room theRoom, final int theR,
-			final int theC) {
+	public void setRoomInMatrix(final Room theRoom, final int theR, final int theC) {
 		try {
 			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-				throw new Exception(
-						"Room does not exist at [" + theR + ", " + theC + "]");
+				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 			} else {
 				System.out.println("added" + theRoom.getAnswer());
 				myMatrix[theR][theC] = theRoom;
@@ -314,13 +304,23 @@ public class Maze {
 	public int getCols() {
 		return COLS;
 	}
-	
+
 	/**
-	 * Reset the maze to default and instantiate new rooms
-	 * Make a new instance of the maze
+	 * If player is at the start of the game
+	 * 
+	 * @return boolean true/false
+	 */
+	public boolean isAtStart() {
+		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START
+				&& myAttemptLocation[1] == START;
+	}
+
+	/**
+	 * Reset the maze to default and instantiate new rooms Make a new instance of
+	 * the maze
 	 */
 	public void reset() {
-		
+
 //	        singleMaze = new Maze();
 		roomCounter = 0;
 		myMatrix = fillRooms();
@@ -333,9 +333,8 @@ public class Maze {
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
 		myPokemonList.clear();
-                myPokemonList = fillPokemonList();
-		
-		
+		myPokemonList = fillPokemonList();
+
 	}
 
 	// TODO: DELETE LATER

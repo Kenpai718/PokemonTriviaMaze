@@ -158,7 +158,7 @@ public class PokemonMenuBar extends JMenuBar {
 				myReveal = reveal.isSelected();
 				myPanel.setMyReveal(myReveal);
 				firePropertyChange("showpkmn", null, null);
-				myPanel.setImage();
+				myPanel.refreshGUI();
 
 			}
 		});
@@ -170,7 +170,7 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				final boolean selected = answer.isSelected();
 				final LabelPanel labels = myPanel.getLabelPanel();
-				myPanel.setImage();
+				myPanel.refreshGUI();
 				if (selected) {
 					labels.enableShowAnswer(true);
 				} else {
