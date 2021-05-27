@@ -397,6 +397,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Updates all important components for the gui
 	 */
 	public void refreshGUI() {
+	        setImgBrightness();
 		setImage();
 		
 		myQuestionRoomGUI.setButtons();
@@ -549,24 +550,20 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 				setPanels(res);
 			}
 
-			if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
-//			        myReveal = res ;
-			        System.out.println("Test");
-//				final int brightness = myReveal ? 1 : 0; // true = light, false = dark
-				setImgBrightness();
-//				repaint();
-			}
-
 		} else {
 			if ("win".equals(prop)) {
 				// TODO: add more to this win message
 				JOptionPane.showMessageDialog(null, "You win!");
-			}
-
-			if ("lose".equals(prop)) {
+			} else if ("lose".equals(prop)) {
 				// TODO: add more to this lose message
 				JOptionPane.showMessageDialog(null, "You lose!");
-			}
+			} else if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
+//                              myReveal = res ;
+                                System.out.println("Test");
+//                              final int brightness = myReveal ? 1 : 0; // true = light, false = dark
+                                setImgBrightness();
+//                              repaint();
+                        }
 
 		}
 

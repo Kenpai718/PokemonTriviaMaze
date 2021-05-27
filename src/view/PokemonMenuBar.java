@@ -160,7 +160,7 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				myReveal = reveal.isSelected();
 				myPanel.setMyReveal(myReveal);
-				firePropertyChange("showpkmn",null,true);
+				firePropertyChange("showpkmn",null,null);
 				myPanel.setImage();
 				
 
@@ -194,12 +194,16 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
 				final Room[][] rooms = myMaze.getMatrix();
-				final boolean change = rooms[2][2].hasVisited();
+				boolean change = true;
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
 					        final Room room = rooms[i][j];
-						rooms[i][j].setVisited(!room.hasVisited());
-						
+					        change = change && room.hasVisited();
+						rooms[i][j].setVisited(!change);
+						if (room.isPlayerHere()) {
+						        rooms[i][j].setVisited(true);
+						}
+						 
 //						repaint();
 					}
 				}

@@ -53,12 +53,11 @@ public class MovementAction extends AbstractAction {
 		myMaze.setAttemptLocation(newPos);
 		if (myMaze.getAttemptRoom().hasVisited()) {
 //		        myPanel.setMyReveal(true);
-			myPanel.setImgBrightness(); // keep pokemon revealed if it has been
+//			myPanel.setImgBrightness(); // keep pokemon revealed if it has been
 			myMaze.setPlayerLocation(newPos);
-		} else {
-//		        myPanel.setMyReveal(false);
-			myPanel.setImgBrightness();
-		}
+                } /*
+                   * else { // myPanel.setMyReveal(false); myPanel.setImgBrightness(); }
+                   */
 		updateGUI();
 
 	}
