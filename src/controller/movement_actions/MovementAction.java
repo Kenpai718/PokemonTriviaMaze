@@ -10,7 +10,6 @@ import javax.swing.ImageIcon;
 
 import model.Maze;
 import view.PokemonPanel;
-import view.viewHelper.MazeGUI.MazeModel;
 
 /**
  * Controls player movement in the maze
@@ -29,7 +28,6 @@ public class MovementAction extends AbstractAction {
 			final PokemonPanel thePanel) {
 		super(theName, theIcon);
 		myPanel = thePanel;
-
 	}
 
 	@Override

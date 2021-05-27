@@ -9,20 +9,17 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
 
 import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
 import model.Room;
 import view.viewHelper.LabelPanel;
-import view.viewHelper.MazeGUI.MazeModel;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -56,9 +53,17 @@ public class PokemonMenuBar extends JMenuBar {
 		myPanel = theFrame.getPanel();
 		myMaze = Maze.getInstance();
 		setupMenuBar();
+		addListeners();
+		
 	}
 
-	/**
+	private void addListeners() {
+                // TODO Auto-generated method stub
+	        this.addPropertyChangeListener(myPanel.getMazeGUI());
+	        this.addPropertyChangeListener(myPanel.getMyControlPanel());
+        }
+
+        /**
 	 * Adds the base menus to the menu bar
 	 */
 	private void setupMenuBar() {
@@ -165,7 +170,7 @@ public class PokemonMenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final boolean selected = answer.isSelected();
-				LabelPanel labels = myPanel.getLabelPanel();
+				final LabelPanel labels = myPanel.getLabelPanel();
 				myPanel.setImage();
 				if (selected) {
 					labels.enableShowAnswer(true);
@@ -192,6 +197,7 @@ public class PokemonMenuBar extends JMenuBar {
 						repaint();
 					}
 				}
+				firePropertyChange("model", null, rooms);
 			}
 
 		});
@@ -210,6 +216,8 @@ public class PokemonMenuBar extends JMenuBar {
 						repaint();
 					}
 				}
+				firePropertyChange("newpos", null, null);
+				firePropertyChange("model", null, rooms);
 			}
 
 		});
@@ -285,6 +293,7 @@ public class PokemonMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			myMaze.reset();
+			firePropertyChange("model", null, myMaze.getMatrix()); 
 			myPanel.refreshGUI();
 			
 		}
@@ -335,7 +344,7 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			final String promptCords = "Where to put a new Pokemon in maze? "
 					+ "\n(X Y):";
 			final String promptPokemon = "What is the name of the Pokemon?";
@@ -357,10 +366,10 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		public void putPokemon(final int[] thePos, final Pokemon theNewPkmn) {
 			try {
-				Room r = myMaze.getRoom(thePos[0], thePos[1]);
+				final Room r = myMaze.getRoom(thePos[0], thePos[1]);
 				r.setNewPokemon(theNewPkmn);
 				myPanel.refreshGUI();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

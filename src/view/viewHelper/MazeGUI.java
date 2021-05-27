@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -27,7 +29,7 @@ import model.Room;
  * @version Spring 2021
  */
 
-public class MazeGUI extends JPanel {
+public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	/**
 	     * 
@@ -72,12 +74,14 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Matrix of the maze
 	 */
-	final private Room[][] myMatrix;
+	private Room[][] myMatrix;
 
 	/*
 	 * Used to draw onto table
 	 */
 	private final Renderer myRenderer;
+	
+	private final MazeModel myModel;
 
 	/**
 	 * Constructor that create the maze visual
@@ -99,7 +103,8 @@ public class MazeGUI extends JPanel {
 		myTable = new JTable();
 		// Using Custom TableModel to correctly refresh the table when changes
 		// are made
-		myTable.setModel(new MazeModel());
+		myModel = new MazeModel();
+		myTable.setModel(myModel);
 		myTable.setFont(PKMN_FONT);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
@@ -113,6 +118,7 @@ public class MazeGUI extends JPanel {
 		// set player icon, blocked, room names
 		myRenderer = new Renderer();
 		fillTable();
+		
 
 	}
 
@@ -271,4 +277,14 @@ public class MazeGUI extends JPanel {
 	public JTable getTable() {
 		return myTable;
 	}
+
+        @Override
+        public void propertyChange(final PropertyChangeEvent evt) {
+                if ("model".equals(evt.getPropertyName())) {
+                        myMatrix = (Room[][]) evt.getNewValue();
+                        myModel.refresh(myMatrix);
+                        repaint();
+                }
+                
+        }
 }

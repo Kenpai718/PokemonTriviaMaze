@@ -51,7 +51,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	final JButton right;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final Maze myMaze;
-	private PokemonPanel myPanel;
+	private final PokemonPanel myPanel;
 
 	/**
 	 * Create the panel.
@@ -134,8 +134,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		}
 	}
 
-	private void changeButtonState(final int i, final int num,
-			final Maze maze) {
+	private void changeButtonState(final int i, final int num) {
 		// TODO Auto-generated method stub
 		if (i == 0) {
 			final Boolean dc = checkRooms("down");
@@ -185,12 +184,11 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		if ("newpos".equals(evt.getPropertyName())) {
-			// System.out.println("entered if");
 
 			final int[] pos = myMaze.getPlayerLocation();
 			for (int i = 0; i < pos.length; i++) {
 				final int num = pos[i];
-				changeButtonState(i, num, myMaze);
+				changeButtonState(i, num);
 			}
 			repaint();
 		}
@@ -200,19 +198,20 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * Highlight the button when user hovers over it
 	 */
 	public class HoverListener extends MouseAdapter {
-		private Color B_COLOR = new Color(58,175,220); //highlighter blue
+		private final Color B_COLOR = new Color(58,175,220); //highlighter blue
 		final Border BLUE_BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
 		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
-		private JButton myButton;
+		private final JButton myButton;
 		
-		public HoverListener(JButton theButton) {
+		public HoverListener(final JButton theButton) {
 			myButton = theButton;
 		}
 
 		/*
 		 * Add border if user hovers mouse
 		 */
-		public void mouseEntered(MouseEvent me) {
+		@Override
+                public void mouseEntered(final MouseEvent me) {
 			//System.out.println("hovering");
 			myButton.setBorder(BLUE_BORDER);
 		}
@@ -220,7 +219,8 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		/*
 		 * Remove border after user scrolls off
 		 */
-		public void mouseExited(MouseEvent me) {
+		@Override
+                public void mouseExited(final MouseEvent me) {
 			//System.out.println("not hovering");
 			myButton.setBorder(EMPTY_BORDER);
 		}

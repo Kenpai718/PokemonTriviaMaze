@@ -165,7 +165,9 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private final ControlPanel myControlPanel;
 
-	/*
+	
+
+        /*
 	 * TODO: panel for the starting room instead of questions
 	 */
 	private final StartRoomPanel myStartPanel;
@@ -192,6 +194,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myGame = new TriviaGame();
 		myMaze = Maze.getInstance();
 		myMazeGUI = new MazeGUI();
+		addListener(myMazeGUI);
 		myMazeModel = (MazeModel) getTable().getModel();
 		myQuestionRoomGUI = new QuestionRoomGUI(this);
 		addListener(myQuestionRoomGUI);
@@ -275,6 +278,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		// disable question rooms until player selects a direction
 		myTextRoomGUI.setVisible(false);
+		// fire change to set the buttons for the start
+		firePropertyChange("newpos", null, null);
 		// myQuestionRoomGUI.setVisible(false);
 
 	}
@@ -301,7 +306,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		// draw the pokemon for the room we are in/attempting to go to
 		setImage();
-		setImgBrightness(0);
 
 	}
 
@@ -388,10 +392,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public void refreshGUI() {
 		setImage();
-		myMazeModel.refresh(myMaze.getMatrix());
+		
 		myQuestionRoomGUI.setButtons();
 		myTextRoomGUI.setButtons();
 		myLabelPanel.updateLabels();
+		firePropertyChange("newpos", null, null);
+		firePropertyChange("model", null, myMaze.getMatrix());
 	}
 
 	/**
@@ -408,7 +414,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		//TODO: change this so this isn't fired every repaint and only when needed
 		//property to update the control panel buttons
-		firePropertyChange("newpos", null, null); 
+//		firePropertyChange("newpos", null, null);
 
 	}
 
@@ -448,6 +454,15 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
+         * Getter MazeGUi table
+         * 
+         * @return JTable the table that represents the maze
+         */
+        public MazeGUI getMazeGUI() {
+                return myMazeGUI;
+        }
+	
+	/**
 	 * Getter MazeGUi table
 	 * 
 	 * @return JTable the table that represents the maze
@@ -482,6 +497,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public LabelPanel getLabelPanel() {
 		return myLabelPanel;
 	}
+	
+	/**
+         * @return the myControlPanel
+         */
+        public ControlPanel getMyControlPanel() {
+                return myControlPanel;
+        }
 
 	/**
 	 * Add an object that this panel will listen for property changes.

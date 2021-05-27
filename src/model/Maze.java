@@ -1,8 +1,5 @@
 package model;
 
-import java.awt.Container;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -269,7 +266,7 @@ public class Maze {
 				System.out.println("added" + theRoom.getAnswer());
 				myMatrix[theR][theC] = theRoom;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -322,6 +319,7 @@ public class Maze {
 	 */
 	public void reset() {
 		
+//	        singleMaze = new Maze();
 		roomCounter = 0;
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { 0, 0 };
@@ -332,15 +330,8 @@ public class Maze {
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
-	
-		if(myPokedex.getCount() == myPokemonList.size()) {
-			myPokemonList.clear();
-			myPokemonList = fillPokemonList();
-		} else {
-			myPokemonList = fillPokemonList();
-		}
-		
-		
+		myPokemonList.clear();
+                myPokemonList = fillPokemonList();
 		
 		
 	}
