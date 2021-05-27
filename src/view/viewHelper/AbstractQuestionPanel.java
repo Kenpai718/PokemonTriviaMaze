@@ -85,6 +85,11 @@ public abstract class AbstractQuestionPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, incorrect + correct,
 					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);
 		}
+		
+		//disable the buttons after the user answers
+		this.enableButtons(false);
+		checkWinLoseCondition();
+		myPP.refreshGUI(); //one full refresh of the gui
 
 
 	}
@@ -113,23 +118,30 @@ public abstract class AbstractQuestionPanel extends JPanel {
 			// reset attempt location to default
 			myMaze.setAttemptLocation(myMaze.getPlayerLocation());
 		}
+		
 
+
+	}
+	
+	/*
+	 * Fire property changes for if the player has won or lost
+	 */
+	private void checkWinLoseCondition() {
+		if (myMaze.isWinCondition()) {
+			firePropertyChange("win", null, null);
+		}
+
+		// TODO: if maze isLoseCondition() fire lose
 	}
 
 	/*
 	 * Update gui components to ensure everything is current
 	 */
 	private void updateGUI() {
-
-		this.enableButtons(false);
+		myPP.setImgBrightness();
+		myPP.setImage();
 		firePropertyChange("newpos", null, null);
-		myPP.refreshGUI();
 
-		if (myMaze.isWinCondition()) {
-			firePropertyChange("win", null, null);
-		}
-
-		// TODO: if maze isLoseCondition() fire lose
 
 	}
 

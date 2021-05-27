@@ -397,7 +397,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Updates all important components for the gui
 	 */
 	public void refreshGUI() {
-	        setImgBrightness();
+	    setImgBrightness();
 		setImage();
 		
 		myQuestionRoomGUI.setButtons();
