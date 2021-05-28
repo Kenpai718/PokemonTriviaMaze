@@ -62,7 +62,7 @@ public class TutorialPanel extends JPanel{
 		myTutorialSum = myPanel.getScaledImage(myTutorialSum, W, H);
 		
 		this.repaint();
-		this.setBorder(BLUE_BORDER);
+		this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, BORDER_COLOR));
 		
 	}
 	

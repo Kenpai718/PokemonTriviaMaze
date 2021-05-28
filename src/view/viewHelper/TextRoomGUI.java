@@ -8,9 +8,11 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
+import javax.swing.border.Border;
 
 import model.Maze;
 import view.PokemonPanel;
@@ -26,7 +28,17 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 	 */
 	private static final long serialVersionUID = -8894683351403359585L;
 	Dimension SIZE = new Dimension(350,100);
+	/*
+	 * Color of maze
+	 */
+	final Color MAZE_BG = new Color(51, 51, 51);
 	private final Color BORDER_COLOR = new Color(51, 153, 204);
+
+	/*
+	 * Border
+	 */
+	final Border BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
+
 	
 	@SuppressWarnings("unused")
 	private final String QUESTION = "Who's that Pokemon?";
@@ -43,10 +55,12 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 		super(thePP);
 		setBackground(BORDER_COLOR);
 		setPreferredSize(SIZE);
+		setMaximumSize(SIZE);
 		final SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		
-		
+		this.setBackground(MAZE_BG);
+		this.setBorder(BORDER);
 		final JTextPane question = new JTextPane();
 		question.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 11));
 		question.setText("Who's that Pokemon?");

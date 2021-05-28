@@ -258,7 +258,7 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				// System.out.println("action fired");
 				// myPanel.setPanels(true);
-				firePropertyChange("changegm", null, true);
+				firePropertyChange("changegm", null, 1);
 
 			}
 
@@ -273,7 +273,7 @@ public class PokemonMenuBar extends JMenuBar {
 			public void actionPerformed(final ActionEvent e) {
 				// System.out.println("action fired");
 				// myPanel.setPanels(false);
-				firePropertyChange("changegm", null, false);
+				firePropertyChange("changegm", null, 2);
 
 			}
 

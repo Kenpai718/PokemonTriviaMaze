@@ -72,12 +72,6 @@ public class MovementAction extends AbstractAction {
 //		firePropertyChange("newpos", null, null);
 		myPanel.refreshGUI();
 
-		if (myMaze.getAttemptRoom().hasVisited()) {
-			myPanel.enableAnswerFields(false);
-		} else {
-			myPanel.enableAnswerFields(true);
-		}
-
 	}
 
 }
