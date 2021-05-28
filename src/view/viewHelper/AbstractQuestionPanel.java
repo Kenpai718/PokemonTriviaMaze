@@ -70,6 +70,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		// call method to change the maze
 		doUserAnswer(isCorrect);
+		myPP.setShowQMark(); //turn off q mark because the user answered
 
 		if (isCorrect) {
 //		        myPP.setMyReveal(isCorrect);
