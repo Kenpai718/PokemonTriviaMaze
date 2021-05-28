@@ -19,6 +19,7 @@ import model.Pokedex;
 import model.Pokemon;
 import model.Room;
 import view.viewHelper.LabelPanel;
+import view.viewHelper.TutorialPanel;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -39,6 +40,7 @@ public class PokemonMenuBar extends JMenuBar {
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
 	private boolean myReveal;
+	private final TutorialPanel myTutorial;
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts the
@@ -52,6 +54,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myFrame = theFrame.getFrame();
 		myPanel = theFrame.getPanel();
 		myMaze = Maze.getInstance();
+		myTutorial = new TutorialPanel(myPanel);
 		setupMenuBar();
 		addListeners();
 
@@ -78,9 +81,10 @@ public class PokemonMenuBar extends JMenuBar {
 		setupHelpMenu();
 		this.add(myHelpMenu);
 
-		myGamemodeMenu = new JMenu("Gamemode");
-		setupGamemodesMenu();
-		this.add(myGamemodeMenu);
+		/*
+		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
+		 * this.add(myGamemodeMenu);
+		 */
 
 	}
 
@@ -133,8 +137,7 @@ public class PokemonMenuBar extends JMenuBar {
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				//TODO:
-				JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!", "About", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, myTutorial, "How to play", JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 		myHelpMenu.add(tutorial);
