@@ -2,7 +2,6 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.swing.ButtonGroup;
@@ -350,9 +349,9 @@ public class PokemonMenuBar extends JMenuBar {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			final String promptCords = "Where to put a new Pokemon in maze? " + "\nInteger (X Y) or \"here\" to put at your location.";
+			final String promptCords = "Where to put a new Pokemon in maze? " + "\nRoom Letter ('D') or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
-			myPos = readCordinateInput(promptCords, myTeleportIcon);
+			myPos = readRoomName(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
 				myNewMon = readNewPokemonInput(promptPokemon);
 				if (!myCancel) {
@@ -427,8 +426,8 @@ public class PokemonMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
-			final String message = "Please enter a new position to teleport" + " to.\n(X Y)";
-			final int[] pos = readCordinateInput(message, myTeleportIcon);
+			final String message = "Please enter a new room to teleport" + " to.\n(Room Letter)";
+			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
 				myMaze.setPlayerLocation(pos);
@@ -437,55 +436,93 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 	}
-
-	/**
-	 * Helper method to read the input from the Input Dialog Used for the teleport
-	 * cheat
-	 * 
-	 * @param theInput a string of the input
-	 * @param icon     for the option pane
-	 * @return an int[] of the two numbers input
-	 */
-	private int[] readCordinateInput(final String theMessage, final ImageIcon theIcon) {
-		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
-				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
-		int[] res = myMaze.getPlayerLocation().clone();
-		final Scanner scan;
-		if (input != null && !input.isEmpty()) {
-			if (!(input.length() < 3)) {
-				scan = new Scanner(input.toString());
-				try {
-					for (int i = 0; i < 2; i++) {
-						final int num = scan.nextInt() - 1;
-						if (num < myMaze.getRows() && num < myMaze.getCols() && num >= 0) {
-							res[i] = num;
-
-						} else {
-							res = readCordinateInput("One or more numbers out " + "of range of maze\n(X Y):", theIcon);
-							break;
-						}
-					}
-				} catch (final InputMismatchException e) {
-					if (input.toLowerCase().strip().equals("here")) {
-						/*
-						 * Quick shortcut with "here" to put it at player pos
-						 */
-						res = myMaze.getAttemptedLocation();
-					} else {
-						res = readCordinateInput("Please use integers only.\n(X Y):", theIcon);
-					}
-				}
-				scan.close();
-			} else {
-				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
-			}
-		} else {
-			// put -1 to signify user canceled
-			res = new int[] { -1, -1 };
-		}
-
-		return res;
-
+	
+	private int[] readRoomName(final String theMessage, final ImageIcon theIcon) {
+	        final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
+                                JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
+	        int[] res = myMaze.getPlayerLocation().clone();
+//	        final Scanner scan;
+	        if (input != null && !input.isEmpty()) {
+	                if (!(input.length() > 1)) {
+//	                        scan = new Scanner(input);
+	                        final String roomName = input.toUpperCase();
+	                        boolean moved = false;
+	                        for(int i = 0; i < myMaze.getRows(); i++) {
+	                                for (int j = 0; j < myMaze.getCols(); j++) {
+	                                        if (myMaze.getMatrix()[i][j].toString().equals(roomName)) {
+	                                                res = new int[] {i, j};
+	                                                moved = true;
+	                                        }
+	                                }
+	                        }
+	                        if (!moved){
+	                                res = readRoomName("Please Input a valid Room Letter"
+	                                                + "\n(Room Letter):", theIcon);
+	                        }
+                                
+	                } else if (input.toLowerCase().strip().equals("here")) {
+                                /*
+                                 * Quick shortcut with "here" to put it at player pos
+                                 */
+                                res = myMaze.getAttemptedLocation();
+                        } else {
+                                res = readRoomName("Please Input a valid Room Letter\n(Room Letter):", theIcon);
+                        }
+	        } else {
+                        // put -1 to signify user canceled
+                        res = new int[] { -1, -1 };
+                }
+                return res;
 	}
+
+//	/**
+//	 * Helper method to read the input from the Input Dialog Used for the teleport
+//	 * cheat
+//	 * 
+//	 * @param theInput a string of the input
+//	 * @param icon     for the option pane
+//	 * @return an int[] of the two numbers input
+//	 */
+//	private int[] readCordinateInput(final String theMessage, final ImageIcon theIcon) {
+//		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
+//				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
+//		int[] res = myMaze.getPlayerLocation().clone();
+//		final Scanner scan;
+//		if (input != null && !input.isEmpty()) {
+//			if (!(input.length() < 3)) {
+//				scan = new Scanner(input.toString());
+//				try {
+//					for (int i = 0; i < 2; i++) {
+//						final int num = scan.nextInt() - 1;
+//						if (num < myMaze.getRows() && num < myMaze.getCols() && num >= 0) {
+//							res[i] = num;
+//
+//						} else {
+//							res = readCordinateInput("One or more numbers out " + "of range of maze\n(X Y):", theIcon);
+//							break;
+//						}
+//					}
+//				} catch (final InputMismatchException e) {
+//					if (input.toLowerCase().strip().equals("here")) {
+//						/*
+//						 * Quick shortcut with "here" to put it at player pos
+//						 */
+//						res = myMaze.getAttemptedLocation();
+//					} else {
+//						res = readCordinateInput("Please use integers only.\n(X Y):", theIcon);
+//					}
+//				}
+//				scan.close();
+//			} else {
+//				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
+//			}
+//		} else {
+//			// put -1 to signify user canceled
+//			res = new int[] { -1, -1 };
+//		}
+//
+//		return res;
+//
+//	}
 
 }
