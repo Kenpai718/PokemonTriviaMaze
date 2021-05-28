@@ -38,6 +38,13 @@ public class QuestionModePanel extends JPanel {
 	 * default size
 	 */
 	private final Dimension SIZE = new Dimension(355, 800);
+	
+	/*
+	 * Icons for the buttons
+	 */
+	
+	private final ImageIcon EASY = new ImageIcon("./src/images/other/pokeball.png");
+	private final ImageIcon HARD = new ImageIcon("./src/images/other/masterball.png");
 
 	/*
 	 * Reference to main panel
@@ -135,9 +142,9 @@ public class QuestionModePanel extends JPanel {
 		/*
 		 * Setup buttons
 		 */
-		myTextSwitch = new JButton("Switch to user input.");
+		myTextSwitch = new JButton("Switch to user input (HARD)", HARD);
 		myTextSwitch.addActionListener(new MCPanelListener());
-		myMCSwitch = new JButton("Switch to multiple choice.");
+		myMCSwitch = new JButton("Switch to multiple choice (EASY)", EASY);
 		myMCSwitch.addActionListener(new TextPanelListener());
 
 		/*
@@ -202,8 +209,13 @@ public class QuestionModePanel extends JPanel {
 			C1.show(myFullContainer, "1"); // default multiple choice if invalid
 		} else {
 
-			myGamemode = theNum;
-			C1.show(myFullContainer, gm);
+			if (myGamemode == 0) {
+				// don't update yet if user is on the tutorial page
+				myGamemode = theNum;
+			} else {
+				myGamemode = theNum;
+				C1.show(myFullContainer, gm);
+			}
 		}
 
 	}
@@ -257,9 +269,10 @@ public class QuestionModePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			myGamemode = 2;
-			setCurrentGamemode();
+			setGamemode(2);
+
 			myPP.refreshGUI();
+
 		}
 
 	}
@@ -272,8 +285,8 @@ public class QuestionModePanel extends JPanel {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			myGamemode = 1;
-			setCurrentGamemode();
+			setGamemode(1);
+
 			myPP.refreshGUI();
 
 		}
