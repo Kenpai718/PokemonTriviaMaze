@@ -213,6 +213,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 		private final ImageIcon WIN = new ImageIcon(
 				"./src/images/other/pokestar.png");
+		
+		//private final Color LIGHT_GREEN = new Color(138,255,167); //highlighter green
+		/*
+		 * Color used to denote visited rooms
+		 */
+		private final Color MY_GREEN = new Color(22,208,68); 
 
 		/**
 		 * Constructor
@@ -253,7 +259,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 				} else if (r.hasVisited()) {
 	                                final String name = r.toString();
 	                                lbl.setText(name);
-	                                lbl.setForeground(Color.CYAN);
+	                                lbl.setForeground(MY_GREEN);
+	                                //lbl.setForeground(Color.CYAN);
 	                                lbl.setBackground(MAZE_BG);
 	                                lbl.setFont(PKMN_FONT);
 	                        } else { // normal room name

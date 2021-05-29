@@ -320,8 +320,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Full refresh that updates all important components for the gui
 	 */
 	public void refreshGUI() {
-		
-		//show question mark if pokemon has not been revealed yet
+
+		// show question mark if pokemon has not been revealed yet
 		myShowQMark = !(myMaze.getAttemptRoom().hasVisited());
 		refreshPokemonImage();
 
@@ -385,6 +385,35 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
+	 * @param myReveal the myReveal to set
+	 */
+	public void setMyReveal(final Boolean theReveal) {
+		myReveal = theReveal;
+	}
+
+	/*
+	 * Take off the question mark from the paint panel if the question has been
+	 * answered already
+	 */
+	public void setShowQMark() {
+		myShowQMark = !(myMaze.getAttemptRoom().hasVisited());
+		repaint();
+	}
+	
+	/*
+	 * Reveal image when the user answers
+	 * Expected refreshGUI will be called afterwards for
+	 * the next question.
+	 */
+	private void showAnswerImage() {
+
+		myDark = false;
+		myShowQMark = false;
+		setImage();
+
+	}
+	
+	/**
 	 * Getter MazeGUi table
 	 * 
 	 * @return JTable the table that represents the maze
@@ -433,24 +462,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * @param myReveal the myReveal to set
-	 */
-	public void setMyReveal(final Boolean theReveal) {
-		myReveal = theReveal;
-	}
-	
-	/*
-	 * Take off the question mark from the paint panel
-	 * if the question has been answered already
-	 */
-	public void setShowQMark() {
-		myShowQMark = !(myMaze.getAttemptRoom().hasVisited());
-		repaint();
-	}
-	
-	
-
-	/**
 	 * Add an object that this panel will listen for property changes.
 	 * 
 	 * @param Container the GUI object
@@ -458,7 +469,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public void addListener(final Container theObj) {
 		theObj.addPropertyChangeListener(this);
 	}
-
 
 	/**
 	 * Property changes that update the panel
@@ -485,13 +495,14 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 				// TODO: add more to this lose message
 				JOptionPane.showMessageDialog(null, "You lose!");
 			} else if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
-				setImgBrightness();
+				//setImgBrightness();
+				showAnswerImage();
 			}
 
 		}
 
 	}
-	
+
 	/**
 	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It is
 	 * scaled this way to prevent the picture from looking blurry.

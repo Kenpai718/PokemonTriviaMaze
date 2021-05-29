@@ -199,7 +199,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 */
 	public class HoverListener extends MouseAdapter {
 		private final Color B_COLOR = new Color(58,175,220); //highlighter blue
-		final Border BLUE_BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
+		final Border BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
 		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
 		private final JButton myButton;
 		
@@ -213,7 +213,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		@Override
                 public void mouseEntered(final MouseEvent me) {
 			//System.out.println("hovering");
-			myButton.setBorder(BLUE_BORDER);
+			myButton.setBorder(BORDER);
 		}
 
 		/*
