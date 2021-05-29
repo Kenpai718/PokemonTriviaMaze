@@ -71,7 +71,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		if (isCorrect) {
 //		        myPP.setMyReveal(isCorrect);
 			firePropertyChange("showpkmn", null, true);
-			JOptionPane.showMessageDialog(null, ("Great job! " + correct + "\nRoom " + myMaze.getAttemptRoom() + " is unlocked."),
+			JOptionPane.showMessageDialog(null, ("Great job!\n" + correct + "\nRoom " + myMaze.getAttemptRoom() + " is unlocked."),
 					"Correct!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
 
 		} else { // incorrect
@@ -88,12 +88,12 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		// call method to change the maze
 		doUserAnswer(isCorrect);
-		updateGUI(); //update gui since the maze changed
 		
 		//disable the buttons after the user answers
 		this.enableButtons(false);
 		checkWinLoseCondition();
-		//myPP.refreshGUI(); //one full refresh of the gui
+		
+		myPP.refreshGUI(); //one full refresh of the gui
 
 
 	}
@@ -136,16 +136,6 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		}
 
 		// TODO: if maze isLoseCondition() fire lose
-	}
-
-	/*
-	 * Update gui components to ensure everything is current
-	 */
-	private void updateGUI() {
-		myPP.refreshPokemonImage();
-		firePropertyChange("newpos", null, null);
-
-
 	}
 
 	/**
