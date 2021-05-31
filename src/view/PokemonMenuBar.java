@@ -147,6 +147,7 @@ public class PokemonMenuBar extends JMenuBar {
                                 if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
                                         try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
                                              final ObjectInputStream in = new ObjectInputStream(file);) {
+                                                System.out.println("Start Load: "+ myMaze);
                                                 myMaze = (Maze) in.readObject();
                                                 firePropertyChange("model", null, myMaze.getMatrix());
                                                 myPanel.refreshGUI();
