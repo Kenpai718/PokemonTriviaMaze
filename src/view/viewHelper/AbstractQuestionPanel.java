@@ -63,7 +63,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		// format answer to prevent errors
 		correctAns = correctAns.toLowerCase().strip();
-		final String userAns = theUserAns.toLowerCase().strip();
+		final String userAns = theUserAns.toLowerCase().replaceAll(" ", "");
 		final Boolean isCorrect = userAns.equals(correctAns);
 
 		//myPP.setShowQMark(); //turn off q mark because the user answered
@@ -90,10 +90,9 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		doUserAnswer(isCorrect);
 		
 		//disable the buttons after the user answers
-		this.enableButtons(false);
-		checkWinLoseCondition();
-		
+		this.enableButtons(false);	
 		myPP.refreshGUI(); //one full refresh of the gui
+		checkWinLoseCondition(); 
 
 
 	}

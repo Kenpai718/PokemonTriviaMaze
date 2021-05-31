@@ -25,7 +25,7 @@ public class Maze {
 	private final static int COLS = 4;
 	private final static int START = 0;
 	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
-			(ROWS - 1) }; // end of maze
+			(COLS - 1) }; // end of maze
 
 	/*
 	 * 2D array to store rooms in the maze

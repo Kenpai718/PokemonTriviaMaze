@@ -1,7 +1,9 @@
 package view;
 
+import java.awt.CheckboxMenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.ButtonGroup;
@@ -20,6 +22,8 @@ import model.Pokemon;
 import model.Room;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.TutorialPanel;
+import javax.swing.JCheckBox;
+import javax.swing.JList;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -35,12 +39,14 @@ public class PokemonMenuBar extends JMenuBar {
 	private JMenu myHelpMenu;
 	private JMenu myFileMenu;
 	private JMenu myGamemodeMenu;
+	private JMenu myGenSelectMenu;
 	private ButtonGroup myGamemodes;
 	private final Maze myMaze;
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
 	private boolean myReveal;
 	private final TutorialPanel myTutorial;
+	private Pokedex myPokedex;
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts the
@@ -54,6 +60,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myFrame = theFrame.getFrame();
 		myPanel = theFrame.getPanel();
 		myMaze = Maze.getInstance();
+		myPokedex = Pokedex.getInstance();
 		myTutorial = new TutorialPanel(myPanel);
 		setupMenuBar();
 		addListeners();
@@ -80,6 +87,13 @@ public class PokemonMenuBar extends JMenuBar {
 		myHelpMenu = new JMenu("Help");
 		setupHelpMenu();
 		this.add(myHelpMenu);
+
+		myGenSelectMenu = new JMenu("Select Pokemon Generation(s)");
+		setupGenSelectMenu();
+		this.add(myGenSelectMenu);
+
+		JList list = new JList();
+		myGenSelectMenu.add(list);
 
 		/*
 		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
@@ -286,7 +300,91 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
+	/*
+	 * Setup select checkbox for pokemon gen select menu
+	 */
+	private void setupGenSelectMenu() {
+
+		// current supported pokemon generations
+		String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
+				"Gen 6 (649-721)", "Gen 7 (721-809)" };
+		ArrayList<JCheckBox> boxList = new ArrayList<JCheckBox>();
+
+		// add all to a checkbox list
+		for (int i = 0; i < gens.length; i++) {
+			JCheckBox genBox = new JCheckBox(gens[i]);
+			genBox.addActionListener(new GenSelectListener(i + 1, genBox));
+			myGenSelectMenu.add(genBox);
+			boxList.add(genBox);
+
+			if (i == 0) {
+				genBox.setSelected(true); // gen 1 selected by defau;t
+			}
+		}
+	}
+
+	/*
+	 * Reset game to start with new pokemon gens
+	 */
+	private void resetAll() {
+		myMaze.reset();
+		firePropertyChange("model", null, myMaze.getMatrix());
+		myPanel.refreshGUI();
+	}
+
 	/* Listener classes */
+
+	/*
+	 * Add a pokemon generation to the pokedex
+	 */
+	class GenSelectListener implements ActionListener {
+
+		private JCheckBox myBox;
+		private final int myGen;
+
+		public GenSelectListener(final int theNum, JCheckBox theBox) {
+			myGen = theNum;
+			myBox = theBox;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			String msg;
+			if (myBox.isSelected()) { // add pokemon gen
+
+				try {
+					myPokedex.addGenToDex(myGen);
+					msg = "Gen " + myGen + " Pokemon can now be encountered! Game has been reset.";
+					JOptionPane.showMessageDialog(null, msg);
+					resetAll();
+
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} else if (!myBox.isSelected()) {
+				if (myPokedex.canRemoveGen()) { // remove pokemon gen
+					try {
+						myPokedex.removeGenFromDex(myGen);
+						msg = "Gen " + myGen + " Pokemon have been removed. Game reset!";
+						JOptionPane.showMessageDialog(null, msg);
+						resetAll();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else { // cannot remove condition
+					myBox.setSelected(true);
+					msg = "Cannot remove Gen " + myGen + " because at least one generation must be selected to play!";
+					JOptionPane.showMessageDialog(null, msg);
+
+				}
+			}
+
+		}
+
+	}
 
 	/**
 	 * Resets the maze to start a new game
@@ -302,10 +400,7 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			myMaze.reset();
-			firePropertyChange("model", null, myMaze.getMatrix());
-			myPanel.refreshGUI();
-
+			resetAll();
 		}
 
 	}
@@ -352,7 +447,8 @@ public class PokemonMenuBar extends JMenuBar {
 
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			final String promptCords = "Where to put a new Pokemon in maze? " + "\nRoom Letter ('D') or \"here\" to put at your location.";
+			final String promptCords = "Where to put a new Pokemon in maze? "
+					+ "\nRoom Letter ('D') or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
 			myPos = readRoomName(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
@@ -439,43 +535,42 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 	}
-	
+
 	private int[] readRoomName(final String theMessage, final ImageIcon theIcon) {
-	        final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
-                                JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
-	        int[] res = myMaze.getPlayerLocation().clone();
+		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
+				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
+		int[] res = myMaze.getPlayerLocation().clone();
 //	        final Scanner scan;
-	        if (input != null && !input.isEmpty()) {
-	                if (!(input.length() > 1)) {
+		if (input != null && !input.isEmpty()) {
+			if (!(input.length() > 1)) {
 //	                        scan = new Scanner(input);
-	                        final String roomName = input.toUpperCase();
-	                        boolean moved = false;
-	                        for(int i = 0; i < myMaze.getRows(); i++) {
-	                                for (int j = 0; j < myMaze.getCols(); j++) {
-	                                        if (myMaze.getMatrix()[i][j].toString().equals(roomName)) {
-	                                                res = new int[] {i, j};
-	                                                moved = true;
-	                                        }
-	                                }
-	                        }
-	                        if (!moved){
-	                                res = readRoomName("Please Input a valid Room Letter"
-	                                                + "\n(Room Letter):", theIcon);
-	                        }
-                                
-	                } else if (input.toLowerCase().strip().equals("here")) {
-                                /*
-                                 * Quick shortcut with "here" to put it at player pos
-                                 */
-                                res = myMaze.getAttemptedLocation();
-                        } else {
-                                res = readRoomName("Please Input a valid Room Letter\n(Room Letter):", theIcon);
-                        }
-	        } else {
-                        // put -1 to signify user canceled
-                        res = new int[] { -1, -1 };
-                }
-                return res;
+				final String roomName = input.toUpperCase();
+				boolean moved = false;
+				for (int i = 0; i < myMaze.getRows(); i++) {
+					for (int j = 0; j < myMaze.getCols(); j++) {
+						if (myMaze.getMatrix()[i][j].toString().equals(roomName)) {
+							res = new int[] { i, j };
+							moved = true;
+						}
+					}
+				}
+				if (!moved) {
+					res = readRoomName("Please Input a valid Room Letter" + "\n(Room Letter):", theIcon);
+				}
+
+			} else if (input.toLowerCase().strip().equals("here")) {
+				/*
+				 * Quick shortcut with "here" to put it at player pos
+				 */
+				res = myMaze.getAttemptedLocation();
+			} else {
+				res = readRoomName("Please Input a valid Room Letter\n(Room Letter):", theIcon);
+			}
+		} else {
+			// put -1 to signify user canceled
+			res = new int[] { -1, -1 };
+		}
+		return res;
 	}
 
 //	/**

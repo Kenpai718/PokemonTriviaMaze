@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.sqlite.SQLiteDataSource;
 
@@ -18,6 +21,11 @@ import org.sqlite.SQLiteDataSource;
  */
 
 public class Pokedex {
+	
+	/*
+	 * Maximum supported pokemon generations
+	 */
+	final int MAX_GEN = 7;
 
 	/*
 	 * Singleton pokedex
@@ -33,9 +41,14 @@ public class Pokedex {
 	 * Alternative map for looking up the name
 	 */
 	private final Map<String, Pokemon> myNameDex;
+	
+	/*
+	 * Generations that have been selected to play on
+	 */
+	private final Set<Integer> mySelectedGens;
 
-	/* How many pokemon in pokedex */
-	int myCounter;
+	/* How many pokemon currently in pokedex */
+	private int myCounter;
 
 	/**
 	 * Constructor to initialize pokedex
@@ -43,6 +56,7 @@ public class Pokedex {
 	private Pokedex() {
 		myPokedex = new HashMap<Integer, Pokemon>();
 		myNameDex = new HashMap<String, Pokemon>();
+		mySelectedGens = new HashSet<Integer>();
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
@@ -50,7 +64,19 @@ public class Pokedex {
 		myPokedex.put(0, missingNo);
 
 		// fill pokedex with database
-		fillPokedex();
+		try {
+			addGenToDex(1); //gen 1 by default
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//joke addition easter egg: "a jigglypuff seen from above"
+		final Pokemon jigglyAbove = new Pokemon("999", "JigglypuffSeenFromAbove");
+		myPokedex.put(999, jigglyAbove);
+		myNameDex.put("meme", jigglyAbove);
+		//only found from the insert pokemon cheat
+		
 	}
 
 	/*
@@ -62,30 +88,38 @@ public class Pokedex {
 		}
 		return singleDex;
 	}
-
+	
 	/*
 	 * Read from the pokedex database file with SQLite to create pokemon objects
 	 * to add to the pokedex map.
 	 * 
-	 * Reads off of Pokedex.db SQLite file
+	 * Reads off of Gen#Pokedex.db file
+	 * Adds a specific pokemon generation number 1-7 to the pokedex
 	 * 
 	 */
-	private void fillPokedex() {
+	private void fillPokedex(final int theNum) throws Exception {
+		
+		if(theNum > MAX_GEN || theNum < 1) {
+			throw new Exception(theNum + " is not a playable generation for the pokedex.");
+		}
+		
 		SQLiteDataSource ds = null;
+		String databaseName = "Gen" + theNum + "Pokedex";
 
 		// establish connection (creates db file if it does not exist :-)
 		try {
 			ds = new SQLiteDataSource();
-			ds.setUrl("jdbc:sqlite:Pokedex.db");
+			ds.setUrl("jdbc:sqlite:" + databaseName + ".db");
+			
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		//System.out.println("Opened pokedex database successfully");
+		System.out.println("Opened " + databaseName + " database successfully!");
 
-		//System.out.println("Selecting all rows from pokedex table");
-		final String query = "SELECT * FROM Pokedex";
+		System.out.println("Selecting all rows from " + databaseName +" table to add to Pokedex map...");
+		final String query = "SELECT * FROM " + databaseName;
 
 		try (Connection conn = ds.getConnection();
 				Statement stmt = conn.createStatement();) {
@@ -102,14 +136,74 @@ public class Pokedex {
 				addPokemon(id, name);
 			}
 
-			//System.out.println("Finished adding pokemon to pokedex.");
-			// System.out.println(myPokedex);
+			System.out.println("Finished adding pokemon from " + databaseName + "\n");
+			System.out.println();
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 	}
+	/**
+	 * Add a pokemon generation to the pokedex
+	 * 
+	 * @param the gen to add
+	 */
+	public void addGenToDex(final int theGenNum) throws Exception {
+		if(theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+		
+		if(!mySelectedGens.contains(theGenNum)) {
+			mySelectedGens.add(theGenNum);
+			fillPokedex(theGenNum);
+		}
+	}
+	
+	/**
+	 * Removes a pokemon gen from the pokedex by resetting the pokedex
+	 * and reading the current selection databases again.
+	 * 
+	 * @param theGenNum
+	 * @throws Exception
+	 */
+	public void removeGenFromDex(final int theGenNum) throws Exception {
+		if(theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+		
+		if(!mySelectedGens.contains(theGenNum)) {
+			throw new Exception(theGenNum + " is not currently selected.");
+		} else if (mySelectedGens.size() == 1) {
+			throw new Exception("Must have at least one pokemon generation selected.");
+		} else {
+			mySelectedGens.remove(theGenNum);
+			resetPokedex();
+			
+			for(int i : mySelectedGens) {
+				fillPokedex(i);
+			}
+			
+		}
+	}
+	
+	/**
+	 * Can remove pokemon gens if the current is greater than 1
+	 * @return boolean
+	 */
+	public boolean canRemoveGen() {
+		return mySelectedGens.size() != 1;
+	}
 
+	/*
+	 * Reset pokedex maps
+	 */
+	private void resetPokedex() {
+		myPokedex.clear();
+		myNameDex.clear();
+		myCounter = 0;
+	}
+	
+	
 	/**
 	 * Add a pokemon to the pokedex map and the name map
 	 * 
@@ -119,9 +213,10 @@ public class Pokedex {
 	public void addPokemon(final String theID, final String theName) {
 		final Pokemon pkmn = new Pokemon(theID, theName);
 		String formatName = formatString(theName);
-		myPokedex.put(Integer.parseInt(theID), pkmn);
-		myNameDex.put(formatName, pkmn);
 		myCounter++;
+		
+		myPokedex.put(myCounter, pkmn);
+		myNameDex.put(formatName, pkmn);
 	}
 
 	/**

@@ -29,10 +29,10 @@ public class TestingClass{
 		 */
 		
 		//printAll();
+		System.out.println(myPokedex.getCount());
+		System.out.println(myPokedex.findPokemon("Farfetch'd"));
+	
 		
-		Pokemon p = new Pokemon("001", "Bulbasaur");
-		Map<Integer, Pokemon> pk = myPokedex.getPokedex();
-		System.out.println(myPokedex.findPokemon("pikachu"));
 		
 		 
 		

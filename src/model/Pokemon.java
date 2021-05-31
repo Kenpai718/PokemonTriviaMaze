@@ -28,7 +28,7 @@ public class Pokemon {
 	/*
 	 * Path for all pokemon pictures
 	 */
-	private final String PATH = "./src/images/gen1/";
+	private final String PATH = "./src/images/Pokedex/";
 
 	/*
 	 * Name of pokemon
@@ -55,9 +55,9 @@ public class Pokemon {
 	 * Create a pokemon with given info
 	 */
 	public Pokemon(final String theID, final String theName) {
-		myID = theID;
+		myID = theID.trim();
 		myIDNum = Integer.parseInt(myID);
-		myName = theName.replaceAll("_", ""); //i.e: Mr._Mime -> Mr.Mime
+		myName = theName.replaceAll("_", "").trim(); //i.e: Mr._Mime -> Mr.Mime
 		myFileName = PATH + theID + theName + ".png";
 		myPNG = readImage(myFileName);
 		

@@ -288,6 +288,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
                 if ("model".equals(evt.getPropertyName())) {
+                		//System.out.println("model called for refresh");
                         myMatrix = (Room[][]) evt.getNewValue();
                         myModel.refresh(myMatrix);
                         repaint();

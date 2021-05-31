@@ -142,6 +142,9 @@ public class QuestionAnswer {
 //	        final Maze maze = Maze.getInstance();
 		Pokemon pkmn = generatePokemonHelper();
 		
+		//clear the pokemon list if it gets full so it does not throw
+		//stack overflow error
+		
 		if (!USED.contains(pkmn)) {
 		        USED.add(pkmn);
 		} else {

@@ -366,10 +366,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 			theG.drawImage(myQuestionImg, X_OFFSET_QUEST, Y_OFFSET_QUEST, myQuestW, myQuestH, this);
 		}
 
-		// TODO: change this so this isn't fired every repaint and only when needed
-		// property to update the control panel buttons
-//		firePropertyChange("newpos", null, null);
-
 	}
 
 	/**
