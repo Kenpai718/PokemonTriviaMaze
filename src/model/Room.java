@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Every room has a Pokemon extended from QuestionAnswer. The room has a
  * question the player must answer to enter the room which is correctly pick the
@@ -10,9 +12,14 @@ package model;
  * @version Spring 2021
  */
 
-public class Room extends QuestionAnswer {
+public class Room extends QuestionAnswer implements Serializable {
 
-	/*
+	/**
+         * 
+         */
+        private static final long serialVersionUID = 575983420176798332L;
+
+        /*
 	 * Starting letter of the room
 	 */
 	private final char START_LETTER = 'A';
@@ -60,7 +67,7 @@ public class Room extends QuestionAnswer {
 	 * @param theRoomNumber how much to increment the room name letter
 	 * @param thePokemon the pokemon to put in this room
 	 */
-	public Room(final int theRoomNumber, Pokemon thePokemon) {
+	public Room(final int theRoomNumber, final Pokemon thePokemon) {
 		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z

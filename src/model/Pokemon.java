@@ -3,6 +3,7 @@ package model;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
@@ -17,39 +18,44 @@ import javax.imageio.ImageIO;
  * @version Spring 2021
  */
 
-public class Pokemon {
+public class Pokemon implements Serializable {
 
-	/*
+	/**
+         * 
+         */
+        private static final long serialVersionUID = -647364516676291280L;
+
+        /*
 	 * Replacement picture path in the case the pokemon's picture cannot be
 	 * found
 	 */
-	private final String MISSING = "./src/images/other/NotFound.png";
+	private static final String MISSING = "./src/images/other/NotFound.png";
 
 	/*
 	 * Path for all pokemon pictures
 	 */
-	private final String PATH = "./src/images/Pokedex/";
+	private static final String PATH = "./src/images/Pokedex/";
 
 	/*
 	 * Name of pokemon
 	 */
-	private String myName;
+	private final String myName;
 	/*
 	 * id of pokemon user in filepath. ie: "001"
 	 */
-	private String myID;
+	private final String myID;
 	/*
 	 * #id of pokemon. ie: "001" = 1
 	 */
-	private int myIDNum;
+	private final int myIDNum;
 	/*
 	 * file name of the pokemon
 	 */
-	private String myFileName;
+	private final String myFileName;
 	/*
 	 * PNG of the pokemon
 	 */
-	private BufferedImage myPNG;
+	private transient BufferedImage myPNG;
 
 	/**
 	 * Create a pokemon with given info
@@ -80,7 +86,7 @@ public class Pokemon {
 				img = ImageIO.read(new File(MISSING));
 				System.out.println(
 						myID + " " + myName + " is missing a picture!");
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -122,7 +128,10 @@ public class Pokemon {
 	 * @return int id
 	 */
 	public BufferedImage getPNG() {
-		return myPNG;
+		if (myPNG == null) {
+		        myPNG = readImage(myFileName);
+		}
+	        return myPNG;
 
 	}
 	
@@ -131,7 +140,7 @@ public class Pokemon {
 	 * 
 	 * @return int -1 = not the same, 1 = same
 	 */
-	public int compareTo(Object theObj) {
+	public int compareTo(final Object theObj) {
 		int res = -1;
 		if(theObj instanceof Pokemon) {
 			if(((Pokemon) theObj).getNum() == this.myIDNum) {

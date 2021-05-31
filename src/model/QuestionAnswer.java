@@ -1,6 +1,7 @@
 package model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,9 +15,14 @@ import java.util.List;
  * @version Spring 2021
  */
 
-public class QuestionAnswer {
+public class QuestionAnswer implements Serializable {
 
-	private final int NUM_CHOICES = 4;
+	/**
+         * 
+         */
+        private static final long serialVersionUID = 6521846190481286645L;
+
+        private static final int NUM_CHOICES = 4;
 	
 	private static List<Pokemon> USED = new ArrayList<Pokemon>();
 
@@ -38,12 +44,12 @@ public class QuestionAnswer {
 	/*
 	 * List of pokemon in a map for #ID lookup
 	 */
-	private final Pokedex myPokedex;
+	private transient final Pokedex myPokedex;
 
 	/*
 	 * Upperbound of random generator
 	 */
-	private final int myUpper;
+	private transient final int myUpper;
 	
 
 	/**
@@ -66,7 +72,7 @@ public class QuestionAnswer {
 	 * 
 	 * @param Pokemon that represents the question
 	 */
-	public QuestionAnswer(Pokemon thePokemon) {
+	public QuestionAnswer(final Pokemon thePokemon) {
 		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
 		myChoices = new ArrayList<String>();

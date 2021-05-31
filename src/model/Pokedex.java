@@ -1,10 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,9 +20,14 @@ import org.sqlite.SQLiteDataSource;
  * @version Spring 2021
  */
 
-public class Pokedex {
+public class Pokedex implements Serializable {
 	
-	/*
+	/**
+         * 
+         */
+        private static final long serialVersionUID = 1230447359362563837L;
+
+        /*
 	 * Maximum supported pokemon generations
 	 */
 	final int MAX_GEN = 7;
@@ -66,7 +71,7 @@ public class Pokedex {
 		// fill pokedex with database
 		try {
 			addGenToDex(1); //gen 1 by default
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -104,7 +109,7 @@ public class Pokedex {
 		}
 		
 		SQLiteDataSource ds = null;
-		String databaseName = "Gen" + theNum + "Pokedex";
+		final String databaseName = "Gen" + theNum + "Pokedex";
 
 		// establish connection (creates db file if it does not exist :-)
 		try {
@@ -179,7 +184,7 @@ public class Pokedex {
 			mySelectedGens.remove(theGenNum);
 			resetPokedex();
 			
-			for(int i : mySelectedGens) {
+			for(final int i : mySelectedGens) {
 				fillPokedex(i);
 			}
 			
@@ -212,7 +217,7 @@ public class Pokedex {
 	 */
 	public void addPokemon(final String theID, final String theName) {
 		final Pokemon pkmn = new Pokemon(theID, theName);
-		String formatName = formatString(theName);
+		final String formatName = formatString(theName);
 		myCounter++;
 		
 		myPokedex.put(myCounter, pkmn);

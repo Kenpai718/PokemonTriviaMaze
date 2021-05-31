@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -23,16 +22,12 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
-import model.TriviaGame;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.MazeGUI.MazeModel;
 import view.viewHelper.QuestionModePanel;
-import view.viewHelper.QuestionRoomGUI;
-import view.viewHelper.TextRoomGUI;
-import view.viewHelper.TutorialPanel;
 
 /**
  * Setups playable game visuals on a panel
@@ -165,7 +160,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	/*
 	 * Panel that holds multiple question/answers gamemodes
 	 */
-	private QuestionModePanel myQuestPanels;
+	private final QuestionModePanel myQuestPanels;
 
 	/*
 	 * Boolean to know if the picture is hidden or visible
@@ -320,8 +315,9 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 * Full refresh that updates all important components for the gui
 	 */
 	public void refreshGUI() {
-
-		// show question mark if pokemon has not been revealed yet
+	        
+	        
+		// show question mark if pokemon has not been revealed yet	        
 		myShowQMark = !(myMaze.getAttemptRoom().hasVisited());
 		refreshPokemonImage();
 

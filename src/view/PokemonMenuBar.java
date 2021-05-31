@@ -1,20 +1,26 @@
 package view;
 
-import java.awt.CheckboxMenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
 
 import model.Maze;
 import model.Pokedex;
@@ -22,8 +28,6 @@ import model.Pokemon;
 import model.Room;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.TutorialPanel;
-import javax.swing.JCheckBox;
-import javax.swing.JList;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -41,12 +45,12 @@ public class PokemonMenuBar extends JMenuBar {
 	private JMenu myGamemodeMenu;
 	private JMenu myGenSelectMenu;
 	private ButtonGroup myGamemodes;
-	private final Maze myMaze;
+	private Maze myMaze;
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
 	private boolean myReveal;
 	private final TutorialPanel myTutorial;
-	private Pokedex myPokedex;
+	private final Pokedex myPokedex;
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts the
@@ -92,7 +96,7 @@ public class PokemonMenuBar extends JMenuBar {
 		setupGenSelectMenu();
 		this.add(myGenSelectMenu);
 
-		JList list = new JList();
+		final JList list = new JList();
 		myGenSelectMenu.add(list);
 
 		/*
@@ -108,9 +112,60 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupFileMenu() {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
+		save.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                final JFileChooser fileChooser = new JFileChooser("Save");
+                                if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+                                        try (final FileOutputStream file = new FileOutputStream(fileChooser.getSelectedFile());
+                                             final ObjectOutputStream out = new ObjectOutputStream(file);) {
+                                                out.writeObject(myMaze);
+                                                System.out.println("Maze has been Saved: "+ myMaze);
+                                                
+                                        } catch (final FileNotFoundException e1) {
+                                                // TODO Auto-generated catch block
+                                                e1.printStackTrace();
+                                        } catch (final IOException e1) {
+                                                // TODO Auto-generated catch block
+                                                e1.printStackTrace();
+                                        }
+                                }
+                        }
+		        
+		});
 		myFileMenu.add(save);
 
 		final JMenuItem load = new JMenuItem("Load");
+                load.addActionListener(new ActionListener() {
+                        
+                        
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                                // TODO Auto-generated method stub
+                                final JFileChooser fileChooser = new JFileChooser("Load");
+                                if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+                                        try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
+                                             final ObjectInputStream in = new ObjectInputStream(file);) {
+                                                myMaze = (Maze) in.readObject();
+                                                firePropertyChange("model", null, myMaze.getMatrix());
+                                                myPanel.refreshGUI();
+                                                System.out.println("Maze has been Loaded: "+ myMaze);
+                                                
+                                        } catch (final FileNotFoundException e1) {
+                                                // TODO Auto-generated catch block
+                                                e1.printStackTrace();
+                                        } catch (final IOException e1) {
+                                                // TODO Auto-generated catch block
+                                                e1.printStackTrace();
+                                        } catch (final ClassNotFoundException e1) {
+                                                // TODO Auto-generated catch block
+                                                e1.printStackTrace();
+                                        }
+                                }
+                        }
+                        
+                });
 		myFileMenu.add(load);
 
 		myFileMenu.addSeparator();
@@ -259,46 +314,46 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/**
-	 * Sets up the gamemode menu for changing the gamemode
-	 */
-	private void setupGamemodesMenu() {
-
-		myGamemodes = new ButtonGroup();
-		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
-		myGamemodeMenu.add(choice);
-		myGamemodes.add(choice);
-		choice.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// System.out.println("action fired");
-				// myPanel.setPanels(true);
-				firePropertyChange("changegm", null, 1);
-
-			}
-
-		});
-
-		final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
-		myGamemodeMenu.add(input);
-		myGamemodes.add(input);
-		input.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// System.out.println("action fired");
-				// myPanel.setPanels(false);
-				firePropertyChange("changegm", null, 2);
-
-			}
-
-		});
-
-		// set initial gamemodechoice
-		choice.setSelected(true);
-
-	}
+//	/**
+//	 * Sets up the gamemode menu for changing the gamemode
+//	 */
+//	private void setupGamemodesMenu() {
+//
+//		myGamemodes = new ButtonGroup();
+//		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
+//		myGamemodeMenu.add(choice);
+//		myGamemodes.add(choice);
+//		choice.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				// System.out.println("action fired");
+//				// myPanel.setPanels(true);
+//				firePropertyChange("changegm", null, 1);
+//
+//			}
+//
+//		});
+//
+//		final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
+//		myGamemodeMenu.add(input);
+//		myGamemodes.add(input);
+//		input.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				// System.out.println("action fired");
+//				// myPanel.setPanels(false);
+//				firePropertyChange("changegm", null, 2);
+//
+//			}
+//
+//		});
+//
+//		// set initial gamemodechoice
+//		choice.setSelected(true);
+//
+//	}
 
 	/*
 	 * Setup select checkbox for pokemon gen select menu
@@ -306,13 +361,13 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupGenSelectMenu() {
 
 		// current supported pokemon generations
-		String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
+		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
 				"Gen 6 (649-721)", "Gen 7 (721-809)" };
-		ArrayList<JCheckBox> boxList = new ArrayList<JCheckBox>();
+		final ArrayList<JCheckBox> boxList = new ArrayList<JCheckBox>();
 
 		// add all to a checkbox list
 		for (int i = 0; i < gens.length; i++) {
-			JCheckBox genBox = new JCheckBox(gens[i]);
+			final JCheckBox genBox = new JCheckBox(gens[i]);
 			genBox.addActionListener(new GenSelectListener(i + 1, genBox));
 			myGenSelectMenu.add(genBox);
 			boxList.add(genBox);
@@ -339,16 +394,16 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class GenSelectListener implements ActionListener {
 
-		private JCheckBox myBox;
+		private final JCheckBox myBox;
 		private final int myGen;
 
-		public GenSelectListener(final int theNum, JCheckBox theBox) {
+		public GenSelectListener(final int theNum, final JCheckBox theBox) {
 			myGen = theNum;
 			myBox = theBox;
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
 			String msg;
 			if (myBox.isSelected()) { // add pokemon gen
@@ -359,7 +414,7 @@ public class PokemonMenuBar extends JMenuBar {
 					JOptionPane.showMessageDialog(null, msg);
 					resetAll();
 
-				} catch (Exception e1) {
+				} catch (final Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -370,7 +425,7 @@ public class PokemonMenuBar extends JMenuBar {
 						msg = "Gen " + myGen + " Pokemon have been removed. Game reset!";
 						JOptionPane.showMessageDialog(null, msg);
 						resetAll();
-					} catch (Exception e1) {
+					} catch (final Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -487,7 +542,6 @@ public class PokemonMenuBar extends JMenuBar {
 		public Pokemon readNewPokemonInput(final String theMsg) {
 			final String input = (String) JOptionPane.showInputDialog(null, theMsg, "Type a Pokemon name to insert",
 					JOptionPane.INFORMATION_MESSAGE, myDittoIcon, null, "");
-			final Scanner scan;
 			Pokemon res = myPokedex.findPokemon(0);
 			if (input != null && !input.isEmpty()) {
 				myCancel = false;

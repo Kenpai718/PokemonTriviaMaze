@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -16,9 +17,14 @@ import java.util.ArrayList;
  * @version Spring 2021
  */
 
-public class Maze {
+public class Maze implements Serializable {
 
-	/*
+	/**
+         * 
+         */
+        private static final long serialVersionUID = -1781677412081562393L;
+        
+        /*
 	 * Constants
 	 */
 	private final static int ROWS = 4;
@@ -46,19 +52,19 @@ public class Maze {
 	 * Keeps track of how many rooms have been made in the maze. Mainly for
 	 * debugging.
 	 */
-	private int roomCounter;
+	private transient int roomCounter;
 
 	/*
 	 * List of Pokemon objects
 	 */
 	private ArrayList<Pokemon> myPokemonList;
 	
-	private final Pokedex myPokedex;
+	private transient final Pokedex myPokedex;
 
 	/*
 	 * Boolean to verify when the player has won the game
 	 */
-	private boolean myWinCondition;
+	private transient boolean myWinCondition;
 
 	// /*
 	// * Big data storage of all pokemon info
@@ -104,6 +110,9 @@ public class Maze {
 		}
 		return singleMaze;
 	}
+	
+	
+	
 
 	/**
 	 * Fills matrix with new rooms that have questions and pokemon
@@ -348,6 +357,14 @@ public class Maze {
 		
 		
 	}
+	
+	private Object readResolve() {
+                final Maze instance = getInstance();
+                instance.myMatrix = myMatrix;
+                instance.myAttemptLocation = myAttemptLocation;
+                instance.myPlayerLocation = myPlayerLocation;
+                return instance;
+        }
 
 	// TODO: DELETE LATER
 	// used to visually check which rooms are set to blocked
