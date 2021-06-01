@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
 import view.PokemonGUI;
 
 
@@ -28,7 +29,8 @@ public class PkmnTriviaMain {
     public static void main(final String... theArgs) {
         /* Use an appropriate Look and Feel */
         try {
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+                UIManager.setLookAndFeel(
+                                UIManager.getSystemLookAndFeelClassName());
         } catch (final UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         } catch (final IllegalAccessException ex) {

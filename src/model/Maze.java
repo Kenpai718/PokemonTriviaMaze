@@ -1,6 +1,8 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
@@ -16,22 +18,25 @@ import java.util.ArrayList;
  * @version Spring 2021
  */
 
-public class Maze {
+public class Maze implements Serializable {
+
+	/**
+	     * 
+	     */
+	private static final long serialVersionUID = -1781677412081562393L;
 
 	/*
 	 * Constants
 	 */
 	private final static int ROWS = 4;
 	private final static int COLS = 4;
-	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
-			(ROWS - 1) }; // end of maze
-
+	private final static int START = 0;
+	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (COLS - 1) }; // end of maze
+	private int[] myWinLocation;
 	/*
 	 * 2D array to store rooms in the maze
 	 */
-	private final Room[][] myMatrix;
-	
-	private boolean[][] myEnterMatrix;
+	private Room[][] myMatrix;
 
 	/*
 	 * Location of the player in the maze
@@ -47,19 +52,20 @@ public class Maze {
 	 * Keeps track of how many rooms have been made in the maze. Mainly for
 	 * debugging.
 	 */
-	private int roomCounter;
+	private transient int roomCounter;
 
 	/*
 	 * List of Pokemon objects
 	 */
-	private final ArrayList<Pokemon> myPokemonList;
+	private ArrayList<Pokemon> myPokemonList;
+
+	private transient final Pokedex myPokedex;
 
 	/*
 	 * Boolean to verify when the player has won the game
 	 */
-	private boolean myWinCondition;
+	private transient boolean myWinCondition;
 
-	private boolean myLoseCondition;
 	// /*
 	// * Big data storage of all pokemon info
 	// */
@@ -80,16 +86,17 @@ public class Maze {
 	private Maze() {
 		roomCounter = 0;
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { 0, 0 };
+		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
+		myWinLocation = WIN_LOCATION;
 		myPokemonList = fillPokemonList();
 		// TODO: test stuff delete later
-		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+		myMatrix[START][START].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
-		myLoseCondition = false;
 
 		// set the first room to be visited since we dont play that room
-		myMatrix[0][0].setVisited(true);
+		myMatrix[START][START].setVisited(true);
+		myPokedex = Pokedex.getInstance();
 
 	}
 
@@ -111,7 +118,12 @@ public class Maze {
 	 * @return Room[][] matrix of instantiated rooms
 	 */
 	private Room[][] fillRooms() {
-		final Room[][] res = new Room[ROWS][COLS];
+		// TODO Auto-generated method stub
+		Room[][] res = new Room[ROWS][COLS];
+		;
+		if (myMatrix != null) {
+			res = new Room[getRows()][getCols()];
+		}
 
 		for (int i = 0; i < res.length; i++) {
 			for (int j = 0; j < res[0].length; j++) {
@@ -128,70 +140,8 @@ public class Maze {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		return myPlayerLocation[0] == WIN_LOCATION[0]
-				&& myPlayerLocation[1] == WIN_LOCATION[1];
+		return myPlayerLocation[0] == myWinLocation[0] && myPlayerLocation[1] == myWinLocation[1];
 	}
-	
-	/**
-	 * Returns if the player has lost yet
-	 * 
-	 * @return boolean t = lose, f = not lose
-	 */
-	public boolean isLoseCondition() {
-		return move(fillEntryMatrix());
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	// TODO: fill/update matrix
-	public boolean[][] fillEntryMatrix() {
-		boolean[][] matrix = new boolean[ROWS][COLS];
-		for (int i = 0; i < ROWS; i++) {
-			for (int j = 0; j < COLS; j++) {
-				final Room r = myMatrix[i][j];
-				if(r.canEnter()) {
-					matrix[i][j] = true;
-				} else {
-					matrix[i][j] = false;
-				}
-			}
-		}
-		return matrix;
-	}
-	
-	/**
-	 * Returns if the player is completely blocked in
-	 * 
-	 * @param theEntryMaze a matrix that keepts track of whether the user can enter a room or not
-	 * @return boolean t = if there is no path to the exit, f = is there is still a path to the exit
-	 */
-	public boolean move(boolean[][] theEntryMatrix) {
-		// Mark reachable (from top left) nodes  
-	    // in first row and first column. 
-	    for (int i = 1; i < ROWS; i++)  
-	        if (theEntryMatrix[0][i] != false) 
-	        	theEntryMatrix[0][i] = theEntryMatrix[0][i - 1];    
-	  
-	    for (int j = 1; j < COLS; j++)  
-	        if (theEntryMatrix[j][0] != false) 
-	        	theEntryMatrix[j][0] = theEntryMatrix[j - 1][0];     
-	  
-	    // Mark reachable nodes in remaining 
-	    // matrix. 
-	    for (int i = 1; i < ROWS; i++)  
-	        for (int j = 1; j < COLS; j++)  
-	          if (theEntryMatrix[i][j] != false) 
-	        	  theEntryMatrix[i][j] = true;        
-	      
-	    // return true if right bottom true
-	    return (theEntryMatrix[ROWS - 1][COLS - 1] == true);
-	}
-	
 
 	/**
 	 * winning location
@@ -199,14 +149,14 @@ public class Maze {
 	 * @return [0] = win row, [1] = win col
 	 */
 	public int[] getWinLocation() {
-		return WIN_LOCATION.clone();
+		return myWinLocation.clone();
 	}
 
 	/**
 	 * Returns the players current location
 	 * 
-	 * @return int[] an integer array of the players current location 0 = row, 1
-	 *         = col
+	 * @return int[] an integer array of the players current location 0 = row, 1 =
+	 *         col
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
@@ -220,14 +170,11 @@ public class Maze {
 	 */
 	public void setPlayerLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set player location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 
-				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]]
-						.setPlayer(false);
+				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
@@ -235,9 +182,10 @@ public class Maze {
 			e.printStackTrace();
 		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
-		getCurrRoom().setVisited(true);
+		if (!getCurrRoom().hasVisited()) {
+			getCurrRoom().setVisited(true);
+		}
 		myWinCondition = isWinCondition();
-
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
 	}
@@ -247,10 +195,6 @@ public class Maze {
 	 */
 	public Room getCurrRoom() {
 		return myMatrix[myPlayerLocation[0]][myPlayerLocation[1]];
-	}
-	
-	public Room getWinRoom() {
-		return myMatrix[ROWS - 1][COLS - 1];
 	}
 
 	/**
@@ -275,10 +219,8 @@ public class Maze {
 
 	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > ROWS
-					|| theNewPos[1] > COLS) {
-				throw new Exception("Cannot set attempt location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
@@ -292,8 +234,7 @@ public class Maze {
 	 * 
 	 */
 	public boolean hasNotMoved() {
-		return myPlayerLocation[0] == myAttemptLocation[0]
-				&& myPlayerLocation[1] == myAttemptLocation[1];
+		return myPlayerLocation[0] == myAttemptLocation[0] && myPlayerLocation[1] == myAttemptLocation[1];
 	}
 
 	/**
@@ -305,9 +246,8 @@ public class Maze {
 	 */
 	public Room getRoom(final int theR, final int theC) throws Exception {
 		Room res = null;
-		if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-			throw new Exception(
-					"Room does not exist at [" + theR + ", " + theC + "]");
+		if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
+			throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 		} else {
 			res = myMatrix[theR][theC];
 		}
@@ -318,21 +258,19 @@ public class Maze {
 	/**
 	 * Set a new room at a location in matrix
 	 * 
-	 * @param the new room
+	 * @param the  new room
 	 * @param theR the row index
 	 * @param theC the col index
 	 */
-	public void setRoomInMatrix(final Room theRoom, final int theR,
-			final int theC) {
+	public void setRoomInMatrix(final Room theRoom, final int theR, final int theC) {
 		try {
-			if (theR < 0 || theC < 0 || theR > ROWS || theC > COLS) {
-				throw new Exception(
-						"Room does not exist at [" + theR + ", " + theC + "]");
+			if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
+				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 			} else {
 				System.out.println("added" + theRoom.getAnswer());
 				myMatrix[theR][theC] = theRoom;
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -362,12 +300,20 @@ public class Maze {
 	}
 
 	/**
+	 * @param myMatrix the myMatrix to set
+	 */
+	public void setMatrix(final Room[][] theMatrix) {
+		myMatrix = theMatrix;
+		myWinLocation = new int[] { getRows() - 1, getCols() - 1 };
+	}
+
+	/**
 	 * Getter for row count
 	 * 
 	 * @return row count
 	 */
 	public int getRows() {
-		return ROWS;
+		return myMatrix.length;
 	}
 
 	/**
@@ -376,15 +322,62 @@ public class Maze {
 	 * @return col count
 	 */
 	public int getCols() {
-		return COLS;
+		return myMatrix[0].length;
 	}
-	
+
 	/**
-	 * TODO:
-	 * Reset the maze to default and instantiate new rooms
+	 * If player is at the start of the game
+	 * 
+	 * @return boolean true/false
 	 */
-	public static void reset() {
-		
+	public boolean isAtStart() {
+		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START
+				&& myAttemptLocation[1] == START;
+	}
+
+	/**
+	 * Reset the maze to default and instantiate new rooms Make a new instance of
+	 * the maze
+	 */
+	public void reset() {
+
+		// singleMaze = new Maze();
+		roomCounter = 0;
+//		clearMatrix();
+		myMatrix = fillRooms();
+		myPlayerLocation = new int[] { 0, 0 };
+		myAttemptLocation = myPlayerLocation.clone();
+		// TODO: test stuff delete later
+		myMatrix[0][0].setPlayer(true); // put player location at 0,0
+		myWinCondition = false;
+
+		// set the first room to be visited since we dont play that room
+		myMatrix[0][0].setVisited(true);
+		myPokemonList.clear();
+		myPokemonList = fillPokemonList();
+
+	}
+
+//	private void changeRooms() {
+//	        // TODO Auto-generated method stub
+//                for (int i = 0; i < getCols; i++) {
+//                        for (int j = 0; j < res[0].length; j++) {
+//                                myMatrix[i][j] 
+//                        }
+//                }
+//        }
+
+        private void clearMatrix() {
+                // TODO Auto-generated method stub
+                Arrays.stream(myMatrix).forEach(x -> Arrays.fill(x, null));
+        }
+
+        private Object readResolve() {
+		final Maze instance = getInstance();
+		instance.myMatrix = myMatrix;
+		instance.myAttemptLocation = myAttemptLocation;
+		instance.myPlayerLocation = myPlayerLocation;
+		return instance;
 	}
 
 	// TODO: DELETE LATER

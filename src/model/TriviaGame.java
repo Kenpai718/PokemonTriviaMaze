@@ -47,22 +47,24 @@ public class TriviaGame extends JPanel {
 	public TriviaGame() {
 		setBackground(BG);
 		setPreferredSize(new Dimension(1920, 1080));
-
+		
+		// TODO: Needs to get Moved to View
+		
 		final JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon("/src/images/other/WhoPKMNLogo.png"));
 
 		final JButton btnNewButton = new JButton("Start Game");
 
-		JComboBox gamemodeBox = new JComboBox(GAMEMODES);
+		final JComboBox gamemodeBox = new JComboBox(GAMEMODES);
 
-		JComboBox playerBox = new JComboBox(AVATARS);
+		final JComboBox playerBox = new JComboBox(AVATARS);
 
-		JButton btnNewButton_1 = new JButton("Tutorial");
+		final JButton btnNewButton_1 = new JButton("Tutorial");
 
-		JLabel lblNewLabel_1 = new JLabel("Choose Avatar");
+		final JLabel lblNewLabel_1 = new JLabel("Choose Avatar");
 
-		JLabel lblNewLabel_2 = new JLabel("Pick Difficulty");
-		GroupLayout groupLayout = new GroupLayout(this);
+		final JLabel lblNewLabel_2 = new JLabel("Pick Difficulty");
+		final GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(groupLayout
 				.createParallelGroup(
 						Alignment.LEADING)

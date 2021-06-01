@@ -2,29 +2,35 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.KeyStroke;
+import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
 import model.Room;
 import view.viewHelper.LabelPanel;
-import view.viewHelper.MazeGUI.MazeModel;
+import view.viewHelper.TutorialPanel;
 
 /**
  * Menubar for the trivia game Has file, help menus.
@@ -40,14 +46,19 @@ public class PokemonMenuBar extends JMenuBar {
 	private JMenu myHelpMenu;
 	private JMenu myFileMenu;
 	private JMenu myGamemodeMenu;
+	private JMenu myGenSelectMenu;
+	private ArrayList<JCheckBox> myGenBoxList;
 	private ButtonGroup myGamemodes;
-	private final Maze myMaze;
+	private Maze myMaze;
 	private final JFrame myFrame;
 	private final PokemonPanel myPanel;
+	private boolean myReveal;
+	private final TutorialPanel myTutorial;
+	private final Pokedex myPokedex;
 
 	/**
-	 * The constructor for the Menu Bar that sets up the the fields and starts
-	 * the menubar gui setup
+	 * The constructor for the Menu Bar that sets up the the fields and starts the
+	 * menubar gui setup
 	 * 
 	 * @param theFrame
 	 */
@@ -57,7 +68,19 @@ public class PokemonMenuBar extends JMenuBar {
 		myFrame = theFrame.getFrame();
 		myPanel = theFrame.getPanel();
 		myMaze = Maze.getInstance();
+		myPokedex = Pokedex.getInstance();
+		myTutorial = new TutorialPanel(myPanel);
 		setupMenuBar();
+		addListeners();
+
+	}
+
+	private void addListeners() {
+		// TODO Auto-generated method stub
+		this.addPropertyChangeListener(myPanel);
+		this.addPropertyChangeListener(myPanel.getMazeGUI());
+		this.addPropertyChangeListener(myPanel.getMyControlPanel());
+
 	}
 
 	/**
@@ -66,19 +89,24 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupMenuBar() {
 
 		myFileMenu = new JMenu("File");
-		myFileMenu.setMnemonic(KeyEvent.VK_F);
 		setupFileMenu();
 		this.add(myFileMenu);
 
 		myHelpMenu = new JMenu("Help");
-		myHelpMenu.setMnemonic(KeyEvent.VK_H);
 		setupHelpMenu();
 		this.add(myHelpMenu);
 
-		myGamemodeMenu = new JMenu("Gamemode");
-		myGamemodeMenu.setMnemonic(KeyEvent.VK_G);
-		setupGamemodesMenu();
-		this.add(myGamemodeMenu);
+		myGenSelectMenu = new JMenu("Select Pokemon Generation(s)");
+		setupGenSelectMenu();
+		this.add(myGenSelectMenu);
+
+		final JList list = new JList();
+		myGenSelectMenu.add(list);
+
+		/*
+		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
+		 * this.add(myGamemodeMenu);
+		 */
 
 	}
 
@@ -88,36 +116,97 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupFileMenu() {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
-		save.setMnemonic(KeyEvent.VK_S);
-        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-        myFileMenu.add(save);
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 
-        //save.addActionListener(new ActionListener() {
-	    //});
+				final JFileChooser fileChooser = new JFileChooser("Save");
+				fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
+                                fileChooser.setAcceptAllFileFilterUsed(false);
+				//read the file from file chooser
+				if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+					// get the save file name and add a suffix to it to denote is it a a game file
+					// for this maze
+					final File saveFile = new File(fileChooser.getSelectedFile() + ".maze");
 
+					try (final FileOutputStream fileOut = new FileOutputStream(saveFile);
+							final ObjectOutputStream objOut = new ObjectOutputStream(fileOut);) {
 
-        final JMenuItem load = new JMenuItem("Load");
-        load.setMnemonic(KeyEvent.VK_L);
-        load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
-        myFileMenu.add(load);
+						// use serialization to write the maze
+						objOut.writeObject(myMaze);
 
-        //load.addActionListener(new ActionListener() {
-		//});
+						JOptionPane.showMessageDialog(null, "Maze has been Saved: " + saveFile.getName());
+
+					} catch (final FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+
+		});
+		myFileMenu.add(save);
+
+		final JMenuItem load = new JMenuItem("Load");
+		load.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				final JFileChooser fileChooser = new JFileChooser("Load");
+				fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+					// get the save file name and check if it has the right suffix
+					final String fileName = fileChooser.getSelectedFile().getName();
+					
+					/*
+					 * Only read files that end with the proper suffix
+					 */
+					if (fileName.endsWith(".maze")) {
+						final File saveFile = new File(fileChooser.getSelectedFile() + ".maze");
+						
+						try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
+								final ObjectInputStream in = new ObjectInputStream(file);) {
+							System.out.println("Start Load: " + myMaze);
+							myMaze = (Maze) in.readObject();
+							firePropertyChange("model", null, myMaze.getMatrix());
+							myPanel.refreshGUI();
+							JOptionPane.showMessageDialog(null, "Maze has been Loaded: " + fileName);
+
+						} catch (final FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (final IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (final ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} else { //wrong file type inform user
+						JOptionPane.showMessageDialog(null,
+								"Cannot load " + fileName + " because it is not a \".maze\" file");
+					}
+				}
+			}
+
+		});
+		myFileMenu.add(load);
 
 		myFileMenu.addSeparator();
 
 		// TODO: game reset button
 		final JMenuItem reset = new JMenuItem("Reset");
-		reset.setMnemonic(KeyEvent.VK_R);
+		reset.addActionListener(new ResetListener());
 		myFileMenu.add(reset);
-		
-		//reset.addActionListener(new ActionListener() {
-	    //});
 
 		myFileMenu.addSeparator();
 
 		final JMenuItem exit = new JMenuItem("Exit");
-		exit.setMnemonic(KeyEvent.VK_E);
 		exit.addActionListener(theEvent -> System.exit(0));
 		myFileMenu.add(exit);
 	}
@@ -129,28 +218,27 @@ public class PokemonMenuBar extends JMenuBar {
 		// TODO Auto-generated method stub
 
 		final JMenuItem about = new JMenuItem("About");
-		about.setMnemonic(KeyEvent.VK_A);
 		about.addActionListener(new ActionListener() {
+
+			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
+					+ "\nSpring 2021\n" + "\nDISCLAIMER:\n"
+					+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime."
+					+ "\nWe are not affliated or endorsed with the Pokemon company. All copyright belongs to Nintendo/Gamefreak.";
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(myFrame,
-						"Created by: AJ Downey, Kenneth Ahrens, "
-								+ "Katlyn Malone\n Spring 2021",
-						"About", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, aboutMessage, "About Us", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		});
 		myHelpMenu.add(about);
 
 		final JMenuItem tutorial = new JMenuItem("Tutorial");
-		tutorial.setMnemonic(KeyEvent.VK_T);
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				JOptionPane.showMessageDialog(myFrame, "This is a Tutorial!",
-						"About", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, myTutorial, "How to play", JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 		myHelpMenu.add(tutorial);
@@ -163,35 +251,29 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	private void setUpCheats() {
 		final JMenu cheats = new JMenu("Cheats");
-		cheats.setMnemonic(KeyEvent.VK_C);
 		myHelpMenu.add(cheats);
 
-		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem(
-				"Reveal Pokemon");
-		reveal.setMnemonic(KeyEvent.VK_R);
+		final JCheckBoxMenuItem reveal = new JCheckBoxMenuItem("Reveal Pokemon");
 		reveal.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				final boolean selected = reveal.isSelected();
-				myPanel.setImage();
-				if (selected) {
-					myPanel.setImgBrightness(1);
-				} else {
-					myPanel.setImgBrightness(0);
-				}
+				myReveal = reveal.isSelected();
+				myPanel.setMyReveal(myReveal);
+				firePropertyChange("showpkmn", null, null);
+				myPanel.refreshGUI();
 
 			}
 		});
 		cheats.add(reveal);
 
 		final JCheckBoxMenuItem answer = new JCheckBoxMenuItem("Show Answer");
-		answer.setMnemonic(KeyEvent.VK_A);
 		answer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				final boolean selected = answer.isSelected();
-				LabelPanel labels = myPanel.getLabelPanel();
-				myPanel.setImage();
+				final LabelPanel labels = myPanel.getLabelPanel();
+				myPanel.refreshGUI();
 				if (selected) {
 					labels.enableShowAnswer(true);
 				} else {
@@ -205,26 +287,37 @@ public class PokemonMenuBar extends JMenuBar {
 		cheats.addSeparator();
 
 		final JMenuItem unlock = new JMenuItem("Unlock All Doors");
-		unlock.setMnemonic(KeyEvent.VK_U);
 		unlock.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
 				final Room[][] rooms = myMaze.getMatrix();
+				boolean change = true;
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
-						rooms[i][j].setVisited(true);
-						repaint();
+						final Room room = rooms[i][j];
+						change = change && room.hasVisited();
+						rooms[i][j].setVisited(!change);
+						if (room.isPlayerHere() || (i == 0 && j == 0)) {
+							rooms[i][j].setVisited(true);
+						}
+
+//						repaint();
 					}
 				}
+				if (change) {
+					unlock.setText("Unlock All Doors");
+				} else {
+					unlock.setText("Relock All Doors");
+				}
+				myPanel.refreshGUI();
 			}
 
 		});
 		cheats.add(unlock);
 
 		final JMenuItem removeBlocked = new JMenuItem("Reset Blocked Rooms");
-		removeBlocked.setMnemonic(KeyEvent.VK_R);
 		removeBlocked.addActionListener(new ActionListener() {
 
 			@Override
@@ -234,74 +327,270 @@ public class PokemonMenuBar extends JMenuBar {
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
 						rooms[i][j].setEntry(true);
-						repaint();
+//						repaint();
 					}
 				}
+				myPanel.refreshGUI();
 			}
 
 		});
 		cheats.add(removeBlocked);
 
 		final JMenuItem insert = new JMenuItem("Insert New Pokemon");
-		insert.setMnemonic(KeyEvent.VK_I);
 		insert.addActionListener(new InsertListener());
 		cheats.add(insert);
 
 		final JMenuItem teleport = new JMenuItem("Teleport");
-		teleport.setMnemonic(KeyEvent.VK_T);
 		teleport.addActionListener(new TeleportListener());
 		cheats.add(teleport);
 
 	}
 
-	/**
-	 * Sets up the gamemode menu for changing the gamemode
+//	/**
+//	 * Sets up the gamemode menu for changing the gamemode
+//	 */
+//	private void setupGamemodesMenu() {
+//
+//		myGamemodes = new ButtonGroup();
+//		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple Choice");
+//		myGamemodeMenu.add(choice);
+//		myGamemodes.add(choice);
+//		choice.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				// System.out.println("action fired");
+//				// myPanel.setPanels(true);
+//				firePropertyChange("changegm", null, 1);
+//
+//			}
+//
+//		});
+//
+//		final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User Input");
+//		myGamemodeMenu.add(input);
+//		myGamemodes.add(input);
+//		input.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				// System.out.println("action fired");
+//				// myPanel.setPanels(false);
+//				firePropertyChange("changegm", null, 2);
+//
+//			}
+//
+//		});
+//
+//		// set initial gamemodechoice
+//		choice.setSelected(true);
+//
+//	}
+
+	/*
+	 * Setup select checkbox for pokemon gen select menu
 	 */
-	private void setupGamemodesMenu() {
+	private void setupGenSelectMenu() {
 
-		myGamemodes = new ButtonGroup();
-		final JRadioButtonMenuItem choice = new JRadioButtonMenuItem(
-				"Multiple Choice");
-		myGamemodeMenu.add(choice);
-		myGamemodes.add(choice);
-		choice.addActionListener(new ActionListener() {
+		// current supported pokemon generations
+		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)",
+				"Gen 5 (493-649)", "Gen 6 (649-721)", "Gen 7 (721-809)" };
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// System.out.println("action fired");
-				// myPanel.setPanels(true);
-				firePropertyChange("changegm", null, true);
+		myGenBoxList = new ArrayList<JCheckBox>();
 
+		// add all to a checkbox list
+		for (int i = 0; i < gens.length; i++) {
+			final JCheckBox genBox = new JCheckBox(gens[i]);
+			genBox.addActionListener(new GenSelectListener(i + 1, genBox));
+			myGenSelectMenu.add(genBox);
+			myGenBoxList.add(genBox);
+
+			if (i == 0) {
+				genBox.setSelected(true); // gen 1 selected by defau;t
 			}
+		}
 
-		});
+		// mass add or remove gen
+		final JMenuItem selectAll = new JMenuItem("Play All Gens");
+		selectAll.addActionListener(new GenSelectAllListener(selectAll));
+		myGenSelectMenu.add(selectAll);
+	}
 
-		final JRadioButtonMenuItem input = new JRadioButtonMenuItem(
-				"User Input");
-		myGamemodeMenu.add(input);
-		myGamemodes.add(input);
-		input.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(final ActionEvent e) {
-				// System.out.println("action fired");
-				// myPanel.setPanels(false);
-				firePropertyChange("changegm", null, false);
-
-			}
-
-		});
-
-		// set initial gamemodechoice
-		choice.setSelected(true);
-
+	/*
+	 * Reset game to start with new pokemon gens
+	 */
+	private void resetAll() {
+		myMaze.reset();
+		firePropertyChange("model", null, myMaze.getMatrix());
+		myPanel.refreshGUI();
 	}
 
 	/* Listener classes */
 
+	/*
+	 * Add a pokemon generation to the pokedex
+	 */
+	class GenSelectListener implements ActionListener {
+
+		private final JCheckBox myBox;
+		private final int myGen;
+
+		public GenSelectListener(final int theNum, final JCheckBox theBox) {
+			myGen = theNum;
+			myBox = theBox;
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			// TODO Auto-generated method stub
+		        final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+        	                @Override
+        	                protected Void doInBackground() throws Exception {
+        	                        System.out.println("Executing");
+        	                        Thread.sleep(750);
+                                        resetAll();
+                                        return null;
+		                }      
+		        };
+			String msg;
+			if (myBox.isSelected()) { // add pokemon gen
+
+				try {
+					myPokedex.addGenToDex(myGen);
+//					resetAll();
+					mySwingWorker.execute();
+					msg = "Gen " + myGen + " Pokemon can now be encountered! Game has been reset.";
+					JOptionPane.showMessageDialog(null, msg);					
+
+				} catch (final Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} else if (!myBox.isSelected()) {
+				if (myPokedex.canRemoveGen()) { // remove pokemon gen
+					try {
+						myPokedex.removeGenFromDex(myGen);
+//						resetAll();
+						mySwingWorker.execute();
+						msg = "Gen " + myGen + " Pokemon have been removed. Game reset!";
+						JOptionPane.showMessageDialog(null, msg);						
+					} catch (final Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else { // cannot remove condition
+					myBox.setSelected(true);
+					msg = "Cannot remove Gen " + myGen + " because at least one generation must be selected to play!";
+					JOptionPane.showMessageDialog(null, msg);
+
+				}
+			}
+
+		}
+
+	}
+
+	/*
+	 * Select/unselect all gens to play on listener
+	 */
+	class GenSelectAllListener implements ActionListener {
+
+		private final JMenuItem myChangeButton;
+		/*
+		 * If user has clicked this button once to add all pokemon
+		 */
+		private boolean myStateChange;
+
+		public GenSelectAllListener(final JMenuItem theChangeButton) {
+			myChangeButton = theChangeButton;
+			myStateChange = false;
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			// TODO Auto-generated method stub
+		        final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                        System.out.println("Executing");
+                                        resetAll();
+                                        return null;
+                                }      
+                        };
+		        
+		        String msg;
+
+			if (!myStateChange) { // add all gens
+				myStateChange = true;
+				msg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
+						+ "Please press \"OK\" and be patient.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myPokedex.addAllGensToDex();
+//				resetAll();
+				mySwingWorker.execute();
+				msg = "All Pokemon generations have been loaded in. Game has been reset.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myChangeButton.setText("Unselect all gens except Gen1");
+
+			} else { // remove all gens
+				myStateChange = false;
+				myPokedex.restoreGensToDefault();
+//				resetAll();
+				mySwingWorker.execute();
+				msg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myChangeButton.setText("Play All Gens");
+			}
+
+			// initialize box selection based on the action
+			selectButtons(myStateChange);
+//			resetAll();
+
+		}
+
+		/**
+		 * Select all gen box buttons depending on state
+		 * 
+		 * @param theState true = all boxes selected, false = all unselected excpet gen
+		 *                 1
+		 */
+		private void selectButtons(final Boolean theState) {
+			for (final JCheckBox box : myGenBoxList) {
+				box.setSelected(theState);
+			}
+
+			// keep gen 1 box selected for the reset remove
+			if (theState == false) {
+				myGenBoxList.get(0).setSelected(true);
+			}
+		}
+
+	}
+
 	/**
-	 * The action listener to add a new Pokemon to the maze at a specified
-	 * location
+	 * Resets the maze to start a new game
+	 * 
+	 * @author ken
+	 *
+	 */
+	class ResetListener implements ActionListener {
+
+		/**
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
+		 */
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			resetAll();
+		}
+
+	}
+
+	/**
+	 * The action listener to add a new Pokemon to the maze at a specified location
 	 * 
 	 * @author Kenneth Ahrens
 	 *
@@ -311,14 +600,12 @@ public class PokemonMenuBar extends JMenuBar {
 		/*
 		 * Icon for ditto
 		 */
-		private final ImageIcon myDittoIcon = new ImageIcon(
-				"./src/images/other/dittoicon.gif");
+		private final ImageIcon myDittoIcon = new ImageIcon("./src/images/other/dittoicon.gif");
 
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/*
 		 * Data map
@@ -343,11 +630,11 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			final String promptCords = "Where to put a new Pokemon in maze? "
-					+ "\n(X Y):";
+					+ "\nRoom Name (Ex: '3') or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
-			myPos = readCordinateInput(promptCords, myTeleportIcon);
+			myPos = readRoomName(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
 				myNewMon = readNewPokemonInput(promptPokemon);
 				if (!myCancel) {
@@ -365,10 +652,10 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		public void putPokemon(final int[] thePos, final Pokemon theNewPkmn) {
 			try {
-				Room r = myMaze.getRoom(thePos[0], thePos[1]);
+				final Room r = myMaze.getRoom(thePos[0], thePos[1]);
 				r.setNewPokemon(theNewPkmn);
 				myPanel.refreshGUI();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -376,25 +663,21 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		/**
-		 * Prompt user for a pokemon and looks for that pokemon name in the
-		 * pokedex
+		 * Prompt user for a pokemon and looks for that pokemon name in the pokedex
 		 * 
 		 * @param theMsg
 		 * @return user inputed Pokemon if found
 		 */
 		public Pokemon readNewPokemonInput(final String theMsg) {
-			final String input = (String) JOptionPane.showInputDialog(null,
-					theMsg, "Type a Pokemon name to insert",
+			final String input = (String) JOptionPane.showInputDialog(null, theMsg, "Type a Pokemon name to insert",
 					JOptionPane.INFORMATION_MESSAGE, myDittoIcon, null, "");
-			final Scanner scan;
 			Pokemon res = myPokedex.findPokemon(0);
 			if (input != null && !input.isEmpty()) {
 				myCancel = false;
 				if (myPokedex.hasPokemon(input)) {
 					res = myPokedex.findPokemon(input);
 				} else {
-					readNewPokemonInput(input
-							+ " does not exist in Pokedex. Try again with a new name!");
+					res = readNewPokemonInput(input + " does not exist in Pokedex. Try again with a new name!");
 				}
 			} else {
 				myCancel = true;
@@ -416,19 +699,17 @@ public class PokemonMenuBar extends JMenuBar {
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/**
-		 * Displays a input dialog that reads the new location and moves the
-		 * player to that location
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
-			final String message = "Please enter a new position to teleport"
-					+ " to.\n(X Y):";
-			final int[] pos = readCordinateInput(message, myTeleportIcon);
+			final String message = "Please enter a new room to teleport" + " to.\n(Room Number)";
+			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
 				myMaze.setPlayerLocation(pos);
@@ -438,53 +719,91 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/**
-	 * Helper method to read the input from the Input Dialog Used for the
-	 * teleport cheat
-	 * 
-	 * @param theInput a string of the input
-	 * @param icon     for the option pane
-	 * @return an int[] of the two numbers input
-	 */
-	private int[] readCordinateInput(final String theMessage,
-			final ImageIcon theIcon) {
-		final String input = (String) JOptionPane.showInputDialog(null,
-				theMessage, "Choose teleport location",
+	private int[] readRoomName(final String theMessage, final ImageIcon theIcon) {
+		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
 				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
 		int[] res = myMaze.getPlayerLocation().clone();
-		final Scanner scan;
+//	        final Scanner scan;
 		if (input != null && !input.isEmpty()) {
-			if (!(input.length() < 3)) {
-				scan = new Scanner(input.toString());
-				try {
-					for (int i = 0; i < 2; i++) {
-						final int num = scan.nextInt() - 1;
-						if (num < myMaze.getRows() && num < myMaze.getCols()
-								&& num >= 0) {
-							res[i] = num;
-						} else {
-							res = readCordinateInput(
-									"One or more numbers out "
-											+ "of range of maze\n(X Y):",
-									theIcon);
-							break;
+			if (!(input.contains(" "))) {
+//	                        scan = new Scanner(input);
+				final String roomName = input.toUpperCase();
+				boolean moved = false;
+				for (int i = 0; i < myMaze.getRows(); i++) {
+					for (int j = 0; j < myMaze.getCols(); j++) {
+						if (myMaze.getMatrix()[i][j].toString().equals(roomName)) {
+							res = new int[] { i, j };
+							moved = true;
 						}
 					}
-				} catch (final InputMismatchException e) {
-					res = readCordinateInput(
-							"Please use integers only.\n(X Y):", theIcon);
 				}
-				scan.close();
+				if (!moved) {
+					res = readRoomName("Please Input a valid Room Name" + "\n(Room Num):", theIcon);
+				}
+
+			} else if (input.toLowerCase().strip().equals("here")) {
+				/*
+				 * Quick shortcut with "here" to put it at player pos
+				 */
+				res = myMaze.getAttemptedLocation();
 			} else {
-				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
+				res = readRoomName("Please Input a valid Room Name\n(Room Num):", theIcon);
 			}
 		} else {
-			//put -1 to signify user canceled
-			res = new int[] {-1, -1};
+			// put -1 to signify user canceled
+			res = new int[] { -1, -1 };
 		}
-
 		return res;
-
 	}
+
+//	/**
+//	 * Helper method to read the input from the Input Dialog Used for the teleport
+//	 * cheat
+//	 * 
+//	 * @param theInput a string of the input
+//	 * @param icon     for the option pane
+//	 * @return an int[] of the two numbers input
+//	 */
+//	private int[] readCordinateInput(final String theMessage, final ImageIcon theIcon) {
+//		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
+//				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
+//		int[] res = myMaze.getPlayerLocation().clone();
+//		final Scanner scan;
+//		if (input != null && !input.isEmpty()) {
+//			if (!(input.length() < 3)) {
+//				scan = new Scanner(input.toString());
+//				try {
+//					for (int i = 0; i < 2; i++) {
+//						final int num = scan.nextInt() - 1;
+//						if (num < myMaze.getRows() && num < myMaze.getCols() && num >= 0) {
+//							res[i] = num;
+//
+//						} else {
+//							res = readCordinateInput("One or more numbers out " + "of range of maze\n(X Y):", theIcon);
+//							break;
+//						}
+//					}
+//				} catch (final InputMismatchException e) {
+//					if (input.toLowerCase().strip().equals("here")) {
+//						/*
+//						 * Quick shortcut with "here" to put it at player pos
+//						 */
+//						res = myMaze.getAttemptedLocation();
+//					} else {
+//						res = readCordinateInput("Please use integers only.\n(X Y):", theIcon);
+//					}
+//				}
+//				scan.close();
+//			} else {
+//				res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
+//			}
+//		} else {
+//			// put -1 to signify user canceled
+//			res = new int[] { -1, -1 };
+//		}
+//
+//		return res;
+//
+//	}
 
 }

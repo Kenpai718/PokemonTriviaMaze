@@ -36,7 +36,10 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	final Color MAZE_BG = new Color(51, 51, 51);
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	
+	
 	// private QuestionAnswer myQA;
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
@@ -61,12 +64,13 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	@SuppressWarnings("static-access")
 	private void setupGUI() {
-		setBorder(new LineBorder(Color.BLACK, 4, true));
+		setBorder(new LineBorder(Color.BLACK, 5, true));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(350, 500));
 		setMaximumSize(new Dimension(350, 500));
 		myLayout = new SpringLayout();
 		setLayout(myLayout);
+		this.setBackground(Color.WHITE);
 
 		myQPane = new JTextPane();
 		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,

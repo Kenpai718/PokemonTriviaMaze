@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -27,12 +29,18 @@ import model.Room;
  * @version Spring 2021
  */
 
-public class MazeGUI extends JPanel {
+public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	/**
 	     * 
 	     */
 	private static final long serialVersionUID = -5880241329362260869L;
+
+	private static final int SIZE = 500;
+
+	private static final Dimension DEFAULT_DIM = new Dimension(SIZE, SIZE);
+
+	private static final double FONT_SIZE = 3.125;
 
 	/*
 	 * Color used for the maze background
@@ -52,7 +60,7 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Pokemon font
 	 */
-	final Font PKMN_FONT = new Font("PKMN RBYGSC", Font.PLAIN, 40);
+	// final Font PKMN_FONT =
 
 	/*
 	 * Table used for GUI visual
@@ -62,7 +70,7 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Used to build the JTable rows and columns
 	 */
-//	private final DefaultTableModel myDTB;
+	// private final DefaultTableModel myDTB;
 
 	/*
 	 * Maze that is to be visualized in the GUI
@@ -72,12 +80,18 @@ public class MazeGUI extends JPanel {
 	/*
 	 * Matrix of the maze
 	 */
-	final private Room[][] myMatrix;
+	private Room[][] myMatrix;
 
 	/*
 	 * Used to draw onto table
 	 */
 	private final Renderer myRenderer;
+
+	private final MazeModel myModel;
+
+	private Font myFont;
+
+	private final int myRowSize;
 
 	/**
 	 * Constructor that create the maze visual
@@ -87,25 +101,28 @@ public class MazeGUI extends JPanel {
 		// initialize fields
 		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
+		myRowSize = SIZE / myMaze.getRows();
+		myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (myRowSize / FONT_SIZE));
 
 		// prepare GUI
-		setMaximumSize(new Dimension(500, 500));
+		setMaximumSize(DEFAULT_DIM);
 		setBackground(new Color(255, 0, 0));
-		setPreferredSize(new Dimension(500, 500));
+		setPreferredSize(DEFAULT_DIM);
 		setLayout(new BorderLayout(0, 0));
 
 		// setup table for maze visual
-//		myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
+		// myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
 		myTable = new JTable();
 		// Using Custom TableModel to correctly refresh the table when changes
 		// are made
-		myTable.setModel(new MazeModel());
-		myTable.setFont(PKMN_FONT);
+		myModel = new MazeModel();
+		myTable.setModel(myModel);
+		myTable.setFont(myFont);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
 		myTable.setRowSelectionAllowed(false);
-		myTable.setRowHeight(125);
-		myTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
+		myTable.setRowHeight(myRowSize);
+		myTable.setPreferredScrollableViewportSize(DEFAULT_DIM);
 		myTable.setBackground(new Color(51, 51, 51));
 		myTable.setFocusable(false);
 		add(myTable, BorderLayout.CENTER);
@@ -164,8 +181,7 @@ public class MazeGUI extends JPanel {
 		 *
 		 */
 		@Override
-		public void setValueAt(final Object theRoom, final int rowIndex,
-				final int columnIndex) {
+		public void setValueAt(final Object theRoom, final int rowIndex, final int columnIndex) {
 			myData[rowIndex][columnIndex] = theRoom;
 			fireTableCellUpdated(rowIndex, columnIndex);
 		}
@@ -174,8 +190,19 @@ public class MazeGUI extends JPanel {
 		 * @param theUpdate
 		 */
 		public void refresh(final Object[][] theUpdate) {
+			// Get row count before change
+			final int oldRows = this.getRowCount();
 			myData = theUpdate;
+			// Check if the row count has changed and update the respective fields
+			if (this.getRowCount() - oldRows != 0) {
+				myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
+				fireTableStructureChanged();
+				myTable.setRowHeight(getRowSize());
+				// Refills the table with the updated font size
+				fillTable();
+			}
 			fireTableDataChanged();
+
 		}
 
 	}
@@ -191,20 +218,25 @@ public class MazeGUI extends JPanel {
 		         */
 		private static final long serialVersionUID = -2696460913971414868L;
 
+		private static final int OFFSET = 25;
+
 		/*
 		 * Icon that represents the player
 		 */
-		private final ImageIcon PLAYER = new ImageIcon(
-				"./src/images/other/PlayerIcon.png");
+		private final ImageIcon PLAYER = new ImageIcon("./src/images/other/PlayerIcon.png");
 
 		/*
 		 * Icon that represents a blocked room
 		 */
-		private final ImageIcon TREE = new ImageIcon(
-				"./src/images/other/tree.png");
+		private final ImageIcon TREE = new ImageIcon("./src/images/other/tree.png");
 
-		private final ImageIcon WIN = new ImageIcon(
-				"./src/images/other/pokestar.png");
+		private final ImageIcon WIN = new ImageIcon("./src/images/other/pokestar.png");
+
+		// private final Color LIGHT_GREEN = new Color(138,255,167); //highlighter green
+		/*
+		 * Color used to denote visited rooms
+		 */
+		private final Color MY_GREEN = new Color(22, 208, 68);
 
 		/**
 		 * Constructor
@@ -216,44 +248,45 @@ public class MazeGUI extends JPanel {
 		}
 
 		@Override
-		public Component getTableCellRendererComponent(final JTable table,
-				final Object value, final boolean isSelected,
+		public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
 				final boolean hasFocus, final int row, final int column) {
 
 			final JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
+			final int iconSize = getRowSize() - OFFSET;
 
 			if (r.isPlayerHere()) { // player at this cell put player icon
-				final ImageIcon scaled = new ImageIcon(PLAYER.getImage()
-						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+				final ImageIcon scaled = new ImageIcon(
+						PLAYER.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 				// same process for blocked rooms put an else if here once we
 				// have a data structure for it
 			} else if (!r.canEnter()) { // blocked room icon
-				final ImageIcon scaled = new ImageIcon(TREE.getImage()
-						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+				final ImageIcon scaled = new ImageIcon(
+						TREE.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
-			}  else { //win icon, blocked or normal room name
+			} else { // win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
-				
+
 				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
 															// icon
-					final ImageIcon scaled = new ImageIcon(WIN.getImage()
-							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+					final ImageIcon scaled = new ImageIcon(
+							WIN.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 					lbl.setIcon(scaled);
 					// set visited color
 				} else if (r.hasVisited()) {
-	                                final String name = r.toString();
-	                                lbl.setText(name);
-	                                lbl.setForeground(Color.CYAN);
-	                                lbl.setBackground(MAZE_BG);
-	                                lbl.setFont(PKMN_FONT);
-	                        } else { // normal room name
+					final String name = r.toString();
+					lbl.setText(name);
+					lbl.setForeground(MY_GREEN);
+					// lbl.setForeground(Color.CYAN);
+					lbl.setBackground(MAZE_BG);
+					lbl.setFont(myFont);
+				} else { // normal room name
 					final String name = r.toString();
 					lbl.setText(name);
 					lbl.setForeground(Color.WHITE);
 					lbl.setBackground(MAZE_BG);
-					lbl.setFont(PKMN_FONT);
+					lbl.setFont(myFont);
 				}
 			}
 
@@ -268,5 +301,26 @@ public class MazeGUI extends JPanel {
 
 	public JTable getTable() {
 		return myTable;
+	}
+
+	private int getRowSize() {
+		return SIZE / myMatrix.length;
+	}
+
+	@Override
+	public void propertyChange(final PropertyChangeEvent evt) {
+		if ("model".equals(evt.getPropertyName())) {
+			// System.out.println("model called for refresh");
+			System.out.println("Model Changed");
+			myMaze.setMatrix((Room[][]) evt.getNewValue());
+			myMatrix = myMaze.getMatrix();
+			myModel.refresh(myMatrix);
+			// if (myMatrix.length - oldRows != 0) {
+			// myTable.setRowHeight(getRowSize());
+			// }
+
+			revalidate();
+		}
+
 	}
 }

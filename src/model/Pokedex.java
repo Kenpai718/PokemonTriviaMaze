@@ -1,11 +1,16 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 
 import org.sqlite.SQLiteDataSource;
 
@@ -17,7 +22,24 @@ import org.sqlite.SQLiteDataSource;
  * @version Spring 2021
  */
 
-public class Pokedex {
+public class Pokedex implements Serializable {
+	
+	/**
+         * 
+         */
+        private static final long serialVersionUID = 1230447359362563837L;
+        
+        private static final Pokemon MISSING = new Pokemon("000", "MissingNo");
+
+        /*
+	 * Maximum supported pokemon generations
+	 */
+	final int MAX_GEN = 7;
+	
+	/*
+	 * Default gen to play on reset or startup
+	 */
+	final int DEFAULT_GEN = 1;
 
 	/*
 	 * Singleton pokedex
@@ -27,31 +49,49 @@ public class Pokedex {
 	/*
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
 	 */
-	private final Map<Integer, Pokemon> myPokedex;
+	private final Map<String, String> myPokedex;
 	
 	/*
 	 * Alternative map for looking up the name
 	 */
-	private final Map<String, Pokemon> myNameDex;
+	private final Map<String, String> myNameDex;
+	
+	/*
+	 * Generations that have been selected to play on
+	 */
+	private final Set<Integer> mySelectedGens;
+	
 
-	/* How many pokemon in pokedex */
-	int myCounter;
+	/* How many pokemon currently in pokedex */
+	private int myCounter;
+	
+	
 
 	/**
 	 * Constructor to initialize pokedex
 	 */
 	private Pokedex() {
-		// TODO Auto-generated constructor stub
-		myPokedex = new HashMap<Integer, Pokemon>();
-		myNameDex = new HashMap<String, Pokemon>();
+		myPokedex = new HashMap<String, String>();
+		myNameDex = new HashMap<String, String>();
+		mySelectedGens = new HashSet<Integer>();
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
-		final Pokemon missingNo = new Pokemon("000", "MissingNo");
-		myPokedex.put(0, missingNo);
 
 		// fill pokedex with database
-		fillPokedex();
+		try {
+			addGenToDex(DEFAULT_GEN); //gen 1 by default
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//joke addition easter egg: "a jigglypuff seen from above"
+		final String jigglyAbove = "JigglypuffSeenFromAbove";
+		myPokedex.put("999", jigglyAbove);
+		myNameDex.put("meme", jigglyAbove);
+		//only found from the insert pokemon cheat
+		
 	}
 
 	/*
@@ -63,30 +103,38 @@ public class Pokedex {
 		}
 		return singleDex;
 	}
-
+	
 	/*
 	 * Read from the pokedex database file with SQLite to create pokemon objects
 	 * to add to the pokedex map.
 	 * 
-	 * Reads off of Pokedex.db SQLite file
+	 * Reads off of Gen#Pokedex.db file
+	 * Adds a specific pokemon generation number 1-7 to the pokedex
 	 * 
 	 */
-	private void fillPokedex() {
+	private void fillPokedex(final int theNum) throws Exception {
+		
+		if(theNum > MAX_GEN || theNum < 1) {
+			throw new Exception(theNum + " is not a playable generation for the pokedex.");
+		}
+		
 		SQLiteDataSource ds = null;
+		final String databaseName = "Gen" + theNum + "Pokedex";
 
 		// establish connection (creates db file if it does not exist :-)
 		try {
 			ds = new SQLiteDataSource();
-			ds.setUrl("jdbc:sqlite:Pokedex.db");
+			ds.setUrl("jdbc:sqlite:" + databaseName + ".db");
+			
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		//System.out.println("Opened pokedex database successfully");
+		System.out.println("Opened " + databaseName + " database successfully!");
 
-		//System.out.println("Selecting all rows from pokedex table");
-		final String query = "SELECT * FROM Pokedex";
+		System.out.println("Selecting all rows from " + databaseName +" table to add to Pokedex map...");
+		final String query = "SELECT * FROM " + databaseName;
 
 		try (Connection conn = ds.getConnection();
 				Statement stmt = conn.createStatement();) {
@@ -103,14 +151,106 @@ public class Pokedex {
 				addPokemon(id, name);
 			}
 
-			//System.out.println("Finished adding pokemon to pokedex.");
-			// System.out.println(myPokedex);
+			System.out.println("Finished adding pokemon from " + databaseName + "\n");
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 	}
+	
+	/**
+	 * Add a pokemon generation to the pokedex
+	 * 
+	 * @param the gen to add: 1- 7
+	 */
+	public void addGenToDex(final int theGenNum) throws Exception {
+		if(theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+		
+		if(!mySelectedGens.contains(theGenNum)) {
+			mySelectedGens.add(theGenNum);
+			fillPokedex(theGenNum);
+		}
+	}
+	
+	/*
+	 * Add all gens to the pokedex
+	 * 
+	 */
+	public void addAllGensToDex() {
+		resetPokedex();
+		for(int i = 1; i <= MAX_GEN; i++) {
+			try {
+				addGenToDex(i);
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Removes a pokemon gen from the pokedex by resetting the pokedex
+	 * and reading the current selection databases again.
+	 * 
+	 * @param theGenNum
+	 * @throws Exception
+	 */
+	public void removeGenFromDex(final int theGenNum) throws Exception {
+		if(theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+		
+		if(!mySelectedGens.contains(theGenNum)) {
+			throw new Exception(theGenNum + " is not currently selected.");
+		} else if (mySelectedGens.size() == 1) {
+			throw new Exception("Must have at least one pokemon generation selected.");
+		} else {
+			mySelectedGens.remove(theGenNum);
+			resetPokedex();
+			
+			for(final int i : mySelectedGens) {
+				fillPokedex(i);
+			}
+			
+		}
+	}
+	
+	/*
+	 * Restores pokedex map to default
+	 * Map will only have gen 1 pokemon.
+	 * 
+	 */
+	public void restoreGensToDefault() {
+		resetPokedex();
+		try {
+			addGenToDex(DEFAULT_GEN);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Can remove pokemon gens if the current is greater than 1
+	 * @return boolean
+	 */
+	public boolean canRemoveGen() {
+		return mySelectedGens.size() >= 1;
+	}
 
+	/*
+	 * Reset pokedex maps
+	 */
+	private void resetPokedex() {
+		myPokedex.clear();
+		myNameDex.clear();
+		mySelectedGens.clear();
+		myCounter = 0;
+	}
+	
+	
 	/**
 	 * Add a pokemon to the pokedex map and the name map
 	 * 
@@ -118,11 +258,11 @@ public class Pokedex {
 	 * @param String theName of the pokemon
 	 */
 	public void addPokemon(final String theID, final String theName) {
-		final Pokemon pkmn = new Pokemon(theID, theName);
-		String formatName = formatString(theName);
-		myPokedex.put(Integer.parseInt(theID), pkmn);
-		myNameDex.put(formatName, pkmn);
+		final String pkmn = theName;
+		final String formatName = formatString(theName);
 		myCounter++;
+		myPokedex.put(theID, pkmn);
+		myNameDex.put(formatName, pkmn);
 	}
 
 	/**
@@ -130,8 +270,8 @@ public class Pokedex {
 	 * 
 	 * @return a map of pokemon
 	 */
-	public Map<Integer, Pokemon> getPokedex() {
-		final Map<Integer, Pokemon> copy = myPokedex;
+	public Map<String, String> getPokedex() {
+		final Map<String, String> copy = myPokedex;
 		return copy;
 	}
 
@@ -151,7 +291,7 @@ public class Pokedex {
 	 * @return formatted string lowercase and stripped
 	 */
 	private String formatString(final String theString) {
-		return theString.toLowerCase().strip();
+		return theString.toLowerCase().trim();
 	}
 
 	/**
@@ -160,9 +300,10 @@ public class Pokedex {
 	 * @return Pokemon at that ID number
 	 */
 	public Pokemon findPokemon(final int theID) {
-		Pokemon res = myPokedex.get(0); // missingno in case not found
-		if (myPokedex.containsKey(theID)) {
-			res = (myPokedex.get(theID)); // if found return pokemon
+	        final String id = ("000" + theID).substring(String.valueOf(theID).length());
+		Pokemon res = MISSING; // missingno in case not found
+		if (myPokedex.containsKey(id)) {
+			res = new Pokemon(id, myPokedex.get(id)); // if found return pokemon
 		}
 
 		return res;
@@ -175,15 +316,28 @@ public class Pokedex {
 	 */
 	public Pokemon findPokemon(final String theName) {
 		final String formatName = formatString(theName);
-		Pokemon res = myPokedex.get(0); // missingno in case not found
+		Pokemon res = new Pokemon("000", myPokedex.get("000"));// missingno in case not found
 		if (myNameDex.containsKey(formatName)) {
-			res = (myNameDex.get(formatName)); // if found return pokemon
+		        final String pokeKey = getKeyByValue(myNameDex.get(formatName));
+		        final String id = ("000" + pokeKey).substring(String.valueOf(pokeKey).length());
+		        res = new Pokemon(id, myNameDex.get(formatName)); // if found return pokemon
 		}
 
 		return res;
 	}
 	
-	/**
+	private String getKeyByValue(final String theName) {
+                // TODO Auto-generated method stub
+	        String res = "000";
+	        for (final Entry<String, String> entry : myPokedex.entrySet()) {
+	                if (Objects.equals(theName, entry.getValue())) {
+	                    res = entry.getKey();
+	                }
+	            }
+	        return res;
+        }
+
+        /**
 	 * Lookup pokemon based on name in map. If not found return false
 	 * 
 	 * @return boolean if that pokemon is in pokedex

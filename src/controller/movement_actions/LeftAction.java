@@ -16,14 +16,14 @@ import view.PokemonPanel;
  */
 public class LeftAction extends MovementAction {
 	
-	private static final String NAME = "";
+	private static final String NAME = "LEFT";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/left.png");
 	
 	//to control the maze
 	//private final Maze myMaze;
 	
 	public LeftAction(final PokemonPanel thePanel) {
-		super(NAME, ICON, thePanel);
+		super("", ICON, thePanel);
 	}
 
 	@Override
@@ -32,6 +32,11 @@ public class LeftAction extends MovementAction {
 		//make the maze move left if possible
 	        final int[] move = new int[] {0, -1};
                 super.movePlayer(move);
+	}
+	
+	@Override
+	public String toString() {
+		return NAME;
 	}
 
 }
