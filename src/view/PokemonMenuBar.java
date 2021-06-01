@@ -268,7 +268,7 @@ public class PokemonMenuBar extends JMenuBar {
 						final Room room = rooms[i][j];
 						change = change && room.hasVisited();
 						rooms[i][j].setVisited(!change);
-						if (room.isPlayerHere()) {
+						if (room.isPlayerHere() || (i == 0 && j == 0)) {
 							rooms[i][j].setVisited(true);
 						}
 

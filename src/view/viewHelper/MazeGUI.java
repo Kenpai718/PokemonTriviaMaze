@@ -118,7 +118,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		// are made
 		myModel = new MazeModel();
 		myTable.setModel(myModel);
-//		myTable.setFont(myFont);
+		myTable.setFont(myFont);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
 		myTable.setRowSelectionAllowed(false);
@@ -198,11 +198,14 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		 */
 		public void refresh(final Object[][] theUpdate) {
 		        final int oldRows = getRowCount();
-			myData = theUpdate;
-			fireTableDataChanged();
+			myData = theUpdate;			
 			if (getRowCount() - oldRows != 0) {
+			        myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
                                 fireTableStructureChanged();
+                                myTable.setRowHeight(getRowSize());
+                                fillTable();
                         }
+			fireTableDataChanged();
 			
 		}
 
@@ -318,13 +321,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
                 		//System.out.println("model called for refresh");
                         System.out.println("Model Changed");
                         final int oldRows = myMatrix.length;
-                        myMatrix = (Room[][]) evt.getNewValue();
-                        if (myMatrix.length - oldRows != 0) {
-                                myTable.setRowHeight(getRowSize());
-                                myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
-                        }
+                        myMaze.setMatrix((Room[][]) evt.getNewValue());
+                        myMatrix = myMaze.getMatrix();
                         myModel.refresh(myMatrix);
-                        
+//                      if (myMatrix.length - oldRows != 0) {
+//                              myTable.setRowHeight(getRowSize());
+//                      }
                         
                         revalidate();
                 }
