@@ -361,6 +361,7 @@ public class Maze implements Serializable {
 	public void reset() {
 
 		// singleMaze = new Maze();
+	        myMatrix[0][0].clearUsed();
 		roomCounter = 0;
 		// clearMatrix();
 		myMatrix = fillRooms();
@@ -374,6 +375,7 @@ public class Maze implements Serializable {
 		myMatrix[0][0].setVisited(true);
 		myPokemonList.clear();
 		myPokemonList = fillPokemonList();
+		
 
 	}
 
@@ -396,6 +398,8 @@ public class Maze implements Serializable {
 		instance.myMatrix = myMatrix;
 		instance.myAttemptLocation = myAttemptLocation;
 		instance.myPlayerLocation = myPlayerLocation;
+		instance.myRows = myRows;
+		instance.myCols = myCols;
 		return instance;
 	}
 
