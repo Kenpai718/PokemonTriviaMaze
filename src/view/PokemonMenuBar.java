@@ -2,6 +2,7 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -116,13 +117,22 @@ public class PokemonMenuBar extends JMenuBar {
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				// TODO Auto-generated method stub
+
 				final JFileChooser fileChooser = new JFileChooser("Save");
+
+				//read the file from file chooser
 				if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
-					try (final FileOutputStream file = new FileOutputStream(fileChooser.getSelectedFile());
-							final ObjectOutputStream out = new ObjectOutputStream(file);) {
-						out.writeObject(myMaze);
-						JOptionPane.showMessageDialog(null, "Maze has been Saved: " + myMaze);
+					// get the save file name and add a suffix to it to denote is it a a game file
+					// for this maze
+					File saveFile = new File(fileChooser.getSelectedFile() + ".maze");
+
+					try (final FileOutputStream fileOut = new FileOutputStream(saveFile);
+							final ObjectOutputStream objOut = new ObjectOutputStream(fileOut);) {
+
+						// use serialization to write the maze
+						objOut.writeObject(myMaze);
+
+						JOptionPane.showMessageDialog(null, "Maze has been Saved: " + saveFile.getName());
 
 					} catch (final FileNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -145,23 +155,36 @@ public class PokemonMenuBar extends JMenuBar {
 				// TODO Auto-generated method stub
 				final JFileChooser fileChooser = new JFileChooser("Load");
 				if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
-					try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
-							final ObjectInputStream in = new ObjectInputStream(file);) {
-						System.out.println("Start Load: " + myMaze);
-						myMaze = (Maze) in.readObject();
-						firePropertyChange("model", null, myMaze.getMatrix());
-						myPanel.refreshGUI();
-						JOptionPane.showMessageDialog(null, "Maze has been Loaded: " + myMaze);
+					// get the save file name and check if it has the right suffix
+					String fileName = fileChooser.getSelectedFile().getName();
+					
+					/*
+					 * Only read files that end with the proper suffix
+					 */
+					if (fileName.endsWith(".maze")) {
+						File saveFile = new File(fileChooser.getSelectedFile() + ".maze");
+						
+						try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
+								final ObjectInputStream in = new ObjectInputStream(file);) {
+							System.out.println("Start Load: " + myMaze);
+							myMaze = (Maze) in.readObject();
+							firePropertyChange("model", null, myMaze.getMatrix());
+							myPanel.refreshGUI();
+							JOptionPane.showMessageDialog(null, "Maze has been Loaded: " + fileName);
 
-					} catch (final FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (final IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (final ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						} catch (final FileNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (final IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (final ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} else { //wrong file type inform user
+						JOptionPane.showMessageDialog(null,
+								"Cannot load " + fileName + " because it is not a \".maze\" file");
 					}
 				}
 			}
@@ -580,7 +603,7 @@ public class PokemonMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			final String promptCords = "Where to put a new Pokemon in maze? "
-					+ "\nRoom Letter ('D') or \"here\" to put at your location.";
+					+ "\nRoom Name (Ex: '3') or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
 			myPos = readRoomName(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
@@ -656,7 +679,7 @@ public class PokemonMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
-			final String message = "Please enter a new room to teleport" + " to.\n(Room Letter)";
+			final String message = "Please enter a new room to teleport" + " to.\n(Room Number)";
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
@@ -686,7 +709,7 @@ public class PokemonMenuBar extends JMenuBar {
 					}
 				}
 				if (!moved) {
-					res = readRoomName("Please Input a valid Room Letter" + "\n(Room Letter):", theIcon);
+					res = readRoomName("Please Input a valid Room Name" + "\n(Room Num):", theIcon);
 				}
 
 			} else if (input.toLowerCase().strip().equals("here")) {
@@ -695,7 +718,7 @@ public class PokemonMenuBar extends JMenuBar {
 				 */
 				res = myMaze.getAttemptedLocation();
 			} else {
-				res = readRoomName("Please Input a valid Room Letter\n(Room Letter):", theIcon);
+				res = readRoomName("Please Input a valid Room Name\n(Room Num):", theIcon);
 			}
 		} else {
 			// put -1 to signify user canceled
