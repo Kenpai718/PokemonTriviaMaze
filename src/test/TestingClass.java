@@ -28,9 +28,12 @@ public class TestingClass{
 		 * System.out.println(choices[1]);
 		 */
 		
+		//myPokedex.addAllGensToDex();
 		//printAll();
-		System.out.println(myPokedex.getCount());
-		System.out.println(myPokedex.findPokemon("Farfetch'd"));
+		//System.out.println(myPokedex.getCount());
+		//System.out.println(myPokedex.findPokemon("Farfetch'd"));
+		System.out.println(myPokedex.findPokemon(25));
+		System.out.println(myPokedex.getPokedex().size());
 	
 		
 		
