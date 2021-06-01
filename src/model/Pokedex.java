@@ -51,6 +51,7 @@ public class Pokedex implements Serializable {
 	 * Generations that have been selected to play on
 	 */
 	private final Set<Integer> mySelectedGens;
+	
 
 	/* How many pokemon currently in pokedex */
 	private int myCounter;
@@ -142,16 +143,16 @@ public class Pokedex implements Serializable {
 			}
 
 			System.out.println("Finished adding pokemon from " + databaseName + "\n");
-			System.out.println();
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 	}
+	
 	/**
 	 * Add a pokemon generation to the pokedex
 	 * 
-	 * @param the gen to add
+	 * @param the gen to add: 1- 7
 	 */
 	public void addGenToDex(final int theGenNum) throws Exception {
 		if(theGenNum > MAX_GEN || theGenNum < 1) {
@@ -163,6 +164,18 @@ public class Pokedex implements Serializable {
 			fillPokedex(theGenNum);
 		}
 	}
+	
+	/*
+	 * Add all gens to the pokedex
+	 * 
+	 */
+	public void addAllGensToDex(final int theGenNum) throws Exception {
+		resetPokedex();
+		for(int i = 1; i <= MAX_GEN; i++) {
+			addGenToDex(i);
+		}
+	}
+	
 	
 	/**
 	 * Removes a pokemon gen from the pokedex by resetting the pokedex
@@ -191,12 +204,26 @@ public class Pokedex implements Serializable {
 		}
 	}
 	
+	/*
+	 * Restores pokedex map to default
+	 * Map will only have gen 1 pokemon.
+	 * 
+	 */
+	public void restoreGensToDefault() {
+		resetPokedex();
+		try {
+			addGenToDex(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Can remove pokemon gens if the current is greater than 1
 	 * @return boolean
 	 */
 	public boolean canRemoveGen() {
-		return mySelectedGens.size() != 1;
+		return mySelectedGens.size() >= 1;
 	}
 
 	/*

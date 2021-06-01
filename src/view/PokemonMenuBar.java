@@ -44,6 +44,7 @@ public class PokemonMenuBar extends JMenuBar {
 	private JMenu myFileMenu;
 	private JMenu myGamemodeMenu;
 	private JMenu myGenSelectMenu;
+	private ArrayList<JCheckBox> myGenBoxList;
 	private ButtonGroup myGamemodes;
 	private Maze myMaze;
 	private final JFrame myFrame;
@@ -51,6 +52,7 @@ public class PokemonMenuBar extends JMenuBar {
 	private boolean myReveal;
 	private final TutorialPanel myTutorial;
 	private final Pokedex myPokedex;
+	
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts the
@@ -113,60 +115,59 @@ public class PokemonMenuBar extends JMenuBar {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
 		save.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                // TODO Auto-generated method stub
-                                final JFileChooser fileChooser = new JFileChooser("Save");
-                                if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
-                                        try (final FileOutputStream file = new FileOutputStream(fileChooser.getSelectedFile());
-                                             final ObjectOutputStream out = new ObjectOutputStream(file);) {
-                                                out.writeObject(myMaze);
-                                                System.out.println("Maze has been Saved: "+ myMaze);
-                                                
-                                        } catch (final FileNotFoundException e1) {
-                                                // TODO Auto-generated catch block
-                                                e1.printStackTrace();
-                                        } catch (final IOException e1) {
-                                                // TODO Auto-generated catch block
-                                                e1.printStackTrace();
-                                        }
-                                }
-                        }
-		        
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				final JFileChooser fileChooser = new JFileChooser("Save");
+				if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+					try (final FileOutputStream file = new FileOutputStream(fileChooser.getSelectedFile());
+							final ObjectOutputStream out = new ObjectOutputStream(file);) {
+						out.writeObject(myMaze);
+						JOptionPane.showMessageDialog(null, "Maze has been Saved: " + myMaze);
+
+					} catch (final FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+
 		});
 		myFileMenu.add(save);
 
 		final JMenuItem load = new JMenuItem("Load");
-                load.addActionListener(new ActionListener() {
-                        
-                        
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                                // TODO Auto-generated method stub
-                                final JFileChooser fileChooser = new JFileChooser("Load");
-                                if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
-                                        try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
-                                             final ObjectInputStream in = new ObjectInputStream(file);) {
-                                                System.out.println("Start Load: "+ myMaze);
-                                                myMaze = (Maze) in.readObject();
-                                                firePropertyChange("model", null, myMaze.getMatrix());
-                                                myPanel.refreshGUI();
-                                                System.out.println("Maze has been Loaded: "+ myMaze);
-                                                
-                                        } catch (final FileNotFoundException e1) {
-                                                // TODO Auto-generated catch block
-                                                e1.printStackTrace();
-                                        } catch (final IOException e1) {
-                                                // TODO Auto-generated catch block
-                                                e1.printStackTrace();
-                                        } catch (final ClassNotFoundException e1) {
-                                                // TODO Auto-generated catch block
-                                                e1.printStackTrace();
-                                        }
-                                }
-                        }
-                        
-                });
+		load.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// TODO Auto-generated method stub
+				final JFileChooser fileChooser = new JFileChooser("Load");
+				if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+					try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
+							final ObjectInputStream in = new ObjectInputStream(file);) {
+						System.out.println("Start Load: " + myMaze);
+						myMaze = (Maze) in.readObject();
+						firePropertyChange("model", null, myMaze.getMatrix());
+						myPanel.refreshGUI();
+						JOptionPane.showMessageDialog(null, "Maze has been Loaded: " + myMaze);
+
+					} catch (final FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+
+		});
 		myFileMenu.add(load);
 
 		myFileMenu.addSeparator();
@@ -192,11 +193,17 @@ public class PokemonMenuBar extends JMenuBar {
 		final JMenuItem about = new JMenuItem("About");
 		about.addActionListener(new ActionListener() {
 
+			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
+					+ "\nSpring 2021\n"
+					+ "\nDISCLAIMER:\n" 
+					+ "This is a fan-made-non-profit project based on the \"Whose that Pokemon\" segment from the original Pokemon anime." 
+					+ "\nWe are not affliated or endorsed with the Pokemon company. All copyright belongs to Nintendo/Gamefreak.";
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
 				JOptionPane.showMessageDialog(myFrame,
-						"Created by: AJ Downey, Kenneth Ahrens, " + "Katelyn Malone\nSpring 2021", "About",
+						aboutMessage, "About Us",
 						JOptionPane.PLAIN_MESSAGE);
 			}
 
@@ -362,16 +369,17 @@ public class PokemonMenuBar extends JMenuBar {
 	private void setupGenSelectMenu() {
 
 		// current supported pokemon generations
-		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
-				"Gen 6 (649-721)", "Gen 7 (721-809)" };
-		final ArrayList<JCheckBox> boxList = new ArrayList<JCheckBox>();
+		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)",
+				"Gen 5 (493-649)", "Gen 6 (649-721)", "Gen 7 (721-809)" };
+		
+		myGenBoxList = new ArrayList<JCheckBox>();
 
 		// add all to a checkbox list
 		for (int i = 0; i < gens.length; i++) {
 			final JCheckBox genBox = new JCheckBox(gens[i]);
 			genBox.addActionListener(new GenSelectListener(i + 1, genBox));
 			myGenSelectMenu.add(genBox);
-			boxList.add(genBox);
+			myGenBoxList.add(genBox);
 
 			if (i == 0) {
 				genBox.setSelected(true); // gen 1 selected by defau;t
