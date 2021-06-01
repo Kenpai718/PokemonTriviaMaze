@@ -197,12 +197,15 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		 * @param theUpdate
 		 */
 		public void refresh(final Object[][] theUpdate) {
-		        final int oldRows = getRowCount();
-			myData = theUpdate;			
-			if (getRowCount() - oldRows != 0) {
+		        // Get row count before change
+		        final int oldRows = this.getRowCount();
+			myData = theUpdate;
+			// Check if the row count has changed and update the respective fields
+			if (this.getRowCount() - oldRows != 0) {
 			        myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
                                 fireTableStructureChanged();
                                 myTable.setRowHeight(getRowSize());
+                                // Refills the table with the updated font size
                                 fillTable();
                         }
 			fireTableDataChanged();
