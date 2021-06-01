@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import org.sqlite.SQLiteDataSource;
@@ -26,6 +28,8 @@ public class Pokedex implements Serializable {
          * 
          */
         private static final long serialVersionUID = 1230447359362563837L;
+        
+        private static final Pokemon MISSING = new Pokemon("000", "MissingNo");
 
         /*
 	 * Maximum supported pokemon generations
@@ -45,12 +49,12 @@ public class Pokedex implements Serializable {
 	/*
 	 * ID number and Pokemon. Used for instant lookups for Pokemon
 	 */
-	private final Map<Integer, Pokemon> myPokedex;
+	private final Map<String, String> myPokedex;
 	
 	/*
 	 * Alternative map for looking up the name
 	 */
-	private final Map<String, Pokemon> myNameDex;
+	private final Map<String, String> myNameDex;
 	
 	/*
 	 * Generations that have been selected to play on
@@ -60,19 +64,19 @@ public class Pokedex implements Serializable {
 
 	/* How many pokemon currently in pokedex */
 	private int myCounter;
+	
+	
 
 	/**
 	 * Constructor to initialize pokedex
 	 */
 	private Pokedex() {
-		myPokedex = new HashMap<Integer, Pokemon>();
-		myNameDex = new HashMap<String, Pokemon>();
+		myPokedex = new HashMap<String, String>();
+		myNameDex = new HashMap<String, String>();
 		mySelectedGens = new HashSet<Integer>();
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
-		final Pokemon missingNo = new Pokemon("000", "MissingNo");
-		myPokedex.put(0, missingNo);
 
 		// fill pokedex with database
 		try {
@@ -83,8 +87,8 @@ public class Pokedex implements Serializable {
 		}
 		
 		//joke addition easter egg: "a jigglypuff seen from above"
-		final Pokemon jigglyAbove = new Pokemon("999", "JigglypuffSeenFromAbove");
-		myPokedex.put(999, jigglyAbove);
+		final String jigglyAbove = "JigglypuffSeenFromAbove";
+		myPokedex.put("999", jigglyAbove);
 		myNameDex.put("meme", jigglyAbove);
 		//only found from the insert pokemon cheat
 		
@@ -179,7 +183,7 @@ public class Pokedex implements Serializable {
 		for(int i = 1; i <= MAX_GEN; i++) {
 			try {
 				addGenToDex(i);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -223,7 +227,7 @@ public class Pokedex implements Serializable {
 		resetPokedex();
 		try {
 			addGenToDex(DEFAULT_GEN);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -254,11 +258,10 @@ public class Pokedex implements Serializable {
 	 * @param String theName of the pokemon
 	 */
 	public void addPokemon(final String theID, final String theName) {
-		final Pokemon pkmn = new Pokemon(theID, theName);
+		final String pkmn = theName;
 		final String formatName = formatString(theName);
 		myCounter++;
-		
-		myPokedex.put(myCounter, pkmn);
+		myPokedex.put(theID, pkmn);
 		myNameDex.put(formatName, pkmn);
 	}
 
@@ -267,8 +270,8 @@ public class Pokedex implements Serializable {
 	 * 
 	 * @return a map of pokemon
 	 */
-	public Map<Integer, Pokemon> getPokedex() {
-		final Map<Integer, Pokemon> copy = myPokedex;
+	public Map<String, String> getPokedex() {
+		final Map<String, String> copy = myPokedex;
 		return copy;
 	}
 
@@ -297,9 +300,10 @@ public class Pokedex implements Serializable {
 	 * @return Pokemon at that ID number
 	 */
 	public Pokemon findPokemon(final int theID) {
-		Pokemon res = myPokedex.get(0); // missingno in case not found
-		if (myPokedex.containsKey(theID)) {
-			res = (myPokedex.get(theID)); // if found return pokemon
+	        final String id = ("000" + theID).substring(String.valueOf(theID).length());
+		Pokemon res = MISSING; // missingno in case not found
+		if (myPokedex.containsKey(id)) {
+			res = new Pokemon(id, myPokedex.get(id)); // if found return pokemon
 		}
 
 		return res;
@@ -312,15 +316,28 @@ public class Pokedex implements Serializable {
 	 */
 	public Pokemon findPokemon(final String theName) {
 		final String formatName = formatString(theName);
-		Pokemon res = myPokedex.get(0); // missingno in case not found
+		Pokemon res = new Pokemon("000", myPokedex.get("000"));// missingno in case not found
 		if (myNameDex.containsKey(formatName)) {
-			res = (myNameDex.get(formatName)); // if found return pokemon
+		        final String pokeKey = getKeyByValue(myNameDex.get(formatName));
+		        final String id = ("000" + pokeKey).substring(String.valueOf(pokeKey).length());
+		        res = new Pokemon(id, myNameDex.get(formatName)); // if found return pokemon
 		}
 
 		return res;
 	}
 	
-	/**
+	private String getKeyByValue(final String theName) {
+                // TODO Auto-generated method stub
+	        String res = "000";
+	        for (final Entry<String, String> entry : myPokedex.entrySet()) {
+	                if (Objects.equals(theName, entry.getValue())) {
+	                    res = entry.getKey();
+	                }
+	            }
+	        return res;
+        }
+
+        /**
 	 * Lookup pokemon based on name in map. If not found return false
 	 * 
 	 * @return boolean if that pokemon is in pokedex

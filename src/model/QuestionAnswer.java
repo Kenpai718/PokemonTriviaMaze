@@ -32,7 +32,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Multiple choice answers
 	 */
-	private List<String> myChoices;
+	private final List<String> myChoices;
 
 	/*
 	 * index of the answer in choices
@@ -89,7 +89,6 @@ public class QuestionAnswer implements Serializable {
 	 * Create multiple choice answers
 	 */
 	public void createMC() {
-		myChoices = new ArrayList<String>();
 		fillChoices();
 		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 	}
@@ -100,7 +99,7 @@ public class QuestionAnswer implements Serializable {
 	 * choices.
 	 */
 	private void fillChoices() {
-
+	        myChoices.clear();
 		myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
@@ -131,7 +130,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private Pokemon generatePokemonHelper() {
 		myUpper = myPokedex.getCount();
-		final int num = (int) (Math.random() * (myUpper - 1) + 1);
+		final int num = (int) ((Math.random() * (myUpper - 1)) + 1);
 		return myPokedex.findPokemon(num);
 	}
 
@@ -155,7 +154,7 @@ public class QuestionAnswer implements Serializable {
 			} else {
 				pkmn = generatePokemon();
 			}
-		} catch (StackOverflowError e) {
+		} catch (final StackOverflowError e) {
 			//System.out.println("USED list is full. It will now be cleared.\n");
 			//System.out.println("OLD USED: " + USED);
 			USED.clear();

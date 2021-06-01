@@ -371,9 +371,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	private void setImgBrightness() {
 		myDark = !(myReveal
 				|| (myMaze.hasNotMoved() ? myMaze.getCurrRoom().hasVisited() : myMaze.getAttemptRoom().hasVisited()));
-
-		repaint();
-
 	}
 
 	/**

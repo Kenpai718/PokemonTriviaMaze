@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
@@ -27,8 +28,8 @@ public class Maze implements Serializable {
 	/*
 	 * Constants
 	 */
-	private final static int ROWS = 10;
-	private final static int COLS = 10;
+	private final static int ROWS = 4;
+	private final static int COLS = 4;
 	private final static int START = 0;
 	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (COLS - 1) }; // end of maze
 	private int[] myWinLocation;
@@ -342,6 +343,7 @@ public class Maze implements Serializable {
 
 		// singleMaze = new Maze();
 		roomCounter = 0;
+//		clearMatrix();
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { 0, 0 };
 		myAttemptLocation = myPlayerLocation.clone();
@@ -356,7 +358,21 @@ public class Maze implements Serializable {
 
 	}
 
-	private Object readResolve() {
+//	private void changeRooms() {
+//	        // TODO Auto-generated method stub
+//                for (int i = 0; i < getCols; i++) {
+//                        for (int j = 0; j < res[0].length; j++) {
+//                                myMatrix[i][j] 
+//                        }
+//                }
+//        }
+
+        private void clearMatrix() {
+                // TODO Auto-generated method stub
+                Arrays.stream(myMatrix).forEach(x -> Arrays.fill(x, null));
+        }
+
+        private Object readResolve() {
 		final Maze instance = getInstance();
 		instance.myMatrix = myMatrix;
 		instance.myAttemptLocation = myAttemptLocation;

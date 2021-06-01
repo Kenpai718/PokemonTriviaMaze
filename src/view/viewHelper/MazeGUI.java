@@ -314,7 +314,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		if ("model".equals(evt.getPropertyName())) {
 			// System.out.println("model called for refresh");
 			System.out.println("Model Changed");
-			final int oldRows = myMatrix.length;
 			myMaze.setMatrix((Room[][]) evt.getNewValue());
 			myMatrix = myMaze.getMatrix();
 			myModel.refresh(myMatrix);
