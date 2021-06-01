@@ -27,8 +27,8 @@ public class Maze implements Serializable {
         /*
 	 * Constants
 	 */
-	private final static int ROWS = 8;
-	private final static int COLS = 8;
+	private final static int ROWS = 10;
+	private final static int COLS = 10;
 	private final static int START = 0;
 	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
 			(COLS - 1) }; // end of maze
