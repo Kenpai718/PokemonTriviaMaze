@@ -5,8 +5,6 @@ package test;
  * Only used to test parts of the program
  */
 
-import java.util.Map;
-
 import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
@@ -27,7 +25,10 @@ public class TestingClass{
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
 		 * System.out.println(choices[1]);
 		 */
-		
+		for (int i = 0; i < 300; i++) {
+		        System.out.println("Resetting maze: "+ i);
+		        myMaze.reset();
+		}
 		//myPokedex.addAllGensToDex();
 		//printAll();
 		//System.out.println(myPokedex.getCount());

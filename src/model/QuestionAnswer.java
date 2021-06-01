@@ -23,7 +23,7 @@ public class QuestionAnswer implements Serializable {
 
 	private static final int NUM_CHOICES = 4;
 
-	private static List<Pokemon> USED = new ArrayList<Pokemon>();
+	private static final  List<Pokemon> USED = new ArrayList<Pokemon>();
 
 	/*
 	 * Question/answer
@@ -50,7 +50,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private transient int myUpper;
 
-	private Random myRand;
+	private final Random myRand;
 
 	/**
 	 * Constructor
@@ -75,17 +75,13 @@ public class QuestionAnswer implements Serializable {
 	 */
 	public QuestionAnswer(final Pokemon thePokemon) {
 		// TODO Auto-generated constructor stub
-		myPokedex = Pokedex.getInstance();
-		myChoices = new ArrayList<String>();
-		myUpper = myPokedex.getCount();
-		myPokemon = thePokemon;
+	        myPokedex = Pokedex.getInstance();
+                myRand = new Random();
+                myChoices = new ArrayList<String>();
+                myUpper = myPokedex.getCount();
+                myPokemon = thePokemon;
 
-		fillChoices();
-		// get index of shuffled array list
-		myAnswerIndex = myChoices.indexOf(this.getAnswer());
-		// System.out.println("my answer num is " + myAnswerIndex);
-
-		// randomly fill out myChoices
+                createMC();
 
 	}
 
@@ -107,7 +103,7 @@ public class QuestionAnswer implements Serializable {
 		myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-			String aName = makeName();
+			final String aName = makeName();
 			myChoices.add(aName);
 		}
 		Collections.shuffle(myChoices);
@@ -152,20 +148,23 @@ public class QuestionAnswer implements Serializable {
 		// clear the pokemon list if it gets full so it does not throw
 		// stack overflow error
 
-		try {
-			if (!USED.contains(pkmn)) {
-				USED.add(pkmn);
-			} else {
-				pkmn = generatePokemon();
-			}
-		} catch (final StackOverflowError e) {
-			// System.out.println("USED list is full. It will now be cleared.\n");
-			// System.out.println("OLD USED: " + USED);
-			USED.clear();
-			pkmn = generatePokemon();
-			// System.out.println("NEW USED: " + USED);
-
-		}
+		if (USED.contains(pkmn)) {
+                        pkmn = generatePokemon();
+                }
+                USED.add(pkmn);
+//		try {
+//			if (USED.contains(pkmn)) {
+//			        pkmn = generatePokemon();
+//			}
+//			USED.add(pkmn);
+//		} catch (final StackOverflowError e) {
+//			// System.out.println("USED list is full. It will now be cleared.\n");
+//			// System.out.println("OLD USED: " + USED);
+//			USED.clear();
+//			pkmn = generatePokemon();
+//			// System.out.println("NEW USED: " + USED);
+//
+//		}
 
 		return pkmn;
 	}

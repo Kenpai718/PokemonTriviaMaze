@@ -2,8 +2,6 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -458,7 +456,7 @@ public class PokemonMenuBar extends JMenuBar {
 					return null;
 				}
 			};
-			String msg;
+			final String msg;
 			if (myBox.isSelected()) { // add pokemon gen
 
 				try {
@@ -523,15 +521,20 @@ public class PokemonMenuBar extends JMenuBar {
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					// System.out.println("Executing");
+					 System.out.println("Executing");
+					
+					if (!myStateChange) {
+                                                myPokedex.addAllGensToDex();
+                                        } else {
+                                                myPokedex.restoreGensToDefault();
+                                        }
 					resetAll();
-
 					return null;
 				}
 			};
 
 			if (!myStateChange) { // add all gens
-				myStateChange = true;
+				
 				myMsg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
 						+ "Please press \"OK\".";
 				JOptionPane.showMessageDialog(null, myMsg);
@@ -542,9 +545,10 @@ public class PokemonMenuBar extends JMenuBar {
 				JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Unselect all gens except Gen1");
+				myStateChange = true;
 
 			} else { // remove all gens
-				myStateChange = false;
+				
 
 				// resetAll();
 				mySwingWorker.execute();
@@ -552,6 +556,7 @@ public class PokemonMenuBar extends JMenuBar {
 				JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Play All Gens");
+				myStateChange = false;
 			}
 
 			// initialize box selection based on the action
