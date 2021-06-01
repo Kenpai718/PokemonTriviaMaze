@@ -225,6 +225,7 @@ public class Pokedex implements Serializable {
 	 */
 	public void restoreGensToDefault() {
 		resetPokedex();
+		mySelectedGens.clear();
 		try {
 			addGenToDex(DEFAULT_GEN);
 		} catch (final Exception e) {
@@ -245,8 +246,7 @@ public class Pokedex implements Serializable {
 	 */
 	private void resetPokedex() {
 		myPokedex.clear();
-		myNameDex.clear();
-		mySelectedGens.clear();
+		myNameDex.clear();		
 		myCounter = 0;
 	}
 	
@@ -343,12 +343,8 @@ public class Pokedex implements Serializable {
 	 * @return boolean if that pokemon is in pokedex
 	 */
 	public Boolean hasPokemon(final int theID) {
-		boolean res = false;
-		if (myPokedex.containsKey(theID)) {
-			res = true;
-		}
-
-		return res;
+	        final String id = ("000" + theID).substring(String.valueOf(theID).length());
+		return myPokedex.containsKey(id);
 	}
 	
 	/**
@@ -358,12 +354,7 @@ public class Pokedex implements Serializable {
 	 */
 	public Boolean hasPokemon(final String theName) {
 		final String formatName = formatString(theName);
-		boolean res = false;
-		if (myNameDex.containsKey(formatName)) {
-			res = true;
-		}
-
-		return res;
+		return myNameDex.containsKey(formatName);
 	}
 	
 	

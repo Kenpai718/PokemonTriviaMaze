@@ -2,6 +2,8 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -447,7 +449,6 @@ public class PokemonMenuBar extends JMenuBar {
         	                @Override
         	                protected Void doInBackground() throws Exception {
         	                        System.out.println("Executing");
-        	                        Thread.sleep(750);
                                         resetAll();
                                         return null;
 		                }      
@@ -460,7 +461,7 @@ public class PokemonMenuBar extends JMenuBar {
 //					resetAll();
 					mySwingWorker.execute();
 					msg = "Gen " + myGen + " Pokemon can now be encountered! Game has been reset.";
-					JOptionPane.showMessageDialog(null, msg);					
+					JOptionPane.showMessageDialog(null, msg);
 
 				} catch (final Exception e1) {
 					// TODO Auto-generated catch block
@@ -470,8 +471,9 @@ public class PokemonMenuBar extends JMenuBar {
 				if (myPokedex.canRemoveGen()) { // remove pokemon gen
 					try {
 						myPokedex.removeGenFromDex(myGen);
-//						resetAll();
+						
 						mySwingWorker.execute();
+//						resetAll();
 						msg = "Gen " + myGen + " Pokemon have been removed. Game reset!";
 						JOptionPane.showMessageDialog(null, msg);						
 					} catch (final Exception e1) {
@@ -513,34 +515,56 @@ public class PokemonMenuBar extends JMenuBar {
                                 @Override
                                 protected Void doInBackground() throws Exception {
                                         System.out.println("Executing");
+                                        if (!myStateChange) {
+                                                myPokedex.addAllGensToDex();
+                                        } else {
+                                                myPokedex.restoreGensToDefault();
+                                        }
                                         resetAll();
                                         return null;
                                 }      
                         };
+                        
+                        mySwingWorker.addPropertyChangeListener(new PropertyChangeListener() {
+
+                                @Override
+                                public void propertyChange(final PropertyChangeEvent evt) {
+                                        String msg;
+                                        if (evt.getPropertyName().equals("state")) {
+                                                if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+                                                        if (!myStateChange) {
+                                                                msg = "All Pokemon generations have been loaded in. Game has been reset.";
+                                                                JOptionPane.showMessageDialog(null, msg);
+                                                        } else {
+                                                                msg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
+                                                                JOptionPane.showMessageDialog(null, msg);
+                                                        } 
+                                                }
+                                        }
+                                }
+                        });
 		        
-		        String msg;
+		        final String msg;
 
 			if (!myStateChange) { // add all gens
 				myStateChange = true;
-				msg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
-						+ "Please press \"OK\" and be patient.";
-				JOptionPane.showMessageDialog(null, msg);
+//				msg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
+//						+ "Please press \"OK\" and be patient.";
+//				JOptionPane.showMessageDialog(null, msg);
 
-				myPokedex.addAllGensToDex();
+				
 //				resetAll();
 				mySwingWorker.execute();
-				msg = "All Pokemon generations have been loaded in. Game has been reset.";
-				JOptionPane.showMessageDialog(null, msg);
+				
 
 				myChangeButton.setText("Unselect all gens except Gen1");
 
 			} else { // remove all gens
 				myStateChange = false;
-				myPokedex.restoreGensToDefault();
+				
 //				resetAll();
 				mySwingWorker.execute();
-				msg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
-				JOptionPane.showMessageDialog(null, msg);
+				
 
 				myChangeButton.setText("Play All Gens");
 			}
@@ -584,7 +608,17 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			resetAll();
+		        final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>(){
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                        System.out.println("Executing");
+                                        resetAll();
+                                        return null;
+                                }      
+                        };
+		        final String msg = "The Maze is now reseting.\n Please wait.";
+		        mySwingWorker.execute();
+                        JOptionPane.showMessageDialog(null, msg);
 		}
 
 	}

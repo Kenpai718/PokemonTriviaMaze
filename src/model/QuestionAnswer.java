@@ -103,7 +103,13 @@ public class QuestionAnswer implements Serializable {
 		myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-			addName();
+			try {
+                                addName();
+                        } catch (final Exception e) {
+                                // TODO Auto-generated catch block
+                                fillChoices();
+                        }
+			
 		}
 		Collections.shuffle(myChoices);
 	}

@@ -59,7 +59,7 @@ public class Maze implements Serializable {
 	 */
 	private ArrayList<Pokemon> myPokemonList;
 
-	private transient final Pokedex myPokedex;
+	private transient Pokedex myPokedex;
 
 	/*
 	 * Boolean to verify when the player has won the game
@@ -345,7 +345,7 @@ public class Maze implements Serializable {
 		roomCounter = 0;
 //		clearMatrix();
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { 0, 0 };
+		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
