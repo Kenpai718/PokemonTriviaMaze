@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -48,6 +49,8 @@ public class QuestionAnswer implements Serializable {
 	 * Upperbound of random generator
 	 */
 	private transient int myUpper;
+	
+	private Random myRand;
 
 	/**
 	 * Constructor
@@ -56,6 +59,7 @@ public class QuestionAnswer implements Serializable {
 	public QuestionAnswer() {
 		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
+		myRand = new Random();
 		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = generatePokemon();
@@ -103,7 +107,8 @@ public class QuestionAnswer implements Serializable {
 		myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-			addName();
+			String aName = makeName();
+			myChoices.add(aName);
 		}
 		Collections.shuffle(myChoices);
 	}
@@ -111,16 +116,15 @@ public class QuestionAnswer implements Serializable {
 	/**
 	 * Adds names to the choices list. checks for duplicates
 	 */
-	private void addName() {
+	private String makeName() {
 		// TODO Auto-generated method stub
-		final String name = generatePokemonHelper().getName();
+		String name = generatePokemonHelper().getName();
 		// check if the name was used
-		if (!myChoices.contains(name)) {
-			myChoices.add(name);
-		} else {
-			// get a new pokemon
-			addName();
+		if (myChoices.contains(name)) {
+			name = makeName();
 		}
+		
+		return name;
 	}
 
 	/**
@@ -130,7 +134,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private Pokemon generatePokemonHelper() {
 		myUpper = myPokedex.getCount();
-		final int num = (int) ((Math.random() * (myUpper - 1)) + 1);
+		final int num = myRand.nextInt(myUpper) + 1;
 		return myPokedex.findPokemon(num);
 	}
 
