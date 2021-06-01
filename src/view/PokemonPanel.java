@@ -24,6 +24,7 @@ import javax.swing.border.Border;
 
 import model.Maze;
 import model.TriviaGame;
+import sound.BackgroundMusic;
 import view.viewHelper.BrightnessUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
@@ -519,13 +520,31 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 		} else {
 			if ("win".equals(prop)) {
-				// TODO: add more to this win message
-				JOptionPane.showMessageDialog(null, "You win!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "You really are a Pokemon Master!", 
+					"Congratulations!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+					case 0:
+						
+					case 1:
+						JOptionPane.showMessageDialog(null, "Thanks for playing!");
+						System.exit(0);
+				}
 			}
 
 			if ("lose".equals(prop)) {
-				// TODO: add more to this lose message
-				JOptionPane.showMessageDialog(null, "You lose!");
+				final Object[] options = {"New Game", "Exit"};
+				int result = JOptionPane.showOptionDialog(null, "Looks like you should have brought HM Cut with you!", 
+						"Better luck next time!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, 
+						options[1]);
+				switch (result) {
+				case 0:
+					
+				case 1:
+					JOptionPane.showMessageDialog(null, "Thanks for playing!");
+					System.exit(0);
+				}
 			}
 
 		}

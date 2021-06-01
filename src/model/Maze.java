@@ -1,8 +1,5 @@
 package model;
 
-import java.awt.Container;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +30,8 @@ public class Maze {
 	 * 2D array to store rooms in the maze
 	 */
 	private final Room[][] myMatrix;
+	
+	private boolean[][] myEnterMatrix;
 
 	/*
 	 * Location of the player in the maze
@@ -60,6 +59,7 @@ public class Maze {
 	 */
 	private boolean myWinCondition;
 
+	private boolean myLoseCondition;
 	// /*
 	// * Big data storage of all pokemon info
 	// */
@@ -86,6 +86,7 @@ public class Maze {
 		// TODO: test stuff delete later
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
+		myLoseCondition = false;
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
@@ -110,7 +111,6 @@ public class Maze {
 	 * @return Room[][] matrix of instantiated rooms
 	 */
 	private Room[][] fillRooms() {
-		// TODO Auto-generated method stub
 		final Room[][] res = new Room[ROWS][COLS];
 
 		for (int i = 0; i < res.length; i++) {
@@ -131,6 +131,67 @@ public class Maze {
 		return myPlayerLocation[0] == WIN_LOCATION[0]
 				&& myPlayerLocation[1] == WIN_LOCATION[1];
 	}
+	
+	/**
+	 * Returns if the player has lost yet
+	 * 
+	 * @return boolean t = lose, f = not lose
+	 */
+	public boolean isLoseCondition() {
+		return move(fillEntryMatrix());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	// TODO: fill/update matrix
+	public boolean[][] fillEntryMatrix() {
+		boolean[][] matrix = new boolean[ROWS][COLS];
+		for (int i = 0; i < ROWS; i++) {
+			for (int j = 0; j < COLS; j++) {
+				final Room r = myMatrix[i][j];
+				if(r.canEnter()) {
+					matrix[i][j] = true;
+				} else {
+					matrix[i][j] = false;
+				}
+			}
+		}
+		return matrix;
+	}
+	
+	/**
+	 * Returns if the player is completely blocked in
+	 * 
+	 * @param theEntryMaze a matrix that keepts track of whether the user can enter a room or not
+	 * @return boolean t = if there is no path to the exit, f = is there is still a path to the exit
+	 */
+	public boolean move(boolean[][] theEntryMatrix) {
+		// Mark reachable (from top left) nodes  
+	    // in first row and first column. 
+	    for (int i = 1; i < ROWS; i++)  
+	        if (theEntryMatrix[0][i] != false) 
+	        	theEntryMatrix[0][i] = theEntryMatrix[0][i - 1];    
+	  
+	    for (int j = 1; j < COLS; j++)  
+	        if (theEntryMatrix[j][0] != false) 
+	        	theEntryMatrix[j][0] = theEntryMatrix[j - 1][0];     
+	  
+	    // Mark reachable nodes in remaining 
+	    // matrix. 
+	    for (int i = 1; i < ROWS; i++)  
+	        for (int j = 1; j < COLS; j++)  
+	          if (theEntryMatrix[i][j] != false) 
+	        	  theEntryMatrix[i][j] = true;        
+	      
+	    // return true if right bottom true
+	    return (theEntryMatrix[ROWS - 1][COLS - 1] == true);
+	}
+	
 
 	/**
 	 * winning location
@@ -176,6 +237,7 @@ public class Maze {
 		// System.out.println(Arrays.toString(getPlayerLocation()));
 		getCurrRoom().setVisited(true);
 		myWinCondition = isWinCondition();
+
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
 	}
@@ -185,6 +247,10 @@ public class Maze {
 	 */
 	public Room getCurrRoom() {
 		return myMatrix[myPlayerLocation[0]][myPlayerLocation[1]];
+	}
+	
+	public Room getWinRoom() {
+		return myMatrix[ROWS - 1][COLS - 1];
 	}
 
 	/**
@@ -317,7 +383,7 @@ public class Maze {
 	 * TODO:
 	 * Reset the maze to default and instantiate new rooms
 	 */
-	public void reset() {
+	public static void reset() {
 		
 	}
 

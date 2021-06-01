@@ -24,6 +24,10 @@ import view.viewHelper.MazeGUI.MazeModel;
 
 public abstract class AbstractQuestionPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -951766683154894211L;
 	/*
 	 * Icons for the option pane
 	 */
@@ -127,6 +131,10 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 		if (myMaze.isWinCondition()) {
 			firePropertyChange("win", null, null);
+		} else if (!myMaze.getWinRoom().canEnter()) {
+			firePropertyChange("lose", null, null);
+		} else if (myMaze.isLoseCondition()) {
+			firePropertyChange("lose", null, null);
 		}
 
 		// TODO: if maze isLoseCondition() fire lose
