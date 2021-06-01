@@ -23,7 +23,10 @@ public class QuestionAnswer implements Serializable {
 
 	private static final int NUM_CHOICES = 4;
 
-	private static final  List<Pokemon> USED = new ArrayList<Pokemon>();
+	/*
+	 * Static list shared to prevent duplicate Pokemon in rooms
+	 */
+	private static List<Pokemon> USED = new ArrayList<Pokemon>();
 
 	/*
 	 * Question/answer
@@ -50,7 +53,10 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private transient int myUpper;
 
-	private final Random myRand;
+	/*
+	 * Random generator for pokemon id lookup and creation
+	 */
+	private Random myRand;
 
 	/**
 	 * Constructor
@@ -75,13 +81,12 @@ public class QuestionAnswer implements Serializable {
 	 */
 	public QuestionAnswer(final Pokemon thePokemon) {
 		// TODO Auto-generated constructor stub
-	        myPokedex = Pokedex.getInstance();
-                myRand = new Random();
-                myChoices = new ArrayList<String>();
-                myUpper = myPokedex.getCount();
-                myPokemon = thePokemon;
-
-                createMC();
+		myPokedex = Pokedex.getInstance();
+		myRand = new Random();
+		myChoices = new ArrayList<String>();
+		myUpper = myPokedex.getCount();
+		myPokemon = thePokemon;
+		createMC();
 
 	}
 
@@ -149,22 +154,22 @@ public class QuestionAnswer implements Serializable {
 		// stack overflow error
 
 		if (USED.contains(pkmn)) {
-                        pkmn = generatePokemon();
-                }
-                USED.add(pkmn);
-//		try {
-//			if (USED.contains(pkmn)) {
-//			        pkmn = generatePokemon();
-//			}
-//			USED.add(pkmn);
-//		} catch (final StackOverflowError e) {
-//			// System.out.println("USED list is full. It will now be cleared.\n");
-//			// System.out.println("OLD USED: " + USED);
-//			USED.clear();
-//			pkmn = generatePokemon();
-//			// System.out.println("NEW USED: " + USED);
-//
-//		}
+			pkmn = generatePokemon();
+		}
+		USED.add(pkmn);
+		// try {
+		// if (USED.contains(pkmn)) {
+		// pkmn = generatePokemon();
+		// }
+		// USED.add(pkmn);
+		// } catch (final StackOverflowError e) {
+		// // System.out.println("USED list is full. It will now be cleared.\n");
+		// // System.out.println("OLD USED: " + USED);
+		// USED.clear();
+		// pkmn = generatePokemon();
+		// // System.out.println("NEW USED: " + USED);
+		//
+		// }
 
 		return pkmn;
 	}
