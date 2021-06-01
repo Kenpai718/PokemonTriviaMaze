@@ -28,11 +28,13 @@ public class Maze implements Serializable {
 	/*
 	 * Constants
 	 */
-	private final static int ROWS = 4;
-	private final static int COLS = 4;
+	private final static int DEFAULT_ROWS = 5;
+	private final static int DEFAULT_COLS = 5;
 	private final static int START = 0;
-	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (COLS - 1) }; // end of maze
 	private int[] myWinLocation;
+	
+	private int myRows;
+	private int myCols;
 	/*
 	 * 2D array to store rooms in the maze
 	 */
@@ -85,10 +87,13 @@ public class Maze implements Serializable {
 	 */
 	private Maze() {
 		roomCounter = 0;
+		myRows = DEFAULT_ROWS;
+		myCols = DEFAULT_COLS;
+		
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
-		myWinLocation = WIN_LOCATION;
+		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of maze;
 		myPokemonList = fillPokemonList();
 		// TODO: test stuff delete later
 		myMatrix[START][START].setPlayer(true); // put player location at 0,0
@@ -119,7 +124,7 @@ public class Maze implements Serializable {
 	 */
 	private Room[][] fillRooms() {
 		// TODO Auto-generated method stub
-		Room[][] res = new Room[ROWS][COLS];
+		Room[][] res = new Room[myRows][myCols];
 		;
 		if (myMatrix != null) {
 			res = new Room[getRows()][getCols()];
@@ -229,6 +234,7 @@ public class Maze implements Serializable {
 		}
 	}
 
+
 	/**
 	 * Check if the player has attempted to move to a new room or not
 	 * 
@@ -278,8 +284,8 @@ public class Maze implements Serializable {
 	private ArrayList<Pokemon> fillPokemonList() {
 		// TODO Auto-generated method stub
 		final ArrayList<Pokemon> res = new ArrayList<>();
-		for (int i = 0; i < ROWS; i++) {
-			for (int j = 0; j < COLS; j++) {
+		for (int i = 0; i < myRows; i++) {
+			for (int j = 0; j < myCols; j++) {
 				res.add(myMatrix[i][j].getPokemon());
 			}
 		}
@@ -313,7 +319,8 @@ public class Maze implements Serializable {
 	 * @return row count
 	 */
 	public int getRows() {
-		return myMatrix.length;
+		//return myMatrix.length;
+		return myRows;
 	}
 
 	/**
@@ -322,7 +329,8 @@ public class Maze implements Serializable {
 	 * @return col count
 	 */
 	public int getCols() {
-		return myMatrix[0].length;
+		//return myMatrix[0].length;
+		return myCols;
 	}
 
 	/**
@@ -333,6 +341,18 @@ public class Maze implements Serializable {
 	public boolean isAtStart() {
 		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START
 				&& myAttemptLocation[1] == START;
+	}
+	
+	/**
+	 * Reset the matrix with a new size
+	 * 
+	 * @param theRows
+	 * @param theCols
+	 */
+	public void setMatrixSize(final int theRows, final int theCols) {
+		myRows = theRows;
+		myCols = theCols;
+		reset();
 	}
 
 	/**
@@ -347,7 +367,7 @@ public class Maze implements Serializable {
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { 0, 0 };
 		myAttemptLocation = myPlayerLocation.clone();
-		// TODO: test stuff delete later
+
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
 
@@ -386,9 +406,9 @@ public class Maze implements Serializable {
 	public void printBlockedDebugger() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("What rooms are blocked?");
-		for (int i = 0; i < ROWS; i++) {
+		for (int i = 0; i < myRows; i++) {
 			sb.append("\n");
-			for (int j = 0; j < COLS; j++) {
+			for (int j = 0; j < myCols; j++) {
 				final Room r = myMatrix[i][j];
 				sb.append(r.getRoomName() + " " + r.canEnter() + ", ");
 			}

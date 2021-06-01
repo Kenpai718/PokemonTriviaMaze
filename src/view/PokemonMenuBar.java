@@ -47,6 +47,7 @@ public class PokemonMenuBar extends JMenuBar {
 	private JMenu myFileMenu;
 	private JMenu myGamemodeMenu;
 	private JMenu myGenSelectMenu;
+	private JMenu myDifficultySelectMenu;
 	private ArrayList<JCheckBox> myGenBoxList;
 	private ButtonGroup myGamemodes;
 	private Maze myMaze;
@@ -96,12 +97,13 @@ public class PokemonMenuBar extends JMenuBar {
 		setupHelpMenu();
 		this.add(myHelpMenu);
 
+		myDifficultySelectMenu = new JMenu("Difficulty");
+		setupDifficultySelectMenu();
+		this.add(myDifficultySelectMenu);
+
 		myGenSelectMenu = new JMenu("Select Pokemon Generation(s)");
 		setupGenSelectMenu();
 		this.add(myGenSelectMenu);
-
-		final JList list = new JList();
-		myGenSelectMenu.add(list);
 
 		/*
 		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
@@ -408,6 +410,34 @@ public class PokemonMenuBar extends JMenuBar {
 //	}
 
 	/*
+	 * Setups difficulty settings menu
+	 */
+	private void setupDifficultySelectMenu() {
+		final int[] sizeSetting = { 4, myMaze.getRows(), 7, 10 };
+		final String[] difficulty = { "Easy", "Normal", "Hard", "Extreme" };
+		final String defaultOption = "Normal";
+
+		/*
+		 * Ensure only one button can be selected at a time
+		 */
+		ButtonGroup difficultyButtons = new ButtonGroup();
+		// build buttons
+		for (int i = 0; i < difficulty.length; i++) {
+			String name = difficulty[i];
+			JCheckBox settingBox = new JCheckBox(name);
+			settingBox.addActionListener(
+					new DifficultySelectListener(sizeSetting[i], settingBox));
+			difficultyButtons.add(settingBox);
+			myDifficultySelectMenu.add(settingBox);
+
+			//set normal as default selected
+			if (settingBox.getText().equals(defaultOption)) {
+				settingBox.setSelected(true);
+			}
+		}
+	}
+
+	/*
 	 * Setup select checkbox for pokemon gen select menu
 	 */
 	private void setupGenSelectMenu() {
@@ -451,6 +481,41 @@ public class PokemonMenuBar extends JMenuBar {
 	/* Listener classes */
 
 	/*
+	 * Select the difficulty and changes the maze's size
+	 */
+	class DifficultySelectListener implements ActionListener {
+
+		private final JCheckBox myBox;
+		private final String myName;
+		private final int myMazeSize;
+
+		public DifficultySelectListener(final int theNum,
+				final JCheckBox theBox) {
+			myMazeSize = theNum;
+			myBox = theBox;
+			myName = theBox.getText();
+
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+
+			if (myBox.isSelected()) { // add pokemon gen
+				myMaze.setMatrixSize(myMazeSize, myMazeSize);
+
+			}
+
+			firePropertyChange("model", null, myMaze.getMatrix());
+			myPanel.refreshGUI();
+			JOptionPane.showMessageDialog(null,
+					"Difficulty is now set to \"" + myName + "\", Size: ["
+							+ myMazeSize + ", " + myMazeSize + "]");
+
+		}
+
+	}
+
+	/*
 	 * Add a pokemon generation to the pokedex
 	 */
 	class GenSelectListener implements ActionListener {
@@ -488,7 +553,7 @@ public class PokemonMenuBar extends JMenuBar {
 							+ " Pokemon can now be encountered! Game has been reset.";
 					// resetAll();
 					mySwingWorker.execute();
-					//JOptionPane.showMessageDialog(null, myMsg);
+					// JOptionPane.showMessageDialog(null, myMsg);
 
 				} catch (final Exception e1) {
 					// TODO Auto-generated catch block
@@ -502,7 +567,7 @@ public class PokemonMenuBar extends JMenuBar {
 								+ " Pokemon have been removed. Game reset!";
 						// resetAll();
 						mySwingWorker.execute();
-						//JOptionPane.showMessageDialog(null, myMsg);
+						// JOptionPane.showMessageDialog(null, myMsg);
 
 					} catch (final Exception e1) {
 						// TODO Auto-generated catch block
@@ -564,7 +629,7 @@ public class PokemonMenuBar extends JMenuBar {
 				myMsg = "All Pokemon generations have been loaded in. Game has been reset.";
 //				resetAll();
 				mySwingWorker.execute();
-				//JOptionPane.showMessageDialog(null, myMsg);
+				// JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Unselect all gens except Gen1");
 
@@ -574,7 +639,7 @@ public class PokemonMenuBar extends JMenuBar {
 				myMsg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
 //				resetAll();
 				mySwingWorker.execute();
-				//JOptionPane.showMessageDialog(null, myMsg);
+				// JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Play All Gens");
 			}
@@ -619,6 +684,7 @@ public class PokemonMenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			resetAll();
+			JOptionPane.showMessageDialog(null, "The game has been reset!");
 		}
 
 	}
@@ -765,6 +831,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	/**
 	 * Takes user input to choose a location in the maze
+	 * 
 	 * @param theMessage
 	 * @param theIcon
 	 * @return int[]
@@ -803,7 +870,8 @@ public class PokemonMenuBar extends JMenuBar {
 
 			} else {
 				res = readRoomName(
-						"Please Input a valid Room Name\n(Room Num), Ex: \'1\':", theIcon);
+						"Please Input a valid Room Name\n(Room Num), Ex: \'1\':",
+						theIcon);
 			}
 		} else {
 			// put -1 to signify user canceled

@@ -23,6 +23,9 @@ public class QuestionAnswer implements Serializable {
 
 	private static final int NUM_CHOICES = 4;
 
+	/*
+	 * Static list shared to prevent duplicate Pokemon in rooms
+	 */
 	private static List<Pokemon> USED = new ArrayList<Pokemon>();
 
 	/*
@@ -50,6 +53,9 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private transient int myUpper;
 	
+	/*
+	 * Random generator for pokemon id lookup and creation
+	 */
 	private Random myRand;
 
 	/**
@@ -76,16 +82,11 @@ public class QuestionAnswer implements Serializable {
 	public QuestionAnswer(final Pokemon thePokemon) {
 		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
+		myRand = new Random();
 		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = thePokemon;
-
-		fillChoices();
-		// get index of shuffled array list
-		myAnswerIndex = myChoices.indexOf(this.getAnswer());
-		// System.out.println("my answer num is " + myAnswerIndex);
-
-		// randomly fill out myChoices
+		createMC();
 
 	}
 
