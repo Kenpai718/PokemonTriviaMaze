@@ -26,7 +26,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Static list shared to prevent duplicate Pokemon in rooms
 	 */
-	private static List<Pokemon> USED = new ArrayList<Pokemon>();
+	private static List<String> USED = new ArrayList<String>();
 
 	/*
 	 * Question/answer
@@ -56,7 +56,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Random generator for pokemon id lookup and creation
 	 */
-	private Random myRand;
+	private final Random myRand;
 
 	/**
 	 * Constructor
@@ -117,9 +117,11 @@ public class QuestionAnswer implements Serializable {
 	/**
 	 * Adds names to the choices list. checks for duplicates
 	 */
-	private String makeName() {
+	private String makeName() {	        
+	        myUpper = myPokedex.getCount();
+                final int num = myRand.nextInt(myUpper) + 1;
 		// TODO Auto-generated method stub
-		String name = generatePokemonHelper().getName();
+		String name = myPokedex.findPokemonName(num);
 		// check if the name was used
 		if (myChoices.contains(name)) {
 			name = makeName();
@@ -152,11 +154,11 @@ public class QuestionAnswer implements Serializable {
 		// TODO:
 		// clear the pokemon list if it gets full so it does not throw
 		// stack overflow error
-
-		if (USED.contains(pkmn)) {
+		final String name = pkmn.getName();
+		if (USED.contains(name)) {
 			pkmn = generatePokemon();
 		}
-		USED.add(pkmn);
+		USED.add(name);
 		// try {
 		// if (USED.contains(pkmn)) {
 		// pkmn = generatePokemon();
@@ -213,6 +215,10 @@ public class QuestionAnswer implements Serializable {
 
 	public int getAnswerIndex() {
 		return myAnswerIndex;
+	}
+	
+	public void clearUsed() {
+	        USED.clear();
 	}
 
 	/**

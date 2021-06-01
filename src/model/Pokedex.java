@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 
 import org.sqlite.SQLiteDataSource;
@@ -89,7 +87,7 @@ public class Pokedex implements Serializable {
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
-		ArrayList<String> empty = new ArrayList<String>();
+		final ArrayList<String> empty = new ArrayList<String>();
 		empty.add(0, "000");
 		empty.add(1, "MissingNo");
 
@@ -102,7 +100,7 @@ public class Pokedex implements Serializable {
 		}
 
 		// joke addition easter egg: "a jigglypuff seen from above" final
-		ArrayList<String> joke = new ArrayList<String>();
+		final ArrayList<String> joke = new ArrayList<String>();
 		joke.add(0, "999");
 		joke.add(1, "JigglypuffSeenFromAbove");
 		myPokedex.put(999, joke);
@@ -279,7 +277,7 @@ public class Pokedex implements Serializable {
 
 		// store pokemon field info
 		final String id = idConverter(theID);
-		ArrayList<String> pokemonInfo = new ArrayList<String>();
+		final ArrayList<String> pokemonInfo = new ArrayList<String>();
 		pokemonInfo.add(0, id);
 		pokemonInfo.add(1, theName);
 
@@ -334,7 +332,7 @@ public class Pokedex implements Serializable {
 
 		Pokemon res;
 		if (myPokedex.containsKey(theID)) {
-			ArrayList<String> info = myPokedex.get(theID);
+			final ArrayList<String> info = myPokedex.get(theID);
 			res = new Pokemon(info.get(0), info.get(1)); // if found return
 															// pokemon
 		} else {
@@ -348,14 +346,15 @@ public class Pokedex implements Serializable {
 	/**
 	 * Lookup pokemon based on name in map. If not found return missingno.
 	 * 
+	 * @param theName the name of the pokemon to find
 	 * @return Pokemon with that name
 	 */
 	public Pokemon findPokemon(final String theName) {
 		final String formatName = formatString(theName);
 		Pokemon res;
 		if (myNameDex.containsKey(formatName)) {
-			int theID = myNameDex.get(theName);
-			ArrayList<String> pokemonInfo = myPokedex.get(theID);
+			final int theID = myNameDex.get(theName);
+			final ArrayList<String> pokemonInfo = myPokedex.get(theID);
 			res = new Pokemon(pokemonInfo.get(0), pokemonInfo.get(1));
 
 		} else {
@@ -365,6 +364,25 @@ public class Pokedex implements Serializable {
 
 		return res;
 	}
+	
+	/**
+	 *  Grabs the name of the pokemon with the passed ID
+	 * 
+	 * @param theID the ID number of the pokemon
+	 * @return the name of the pokemon
+	 */
+	public String findPokemonName(final int theID) {
+	        String res;
+                if (myPokedex.containsKey(theID)) {
+                        final ArrayList<String> info = myPokedex.get(theID);
+                        res = info.get(1); // if found return
+                                                                                                                        // pokemon
+                } else {
+                        System.out.println(theID + " not found in pokedex! MissingNo will be returned.");
+                        res = "MissingNo"; // missingno in case not found
+                }
+                return res;
+        }
 
 	/*
 	 * private String getKeyByValue(final String theName) { // TODO Auto-generated
@@ -379,8 +397,7 @@ public class Pokedex implements Serializable {
 	 * @return boolean if that pokemon is in pokedex
 	 */
 	public Boolean hasPokemon(final int theID) {
-		final String id = ("000" + theID).substring(String.valueOf(theID).length());
-		return myPokedex.containsKey(id);
+		return myPokedex.containsKey(theID);
 	}
 
 	/**
