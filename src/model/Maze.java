@@ -20,18 +20,17 @@ import java.util.ArrayList;
 public class Maze implements Serializable {
 
 	/**
-         * 
-         */
-        private static final long serialVersionUID = -1781677412081562393L;
-        
-        /*
+	     * 
+	     */
+	private static final long serialVersionUID = -1781677412081562393L;
+
+	/*
 	 * Constants
 	 */
-	private final static int ROWS = 3;
-	private final static int COLS = 3;
+	private final static int ROWS = 8;
+	private final static int COLS = 8;
 	private final static int START = 0;
-	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1),
-			(COLS - 1) }; // end of maze
+	private final static int[] WIN_LOCATION = new int[] { (ROWS - 1), (COLS - 1) }; // end of maze
 	private int[] myWinLocation;
 	/*
 	 * 2D array to store rooms in the maze
@@ -58,7 +57,7 @@ public class Maze implements Serializable {
 	 * List of Pokemon objects
 	 */
 	private ArrayList<Pokemon> myPokemonList;
-	
+
 	private transient final Pokedex myPokedex;
 
 	/*
@@ -86,7 +85,7 @@ public class Maze implements Serializable {
 	private Maze() {
 		roomCounter = 0;
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { START, START};
+		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
 		myWinLocation = WIN_LOCATION;
 		myPokemonList = fillPokemonList();
@@ -111,9 +110,6 @@ public class Maze implements Serializable {
 		}
 		return singleMaze;
 	}
-	
-	
-	
 
 	/**
 	 * Fills matrix with new rooms that have questions and pokemon
@@ -122,11 +118,11 @@ public class Maze implements Serializable {
 	 */
 	private Room[][] fillRooms() {
 		// TODO Auto-generated method stub
-	        Room[][] res = new Room[ROWS][COLS];;
-	        if (myMatrix != null) {
-	              res = new Room[getRows()][getCols()];  
-	        }
-		
+		Room[][] res = new Room[ROWS][COLS];
+		;
+		if (myMatrix != null) {
+			res = new Room[getRows()][getCols()];
+		}
 
 		for (int i = 0; i < res.length; i++) {
 			for (int j = 0; j < res[0].length; j++) {
@@ -143,8 +139,7 @@ public class Maze implements Serializable {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		return myPlayerLocation[0] == myWinLocation[0]
-				&& myPlayerLocation[1] == myWinLocation[1];
+		return myPlayerLocation[0] == myWinLocation[0] && myPlayerLocation[1] == myWinLocation[1];
 	}
 
 	/**
@@ -159,8 +154,8 @@ public class Maze implements Serializable {
 	/**
 	 * Returns the players current location
 	 * 
-	 * @return int[] an integer array of the players current location 0 = row, 1
-	 *         = col
+	 * @return int[] an integer array of the players current location 0 = row, 1 =
+	 *         col
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
@@ -174,14 +169,11 @@ public class Maze implements Serializable {
 	 */
 	public void setPlayerLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows()
-					|| theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set player location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 
-				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]]
-						.setPlayer(false);
+				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
@@ -190,8 +182,8 @@ public class Maze implements Serializable {
 		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
 		if (!getCurrRoom().hasVisited()) {
-		      getCurrRoom().setVisited(true);  
-		}		
+			getCurrRoom().setVisited(true);
+		}
 		myWinCondition = isWinCondition();
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
@@ -226,10 +218,8 @@ public class Maze implements Serializable {
 
 	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows()
-					|| theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set attempt location at ["
-						+ theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
@@ -243,8 +233,7 @@ public class Maze implements Serializable {
 	 * 
 	 */
 	public boolean hasNotMoved() {
-		return myPlayerLocation[0] == myAttemptLocation[0]
-				&& myPlayerLocation[1] == myAttemptLocation[1];
+		return myPlayerLocation[0] == myAttemptLocation[0] && myPlayerLocation[1] == myAttemptLocation[1];
 	}
 
 	/**
@@ -257,8 +246,7 @@ public class Maze implements Serializable {
 	public Room getRoom(final int theR, final int theC) throws Exception {
 		Room res = null;
 		if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
-			throw new Exception(
-					"Room does not exist at [" + theR + ", " + theC + "]");
+			throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 		} else {
 			res = myMatrix[theR][theC];
 		}
@@ -269,16 +257,14 @@ public class Maze implements Serializable {
 	/**
 	 * Set a new room at a location in matrix
 	 * 
-	 * @param the new room
+	 * @param the  new room
 	 * @param theR the row index
 	 * @param theC the col index
 	 */
-	public void setRoomInMatrix(final Room theRoom, final int theR,
-			final int theC) {
+	public void setRoomInMatrix(final Room theRoom, final int theR, final int theC) {
 		try {
 			if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
-				throw new Exception(
-						"Room does not exist at [" + theR + ", " + theC + "]");
+				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
 			} else {
 				System.out.println("added" + theRoom.getAnswer());
 				myMatrix[theR][theC] = theRoom;
@@ -311,14 +297,14 @@ public class Maze implements Serializable {
 	public Room[][] getMatrix() {
 		return myMatrix;
 	}
-	
+
 	/**
-         * @param myMatrix the myMatrix to set
-         */
-        public void setMatrix(final Room[][] theMatrix) {
-                myMatrix = theMatrix;
-                myWinLocation = new int[] {getRows() - 1, getCols() - 1};
-        }
+	 * @param myMatrix the myMatrix to set
+	 */
+	public void setMatrix(final Room[][] theMatrix) {
+		myMatrix = theMatrix;
+		myWinLocation = new int[] { getRows() - 1, getCols() - 1 };
+	}
 
 	/**
 	 * Getter for row count
@@ -337,24 +323,24 @@ public class Maze implements Serializable {
 	public int getCols() {
 		return myMatrix[0].length;
 	}
-	
-	
+
 	/**
 	 * If player is at the start of the game
 	 * 
 	 * @return boolean true/false
 	 */
 	public boolean isAtStart() {
-		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START && myAttemptLocation[1] == START;
+		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START
+				&& myAttemptLocation[1] == START;
 	}
-	
+
 	/**
-	 * Reset the maze to default and instantiate new rooms
-	 * Make a new instance of the maze
+	 * Reset the maze to default and instantiate new rooms Make a new instance of
+	 * the maze
 	 */
 	public void reset() {
-		
-//	        singleMaze = new Maze();
+
+		// singleMaze = new Maze();
 		roomCounter = 0;
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { 0, 0 };
@@ -366,20 +352,17 @@ public class Maze implements Serializable {
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
 		myPokemonList.clear();
-                myPokemonList = fillPokemonList();
-		
-		
-	}
-	
-	
+		myPokemonList = fillPokemonList();
 
-        private Object readResolve() {
-                final Maze instance = getInstance();
-                instance.myMatrix = myMatrix;
-                instance.myAttemptLocation = myAttemptLocation;
-                instance.myPlayerLocation = myPlayerLocation;
-                return instance;
-        }
+	}
+
+	private Object readResolve() {
+		final Maze instance = getInstance();
+		instance.myMatrix = myMatrix;
+		instance.myAttemptLocation = myAttemptLocation;
+		instance.myPlayerLocation = myPlayerLocation;
+		return instance;
+	}
 
 	// TODO: DELETE LATER
 	// used to visually check which rooms are set to blocked

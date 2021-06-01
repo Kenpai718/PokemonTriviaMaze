@@ -31,6 +31,11 @@ public class Pokedex implements Serializable {
 	 * Maximum supported pokemon generations
 	 */
 	final int MAX_GEN = 7;
+	
+	/*
+	 * Default gen to play on reset or startup
+	 */
+	final int DEFAULT_GEN = 1;
 
 	/*
 	 * Singleton pokedex
@@ -51,6 +56,7 @@ public class Pokedex implements Serializable {
 	 * Generations that have been selected to play on
 	 */
 	private final Set<Integer> mySelectedGens;
+	
 
 	/* How many pokemon currently in pokedex */
 	private int myCounter;
@@ -70,7 +76,7 @@ public class Pokedex implements Serializable {
 
 		// fill pokedex with database
 		try {
-			addGenToDex(1); //gen 1 by default
+			addGenToDex(DEFAULT_GEN); //gen 1 by default
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,16 +148,16 @@ public class Pokedex implements Serializable {
 			}
 
 			System.out.println("Finished adding pokemon from " + databaseName + "\n");
-			System.out.println();
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 	}
+	
 	/**
 	 * Add a pokemon generation to the pokedex
 	 * 
-	 * @param the gen to add
+	 * @param the gen to add: 1- 7
 	 */
 	public void addGenToDex(final int theGenNum) throws Exception {
 		if(theGenNum > MAX_GEN || theGenNum < 1) {
@@ -163,6 +169,23 @@ public class Pokedex implements Serializable {
 			fillPokedex(theGenNum);
 		}
 	}
+	
+	/*
+	 * Add all gens to the pokedex
+	 * 
+	 */
+	public void addAllGensToDex() {
+		resetPokedex();
+		for(int i = 1; i <= MAX_GEN; i++) {
+			try {
+				addGenToDex(i);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	/**
 	 * Removes a pokemon gen from the pokedex by resetting the pokedex
@@ -191,12 +214,26 @@ public class Pokedex implements Serializable {
 		}
 	}
 	
+	/*
+	 * Restores pokedex map to default
+	 * Map will only have gen 1 pokemon.
+	 * 
+	 */
+	public void restoreGensToDefault() {
+		resetPokedex();
+		try {
+			addGenToDex(DEFAULT_GEN);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Can remove pokemon gens if the current is greater than 1
 	 * @return boolean
 	 */
 	public boolean canRemoveGen() {
-		return mySelectedGens.size() != 1;
+		return mySelectedGens.size() >= 1;
 	}
 
 	/*
@@ -205,6 +242,7 @@ public class Pokedex implements Serializable {
 	private void resetPokedex() {
 		myPokedex.clear();
 		myNameDex.clear();
+		mySelectedGens.clear();
 		myCounter = 0;
 	}
 	
@@ -250,7 +288,7 @@ public class Pokedex implements Serializable {
 	 * @return formatted string lowercase and stripped
 	 */
 	private String formatString(final String theString) {
-		return theString.toLowerCase().strip();
+		return theString.toLowerCase().trim();
 	}
 
 	/**
