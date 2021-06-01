@@ -424,11 +424,17 @@ public class PokemonMenuBar extends JMenuBar {
 		// build buttons
 		for (int i = 0; i < difficulty.length; i++) {
 			String name = difficulty[i];
+			int size = sizeSetting[i];
 			JCheckBox settingBox = new JCheckBox(name);
+			String sizeTip = name + ", Maze Size: " + size + "-by-" + size;
+			settingBox.setToolTipText(sizeTip);
+			
 			settingBox.addActionListener(
-					new DifficultySelectListener(sizeSetting[i], settingBox));
+					new DifficultySelectListener(size, settingBox));
 			difficultyButtons.add(settingBox);
 			myDifficultySelectMenu.add(settingBox);
+			
+
 
 			//set normal as default selected
 			if (settingBox.getText().equals(defaultOption)) {
