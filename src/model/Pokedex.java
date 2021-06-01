@@ -149,11 +149,9 @@ public class Pokedex implements Serializable {
 			System.exit(0);
 		}
 
-		System.out
-				.println("Opened " + databaseName + " database successfully!");
+	//	System.out.println("Opened " + databaseName + " database successfully!");
 
-		System.out.println("Selecting all rows from " + databaseName
-				+ " table to add to Pokedex map...");
+		//System.out.println("Selecting all rows from " + databaseName+ " table to add to Pokedex map...");
 		final String query = "SELECT * FROM " + databaseName;
 
 		try (Connection conn = ds.getConnection();
@@ -171,8 +169,7 @@ public class Pokedex implements Serializable {
 				addPokemon(id, name);
 			}
 
-			System.out.println(
-					"Finished adding pokemon from " + databaseName + "\n");
+			//System.out.println("Finished adding pokemon from " + databaseName + "\n");
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);

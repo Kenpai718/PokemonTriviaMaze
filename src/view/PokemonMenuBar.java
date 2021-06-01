@@ -431,6 +431,8 @@ public class PokemonMenuBar extends JMenuBar {
 			}
 		}
 
+		myGenSelectMenu.addSeparator();
+
 		// mass add or remove gen
 		final JMenuItem selectAll = new JMenuItem("Play All Gens");
 		selectAll.addActionListener(new GenSelectAllListener(selectAll));
@@ -471,9 +473,9 @@ public class PokemonMenuBar extends JMenuBar {
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					//System.out.println("Executing");
+					// System.out.println("Executing");
 					Thread.sleep(750);
-					resetAll();
+					JOptionPane.showMessageDialog(null, myMsg);
 					return null;
 				}
 			};
@@ -484,9 +486,9 @@ public class PokemonMenuBar extends JMenuBar {
 					myPokedex.addGenToDex(myGen);
 					myMsg = "Gen " + myGen
 							+ " Pokemon can now be encountered! Game has been reset.";
-					//resetAll();
+					// resetAll();
 					mySwingWorker.execute();
-					JOptionPane.showMessageDialog(null, myMsg);
+					//JOptionPane.showMessageDialog(null, myMsg);
 
 				} catch (final Exception e1) {
 					// TODO Auto-generated catch block
@@ -498,9 +500,9 @@ public class PokemonMenuBar extends JMenuBar {
 						myPokedex.removeGenFromDex(myGen);
 						myMsg = "Gen " + myGen
 								+ " Pokemon have been removed. Game reset!";
-						//resetAll();
+						// resetAll();
 						mySwingWorker.execute();
-						JOptionPane.showMessageDialog(null, myMsg);
+						//JOptionPane.showMessageDialog(null, myMsg);
 
 					} catch (final Exception e1) {
 						// TODO Auto-generated catch block
@@ -545,9 +547,9 @@ public class PokemonMenuBar extends JMenuBar {
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					//System.out.println("Executing");
+					// System.out.println("Executing");
 					resetAll();
-
+					JOptionPane.showMessageDialog(null, myMsg);
 					return null;
 				}
 			};
@@ -555,25 +557,24 @@ public class PokemonMenuBar extends JMenuBar {
 			if (!myStateChange) { // add all gens
 				myStateChange = true;
 				myMsg = "Pokemon from all generations will now be loaded in."
-						+ "\nThis may take a while. "
-						+ "Please press \"OK\".";
+						+ "\nThis may take a while. " + "Please press \"OK\".";
 				JOptionPane.showMessageDialog(null, myMsg);
 
 				myPokedex.addAllGensToDex();
+				myMsg = "All Pokemon generations have been loaded in. Game has been reset.";
 //				resetAll();
 				mySwingWorker.execute();
-				myMsg = "All Pokemon generations have been loaded in. Game has been reset.";
-				JOptionPane.showMessageDialog(null, myMsg);
+				//JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Unselect all gens except Gen1");
 
 			} else { // remove all gens
 				myStateChange = false;
 				myPokedex.restoreGensToDefault();
+				myMsg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
 //				resetAll();
 				mySwingWorker.execute();
-				myMsg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
-				JOptionPane.showMessageDialog(null, myMsg);
+				//JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Play All Gens");
 			}
@@ -751,7 +752,7 @@ public class PokemonMenuBar extends JMenuBar {
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
 			final String message = "Please enter a new room to teleport"
-					+ " to.\n(Room Number)";
+					+ " to.\n(Room Name)";
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
@@ -762,6 +763,12 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
+	/**
+	 * Takes user input to choose a location in the maze
+	 * @param theMessage
+	 * @param theIcon
+	 * @return int[]
+	 */
 	private int[] readRoomName(final String theMessage,
 			final ImageIcon theIcon) {
 		final String input = (String) JOptionPane.showInputDialog(null,
@@ -770,7 +777,12 @@ public class PokemonMenuBar extends JMenuBar {
 		int[] res = myMaze.getPlayerLocation().clone();
 //	        final Scanner scan;
 		if (input != null && !input.isEmpty()) {
-			if (!(input.contains(" "))) {
+			if ((input.toLowerCase().strip().equals("here"))) {
+				/*
+				 * Quick shortcut with "here" to put it at player pos
+				 */
+				res = myMaze.getAttemptedLocation();
+			} else if (!(input.isEmpty())) {
 //	                        scan = new Scanner(input);
 				final String roomName = input.toUpperCase();
 				boolean moved = false;
@@ -789,14 +801,9 @@ public class PokemonMenuBar extends JMenuBar {
 							theIcon);
 				}
 
-			} else if (input.toLowerCase().strip().equals("here")) {
-				/*
-				 * Quick shortcut with "here" to put it at player pos
-				 */
-				res = myMaze.getAttemptedLocation();
 			} else {
 				res = readRoomName(
-						"Please Input a valid Room Name\n(Room Num):", theIcon);
+						"Please Input a valid Room Name\n(Room Num), Ex: \'1\':", theIcon);
 			}
 		} else {
 			// put -1 to signify user canceled
