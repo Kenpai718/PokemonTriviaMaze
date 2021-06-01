@@ -196,7 +196,7 @@ public class PokemonMenuBar extends JMenuBar {
 			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
 					+ "\nSpring 2021\n"
 					+ "\nDISCLAIMER:\n" 
-					+ "This is a fan-made-non-profit project based on the \"Whose that Pokemon\" segment from the original Pokemon anime." 
+					+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime." 
 					+ "\nWe are not affliated or endorsed with the Pokemon company. All copyright belongs to Nintendo/Gamefreak.";
 
 			@Override
@@ -275,7 +275,7 @@ public class PokemonMenuBar extends JMenuBar {
 						final Room room = rooms[i][j];
 						change = change && room.hasVisited();
 						rooms[i][j].setVisited(!change);
-						if (room.isPlayerHere()) {
+						if (room.isPlayerHere() || (i == 0 && j == 0)) {
 							rooms[i][j].setVisited(true);
 						}
 
