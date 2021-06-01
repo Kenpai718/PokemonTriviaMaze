@@ -597,7 +597,7 @@ public class PokemonMenuBar extends JMenuBar {
 		int[] res = myMaze.getPlayerLocation().clone();
 //	        final Scanner scan;
 		if (input != null && !input.isEmpty()) {
-			if (!(input.length() > 1)) {
+			if (!(input.contains(" "))) {
 //	                        scan = new Scanner(input);
 				final String roomName = input.toUpperCase();
 				boolean moved = false;

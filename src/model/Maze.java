@@ -313,7 +313,7 @@ public class Maze implements Serializable {
 	 * @return row count
 	 */
 	public int getRows() {
-		return ROWS;
+		return myMatrix.length;
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class Maze implements Serializable {
 	 * @return col count
 	 */
 	public int getCols() {
-		return COLS;
+		return myMatrix[0].length;
 	}
 	
 	

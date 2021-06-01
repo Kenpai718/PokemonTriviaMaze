@@ -27,7 +27,7 @@ public class Room extends QuestionAnswer implements Serializable {
 	/*
 	 * Name of room
 	 */
-	private final char myRoomName;
+	private final String myRoomName;
 
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
@@ -55,7 +55,8 @@ public class Room extends QuestionAnswer implements Serializable {
 		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z
-		myRoomName = (char) (theRoomNumber + START_LETTER);
+//		myRoomName = (char) (theRoomNumber + START_LETTER);
+		myRoomName = "" + (theRoomNumber + 1);
 		setEntry(true);
 		hasPlayer = false;
 		myVisit = false;
@@ -71,11 +72,23 @@ public class Room extends QuestionAnswer implements Serializable {
 		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z
-		myRoomName = (char) (theRoomNumber + START_LETTER);
+//		(char) (theRoomNumber + START_LETTER);
+//		myRoomName = setName(theRoomNumber);
+		myRoomName = "" + (theRoomNumber + 1);
 		setEntry(true);
 		hasPlayer = false;
 		myVisit = false;
 		
+	}
+	
+	private char setName(final int theRoomNumber) {
+	        char res = START_LETTER;
+	        if (theRoomNumber + START_LETTER <= 'Z') {
+	                res = (char) (theRoomNumber + START_LETTER);
+	        } else {
+	                
+	        }
+	        return res;
 	}
 
 	/**
@@ -133,7 +146,7 @@ public class Room extends QuestionAnswer implements Serializable {
 	 * 
 	 * @return char roomName
 	 */
-	public char getRoomName() {
+	public String getRoomName() {
 		return myRoomName;
 	}
 

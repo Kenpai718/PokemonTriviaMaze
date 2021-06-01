@@ -35,6 +35,13 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	     * 
 	     */
 	private static final long serialVersionUID = -5880241329362260869L;
+	
+	private static final int SIZE = 500;
+	
+	private static final Dimension DEFAULT_DIM = new Dimension(SIZE,SIZE);
+	
+	private static final double FONT_SIZE = 3.125;
+	
 
 	/*
 	 * Color used for the maze background
@@ -54,7 +61,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	/*
 	 * Pokemon font
 	 */
-	final Font PKMN_FONT = new Font("PKMN RBYGSC", Font.PLAIN, 40);
+//	final Font PKMN_FONT = 
 
 	/*
 	 * Table used for GUI visual
@@ -82,6 +89,10 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	private final Renderer myRenderer;
 	
 	private final MazeModel myModel;
+	
+	private Font myFont;
+	
+	private final int myRowSize;
 
 	/**
 	 * Constructor that create the maze visual
@@ -91,11 +102,13 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		// initialize fields
 		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
+		myRowSize = SIZE / myMaze.getRows();
+		myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (myRowSize / FONT_SIZE));
 
 		// prepare GUI
-		setMaximumSize(new Dimension(500, 500));
+		setMaximumSize(DEFAULT_DIM);
 		setBackground(new Color(255, 0, 0));
-		setPreferredSize(new Dimension(500, 500));
+		setPreferredSize(DEFAULT_DIM);
 		setLayout(new BorderLayout(0, 0));
 
 		// setup table for maze visual
@@ -105,12 +118,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		// are made
 		myModel = new MazeModel();
 		myTable.setModel(myModel);
-		myTable.setFont(PKMN_FONT);
+//		myTable.setFont(myFont);
 		myTable.setForeground(FONT_COLOR);
 		myTable.setGridColor(BORDER_COLOR);
 		myTable.setRowSelectionAllowed(false);
-		myTable.setRowHeight(125);
-		myTable.setPreferredScrollableViewportSize(new Dimension(500, 500));
+		myTable.setRowHeight(myRowSize);
+		myTable.setPreferredScrollableViewportSize(DEFAULT_DIM);
 		myTable.setBackground(new Color(51, 51, 51));
 		myTable.setFocusable(false);
 		add(myTable, BorderLayout.CENTER);
@@ -132,6 +145,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			myTable.getColumnModel().getColumn(i).setCellRenderer(myRenderer);
 		}
 	}
+	
+	
 
 	// inner class that creates a custom implementation of AbstractTableModel
 	// for the maze
@@ -182,8 +197,13 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		 * @param theUpdate
 		 */
 		public void refresh(final Object[][] theUpdate) {
+		        final int oldRows = getRowCount();
 			myData = theUpdate;
 			fireTableDataChanged();
+			if (getRowCount() - oldRows != 0) {
+                                fireTableStructureChanged();
+                        }
+			
 		}
 
 	}
@@ -198,6 +218,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		         * 
 		         */
 		private static final long serialVersionUID = -2696460913971414868L;
+		
+		private static final int OFFSET = 25;
 
 		/*
 		 * Icon that represents the player
@@ -236,16 +258,17 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 			final JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
+			final int iconSize = getRowSize() - OFFSET;
 
 			if (r.isPlayerHere()) { // player at this cell put player icon
 				final ImageIcon scaled = new ImageIcon(PLAYER.getImage()
-						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+						.getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 				// same process for blocked rooms put an else if here once we
 				// have a data structure for it
 			} else if (!r.canEnter()) { // blocked room icon
 				final ImageIcon scaled = new ImageIcon(TREE.getImage()
-						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+						.getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 				lbl.setIcon(scaled);
 			}  else { //win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
@@ -253,7 +276,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
 															// icon
 					final ImageIcon scaled = new ImageIcon(WIN.getImage()
-							.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+							.getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
 					lbl.setIcon(scaled);
 					// set visited color
 				} else if (r.hasVisited()) {
@@ -262,13 +285,13 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	                                lbl.setForeground(MY_GREEN);
 	                                //lbl.setForeground(Color.CYAN);
 	                                lbl.setBackground(MAZE_BG);
-	                                lbl.setFont(PKMN_FONT);
+	                                lbl.setFont(myFont);
 	                        } else { // normal room name
 					final String name = r.toString();
 					lbl.setText(name);
 					lbl.setForeground(Color.WHITE);
 					lbl.setBackground(MAZE_BG);
-					lbl.setFont(PKMN_FONT);
+					lbl.setFont(myFont);
 				}
 			}
 
@@ -284,14 +307,26 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	public JTable getTable() {
 		return myTable;
 	}
+	
+	private int getRowSize() {
+                return SIZE / myMatrix.length;
+        }
 
         @Override
         public void propertyChange(final PropertyChangeEvent evt) {
                 if ("model".equals(evt.getPropertyName())) {
                 		//System.out.println("model called for refresh");
+                        System.out.println("Model Changed");
+                        final int oldRows = myMatrix.length;
                         myMatrix = (Room[][]) evt.getNewValue();
+                        if (myMatrix.length - oldRows != 0) {
+                                myTable.setRowHeight(getRowSize());
+                                myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
+                        }
                         myModel.refresh(myMatrix);
-                        repaint();
+                        
+                        
+                        revalidate();
                 }
                 
         }
