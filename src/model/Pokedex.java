@@ -31,6 +31,11 @@ public class Pokedex implements Serializable {
 	 * Maximum supported pokemon generations
 	 */
 	final int MAX_GEN = 7;
+	
+	/*
+	 * Default gen to play on reset or startup
+	 */
+	final int DEFAULT_GEN = 1;
 
 	/*
 	 * Singleton pokedex
@@ -71,7 +76,7 @@ public class Pokedex implements Serializable {
 
 		// fill pokedex with database
 		try {
-			addGenToDex(1); //gen 1 by default
+			addGenToDex(DEFAULT_GEN); //gen 1 by default
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,10 +174,15 @@ public class Pokedex implements Serializable {
 	 * Add all gens to the pokedex
 	 * 
 	 */
-	public void addAllGensToDex(final int theGenNum) throws Exception {
+	public void addAllGensToDex() {
 		resetPokedex();
 		for(int i = 1; i <= MAX_GEN; i++) {
-			addGenToDex(i);
+			try {
+				addGenToDex(i);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -212,7 +222,7 @@ public class Pokedex implements Serializable {
 	public void restoreGensToDefault() {
 		resetPokedex();
 		try {
-			addGenToDex(1);
+			addGenToDex(DEFAULT_GEN);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,6 +242,7 @@ public class Pokedex implements Serializable {
 	private void resetPokedex() {
 		myPokedex.clear();
 		myNameDex.clear();
+		mySelectedGens.clear();
 		myCounter = 0;
 	}
 	
@@ -277,7 +288,7 @@ public class Pokedex implements Serializable {
 	 * @return formatted string lowercase and stripped
 	 */
 	private String formatString(final String theString) {
-		return theString.toLowerCase().strip();
+		return theString.toLowerCase().trim();
 	}
 
 	/**

@@ -52,7 +52,6 @@ public class PokemonMenuBar extends JMenuBar {
 	private boolean myReveal;
 	private final TutorialPanel myTutorial;
 	private final Pokedex myPokedex;
-	
 
 	/**
 	 * The constructor for the Menu Bar that sets up the the fields and starts the
@@ -194,17 +193,14 @@ public class PokemonMenuBar extends JMenuBar {
 		about.addActionListener(new ActionListener() {
 
 			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
-					+ "\nSpring 2021\n"
-					+ "\nDISCLAIMER:\n" 
-					+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime." 
+					+ "\nSpring 2021\n" + "\nDISCLAIMER:\n"
+					+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime."
 					+ "\nWe are not affliated or endorsed with the Pokemon company. All copyright belongs to Nintendo/Gamefreak.";
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(myFrame,
-						aboutMessage, "About Us",
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, aboutMessage, "About Us", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		});
@@ -371,7 +367,7 @@ public class PokemonMenuBar extends JMenuBar {
 		// current supported pokemon generations
 		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)",
 				"Gen 5 (493-649)", "Gen 6 (649-721)", "Gen 7 (721-809)" };
-		
+
 		myGenBoxList = new ArrayList<JCheckBox>();
 
 		// add all to a checkbox list
@@ -385,6 +381,11 @@ public class PokemonMenuBar extends JMenuBar {
 				genBox.setSelected(true); // gen 1 selected by defau;t
 			}
 		}
+
+		// mass add or remove gen
+		JMenuItem selectAll = new JMenuItem("Play All Gens");
+		selectAll.addActionListener(new GenSelectAllListener(selectAll));
+		myGenSelectMenu.add(selectAll);
 	}
 
 	/*
@@ -446,6 +447,73 @@ public class PokemonMenuBar extends JMenuBar {
 				}
 			}
 
+		}
+
+	}
+
+	/*
+	 * Select/unselect all gens to play on listener
+	 */
+	class GenSelectAllListener implements ActionListener {
+
+		private JMenuItem myChangeButton;
+		/*
+		 * If user has clicked this button once to add all pokemon
+		 */
+		private boolean myStateChange;
+
+		public GenSelectAllListener(final JMenuItem theChangeButton) {
+			myChangeButton = theChangeButton;
+			myStateChange = false;
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			// TODO Auto-generated method stub
+			String msg;
+
+			if (!myStateChange) { // add all gens
+				myStateChange = true;
+				msg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
+						+ "Please press \"OK\" and be patient.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myPokedex.addAllGensToDex();
+				msg = "All Pokemon generations have been loaded in. Game has been reset.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myChangeButton.setText("Unselect all gens except Gen1");
+
+			} else { // remove all gens
+				myStateChange = false;
+				myPokedex.restoreGensToDefault();
+				msg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
+				JOptionPane.showMessageDialog(null, msg);
+
+				myChangeButton.setText("Play All Gens");
+			}
+
+			// initialize box selection based on the action
+			selectButtons(myStateChange);
+			resetAll();
+
+		}
+
+		/**
+		 * Select all gen box buttons depending on state
+		 * 
+		 * @param theState true = all boxes selected, false = all unselected excpet gen
+		 *                 1
+		 */
+		private void selectButtons(final Boolean theState) {
+			for (JCheckBox box : myGenBoxList) {
+				box.setSelected(theState);
+			}
+
+			// keep gen 1 box selected for the reset remove
+			if (theState == false) {
+				myGenBoxList.get(0).setSelected(true);
+			}
 		}
 
 	}

@@ -47,7 +47,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Upperbound of random generator
 	 */
-	private transient final int myUpper;
+	private transient int myUpper;
 
 	/**
 	 * Constructor
@@ -130,6 +130,7 @@ public class QuestionAnswer implements Serializable {
 	 * @return returns a random pokemon
 	 */
 	private Pokemon generatePokemonHelper() {
+		myUpper = myPokedex.getCount();
 		final int num = (int) (Math.random() * (myUpper - 1) + 1);
 		return myPokedex.findPokemon(num);
 	}
