@@ -46,29 +46,29 @@ public class Pokedex implements Serializable {
 	public static Pokedex singleDex = null;
 
 	/*
-	 * key = number id of when the pokemon was added to pokedex (myCounter) value =
-	 * Arraylist<String> to store pokemon fields, [0]: official pokedex id num
-	 * "025", [1]: name "pikachu"
+	 * key = number id of when the pokemon was added to pokedex (myCounter)
+	 * value = Arraylist<String> to store pokemon fields, [0]: official pokedex
+	 * id num "025", [1]: name "pikachu"
 	 * 
 	 * Used for look ups for pokemon based on random generation
 	 */
-	private final Map<Integer, ArrayList<String>> myPokedex;
+	private Map<Integer, ArrayList<String>> myPokedex;
 	// private final Map<String, String> myPokedex;
 
 	/*
 	 * Alternative map for looking up the name
 	 * 
-	 * Key = String formatted name of the pokemon, value = id number when added to
-	 * pokedex
+	 * Key = String formatted name of the pokemon, value = id number when added
+	 * to pokedex
 	 * 
 	 * Used in conjunction with myPokedex to get info used to make a pokemon
 	 */
-	private final Map<String, Integer> myNameDex;
+	private Map<String, Integer> myNameDex;
 
 	/*
 	 * Generations that have been selected to play on
 	 */
-	private final Set<Integer> mySelectedGens;
+	private Set<Integer> mySelectedGens;
 
 	/*
 	 * How many pokemon currently in pokedex Also used as an id number for when
@@ -120,17 +120,18 @@ public class Pokedex implements Serializable {
 	}
 
 	/*
-	 * Read from the pokedex database file with SQLite to create pokemon objects to
-	 * add to the pokedex map.
+	 * Read from the pokedex database file with SQLite to create pokemon objects
+	 * to add to the pokedex map.
 	 * 
-	 * Reads off of Gen#Pokedex.db file Adds a specific pokemon generation number
-	 * 1-7 to the pokedex
+	 * Reads off of Gen#Pokedex.db file Adds a specific pokemon generation
+	 * number 1-7 to the pokedex
 	 * 
 	 */
 	private void fillPokedex(final int theNum) throws Exception {
 
 		if (theNum > MAX_GEN || theNum < 1) {
-			throw new Exception(theNum + " is not a playable generation for the pokedex.");
+			throw new Exception(
+					theNum + " is not a playable generation for the pokedex.");
 		}
 
 		SQLiteDataSource ds = null;
@@ -146,13 +147,16 @@ public class Pokedex implements Serializable {
 			System.exit(0);
 		}
 
-		// System.out.println("Opened " + databaseName + " database successfully!");
+		// System.out.println("Opened " + databaseName + " database
+		// successfully!");
 
-		// System.out.println("Selecting all rows from " + databaseName+ " table to add
+		// System.out.println("Selecting all rows from " + databaseName+ " table
+		// to add
 		// to Pokedex map...");
 		final String query = "SELECT * FROM " + databaseName;
 
-		try (Connection conn = ds.getConnection(); Statement stmt = conn.createStatement();) {
+		try (Connection conn = ds.getConnection();
+				Statement stmt = conn.createStatement();) {
 
 			final ResultSet rs = stmt.executeQuery(query);
 
@@ -166,7 +170,8 @@ public class Pokedex implements Serializable {
 				addPokemon(id, name);
 			}
 
-			// System.out.println("Finished adding pokemon from " + databaseName + "\n");
+			// System.out.println("Finished adding pokemon from " + databaseName
+			// + "\n");
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -206,8 +211,8 @@ public class Pokedex implements Serializable {
 	}
 
 	/**
-	 * Removes a pokemon gen from the pokedex by resetting the pokedex and reading
-	 * the current selection databases again.
+	 * Removes a pokemon gen from the pokedex by resetting the pokedex and
+	 * reading the current selection databases again.
 	 * 
 	 * @param theGenNum
 	 * @throws Exception
@@ -220,7 +225,8 @@ public class Pokedex implements Serializable {
 		if (!mySelectedGens.contains(theGenNum)) {
 			throw new Exception(theGenNum + " is not currently selected.");
 		} else if (mySelectedGens.size() == 1) {
-			throw new Exception("Must have at least one pokemon generation selected.");
+			throw new Exception(
+					"Must have at least one pokemon generation selected.");
 		} else {
 			mySelectedGens.remove(theGenNum);
 			resetPokedex();
@@ -313,6 +319,15 @@ public class Pokedex implements Serializable {
 		return myCounter;
 	}
 
+	/***
+	 * Pokedex counter
+	 * 
+	 * @return set of selected gens
+	 */
+	public Set<Integer> getSelectedGens() {
+		return mySelectedGens;
+	}
+
 	/**
 	 * Method to format string the same to put in name map
 	 * 
@@ -336,7 +351,8 @@ public class Pokedex implements Serializable {
 			res = new Pokemon(info.get(0), info.get(1)); // if found return
 															// pokemon
 		} else {
-			System.out.println(theID + " not found in pokedex! MissingNo will be returned.");
+			System.out.println(theID
+					+ " not found in pokedex! MissingNo will be returned.");
 			res = MISSING; // missingno in case not found
 		}
 
@@ -358,37 +374,39 @@ public class Pokedex implements Serializable {
 			res = new Pokemon(pokemonInfo.get(0), pokemonInfo.get(1));
 
 		} else {
-			System.out.println(theName + " not found in pokedex! MissingNo will be returned.");
+			System.out.println(theName
+					+ " not found in pokedex! MissingNo will be returned.");
 			res = MISSING;
 		}
 
 		return res;
 	}
-	
+
 	/**
-	 *  Grabs the name of the pokemon with the passed ID
+	 * Grabs the name of the pokemon with the passed ID
 	 * 
 	 * @param theID the ID number of the pokemon
 	 * @return the name of the pokemon
 	 */
 	public String findPokemonName(final int theID) {
-	        String res;
-                if (myPokedex.containsKey(theID)) {
-                        final ArrayList<String> info = myPokedex.get(theID);
-                        res = info.get(1); // if found return
-                                                                                                                        // pokemon
-                } else {
-                        System.out.println(theID + " not found in pokedex! MissingNo will be returned.");
-                        res = "MissingNo"; // missingno in case not found
-                }
-                return res;
-        }
+		String res;
+		if (myPokedex.containsKey(theID)) {
+			final ArrayList<String> info = myPokedex.get(theID);
+			res = info.get(1); // if found return
+								// pokemon
+		} else {
+			System.out.println(theID
+					+ " not found in pokedex! MissingNo will be returned.");
+			res = "MissingNo"; // missingno in case not found
+		}
+		return res;
+	}
 
 	/*
-	 * private String getKeyByValue(final String theName) { // TODO Auto-generated
-	 * method stub String res = "000"; for (final Entry<String, String> entry :
-	 * myPokedex.entrySet()) { if (Objects.equals(theName, entry.getValue())) { res
-	 * = entry.getKey(); } } return res; }
+	 * private String getKeyByValue(final String theName) { // TODO
+	 * Auto-generated method stub String res = "000"; for (final Entry<String,
+	 * String> entry : myPokedex.entrySet()) { if (Objects.equals(theName,
+	 * entry.getValue())) { res = entry.getKey(); } } return res; }
 	 */
 
 	/**
@@ -410,9 +428,24 @@ public class Pokedex implements Serializable {
 		return myNameDex.containsKey(formatName);
 	}
 
+	/**
+	 * Resolve singleton serialization
+	 * 
+	 * @return object this pokedex
+	 */
+	private Object readResolve() {
+
+		final Pokedex instance = getInstance();
+		instance.myPokedex = myPokedex;
+		instance.myNameDex = myNameDex;
+		instance.mySelectedGens = mySelectedGens;
+		instance.myCounter = myCounter;
+		return instance;
+	}
+
 	@Override
 	public String toString() {
-		return myPokedex.toString();
+		return myNameDex.keySet().toString();
 	}
 
 }
