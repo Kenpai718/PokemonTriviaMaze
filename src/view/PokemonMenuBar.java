@@ -12,7 +12,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.AbstractButton;
@@ -450,10 +449,10 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 * Update gen select menu
 	 */
 	private void updateGenSelect() {
-		Set<Integer> selectgens = myPokedex.getSelectedGens();
+		final Set<Integer> selectgens = myPokedex.getSelectedGens();
 		// update gen selection
 		int count = 1;
-		for (JCheckBox jrb : myGenBoxList) {
+		for (final JCheckBox jrb : myGenBoxList) {
 			if (selectgens.contains(count)) {
 				jrb.setSelected(true);
 			} else {
@@ -577,7 +576,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Objects to be saved
 		 */
-		private void saveHelper(ObjectOutputStream objOut) throws IOException {
+		private void saveHelper(final ObjectOutputStream objOut) throws IOException {
 			objOut.writeObject(myMaze);
 			objOut.writeObject(myPokedex);
 		}
@@ -585,12 +584,12 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Tell user the save state info
 		 */
-		private void showState(String theFileName) {
-			String curr = "Player is at Room " + myMaze.getCurrRoom();
-			String attempt = "Player is attempting to enter Room "
+		private void showState(final String theFileName) {
+			final String curr = "Player is at Room " + myMaze.getCurrRoom();
+			final String attempt = "Player is attempting to enter Room "
 					+ myMaze.getAttemptRoom();
-			String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
-			String stateMessage = "Pokemon Trivia save has been loaded: "
+			final String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
+			final String stateMessage = "Pokemon Trivia save has been Saved: "
 					+ theFileName + "\n" + playerLocation
 					+ "\nDifficulty Setting = " + mySelectedDifficulty
 					+ "\nGens Selected = Gens: " + myPokedex.getSelectedGens();
@@ -605,7 +604,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	class LoadListener implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			doLoad();
 
 		}
@@ -659,7 +658,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Load the objects we want
 		 */
-		private void loadObjectsHelper(ObjectInputStream in)
+		private void loadObjectsHelper(final ObjectInputStream in)
 				throws ClassNotFoundException, IOException {
 			myMaze = (Maze) in.readObject();
 			myPokedex = (Pokedex) in.readObject();
@@ -669,12 +668,12 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Option pane to tell user of state
 		 */
-		private void showState(String fileName) {
-			String curr = "Player is at Room " + myMaze.getCurrRoom();
-			String attempt = "Player is attempting to enter Room "
+		private void showState(final String fileName) {
+			final String curr = "Player is at Room " + myMaze.getCurrRoom();
+			final String attempt = "Player is attempting to enter Room "
 					+ myMaze.getAttemptRoom();
-			String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
-			String stateMessage = "Pokemon Trivia save has been loaded: "
+			final String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
+			final String stateMessage = "Pokemon Trivia save has been loaded: "
 					+ fileName + "\n" + playerLocation
 					+ "\nDifficulty Setting = " + mySelectedDifficulty
 					+ "\nGens Selected = Gens: " + myPokedex.getSelectedGens();
@@ -888,8 +887,19 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			resetAll();
-			JOptionPane.showMessageDialog(null, "The game has been reset!");
+		        
+		        final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                        // System.out.println("Executing");
+                                        resetAll();
+                                        JOptionPane.showMessageDialog(null, "The game has been reset!");
+                                        return null;
+                                }
+                        };
+                        mySwingWorker.execute();
+			
 		}
 
 	}
