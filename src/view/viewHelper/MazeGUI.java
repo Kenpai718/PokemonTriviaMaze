@@ -5,14 +5,23 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.border.Border;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -32,20 +41,20 @@ import model.Room;
 public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	/**
-	     * 
-	     */
+	 * Constants
+	 */
 	private static final long serialVersionUID = -5880241329362260869L;
-
 	private static final int SIZE = 500;
-
 	private static final Dimension DEFAULT_DIM = new Dimension(SIZE, SIZE);
-
 	private static final double FONT_SIZE = 3.125;
+	private final String myGrassPath = "./src/images/maze_gui/maze_grass_bg.png";
+	private final Color TRANSPARENT = new Color(1f, 0f, 0f, .5f);
 
 	/*
 	 * Color used for the maze background
 	 */
-	final Color MAZE_BG = new Color(51, 51, 51);
+	// final Color MAZE_BG = new Color(51, 51, 51);
+	final Color MAZE_BG = new Color(112, 200, 160);
 
 	/*
 	 * Color used for the font
@@ -53,24 +62,9 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	final Color FONT_COLOR = Color.WHITE;
 
 	/*
-	 * Color used for the border
-	 */
-	final Color BORDER_COLOR = new Color(51, 153, 204);
-
-	/*
-	 * Pokemon font
-	 */
-	// final Font PKMN_FONT =
-
-	/*
 	 * Table used for GUI visual
 	 */
 	private final JTable myTable;
-
-	/*
-	 * Used to build the JTable rows and columns
-	 */
-	// private final DefaultTableModel myDTB;
 
 	/*
 	 * Maze that is to be visualized in the GUI
@@ -87,11 +81,40 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 */
 	private final Renderer myRenderer;
 
+	/*
+	 * Model of the maze visual
+	 */
 	private final MazeModel myModel;
 
+	/*
+	 * Font used/size
+	 */
 	private Font myFont;
 
+	/*
+	 * Size of the table visual
+	 */
 	private final int myRowSize;
+
+	/*
+	 * background of this jpanel
+	 */
+	private final BufferedImage myGrassBG;
+
+	/*
+	 * Background color of border: dark green
+	 */
+	private final Color GRID_COLOR = new Color(0, 100, 0);
+
+	/*
+	 * Border color
+	 */
+	private final Color BORDER_COLOR = Color.black;
+
+	/*
+	 * Border of jpanel
+	 */
+	final Border BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 
 	/**
 	 * Constructor that create the maze visual
@@ -102,34 +125,81 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		myMaze = Maze.getInstance();
 		myMatrix = myMaze.getMatrix();
 		myRowSize = SIZE / myMaze.getRows();
-		myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (myRowSize / FONT_SIZE));
+		myFont = new Font("PKMN RBYGSC", Font.PLAIN,
+				(int) (myRowSize / FONT_SIZE));
+		myGrassBG = readImage(myGrassPath);
+		myTable = new JTable();
+		myModel = new MazeModel();
+		myRenderer = new Renderer();
+		
+		//setup visuals
+		prepareGUI();
+		setupTable();
 
-		// prepare GUI
+
+	}
+	
+	/*
+	 * Setup the gui for this jpanel
+	 */
+	private void prepareGUI() {
 		setMaximumSize(DEFAULT_DIM);
-		setBackground(new Color(255, 0, 0));
 		setPreferredSize(DEFAULT_DIM);
 		setLayout(new BorderLayout(0, 0));
-
-		// setup table for maze visual
-		// myDTB = new DefaultTableModel(myMaze.getRows(), myMaze.getCols());
-		myTable = new JTable();
-		// Using Custom TableModel to correctly refresh the table when changes
-		// are made
-		myModel = new MazeModel();
+		// set background transparent to draw a new background
+		setOpaque(false); // background of parent will be painted first
+		setBackground(TRANSPARENT);
+		this.setBorder(BORDER);
+		repaint();
+	
+	}
+	
+	/*
+	 * Setup jtable visual of the maze
+	 * Using Custom TableModel to correctly refresh the table when changes
+	 * are made
+	 */
+	private void setupTable() {
 		myTable.setModel(myModel);
 		myTable.setFont(myFont);
 		myTable.setForeground(FONT_COLOR);
-		myTable.setGridColor(BORDER_COLOR);
+		myTable.setGridColor(GRID_COLOR);
 		myTable.setRowSelectionAllowed(false);
 		myTable.setRowHeight(myRowSize);
 		myTable.setPreferredScrollableViewportSize(DEFAULT_DIM);
-		myTable.setBackground(new Color(51, 51, 51));
+		myTable.setOpaque(false);
+		myTable.setBackground(TRANSPARENT);
 		myTable.setFocusable(false);
 		add(myTable, BorderLayout.CENTER);
 
 		// set player icon, blocked, room names
-		myRenderer = new Renderer();
 		fillTable();
+	}
+
+	/**
+	 * Helper method to read an Image given a filepath
+	 * 
+	 * @param String theLocation filepath
+	 * @return BufferedImage the new image
+	 */
+	public BufferedImage readImage(final String theLocation) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(theLocation));
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+
+		return img;
+	}
+
+	/**
+	 * Paints the grass background
+	 */
+	@Override
+	protected void paintComponent(final Graphics theG) {
+		super.paintComponent(theG);
+		theG.drawImage(myGrassBG, 0, 0, SIZE, SIZE, this);
 
 	}
 
@@ -183,7 +253,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		 *
 		 */
 		@Override
-		public void setValueAt(final Object theRoom, final int rowIndex, final int columnIndex) {
+		public void setValueAt(final Object theRoom, final int rowIndex,
+				final int columnIndex) {
 			myData[rowIndex][columnIndex] = theRoom;
 			fireTableCellUpdated(rowIndex, columnIndex);
 		}
@@ -195,9 +266,11 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			// Get row count before change
 			final int oldRows = this.getRowCount();
 			myData = theUpdate;
-			// Check if the row count has changed and update the respective fields
+			// Check if the row count has changed and update the respective
+			// fields
 			if (this.getRowCount() - oldRows != 0) {
-				myFont = new Font("PKMN RBYGSC", Font.PLAIN, (int) (getRowSize() / FONT_SIZE));
+				myFont = new Font("PKMN RBYGSC", Font.PLAIN,
+						(int) (getRowSize() / FONT_SIZE));
 				fireTableStructureChanged();
 				myTable.setRowHeight(getRowSize());
 				// Refills the table with the updated font size
@@ -225,20 +298,32 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		/*
 		 * Icon that represents the player
 		 */
-		private final ImageIcon PLAYER = new ImageIcon("./src/images/other/PlayerIcon.png");
+		private final ImageIcon PLAYER = new ImageIcon(
+				"./src/images/maze_gui/PlayerIcon.png");
+
+		/*
+		 * Icon that represents the player
+		 */
+		private final ImageIcon GRASS = new ImageIcon(
+				"./src/images/maze_gui/grass_icon.png");
 
 		/*
 		 * Icon that represents a blocked room
 		 */
-		private final ImageIcon TREE = new ImageIcon("./src/images/other/tree.png");
+		private final ImageIcon TREE = new ImageIcon(
+				"./src/images/maze_gui/tree.png");
 
-		private final ImageIcon WIN = new ImageIcon("./src/images/other/pokestar.png");
-
-		// private final Color LIGHT_GREEN = new Color(138,255,167); //highlighter green
 		/*
-		 * Color used to denote visited rooms
+		 * Icon to represent the end goal
 		 */
-		private final Color MY_GREEN = new Color(22, 208, 68);
+		private final ImageIcon WIN = new ImageIcon(
+				"./src/images/maze_gui/pokestar.png");
+
+		/*
+		 * Icon to represent visited room
+		 */
+		private final ImageIcon POKEBALL = new ImageIcon(
+				"./src/images/maze_gui/visited_icon.png");
 
 		/**
 		 * Constructor
@@ -249,56 +334,81 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			super();
 		}
 
+
+		/**
+		 * Draws the icons for each cell of the maze
+		 */
 		@Override
-		public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected,
+		public Component getTableCellRendererComponent(final JTable table,
+				final Object value, final boolean isSelected,
 				final boolean hasFocus, final int row, final int column) {
 
-			final JLabel lbl = new JLabel(); // label put in cells
+			JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
 			final int iconSize = getRowSize() - OFFSET;
+			final int grassSize = iconSize + 10;
+			final int visitedSize = iconSize / 2;
 
 			if (r.isPlayerHere()) { // player at this cell put player icon
-				final ImageIcon scaled = new ImageIcon(
-						PLAYER.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
-				lbl.setIcon(scaled);
-				// same process for blocked rooms put an else if here once we
-				// have a data structure for it
+				lbl = makeImageLabel(PLAYER, iconSize);
 			} else if (!r.canEnter()) { // blocked room icon
-				final ImageIcon scaled = new ImageIcon(
-						TREE.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
-				lbl.setIcon(scaled);
+				lbl = makeImageLabel(TREE, iconSize);
 			} else { // win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
 
-				if (r == myMatrix[winpos[0]][winpos[1]]) { // winning location
-															// icon
-					final ImageIcon scaled = new ImageIcon(
-							WIN.getImage().getScaledInstance(iconSize, iconSize, Image.SCALE_DEFAULT));
-					lbl.setIcon(scaled);
-					// set visited color
-				} else if (r.hasVisited()) {
-					final String name = r.toString();
-					lbl.setText(name);
-					lbl.setForeground(MY_GREEN);
-					// lbl.setForeground(Color.CYAN);
-					lbl.setBackground(MAZE_BG);
-					lbl.setFont(myFont);
-				} else { // normal room name
-					final String name = r.toString();
-					lbl.setText(name);
-					lbl.setForeground(Color.WHITE);
-					lbl.setBackground(MAZE_BG);
-					lbl.setFont(myFont);
+				if (r == myMatrix[winpos[0]][winpos[1]]) {
+					// winning location icon
+					lbl = makeImageLabel(WIN, iconSize);
+				} else if (r.hasVisited()) { // pokeball for unvisited rooms
+					lbl = makeImageLabel(POKEBALL, visitedSize);
+				} else { // tall grass for unvisited rooms
+					lbl = makeImageLabel(GRASS, grassSize);
 				}
 			}
 
-			// format jlabel
-			lbl.setVisible(true);
-			lbl.setHorizontalAlignment(JLabel.CENTER);
-			lbl.setVerticalAlignment(JLabel.CENTER);
 			return lbl;
 
 		}
+	}
+
+	/**
+	 * Make a label and put an image on it and scale it
+	 * 
+	 * @param ImageIcon theImg
+	 * @param ImageIcon theSize
+	 * @return formamted label with an image on it
+	 */
+	private JLabel makeImageLabel(final ImageIcon theImg, final int theSize) {
+		final JLabel lbl = new JLabel(); // label put in cells
+		final ImageIcon scaled = new ImageIcon(theImg.getImage()
+				.getScaledInstance(theSize, theSize, Image.SCALE_DEFAULT));
+		lbl.setIcon(scaled);
+		lbl.setVisible(true);
+		lbl.setHorizontalAlignment(JLabel.CENTER);
+		lbl.setVerticalAlignment(JLabel.CENTER);
+
+		return lbl;
+	}
+
+	/**
+	 * Make a label for the room name
+	 * 
+	 * @param String theName
+	 * @param Color  theColor
+	 * @param int    theSize
+	 */
+	private JLabel makeTextLabel(final String theName, final Color theColor) {
+		final JLabel lbl = new JLabel(); // label put in cells
+		final String name = theName;
+		lbl.setText(name);
+		lbl.setForeground(theColor);
+		lbl.setBackground(TRANSPARENT);
+		lbl.setFont(myFont);
+		lbl.setVisible(true);
+		lbl.setHorizontalAlignment(JLabel.CENTER);
+		lbl.setVerticalAlignment(JLabel.CENTER);
+
+		return lbl;
 	}
 
 	public JTable getTable() {
@@ -313,7 +423,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if ("model".equals(evt.getPropertyName())) {
 			// System.out.println("model called for refresh");
-			//System.out.println("Model Changed");
+			// System.out.println("Model Changed");
 			myMaze.setMatrix((Room[][]) evt.getNewValue());
 			myMatrix = myMaze.getMatrix();
 			myModel.refresh(myMatrix);

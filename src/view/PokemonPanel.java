@@ -213,20 +213,18 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	private void setupPanel() {
 		setBackground(BG_COLOR);
 		setPreferredSize(PANEL_SIZE);
-		myMazeGUI.setBorder(BLUE_BORDER);
 		setLayout(springLayout);
 
 		// position panel components
 
 		// maze gui
 		springLayout.putConstraint(SpringLayout.NORTH, myMazeGUI, 10, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, myMazeGUI, 1345, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.EAST, myMazeGUI, -10, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.WEST, myMazeGUI, 1350, SpringLayout.WEST, this);;
 
 		// question panel
 		springLayout.putConstraint(SpringLayout.NORTH, myQuestPanels, 553, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, myQuestPanels, -36, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, -107, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, -130, SpringLayout.EAST, this);
 
 		// label panel
 		springLayout.putConstraint(SpringLayout.NORTH, myLabelPanel, 10, SpringLayout.NORTH, this);
