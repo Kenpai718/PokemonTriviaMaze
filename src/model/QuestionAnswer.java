@@ -1,10 +1,10 @@
 package model;
 
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Random;
 
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
@@ -14,16 +14,27 @@ import java.util.List;
  * @version Spring 2021
  */
 
-public class QuestionAnswer {
+public class QuestionAnswer implements Serializable {
 
-	private final int NUM_CHOICES = 4;
-	
-	private static List<Pokemon> USED = new ArrayList<Pokemon>();
+	/**
+	     * 
+	     */
+	private static final long serialVersionUID = 6521846190481286645L;
 
 	/*
-	 * Question/answer
+	 * Number of multiple choice options
 	 */
-	private final Pokemon myPokemon;
+	private static final int NUM_CHOICES = 4;
+
+	/*
+	 * Static list shared to prevent duplicate Pokemon in rooms
+	 */
+	private static List<String> USED = new ArrayList<String>();
+
+	/*
+	 * Question/answer pokemon
+	 */
+	private Pokemon myPokemon;
 
 	/*
 	 * Multiple choice answers
@@ -33,18 +44,22 @@ public class QuestionAnswer {
 	/*
 	 * index of the answer in choices
 	 */
-	private final int myAnswerIndex;
+	private int myAnswerIndex;
 
 	/*
 	 * List of pokemon in a map for #ID lookup
 	 */
-	private final Pokedex myPokedex;
+	private transient final Pokedex myPokedex;
 
 	/*
 	 * Upperbound of random generator
 	 */
-	private final int myUpper;
-	
+	private transient int myUpper;
+
+	/*
+	 * Random generator for pokemon id lookup and creation
+	 */
+	private final Random myRand;
 
 	/**
 	 * Constructor
@@ -53,40 +68,37 @@ public class QuestionAnswer {
 	public QuestionAnswer() {
 		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
+		myRand = new Random();
 		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = generatePokemon();
-		
-		
-		fillChoices();
-		// get index of shuffled array list
-		myAnswerIndex = myChoices.indexOf(this.getAnswer());
-		// System.out.println("my answer num is " + myAnswerIndex);
 
-		// randomly fill out myChoices
-		
+		createMC();
+
 	}
-	
+
 	/**
 	 * Manually add a pokemon for a question
 	 * 
 	 * @param Pokemon that represents the question
 	 */
-	public QuestionAnswer(Pokemon thePokemon) {
+	public QuestionAnswer(final Pokemon thePokemon) {
 		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
+		myRand = new Random();
 		myChoices = new ArrayList<String>();
 		myUpper = myPokedex.getCount();
 		myPokemon = thePokemon;
-		
-		
-		fillChoices();
-		// get index of shuffled array list
-		myAnswerIndex = myChoices.indexOf(this.getAnswer());
-		// System.out.println("my answer num is " + myAnswerIndex);
+		createMC();
 
-		// randomly fill out myChoices
-		
+	}
+
+	/*
+	 * Create multiple choice answers
+	 */
+	public void createMC() {
+		fillChoices();
+		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 	}
 
 	/**
@@ -95,55 +107,80 @@ public class QuestionAnswer {
 	 * question choices.
 	 */
 	private void fillChoices() {
-	        
-	        myChoices.add(myPokemon.getName());
+		myChoices.clear();
+		myChoices.add(myPokemon.getName());
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
-		        addName();		        
+			final String aName = makeName();
+			myChoices.add(aName);
 		}
+
 		Collections.shuffle(myChoices);
 	}
 
 	/**
 	 * Adds names to the choices list. checks for duplicates
+	 * 
+	 * @String generated pokemon name
 	 */
-	private void addName() {
-                // TODO Auto-generated method stub
-                final String name = generatePokemonHelper().getName();
-                // check if the name was used
-	        if (!myChoices.contains(name)) {
-	                myChoices.add(name);
-	        } else {
-	                // get a new pokemon
-	                addName();
-	        }
-        }
+	private String makeName() {
+		myUpper = myPokedex.getCount();
+		final int num = myRand.nextInt(myUpper) + 1;
+		// TODO Auto-generated method stub
+		String name = myPokedex.findPokemonName(num);
+		// check if the name was used
+		if (myChoices.contains(name)) {
+			name = makeName();
+		}
 
-        /**
-         * Method helper that returns a random pokemon from the pokedex
-         * 
-         * @return returns a random pokemon
-         */
-        private Pokemon generatePokemonHelper() {
-                final int num = (int) (Math.random() * (myUpper - 1) + 1);
-                return myPokedex.findPokemon(num);
-        }
+		return name;
+	}
 
-        /**
+	/**
+	 * Method helper that returns a random pokemon from the pokedex
+	 * 
+	 * @return returns a random pokemon
+	 */
+	private Pokemon generatePokemonHelper() {
+		myUpper = myPokedex.getCount();
+		final int num = myRand.nextInt(myUpper) + 1;
+		return myPokedex.findPokemon(num);
+	}
+
+	/**
 	 * Randomly generate a pokemon with ID 1-myUpper and get it from the
-	 * pokedex.
+	 * pokedex. Clears USED list if the stack gets too big and throws an
+	 * exception
 	 * 
 	 * @return Pokemon randomly generated pokemon
 	 */
 	private Pokemon generatePokemon() {
-//	        final Maze maze = Maze.getInstance();
+		// final Maze maze = Maze.getInstance();
 		Pokemon pkmn = generatePokemonHelper();
-		
-		if (!USED.contains(pkmn)) {
-		        USED.add(pkmn);
-		} else {
-		        pkmn = generatePokemon();
+
+		// TODO:
+		// clear the pokemon list if it gets full so it does not throw
+		// stack overflow error
+		final String name = pkmn.getName();
+		if (USED.contains(name)) {
+			pkmn = generatePokemon();
 		}
+		USED.add(name);
+		// try {
+		// if (USED.contains(pkmn)) {
+		// pkmn = generatePokemon();
+		// }
+		// USED.add(pkmn);
+		// } catch (final StackOverflowError e) {
+		// // System.out.println("USED list is full. It will now be
+		// cleared.\n");
+		// // System.out.println("OLD USED: " + USED);
+		// USED.clear();
+		// pkmn = generatePokemon();
+		// // System.out.println("NEW USED: " + USED);
+		//
+		// }
+
 		return pkmn;
 	}
 
@@ -167,6 +204,14 @@ public class QuestionAnswer {
 	}
 
 	/**
+	 * Set new pokemon for the question/answer
+	 */
+	public void setNewPokemon(final Pokemon thePkmn) {
+		myPokemon = thePkmn;
+		createMC();
+	}
+
+	/**
 	 * Get a deep copy of the choices array
 	 * 
 	 * @return String[]
@@ -175,9 +220,21 @@ public class QuestionAnswer {
 
 		return (ArrayList<String>) myChoices;
 	}
-	
+
+	/**
+	 * 
+	 * @return index of the answer to this multiple choice question
+	 */
 	public int getAnswerIndex() {
 		return myAnswerIndex;
+	}
+
+	/**
+	 * clear the used list of pokemon.
+	 * Main purpose is to avoid stack overflow.
+	 */
+	public void clearUsed() {
+		USED.clear();
 	}
 
 	/**
@@ -194,8 +251,5 @@ public class QuestionAnswer {
 
 		return sb.toString();
 	}
-	
-	
-	
 
 }

@@ -10,7 +10,6 @@ import javax.swing.ImageIcon;
 
 import model.Maze;
 import view.PokemonPanel;
-import view.viewHelper.MazeGUI.MazeModel;
 
 /**
  * Controls player movement in the maze
@@ -29,7 +28,6 @@ public class MovementAction extends AbstractAction {
 			final PokemonPanel thePanel) {
 		super(theName, theIcon);
 		myPanel = thePanel;
-
 	}
 
 	@Override
@@ -54,12 +52,12 @@ public class MovementAction extends AbstractAction {
 		// set the attempted move location of the direction pressed
 		myMaze.setAttemptLocation(newPos);
 		if (myMaze.getAttemptRoom().hasVisited()) {
-			myPanel.setImgBrightness(1); // keep pokemon revealed if it has been
-											// visited
+//		        myPanel.setMyReveal(true);
+//			myPanel.setImgBrightness(); // keep pokemon revealed if it has been
 			myMaze.setPlayerLocation(newPos);
-		} else {
-			myPanel.setImgBrightness(0);
-		}
+                } /*
+                   * else { // myPanel.setMyReveal(false); myPanel.setImgBrightness(); }
+                   */
 		updateGUI();
 
 	}
@@ -70,19 +68,10 @@ public class MovementAction extends AbstractAction {
 	 * 
 	 */
 	private void updateGUI() {
-		final MazeModel model = (MazeModel) myPanel.getTable().getModel();
-		model.refresh(myMaze.getMatrix());
-		firePropertyChange("newpos", null, null);
-		myPanel.setImage();
+		
+//		firePropertyChange("newpos", null, null);
+		myPanel.refreshGUI();
 
-		if (myMaze.getAttemptRoom().hasVisited()) {
-			myPanel.enableAnswerFields(false);
-		} else {
-			myPanel.enableAnswerFields(true);
-		}
-
-		myPanel.getQuestionGUI().setButtons();
-		myPanel.getTextGUI().setButtons();
 	}
 
 }

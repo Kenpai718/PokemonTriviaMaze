@@ -1,23 +1,49 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.sqlite.SQLiteDataSource;
 
 /**
  * Stores information about every Pokemon such as their ID number and name.
- * Initially reads off an SQL database file to get Pokemon information.
+ * Initially reads off an SQL database file(s) to get Pokemon information.
+ * Stores the data from the database into a map for other classes to easily
+ * gather info to make a Pokemon.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
  */
 
-public class Pokedex {
+public class Pokedex implements Serializable {
+
+	/**
+	     * 
+	     */
+	private static final long serialVersionUID = 1230447359362563837L;
+
+	/*
+	 * Entry to use if finding a pokemon returns missing
+	 */
+	private static final Pokemon MISSING = new Pokemon("000", "MissingNo");
+
+	/*
+	 * Maximum supported pokemon generations
+	 */
+	final int MAX_GEN = 7;
+
+	/*
+	 * Default gen to play on reset or startup
+	 */
+	final int DEFAULT_GEN = 1;
 
 	/*
 	 * Singleton pokedex
@@ -25,31 +51,86 @@ public class Pokedex {
 	public static Pokedex singleDex = null;
 
 	/*
-	 * ID number and Pokemon. Used for instant lookups for Pokemon
+	 * key = number id of when the pokemon was added to pokedex (myCounter)
+	 * value = Arraylist<String> to store pokemon fields, [0]: official pokedex
+	 * id num "025", [1]: name "pikachu"
+	 * 
+	 * Used for look ups for pokemon based on random generation
 	 */
-	private final Map<Integer, Pokemon> myPokedex;
+	private Map<Integer, ArrayList<String>> myPokedex;
+	// private final Map<String, String> myPokedex;
 
-	/* How many pokemon in pokedex */
-	int myCounter;
+	/*
+	 * Alternative map for looking up the name
+	 * 
+	 * Key = String formatted name of the pokemon, value = id number when added
+	 * to pokedex
+	 * 
+	 * Used in conjunction with myPokedex to get info used to make a pokemon
+	 */
+	private Map<String, Integer> myNameDex;
+
+	/*
+	 * Generations that have been selected to play on
+	 */
+	private Set<Integer> mySelectedGens;
+
+	/*
+	 * How many pokemon currently in pokedex Also used as an id number for when
+	 * pokemon are added into the maps.
+	 *
+	 */
+	private int myCounter;
 
 	/**
 	 * Constructor to initialize pokedex
 	 */
 	private Pokedex() {
-		// TODO Auto-generated constructor stub
-		myPokedex = new HashMap<Integer, Pokemon>();
+		myPokedex = new HashMap<Integer, ArrayList<String>>();
+		myNameDex = new HashMap<String, Integer>();
+		mySelectedGens = new HashSet<Integer>();
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
-		final Pokemon missingNo = new Pokemon("000", "MissingNo");
-		myPokedex.put(0, missingNo);
+		final ArrayList<String> empty = new ArrayList<String>();
+		empty.add(0, "000");
+		empty.add(1, "MissingNo");
 
 		// fill pokedex with database
-		fillPokedex();
+		try {
+			addGenToDex(DEFAULT_GEN); // gen 1 by default
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+	/**
+	 * Joke from the pokemon anime where a circular shape
+	 * which looked like an Electrode/voltorb = was actually....
+	 * a jigglypuff seen from above.
+	 * 
+	 * Fans will know this joke and it can be found in the maze
+	 * to prank players playing in user input mode.
+	 * 
+	 */
+	private void addJokeEntry() {
+		// joke addition easter egg: "a jigglypuff seen from above" final
+		if(!myNameDex.containsKey("meme")) {
+			myCounter++;
+			final ArrayList<String> joke = new ArrayList<String>();
+			joke.add(0, "999");
+			joke.add(1, "JigglypuffSeenFromAbove");
+			myPokedex.put(myCounter, joke);
+			myNameDex.put("meme", myCounter);
+		}
+		
 	}
 
 	/*
-	 * Singleton instantiation 
+	 * Singleton instantiation
 	 */
 	public static Pokedex getInstance() {
 		if (singleDex == null) {
@@ -62,25 +143,37 @@ public class Pokedex {
 	 * Read from the pokedex database file with SQLite to create pokemon objects
 	 * to add to the pokedex map.
 	 * 
-	 * Reads off of Pokedex.db SQLite file
+	 * Reads off of Gen#Pokedex.db file Adds a specific pokemon generation
+	 * number 1-7 to the pokedex
 	 * 
 	 */
-	private void fillPokedex() {
+	private void fillPokedex(final int theNum) throws Exception {
+
+		if (theNum > MAX_GEN || theNum < 1) {
+			throw new Exception(
+					theNum + " is not a playable generation for the pokedex.");
+		}
+
 		SQLiteDataSource ds = null;
+		final String databaseName = "Gen" + theNum + "Pokedex";
 
 		// establish connection (creates db file if it does not exist :-)
 		try {
 			ds = new SQLiteDataSource();
-			ds.setUrl("jdbc:sqlite:Pokedex.db");
+			ds.setUrl("jdbc:sqlite:" + databaseName + ".db");
+
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		//System.out.println("Opened pokedex database successfully");
+		// System.out.println("Opened " + databaseName + " database
+		// successfully!");
 
-		//System.out.println("Selecting all rows from pokedex table");
-		final String query = "SELECT * FROM Pokedex";
+		// System.out.println("Selecting all rows from " + databaseName+ " table
+		// to add
+		// to Pokedex map...");
+		final String query = "SELECT * FROM " + databaseName;
 
 		try (Connection conn = ds.getConnection();
 				Statement stmt = conn.createStatement();) {
@@ -96,9 +189,12 @@ public class Pokedex {
 
 				addPokemon(id, name);
 			}
+			
+			//for fun addition to the pokedex
+			addJokeEntry();
 
-			//System.out.println("Finished adding pokemon to pokedex.");
-			// System.out.println(myPokedex);
+			// System.out.println("Finished adding pokemon from " + databaseName
+			// + "\n");
 		} catch (final SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -106,15 +202,129 @@ public class Pokedex {
 	}
 
 	/**
-	 * Add a pokemon to the pokedex map
+	 * Add a pokemon generation to the pokedex
+	 * 
+	 * @param the gen to add: 1- 7
+	 */
+	public void addGenToDex(final int theGenNum) throws Exception {
+		if (theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+
+		if (!mySelectedGens.contains(theGenNum)) {
+			mySelectedGens.add(theGenNum);
+			fillPokedex(theGenNum);
+		}
+	}
+
+	/*
+	 * Add all gens to the pokedex
+	 * 
+	 */
+	public void addAllGensToDex() {
+		resetPokedex();
+		mySelectedGens.clear();
+		for (int i = 1; i <= MAX_GEN; i++) {
+			try {
+				addGenToDex(i);
+			} catch (final Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	/**
+	 * Removes a pokemon gen from the pokedex by resetting the pokedex and
+	 * reading the current selection databases again.
+	 * 
+	 * @param theGenNum
+	 * @throws Exception
+	 */
+	public void removeGenFromDex(final int theGenNum) throws Exception {
+		if (theGenNum > MAX_GEN || theGenNum < 1) {
+			throw new Exception("Not a valid gen number");
+		}
+
+		if (!mySelectedGens.contains(theGenNum)) {
+			throw new Exception(theGenNum + " is not currently selected.");
+		} else if (mySelectedGens.size() == 1) {
+			throw new Exception(
+					"Must have at least one pokemon generation selected.");
+		} else {
+			mySelectedGens.remove(theGenNum);
+			resetPokedex();
+
+			for (final int i : mySelectedGens) {
+				fillPokedex(i);
+			}
+
+		}
+	}
+
+	/*
+	 * Restores pokedex map to default Map will only have gen 1 pokemon.
+	 * 
+	 */
+	public void restoreGensToDefault() {
+		resetPokedex();
+		mySelectedGens.clear();
+		try {
+			addGenToDex(DEFAULT_GEN);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Can remove pokemon gens if the current is greater than 1
+	 * 
+	 * @return boolean
+	 */
+	public boolean canRemoveGen() {
+		return mySelectedGens.size() >= 1;
+	}
+
+	/*
+	 * Reset pokedex maps and counter
+	 */
+	private void resetPokedex() {
+		myPokedex.clear();
+		myNameDex.clear();
+		myCounter = 0;
+	}
+	
+	
+
+	/**
+	 * Add a pokemon to the pokedex map and the name map
 	 * 
 	 * @param String theID of the pokemon based on official pokedex
 	 * @param String theName of the pokemon
 	 */
 	public void addPokemon(final String theID, final String theName) {
-		final Pokemon pkmn = new Pokemon(theID, theName);
-		myPokedex.put(Integer.parseInt(theID), pkmn);
+		final String pkmnName = theName;
+		final String formatName = formatString(theName);
 		myCounter++;
+
+		// store pokemon field info
+		final String id = idConverter(theID);
+		final ArrayList<String> pokemonInfo = new ArrayList<String>();
+		pokemonInfo.add(0, id);
+		pokemonInfo.add(1, theName);
+
+		myPokedex.put(myCounter, pokemonInfo);
+		myNameDex.put(formatName, myCounter);
+	}
+
+	/**
+	 * Convert a string to a proper id format a pokemon object can read
+	 * 
+	 * @return String formatted ex: 0 to "000"
+	 */
+	private String idConverter(final String theID) {
+		return ("000" + theID).substring(String.valueOf(theID).length());
 	}
 
 	/**
@@ -122,8 +332,8 @@ public class Pokedex {
 	 * 
 	 * @return a map of pokemon
 	 */
-	public Map<Integer, Pokemon> getPokedex() {
-		final Map<Integer, Pokemon> copy = myPokedex;
+	public Map<Integer, ArrayList<String>> getPokedex() {
+		final Map<Integer, ArrayList<String>> copy = myPokedex;
 		return copy;
 	}
 
@@ -136,23 +346,136 @@ public class Pokedex {
 		return myCounter;
 	}
 
+	/***
+	 * Pokedex counter
+	 * 
+	 * @return set of selected gens
+	 */
+	public Set<Integer> getSelectedGens() {
+		return mySelectedGens;
+	}
+
+	/**
+	 * Method to format string the same to put in name map
+	 * 
+	 * @param theString
+	 * @return formatted string lowercase and stripped
+	 */
+	private String formatString(final String theString) {
+		return theString.toLowerCase().trim();
+	}
+
 	/**
 	 * Lookup pokemon based on id number in map. If not found return missingno.
 	 * 
 	 * @return Pokemon at that ID number
 	 */
 	public Pokemon findPokemon(final int theID) {
-		Pokemon res = myPokedex.get("000"); // missingno in case not found
+
+		Pokemon res;
 		if (myPokedex.containsKey(theID)) {
-			res = (myPokedex.get(theID)); // if found return pokemon
+			final ArrayList<String> info = myPokedex.get(theID);
+			res = new Pokemon(info.get(0), info.get(1)); // if found return
+															// pokemon
+		} else {
+			System.out.println(theID
+					+ " not found in pokedex! MissingNo will be returned.");
+			res = MISSING; // missingno in case not found
 		}
 
 		return res;
 	}
 
+	/**
+	 * Lookup pokemon based on name in map. If not found return missingno.
+	 * 
+	 * @param theName the name of the pokemon to find
+	 * @return Pokemon with that name
+	 */
+	public Pokemon findPokemon(final String theName) {
+		final String formatName = formatString(theName);
+		Pokemon res;
+		if (myNameDex.containsKey(formatName)) {
+			final int theID = myNameDex.get(theName);
+			final ArrayList<String> pokemonInfo = myPokedex.get(theID);
+			res = new Pokemon(pokemonInfo.get(0), pokemonInfo.get(1));
+
+		} else {
+			System.out.println(theName
+					+ " not found in pokedex! MissingNo will be returned.");
+			res = MISSING;
+		}
+
+		return res;
+	}
+
+	/**
+	 * Grabs the name of the pokemon with the passed ID
+	 * 
+	 * @param theID the ID number of the pokemon
+	 * @return the name of the pokemon
+	 */
+	public String findPokemonName(final int theID) {
+		String res;
+		if (myPokedex.containsKey(theID)) {
+			final ArrayList<String> info = myPokedex.get(theID);
+			res = info.get(1); // if found return
+								// pokemon
+		} else {
+			System.out.println(theID
+					+ " not found in pokedex! MissingNo will be returned.");
+			res = "MissingNo"; // missingno in case not found
+		}
+		return res;
+	}
+
+	/*
+	 * private String getKeyByValue(final String theName) { // TODO
+	 * Auto-generated method stub String res = "000"; for (final Entry<String,
+	 * String> entry : myPokedex.entrySet()) { if (Objects.equals(theName,
+	 * entry.getValue())) { res = entry.getKey(); } } return res; }
+	 */
+
+	/**
+	 * Lookup pokemon based on name in map. If not found return false
+	 * 
+	 * @return boolean if that pokemon is in pokedex
+	 */
+	public Boolean hasPokemon(final int theID) {
+		return myPokedex.containsKey(theID);
+	}
+
+	/**
+	 * Lookup pokemon based on name in map. If not found return false
+	 * 
+	 * @return boolean if that pokemon is in pokedex
+	 */
+	public Boolean hasPokemon(final String theName) {
+		final String formatName = formatString(theName);
+		return myNameDex.containsKey(formatName);
+	}
+
+	/**
+	 * Resolve singleton serialization
+	 * 
+	 * @return object this pokedex
+	 */
+	private Object readResolve() {
+
+		final Pokedex instance = getInstance();
+		instance.myPokedex = myPokedex;
+		instance.myNameDex = myNameDex;
+		instance.mySelectedGens = mySelectedGens;
+		instance.myCounter = myCounter;
+		return instance;
+	}
+
+	/**
+	 * @return names of all pokemon currently in the pokedex
+	 */
 	@Override
 	public String toString() {
-		return myPokedex.toString();
+		return myNameDex.keySet().toString();
 	}
 
 }

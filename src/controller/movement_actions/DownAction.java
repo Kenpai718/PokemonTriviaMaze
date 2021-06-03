@@ -16,14 +16,12 @@ import view.PokemonPanel;
  */
 
 public class DownAction extends MovementAction {
-	private static final String NAME = "Down";
+	private static final String NAME = "DOWN";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
 	
-	//to control the maze
-	//private final Maze myMaze;
 	
 	public DownAction(final PokemonPanel thePanel) {
-		super(NAME, ICON, thePanel);
+		super("", ICON, thePanel);
 	}
 
 	@Override
@@ -31,6 +29,11 @@ public class DownAction extends MovementAction {
 		//make the maze move down if possible
 	        final int[] move = new int[] {1, 0};
                 super.movePlayer(move);
+	}
+	
+	@Override
+	public String toString() {
+		return NAME;
 	}
 
 }

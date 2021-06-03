@@ -39,29 +39,28 @@ import view.PokemonPanel;
 public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	/**
-	 * 
+	 * constants
 	 */
 	private static final long serialVersionUID = 1L;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
+	final Color MAZE_BG = new Color(51, 51, 51);
+	private final ButtonGroup myButtonGroup = new ButtonGroup();
+
 	// private QuestionAnswer myQA;
 	private JTextPane myQPane;
 	private SpringLayout myLayout;
 
+	/*
+	 * Multiple choice buttons
+	 */
 	private JRadioButton myA1;
 	private JRadioButton myA2;
 	private JRadioButton myA3;
 	private JRadioButton myA4;
-	private final int POKE_W = 600;
-	private final int POKE_H = 600;
 
+	/*
+	 * Maze
+	 */
 	private Maze myMaze;
-
-	// /*
-	// * Multiple choice
-	// */
-	// private final String[] myChoices;
-	//
-	// private final Room myCurrRoom;
 
 	/**
 	 * Create the panel.
@@ -76,14 +75,18 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
+	/*
+	 * Make the multiple choice gui
+	 */
 	@SuppressWarnings("static-access")
 	private void setupGUI() {
-		setBorder(new LineBorder(Color.BLACK, 4, true));
+		setBorder(new LineBorder(Color.BLACK, 5, true));
 		setBackground(Color.WHITE);
 		setPreferredSize(new Dimension(350, 500));
 		setMaximumSize(new Dimension(350, 500));
 		myLayout = new SpringLayout();
 		setLayout(myLayout);
+		this.setBackground(Color.WHITE);
 
 		myQPane = new JTextPane();
 		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,
@@ -106,69 +109,73 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
+	/*
+	 * Make the questions the panel uses
+	 */
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		myA1 = new JRadioButton("");
-		myA1.setOpaque(false);
+		myA1 = buildButton('1');
 		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
 				myQPane);
 		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST,
 				myA1);
 		myLayout.putConstraint(myLayout.WEST, myA1, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.EAST, myA1, 0, myLayout.EAST, this);
-		myA1.setMnemonic('1');
-		myA1.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-		myA1.addActionListener(new AnswerDisplay());
-		buttonGroup.add(myA1);
+		myButtonGroup.add(myA1);
 		add(myA1);
 
-		final JRadioButton myA2 = new JRadioButton("");
-		myA2.setOpaque(false);
+		final JRadioButton myA2 = buildButton('2');
 		myLayout.putConstraint(myLayout.SOUTH, myA1, -37, myLayout.NORTH, myA2);
 		myLayout.putConstraint(myLayout.NORTH, myA2, 179, myLayout.NORTH, this);
 		myLayout.putConstraint(myLayout.WEST, myA2, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.EAST, myA2, 0, myLayout.EAST, this);
-		myA2.setMnemonic('2');
-		myA2.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-		myA2.addActionListener(new AnswerDisplay());
-		buttonGroup.add(myA2);
+		myButtonGroup.add(myA2);
 		add(myA2);
 
-		final JRadioButton myA3 = new JRadioButton("");
-
-		myA3.setOpaque(false);
+		final JRadioButton myA3 = buildButton('3');
 		myLayout.putConstraint(myLayout.WEST, myA3, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.EAST, myA3, 0, myLayout.EAST, this);
 		myLayout.putConstraint(myLayout.SOUTH, myA2, -42, myLayout.NORTH, myA3);
 		myLayout.putConstraint(myLayout.NORTH, myA3, 276, myLayout.NORTH, this);
-		myA3.setMnemonic('3');
-		myA3.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-		myA3.addActionListener(new AnswerDisplay());
-		buttonGroup.add(myA3);
+		myButtonGroup.add(myA3);
 		add(myA3);
 
-		final JRadioButton myA4 = new JRadioButton("");
-		myA4.setOpaque(false);
+		final JRadioButton myA4 = buildButton('4');
 		myLayout.putConstraint(myLayout.NORTH, myA4, 47, myLayout.SOUTH, myA3);
 		myLayout.putConstraint(myLayout.WEST, myA4, 34, myLayout.WEST, this);
 		myLayout.putConstraint(myLayout.SOUTH, myA4, -55, myLayout.SOUTH, this);
 		myLayout.putConstraint(myLayout.EAST, myA4, 0, myLayout.EAST, this);
-		myA4.setMnemonic('4');
-		myA4.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-		myA4.addActionListener(new AnswerDisplay());
-		buttonGroup.add(myA4);
+		myButtonGroup.add(myA4);
 
 		setButtons();
 		add(myA4);
 	}
 
+	/**
+	 * Builder for a radio button
+	 * 
+	 * @return multiple choice button
+	 */
+	private JRadioButton buildButton(final char theMnemonic) {
+		final JRadioButton myMC = new JRadioButton("");
+		myMC.setOpaque(false);
+		myMC.setMnemonic(theMnemonic);
+		myMC.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		myMC.addActionListener(new AnswerDisplay());
+		return myMC;
+
+	}
+
+	/**
+	 * Put multiple choice text on the buttons
+	 */
 	public void setButtons() {
 		// TODO Auto-generated method stub
-		buttonGroup.clearSelection();
+		myButtonGroup.clearSelection();
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
-		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
@@ -178,10 +185,14 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		}
 	}
 
+	/*
+	 * Set the color of the text after the user answers
+	 * Green = correct, red = incorrect
+	 */
 	public void setButtonsAnswer() {
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
-		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
 		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
@@ -196,12 +207,15 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		}
 	}
 
+	/**
+	 * Pop up an option pane when the user answers and tell result
+	 */
 	public void answerPopUp() {
 		String userAns = "";
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
-		for (Enumeration<AbstractButton> buttons = buttonGroup
+		for (Enumeration<AbstractButton> buttons = myButtonGroup
 				.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
@@ -213,18 +227,14 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
-	class AnswerDisplay implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			setButtonsAnswer();
-			answerPopUp();
-		}
-	}
-
+	/**
+	 * Set all multiple choice buttons state on or off
+	 * 
+	 * @boolean the state of buttons 
+	 */
 	@Override
 	public void enableButtons(Boolean theBool) {
-		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
 		while (buttons.hasMoreElements()) {
 			JRadioButton temp = (JRadioButton) buttons.nextElement();
 			if (theBool) {
@@ -235,6 +245,16 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 		}
 
+	}
+	
+	//inner class called when user clicks an answer button
+	class AnswerDisplay implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setButtonsAnswer();
+			answerPopUp();
+		}
 	}
 
 }

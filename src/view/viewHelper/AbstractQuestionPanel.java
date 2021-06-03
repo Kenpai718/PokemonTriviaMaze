@@ -1,17 +1,17 @@
 package view.viewHelper;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Maze;
 import model.Room;
 import view.PokemonPanel;
-import view.viewHelper.MazeGUI.MazeModel;
 
 /**
  * Used for QuestionRoomGUI and TextRoomGUI for behaviors that they both have.
  * 
- * Main use is to verify answers and sends property changes for correct and
+ * Main use is to verify answers and changes maze player location on correct and
  * incorrect answers.
  * 
  * Abstract to prevent instantiation because it does nothing on its own.
@@ -22,11 +22,28 @@ import view.viewHelper.MazeGUI.MazeModel;
  */
 
 public abstract class AbstractQuestionPanel extends JPanel {
+	
+	/*
+	 * Icons for the option pane
+	 */
+	private final ImageIcon CORRECT_ICON = new ImageIcon("./src/images/other/correct_icon.png");
+	private final ImageIcon INCORRECT_ICON = new ImageIcon("./src/images/other/incorrect_icon.png");
+	
+	/*
+	 * Maze
+	 */
+	private final Maze myMaze;
+	/*
+	 * Game panel
+	 */
+	private final PokemonPanel myPP;
 
-	private Maze myMaze;
-	private PokemonPanel myPP;
-
-	public AbstractQuestionPanel(PokemonPanel thePP) {
+	/**
+	 * Constructor
+	 * 
+	 * @param thePP so the panel can be modified after user answers
+	 */
+	public AbstractQuestionPanel(final PokemonPanel thePP) {
 		super();
 		myPP = thePP;
 		myMaze = Maze.getInstance();
@@ -43,31 +60,40 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		final Room curr = myMaze.getAttemptRoom();
 		String correctAns = curr.getAnswer();
 		final String correct = correctAns + " was the correct answer!";
-		final String incorrect = "Sorry, but " + theUserAns
-				+ " is incorrect... ";
 
 		// format answer to prevent errors
 		correctAns = correctAns.toLowerCase().strip();
-		String userAns = theUserAns.toLowerCase().strip();
-		Boolean isCorrect = userAns.equals(correctAns);
+		final String userAns = theUserAns.toLowerCase().replaceAll(" ", "");
+		final Boolean isCorrect = userAns.equals(correctAns);
+
+		//myPP.setShowQMark(); //turn off q mark because the user answered
+
+		if (isCorrect) {
+//		        myPP.setMyReveal(isCorrect);
+			firePropertyChange("showpkmn", null, true);
+			JOptionPane.showMessageDialog(null, ("Great job!\n" + correct + "\nRoom " + myMaze.getAttemptRoom() + " is unlocked."),
+					"Correct!", JOptionPane.INFORMATION_MESSAGE, CORRECT_ICON);
+
+		} else { // incorrect
+//		        myPP.setMyReveal(isCorrect);
+			firePropertyChange("showpkmn", null, false);
+			final String incorrect = "Sorry, but " + theUserAns
+					+ " is incorrect... "
+					+ "\n" + correct
+					+ "\nRoom " + myMaze.getAttemptRoom() + " is now blocked.";
+			JOptionPane.showMessageDialog(null, incorrect,
+					"Incorrect...", JOptionPane.INFORMATION_MESSAGE, INCORRECT_ICON);
+		}
+		
 
 		// call method to change the maze
 		doUserAnswer(isCorrect);
+		
+		//disable the buttons after the user answers
+		this.enableButtons(false);	
+		myPP.refreshGUI(); //one full refresh of the gui
+		checkWinLoseCondition(); 
 
-		if (isCorrect) {
-
-			firePropertyChange("showpkmn", null, true);
-			JOptionPane.showMessageDialog(null, "Good job! " + correct,
-					"Correct!", JOptionPane.INFORMATION_MESSAGE);
-
-		} else { // incorrect
-
-			firePropertyChange("showpkmn", null, true);
-			JOptionPane.showMessageDialog(null, incorrect + correct,
-					"Incorrect!", JOptionPane.INFORMATION_MESSAGE);
-		}
-
-		updateGUI();
 
 	}
 
@@ -81,10 +107,10 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 *                room to visited, false = incorrect, set visited false and
 	 *                block the room
 	 */
-	private void doUserAnswer(Boolean theResult) {
+	private void doUserAnswer(final Boolean theResult) {
 
-		Room curr = myMaze.getCurrRoom();
-		Room attempt = myMaze.getAttemptRoom();
+		final Room curr = myMaze.getCurrRoom();
+		final Room attempt = myMaze.getAttemptRoom();
 		if (theResult) { // answered correctly
 			// set current player room and attempted room to visited
 			curr.setVisited(theResult);
@@ -95,27 +121,20 @@ public abstract class AbstractQuestionPanel extends JPanel {
 			// reset attempt location to default
 			myMaze.setAttemptLocation(myMaze.getPlayerLocation());
 		}
+		
+
 
 	}
-
+	
 	/*
-	 * Update gui components to ensure everything is current
+	 * Fire property changes for if the player has won or lost
 	 */
-	private void updateGUI() {
-
-		this.enableButtons(false);
-		final MazeModel model = (MazeModel) myPP.getTable().getModel();
-		model.refresh(myMaze.getMatrix());
-		firePropertyChange("newpos", null, null);
-		myPP.setImage();
-		myPP.getQuestionGUI().setButtons();
-
+	private void checkWinLoseCondition() {
 		if (myMaze.isWinCondition()) {
 			firePropertyChange("win", null, null);
 		}
 
 		// TODO: if maze isLoseCondition() fire lose
-
 	}
 
 	/**

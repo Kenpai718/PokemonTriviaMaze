@@ -17,14 +17,10 @@ import view.PokemonPanel;
 
 public class UpAction extends MovementAction {
 	
-	private static final String NAME = "";
+	private static final String NAME = "UP";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/up.png");
-	
-	//to control the maze
-	//private final Maze myMaze;
-	
 	public UpAction(final PokemonPanel thePanel) {
-		super(NAME, ICON, thePanel);
+		super("", ICON, thePanel);
 	}
 
 	@Override
@@ -36,4 +32,8 @@ public class UpAction extends MovementAction {
 		
 	}
 
+	@Override
+	public String toString() {
+		return NAME;
+	}
 }

@@ -1,16 +1,23 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Every room has a Pokemon extended from QuestionAnswer. The room has a
- * question the player must answer to enter the room which is correctly pick the
- * Pokemon.
+ * question the player must answer to enter the room. To enter the room the
+ * player must correctly answer the question.
  * 
  * @author Kenneth Ahrens
  * @author AJ Downey
  * @version Spring 2021
  */
 
-public class Room extends QuestionAnswer {
+public class Room extends QuestionAnswer implements Serializable {
+
+	/**
+	     * 
+	     */
+	private static final long serialVersionUID = 575983420176798332L;
 
 	/*
 	 * Starting letter of the room
@@ -20,7 +27,7 @@ public class Room extends QuestionAnswer {
 	/*
 	 * Name of room
 	 */
-	private final char myRoomName;
+	private final String myRoomName;
 
 	/*
 	 * boolean if player canEnter room Denotes if it is blocked or not
@@ -31,9 +38,11 @@ public class Room extends QuestionAnswer {
 	 * If player is currently in this room
 	 */
 	private boolean hasPlayer;
-	
+
+	/*
+	 * If player has been to this room before and cleared it
+	 */
 	private boolean myVisit;
-	
 
 	/**
 	 * Constructor
@@ -45,46 +54,65 @@ public class Room extends QuestionAnswer {
 		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z
-		myRoomName = (char) (theRoomNumber + START_LETTER);
+//		myRoomName = (char) (theRoomNumber + START_LETTER);
+		myRoomName = "" + (theRoomNumber + 1);
 		setEntry(true);
 		hasPlayer = false;
 		myVisit = false;
 	}
-	
+
 	/**
 	 * Manually add a pokemon to the room
 	 * 
 	 * @param theRoomNumber how much to increment the room name letter
-	 * @param thePokemon the pokemon to put in this room
+	 * @param thePokemon    the pokemon to put in this room
 	 */
-	public Room(final int theRoomNumber, Pokemon thePokemon) {
+	public Room(final int theRoomNumber, final Pokemon thePokemon) {
 		super(); // put a pokemon and question in this room
 
 		// increment the starting letter for each room to go from A-Z
-		myRoomName = (char) (theRoomNumber + START_LETTER);
+//		(char) (theRoomNumber + START_LETTER);
+//		myRoomName = setName(theRoomNumber);
+		myRoomName = "" + (theRoomNumber + 1);
 		setEntry(true);
 		hasPlayer = false;
 		myVisit = false;
-		
+
+	}
+
+	/**
+	 * Make the room name alphabetical
+	 * 
+	 * @param int room number increment
+	 * @char room name incremented
+	 */
+	private char setName(final int theRoomNumber) {
+		char res = START_LETTER;
+		if (theRoomNumber + START_LETTER <= 'Z') {
+			res = (char) (theRoomNumber + START_LETTER);
+		} else {
+
+		}
+		return res;
 	}
 
 	/**
 	 * Setter for blocked room
 	 * 
-	 * @return boolean T = canEnter room, F = blocked room
+	 * @param boolean T = canEnter room, F = blocked room
 	 */
 	public void setEntry(final Boolean theChoice) {
 		canEnter = theChoice;
 	}
-	
+
 	/**
-         * Setter for blocked room
-         * 
-         * @return boolean T = canEnter room, F = blocked room
-         */
-        public void setVisited(final Boolean theChoice) {
-                myVisit = theChoice;
-        }
+	 * Setter for denoting a room had a player in it before
+	 * 
+	 * @param boolean T = player visited, F = not visited
+	 */
+	public void setVisited(final Boolean theChoice) {
+		myVisit = theChoice;
+	}
 
 	/**
 	 * Getter to inform if the room is blocked or not
@@ -112,18 +140,21 @@ public class Room extends QuestionAnswer {
 	public Boolean isPlayerHere() {
 		return hasPlayer;
 	}
-	
+
+	/**
+	 * 
+	 * @return if player has been to this room before
+	 */
 	public Boolean hasVisited() {
-	        return myVisit;
+		return myVisit;
 	}
 
 	/**
-	 * Getter for room name
-	 * IE: 'A'-'Z'
+	 * Getter for room name IE: 'A'-'Z'
 	 * 
 	 * @return char roomName
 	 */
-	public char getRoomName() {
+	public String getRoomName() {
 		return myRoomName;
 	}
 

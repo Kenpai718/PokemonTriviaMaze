@@ -4,6 +4,7 @@
 package view;
 
 import java.awt.BorderLayout;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -73,10 +74,12 @@ public class PokemonGUI {
 
 		setupGUI();
 		setupControlButtons();
-		BackgroundMusic.playMusic();
+		BackgroundMusic.loadMusic();
 	}
 
-	/**
+	
+
+        /**
 	 * Helper to initialize GUI components
 	 */
 	private void setupGUI() {
@@ -116,7 +119,13 @@ public class PokemonGUI {
 //                }
 
 	}
-
+        /**
+         * @return the myMB
+         */
+        public PokemonMenuBar getMB() {
+                return myMB;
+        }
+        
 	/**
 	 * @return the myPanel
 	 */

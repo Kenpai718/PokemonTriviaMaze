@@ -5,7 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
 
 /**
- * Make player move left
+ * Toolbar for important actions.
+ * Currently has buttons to make player move.
  * 
  * @author Kenneth Ahrens
  * @author AJ Downey
@@ -15,6 +16,11 @@ import javax.swing.JToolBar;
 
 public class PokemonToolBar extends JToolBar{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4929301655633315425L;
+
 	private ButtonGroup myControls;
 	
 	/*

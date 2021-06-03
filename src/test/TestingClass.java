@@ -19,14 +19,27 @@ public class TestingClass{
 
 	public static void main(final String[] args) {
 		myPokedex = Pokedex.getInstance();
-		myQA = new QuestionAnswer();
+		//myQA = new QuestionAnswer();
 		myMaze = Maze.getInstance();
 		/*
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
 		 * System.out.println(choices[1]);
 		 */
+		System.out.println(myPokedex);
+		for (int i = 0; i < 300; i++) {
+		        System.out.println("Resetting maze: "+ i);
+		        myMaze.reset();
+		}
+		//myPokedex.addAllGensToDex();
+		//printAll();
+		//System.out.println(myPokedex.getCount());
+		//System.out.println(myPokedex.findPokemon("Farfetch'd"));
+		System.out.println(myPokedex.findPokemon(25));
+		System.out.println(myPokedex.getPokedex().size());
 		
-		printAll();
+		
+	
+		
 		
 		 
 		
