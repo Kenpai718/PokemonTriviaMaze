@@ -1031,7 +1031,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
+		        
 			// TODO Auto-generated method stub
+		        firePropertyChange("tele", null, true);
 			final String message = "Please enter a new room to teleport"
 					+ " to.\n(Room Name)";
 			final int[] pos = readRoomName(message, myTeleportIcon);
@@ -1040,6 +1042,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				myMaze.setPlayerLocation(pos);
 				myPanel.refreshGUI();
 			}
+			
+			firePropertyChange("tele", null, false);
 		}
 
 	}

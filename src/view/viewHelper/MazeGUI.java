@@ -6,9 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -49,17 +47,25 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	private static final double FONT_SIZE = 3.125;
 	private final String myGrassPath = "./src/images/maze_gui/maze_grass_bg.png";
 	private final Color TRANSPARENT = new Color(1f, 0f, 0f, .5f);
+	
+	/**
+         * Color used to denote visited rooms
+         */
+        private final Color VISITED = new Color(255, 51, 51);
+
 
 	/*
 	 * Color used for the maze background
 	 */
-	// final Color MAZE_BG = new Color(51, 51, 51);
-	final Color MAZE_BG = new Color(112, 200, 160);
+	 final Color DARK = new Color(51, 51, 51);
+//	final Color MAZE_BG = new Color(112, 200, 160);
 
 	/*
 	 * Color used for the font
 	 */
 	final Color FONT_COLOR = Color.WHITE;
+	
+	
 
 	/*
 	 * Table used for GUI visual
@@ -95,6 +101,11 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 * Size of the table visual
 	 */
 	private final int myRowSize;
+	
+	/**
+	 * 
+	 */
+	private boolean myTeleport;
 
 	/*
 	 * background of this jpanel
@@ -199,8 +210,10 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
+//		if (myTeleport) {
+//		        return;
+//		} 
 		theG.drawImage(myGrassBG, 0, 0, SIZE, SIZE, this);
-
 	}
 
 	/**
@@ -294,7 +307,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		private static final long serialVersionUID = -2696460913971414868L;
 
 		private static final int OFFSET = 25;
-
+		
+		
 		/*
 		 * Icon that represents the player
 		 */
@@ -325,6 +339,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		private final ImageIcon POKEBALL = new ImageIcon(
 				"./src/images/maze_gui/visited_icon.png");
 
+                
+
 		/**
 		 * Constructor
 		 * 
@@ -345,6 +361,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 			JLabel lbl = new JLabel(); // label put in cells
 			final Room r = myMatrix[row][column];
+			final String name = r.getRoomName();
 			final int iconSize = getRowSize() - OFFSET;
 			final int grassSize = iconSize + 10;
 			final int visitedSize = iconSize / 2;
@@ -353,7 +370,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 				lbl = makeImageLabel(PLAYER, iconSize);
 			} else if (!r.canEnter()) { // blocked room icon
 				lbl = makeImageLabel(TREE, iconSize);
-			} else { // win icon, blocked or normal room name
+			} else if (!myTeleport){ // win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
 
 				if (r == myMatrix[winpos[0]][winpos[1]]) {
@@ -364,6 +381,17 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 				} else { // tall grass for unvisited rooms
 					lbl = makeImageLabel(GRASS, grassSize);
 				}
+			} else {
+			        final int[] winpos = myMaze.getWinLocation();
+
+                                if (r == myMatrix[winpos[0]][winpos[1]]) {
+                                        // winning location icon
+                                        lbl = makeImageLabel(WIN, iconSize);
+                                } else if (r.hasVisited()) { // pokeball for unvisited rooms
+                                        lbl = makeTextLabel(name, VISITED);
+                                } else { // tall grass for unvisited rooms
+                                        lbl = makeTextLabel(name, DARK);
+                                }
 			}
 
 			return lbl;
@@ -410,6 +438,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 		return lbl;
 	}
+	
 
 	public JTable getTable() {
 		return myTable;
@@ -424,15 +453,23 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		if ("model".equals(evt.getPropertyName())) {
 			// System.out.println("model called for refresh");
 			// System.out.println("Model Changed");
+		        
 			myMaze.setMatrix((Room[][]) evt.getNewValue());
 			myMatrix = myMaze.getMatrix();
 			myModel.refresh(myMatrix);
+			
 			// if (myMatrix.length - oldRows != 0) {
 			// myTable.setRowHeight(getRowSize());
 			// }
 
 			revalidate();
+			
+		} else if ("tele".equals(evt.getPropertyName())) {
+		        myTeleport = (boolean) evt.getNewValue();
+		        repaint();
 		}
 
 	}
+
+        
 }
