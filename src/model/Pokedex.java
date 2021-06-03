@@ -15,7 +15,9 @@ import org.sqlite.SQLiteDataSource;
 
 /**
  * Stores information about every Pokemon such as their ID number and name.
- * Initially reads off an SQL database file to get Pokemon information.
+ * Initially reads off an SQL database file(s) to get Pokemon information.
+ * Stores the data from the database into a map for other classes to easily
+ * gather info to make a Pokemon.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
@@ -28,6 +30,9 @@ public class Pokedex implements Serializable {
 	     */
 	private static final long serialVersionUID = 1230447359362563837L;
 
+	/*
+	 * Entry to use if finding a pokemon returns missing
+	 */
 	private static final Pokemon MISSING = new Pokemon("000", "MissingNo");
 
 	/*
@@ -99,14 +104,29 @@ public class Pokedex implements Serializable {
 			e.printStackTrace();
 		}
 
+		
+	}
+	
+	/**
+	 * Joke from the pokemon anime where a circular shape
+	 * which looked like an Electrode/voltorb = was actually....
+	 * a jigglypuff seen from above.
+	 * 
+	 * Fans will know this joke and it can be found in the maze
+	 * to prank players playing in user input mode.
+	 * 
+	 */
+	private void addJokeEntry() {
 		// joke addition easter egg: "a jigglypuff seen from above" final
-		final ArrayList<String> joke = new ArrayList<String>();
-		joke.add(0, "999");
-		joke.add(1, "JigglypuffSeenFromAbove");
-		myPokedex.put(999, joke);
-		myNameDex.put("meme", 999);
-		// only found from the insert pokemon cheat
-
+		if(!myNameDex.containsKey("meme")) {
+			myCounter++;
+			final ArrayList<String> joke = new ArrayList<String>();
+			joke.add(0, "999");
+			joke.add(1, "JigglypuffSeenFromAbove");
+			myPokedex.put(myCounter, joke);
+			myNameDex.put("meme", myCounter);
+		}
+		
 	}
 
 	/*
@@ -169,6 +189,9 @@ public class Pokedex implements Serializable {
 
 				addPokemon(id, name);
 			}
+			
+			//for fun addition to the pokedex
+			addJokeEntry();
 
 			// System.out.println("Finished adding pokemon from " + databaseName
 			// + "\n");
@@ -262,7 +285,7 @@ public class Pokedex implements Serializable {
 	}
 
 	/*
-	 * Reset pokedex maps
+	 * Reset pokedex maps and counter
 	 */
 	private void resetPokedex() {
 		myPokedex.clear();
@@ -443,6 +466,9 @@ public class Pokedex implements Serializable {
 		return instance;
 	}
 
+	/**
+	 * @return names of all pokemon currently in the pokedex
+	 */
 	@Override
 	public String toString() {
 		return myNameDex.keySet().toString();

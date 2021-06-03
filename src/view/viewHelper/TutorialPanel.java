@@ -28,6 +28,9 @@ import javax.swing.JLabel;
 
 public class TutorialPanel extends JPanel{
 	
+	/*
+	 * Constants
+	 */
 	private final int W = 350;
 	private final int H = 500;
 	private final String TUT_PATH = "./src/images/tutorial/tutorial_summary.png";
@@ -42,10 +45,20 @@ public class TutorialPanel extends JPanel{
 	 */
 	final Border BLUE_BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 	
+	/*
+	 * Reference to main panel to use its methods
+	 */
 	private PokemonPanel myPanel;
-	private BufferedImage myTutorialSum;
+
+	/*
+	 * Reference to maze
+	 */
 	private Maze myMaze;
 	
+	/*
+	 * Image that represents the tutorial
+	 */
+	private BufferedImage myTutorialSum;
 	
 	
 	/**

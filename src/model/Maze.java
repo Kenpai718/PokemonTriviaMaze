@@ -33,7 +33,13 @@ public class Maze implements Serializable {
 	private final static int START = 0;
 	private int[] myWinLocation;
 
+	/*
+	 * length of the matrix rows
+	 */
 	private int myRows;
+	/*
+	 * length of the matrix cols
+	 */
 	private int myCols;
 	/*
 	 * 2D array to store rooms in the maze
@@ -61,17 +67,10 @@ public class Maze implements Serializable {
 	 */
 	private ArrayList<Pokemon> myPokemonList;
 
-	private transient Pokedex myPokedex;
-
 	/*
 	 * Boolean to verify when the player has won the game
 	 */
 	private transient boolean myWinCondition;
-
-	// /*
-	// * Big data storage of all pokemon info
-	// */
-	// private static Pokedex myPokedex;
 
 	/*
 	 * Singleton maze instantiation
@@ -101,7 +100,6 @@ public class Maze implements Serializable {
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[START][START].setVisited(true);
-		myPokedex = Pokedex.getInstance();
 
 	}
 
@@ -243,6 +241,7 @@ public class Maze implements Serializable {
 	}
 
 	/**
+	 * Get a specific room in the matrix
 	 * 
 	 * @param theR the row
 	 * @param theC the col
@@ -280,6 +279,10 @@ public class Maze implements Serializable {
 		}
 	}
 
+	/**
+	 * Make a list of pokemon that are currently put in the maze
+	 * @return list of pokemon
+	 */
 	private ArrayList<Pokemon> fillPokemonList() {
 		// TODO Auto-generated method stub
 		final ArrayList<Pokemon> res = new ArrayList<>();
@@ -291,6 +294,9 @@ public class Maze implements Serializable {
 		return res;
 	}
 
+	/**
+	 * @return get list of pokemon in maze
+	 */
 	public ArrayList<Pokemon> getPokemonList() {
 		return myPokemonList;
 	}
@@ -388,6 +394,9 @@ public class Maze implements Serializable {
 	// }
 	// }
 
+	/**
+	 * Fully reset the matrix
+	 */
 	private void clearMatrix() {
 		// TODO Auto-generated method stub
 		Arrays.stream(myMatrix).forEach(x -> Arrays.fill(x, null));

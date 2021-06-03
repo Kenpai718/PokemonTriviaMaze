@@ -47,17 +47,16 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	private static final double FONT_SIZE = 3.125;
 	private final String myGrassPath = "./src/images/maze_gui/maze_grass_bg.png";
 	private final Color TRANSPARENT = new Color(1f, 0f, 0f, .5f);
-	
-	/**
-         * Color used to denote visited rooms
-         */
-        private final Color VISITED = new Color(255, 51, 51);
 
+	/**
+	 * Color used to denote visited rooms
+	 */
+	private final Color VISITED = new Color(255, 51, 51);
 
 	/*
 	 * Color used for the maze background
 	 */
-	 final Color DARK = new Color(51, 51, 51);
+	final Color DARK = new Color(51, 51, 51);
 //	final Color MAZE_BG = new Color(112, 200, 160);
 
 	/*
@@ -65,7 +64,24 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 */
 	final Color FONT_COLOR = Color.WHITE;
 	
+	/*
+	 * Background color of border: dark green
+	 */
+	private final Color GRID_COLOR = new Color(0, 100, 0);
+
+	/*
+	 * Border color
+	 */
+	private final Color BORDER_COLOR = Color.black;
+
+	/*
+	 * Border of jpanel
+	 */
+	final Border BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 	
+	/*
+	 * Fields
+	 */
 
 	/*
 	 * Table used for GUI visual
@@ -101,31 +117,16 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 * Size of the table visual
 	 */
 	private final int myRowSize;
-	
+
 	/**
 	 * 
 	 */
 	private boolean myTeleport;
 
 	/*
-	 * background of this jpanel
+	 * background image of this jpanel
 	 */
 	private final BufferedImage myGrassBG;
-
-	/*
-	 * Background color of border: dark green
-	 */
-	private final Color GRID_COLOR = new Color(0, 100, 0);
-
-	/*
-	 * Border color
-	 */
-	private final Color BORDER_COLOR = Color.black;
-
-	/*
-	 * Border of jpanel
-	 */
-	final Border BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
 
 	/**
 	 * Constructor that create the maze visual
@@ -142,14 +143,13 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		myTable = new JTable();
 		myModel = new MazeModel();
 		myRenderer = new Renderer();
-		
-		//setup visuals
+
+		// setup visuals
 		prepareGUI();
 		setupTable();
 
-
 	}
-	
+
 	/*
 	 * Setup the gui for this jpanel
 	 */
@@ -162,13 +162,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		setBackground(TRANSPARENT);
 		this.setBorder(BORDER);
 		repaint();
-	
+
 	}
-	
+
 	/*
-	 * Setup jtable visual of the maze
-	 * Using Custom TableModel to correctly refresh the table when changes
-	 * are made
+	 * Setup jtable visual of the maze Using Custom TableModel to correctly
+	 * refresh the table when changes are made
 	 */
 	private void setupTable() {
 		myTable.setModel(myModel);
@@ -210,9 +209,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	@Override
 	protected void paintComponent(final Graphics theG) {
 		super.paintComponent(theG);
-//		if (myTeleport) {
-//		        return;
-//		} 
 		theG.drawImage(myGrassBG, 0, 0, SIZE, SIZE, this);
 	}
 
@@ -226,6 +222,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			myTable.getColumnModel().getColumn(i).setCellRenderer(myRenderer);
 		}
 	}
+	
+	/*
+	 * ------------------------------------------------------
+	 * Inner classes to help build the maze gui visual
+	 * ------------------------------------------------------
+	 */
 
 	// inner class that creates a custom implementation of AbstractTableModel
 	// for the maze
@@ -306,9 +308,11 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		         */
 		private static final long serialVersionUID = -2696460913971414868L;
 
+		/*
+		 * Offset to adjust the image scaling
+		 */
 		private static final int OFFSET = 25;
-		
-		
+
 		/*
 		 * Icon that represents the player
 		 */
@@ -339,8 +343,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		private final ImageIcon POKEBALL = new ImageIcon(
 				"./src/images/maze_gui/visited_icon.png");
 
-                
-
 		/**
 		 * Constructor
 		 * 
@@ -349,7 +351,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		public Renderer() {
 			super();
 		}
-
 
 		/**
 		 * Draws the icons for each cell of the maze
@@ -370,7 +371,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 				lbl = makeImageLabel(PLAYER, iconSize);
 			} else if (!r.canEnter()) { // blocked room icon
 				lbl = makeImageLabel(TREE, iconSize);
-			} else if (!myTeleport){ // win icon, blocked or normal room name
+			} else if (!myTeleport) { // win icon, blocked or normal room name
 				final int[] winpos = myMaze.getWinLocation();
 
 				if (r == myMatrix[winpos[0]][winpos[1]]) {
@@ -382,16 +383,16 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 					lbl = makeImageLabel(GRASS, grassSize);
 				}
 			} else {
-			        final int[] winpos = myMaze.getWinLocation();
+				final int[] winpos = myMaze.getWinLocation();
 
-                                if (r == myMatrix[winpos[0]][winpos[1]]) {
-                                        // winning location icon
-                                        lbl = makeImageLabel(WIN, iconSize);
-                                } else if (r.hasVisited()) { // pokeball for unvisited rooms
-                                        lbl = makeTextLabel(name, VISITED);
-                                } else { // tall grass for unvisited rooms
-                                        lbl = makeTextLabel(name, DARK);
-                                }
+				if (r == myMatrix[winpos[0]][winpos[1]]) {
+					// winning location icon
+					lbl = makeImageLabel(WIN, iconSize);
+				} else if (r.hasVisited()) { // pokeball for unvisited rooms
+					lbl = makeTextLabel(name, VISITED);
+				} else { // tall grass for unvisited rooms
+					lbl = makeTextLabel(name, DARK);
+				}
 			}
 
 			return lbl;
@@ -438,38 +439,45 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 		return lbl;
 	}
-	
 
+	/**
+	 * @return jtable
+	 */
 	public JTable getTable() {
 		return myTable;
 	}
 
+	/**
+	 * @return size to scale for based on the matrix length
+	 */
 	private int getRowSize() {
 		return SIZE / myMatrix.length;
 	}
 
+	/*
+	 * Listens for changes to update this panel
+	 */
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if ("model".equals(evt.getPropertyName())) {
 			// System.out.println("model called for refresh");
 			// System.out.println("Model Changed");
-		        
+
 			myMaze.setMatrix((Room[][]) evt.getNewValue());
 			myMatrix = myMaze.getMatrix();
 			myModel.refresh(myMatrix);
-			
+
 			// if (myMatrix.length - oldRows != 0) {
 			// myTable.setRowHeight(getRowSize());
 			// }
 
 			revalidate();
-			
+
 		} else if ("tele".equals(evt.getPropertyName())) {
-		        myTeleport = (boolean) evt.getNewValue();
-		        repaint();
+			myTeleport = (boolean) evt.getNewValue();
+			repaint();
 		}
 
 	}
 
-        
 }

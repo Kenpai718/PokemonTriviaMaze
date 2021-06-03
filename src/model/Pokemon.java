@@ -11,8 +11,6 @@ import javax.imageio.ImageIO;
  * Stores information about a Pokemon such as the ID number, name and picture
  * png representation.
  * 
- * TODO: Currently only has implementation for gen 1. Would like to add more in
- * the future.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
@@ -25,7 +23,7 @@ public class Pokemon implements Serializable {
          */
         private static final long serialVersionUID = -647364516676291280L;
 
-        /*
+    /*
 	 * Replacement picture path in the case the pokemon's picture cannot be
 	 * found
 	 */

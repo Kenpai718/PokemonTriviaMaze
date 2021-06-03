@@ -21,6 +21,9 @@ public class QuestionAnswer implements Serializable {
 	     */
 	private static final long serialVersionUID = 6521846190481286645L;
 
+	/*
+	 * Number of multiple choice options
+	 */
 	private static final int NUM_CHOICES = 4;
 
 	/*
@@ -29,7 +32,7 @@ public class QuestionAnswer implements Serializable {
 	private static List<String> USED = new ArrayList<String>();
 
 	/*
-	 * Question/answer
+	 * Question/answer pokemon
 	 */
 	private Pokemon myPokemon;
 
@@ -99,9 +102,9 @@ public class QuestionAnswer implements Serializable {
 	}
 
 	/**
-	 * Fill out myChoices by randomly generating id numbers based on pokedex count.
-	 * Uses random generated ID to lookup pokemon from pokedex to put in question
-	 * choices.
+	 * Fill out myChoices by randomly generating id numbers based on pokedex
+	 * count. Uses random generated ID to lookup pokemon from pokedex to put in
+	 * question choices.
 	 */
 	private void fillChoices() {
 		myChoices.clear();
@@ -111,15 +114,18 @@ public class QuestionAnswer implements Serializable {
 			final String aName = makeName();
 			myChoices.add(aName);
 		}
+
 		Collections.shuffle(myChoices);
 	}
 
 	/**
 	 * Adds names to the choices list. checks for duplicates
+	 * 
+	 * @String generated pokemon name
 	 */
-	private String makeName() {	        
-	        myUpper = myPokedex.getCount();
-                final int num = myRand.nextInt(myUpper) + 1;
+	private String makeName() {
+		myUpper = myPokedex.getCount();
+		final int num = myRand.nextInt(myUpper) + 1;
 		// TODO Auto-generated method stub
 		String name = myPokedex.findPokemonName(num);
 		// check if the name was used
@@ -142,8 +148,9 @@ public class QuestionAnswer implements Serializable {
 	}
 
 	/**
-	 * Randomly generate a pokemon with ID 1-myUpper and get it from the pokedex.
-	 * Clears USED list if the stack gets too big and throws an exception
+	 * Randomly generate a pokemon with ID 1-myUpper and get it from the
+	 * pokedex. Clears USED list if the stack gets too big and throws an
+	 * exception
 	 * 
 	 * @return Pokemon randomly generated pokemon
 	 */
@@ -165,7 +172,8 @@ public class QuestionAnswer implements Serializable {
 		// }
 		// USED.add(pkmn);
 		// } catch (final StackOverflowError e) {
-		// // System.out.println("USED list is full. It will now be cleared.\n");
+		// // System.out.println("USED list is full. It will now be
+		// cleared.\n");
 		// // System.out.println("OLD USED: " + USED);
 		// USED.clear();
 		// pkmn = generatePokemon();
@@ -213,12 +221,20 @@ public class QuestionAnswer implements Serializable {
 		return (ArrayList<String>) myChoices;
 	}
 
+	/**
+	 * 
+	 * @return index of the answer to this multiple choice question
+	 */
 	public int getAnswerIndex() {
 		return myAnswerIndex;
 	}
-	
+
+	/**
+	 * clear the used list of pokemon.
+	 * Main purpose is to avoid stack overflow.
+	 */
 	public void clearUsed() {
-	        USED.clear();
+		USED.clear();
 	}
 
 	/**

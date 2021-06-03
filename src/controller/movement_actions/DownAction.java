@@ -19,8 +19,6 @@ public class DownAction extends MovementAction {
 	private static final String NAME = "DOWN";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
 	
-	//to control the maze
-	//private final Maze myMaze;
 	
 	public DownAction(final PokemonPanel thePanel) {
 		super("", ICON, thePanel);

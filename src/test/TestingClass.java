@@ -25,6 +25,7 @@ public class TestingClass{
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
 		 * System.out.println(choices[1]);
 		 */
+		System.out.println(myPokedex);
 		for (int i = 0; i < 300; i++) {
 		        System.out.println("Resetting maze: "+ i);
 		        myMaze.reset();
@@ -35,6 +36,8 @@ public class TestingClass{
 		//System.out.println(myPokedex.findPokemon("Farfetch'd"));
 		System.out.println(myPokedex.findPokemon(25));
 		System.out.println(myPokedex.getPokedex().size());
+		
+		
 	
 		
 		

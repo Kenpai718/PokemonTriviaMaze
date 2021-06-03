@@ -1,4 +1,4 @@
-package model;
+package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,8 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
+import model.Maze;
+import model.Pokedex;
+
 /**
- * TODO: Used to initialize a trivia maze game
+ * 
+ * CURRENTLY NOT IN USE OR IMPLEMENTED!
+ * TODO: Used to initialize a trivia maze game. The goal is to make it like an opening
+ * title screen.
  * 
  * @author ajdowney
  * @author ken

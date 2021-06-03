@@ -952,6 +952,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			final String promptCords = "Where to put a new Pokemon in maze? "
 					+ "\nRoom Name (Ex: '3') or \"here\" to put at your location.";
 			final String promptPokemon = "What is the name of the Pokemon?";
+			firePropertyChange("tele", null, true);
 			myPos = readRoomName(promptCords, myTeleportIcon);
 			if (myPos[0] != -1) {
 				myNewMon = readNewPokemonInput(promptPokemon);
@@ -959,6 +960,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 					putPokemon(myPos, myNewMon);
 				}
 			}
+			
+			firePropertyChange("tele", null, false);
 
 		}
 

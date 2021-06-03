@@ -5,7 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
 
 /**
- * Make player move left
+ * Toolbar for important actions.
+ * Currently has buttons to make player move.
  * 
  * @author Kenneth Ahrens
  * @author AJ Downey

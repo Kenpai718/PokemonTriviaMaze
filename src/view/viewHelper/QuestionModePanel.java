@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Holds all the panels that the user interacts with to answer questions Allows
- * switching of panels using a card layout.
+ * Holds all the panels that the user interacts with to answer questions. Allows
+ * switching of panel type using a card layout.
  * 
  * @author Kenneth Ahrens
  * @version Spring 2021
@@ -30,7 +30,7 @@ import java.util.Set;
 public class QuestionModePanel extends JPanel {
 
 	/*
-	 * Total gamemode panels 0 = tutorial, 1 = multiple choice, 2 = user input
+	 * Total gamemode panels. 0 = tutorial, 1 = multiple choice, 2 = user input
 	 */
 	final int NUM_PANELS = 3;
 
@@ -38,13 +38,19 @@ public class QuestionModePanel extends JPanel {
 	 * default size
 	 */
 	private final Dimension SIZE = new Dimension(355, 800);
-	
+
 	/*
-	 * Icons for the buttons
+	 * Layout of the panel
 	 */
-	
-	private final ImageIcon EASY = new ImageIcon("./src/images/other/pokeball.png");
-	private final ImageIcon HARD = new ImageIcon("./src/images/other/masterball.png");
+	private final CardLayout C1 = new CardLayout();
+
+	/*
+	 * Icons for the buttons to switch gamemode
+	 */
+	private final ImageIcon EASY = new ImageIcon(
+			"./src/images/other/pokeball.png");
+	private final ImageIcon HARD = new ImageIcon(
+			"./src/images/other/masterball.png");
 
 	/*
 	 * Reference to main panel
@@ -83,17 +89,13 @@ public class QuestionModePanel extends JPanel {
 	private int myGamemode;
 
 	/*
-	 * Set of gamemodes
+	 * Map of gamemodes. Key = gamemode num, value = panel type
 	 */
 	Map<Integer, AbstractQuestionPanel> myQuestionPanels;
 
-	/*
-	 * Layout of the panel
-	 */
-	private final CardLayout C1 = new CardLayout();
-
-	/*
-	 * Constructor
+	/**
+	 * Constructor. Builds multiple containers that holds the gamemode question
+	 * panels that can be switched between.
 	 * 
 	 * @param reference to pokemon panel
 	 */
@@ -115,7 +117,8 @@ public class QuestionModePanel extends JPanel {
 		myFullContainer = new JPanel();
 		myFullContainer.setPreferredSize(SIZE);
 		myFullContainer.setLayout(new BorderLayout());
-		myFullContainer.setLayout(C1); // set card layout to switch between gamemodes
+		myFullContainer.setLayout(C1); // set card layout to switch between
+										// gamemodes
 		myFullContainer.setOpaque(false);
 
 		this.add(myFullContainer);
@@ -128,7 +131,8 @@ public class QuestionModePanel extends JPanel {
 		myTR = new TextRoomGUI(myPP);
 
 		/*
-		 * Setup container that holds the multiple choice and switch to text button
+		 * Setup container that holds the multiple choice and switch to text
+		 * button
 		 */
 		myMCContainer = buildContainer();
 		myMCContainer.add(myMC);
@@ -173,16 +177,7 @@ public class QuestionModePanel extends JPanel {
 		myQuestionPanels.put(2, myTR);
 
 	}
-
-	/*
-	 * Add listeners to the pokemon panel
-	 */
-	private void addListenersToPokemonPanel() {
-		myPP.addListener(myMC);
-		myPP.addListener(myTR);
-
-	}
-
+	
 	/**
 	 * Builder design pattern to make a jpanel container
 	 * 
@@ -198,8 +193,11 @@ public class QuestionModePanel extends JPanel {
 		return aPanel;
 	}
 
+
+
 	/**
-	 * Set the question gamemode 0 = tutorial, 1 = multiple choice, 2 = user input
+	 * Set the question gamemode 0 = tutorial, 1 = multiple choice, 2 = user
+	 * input
 	 * 
 	 * @param theNum
 	 */
@@ -221,7 +219,8 @@ public class QuestionModePanel extends JPanel {
 	}
 
 	/*
-	 * Shows the tutorial panel, but dont set it as a gamemode because it is not one
+	 * Shows the tutorial panel, but dont set it as a gamemode because it is not
+	 * one
 	 */
 	public void showTutorial() {
 		C1.show(myFullContainer, "0");
@@ -246,8 +245,8 @@ public class QuestionModePanel extends JPanel {
 	}
 
 	/**
-	 * Used to allow/unallow the user to answer the question Used for when the user
-	 * already answered the room so it shouldn't be answered again.
+	 * Used to allow/unallow the user to answer the question. Used for when the
+	 * user already answered the room so it shouldn't be answered again.
 	 * 
 	 */
 	private void enableAnswerFields() {
@@ -260,6 +259,19 @@ public class QuestionModePanel extends JPanel {
 		}
 
 	}
+	
+	/*
+	 * Add listeners to the pokemon panel for the gamemode panels
+	 */
+	private void addListenersToPokemonPanel() {
+		myPP.addListener(myMC);
+		myPP.addListener(myTR);
+
+	}
+	
+	/*
+	 * Inner classes
+	 */
 
 	/**
 	 * Switch to user input

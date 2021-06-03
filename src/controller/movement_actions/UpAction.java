@@ -19,10 +19,6 @@ public class UpAction extends MovementAction {
 	
 	private static final String NAME = "UP";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/up.png");
-	
-	//to control the maze
-	//private final Maze myMaze;
-	
 	public UpAction(final PokemonPanel thePanel) {
 		super("", ICON, thePanel);
 	}

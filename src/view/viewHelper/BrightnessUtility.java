@@ -8,7 +8,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 /**
- * Utility to change the brightness of an image Source:
+ * Utility to change the brightness of an image
+ * Source:
  * https://stackoverflow.com/questions/46797579/how-can-i-control-the-brightness-of-an-image
  * 
  * @author ajdowney
@@ -70,6 +71,12 @@ public final class BrightnessUtility {
 
 	}
 
+	/**
+	 * Helper method that make all pixels of an image pure black
+	 * 
+	 * @param theSource
+	 * @return black image
+	 */
 	public static Image setToBlack(final Image theSource) {
 		return adjustBrighness(theSource, MIN_BRIGHT);
 	}

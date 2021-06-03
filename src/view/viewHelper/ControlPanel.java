@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -21,6 +22,7 @@ import javax.swing.border.Border;
 
 import controller.movement_actions.DownAction;
 import controller.movement_actions.LeftAction;
+import controller.movement_actions.MovementAction;
 import controller.movement_actions.RightAction;
 import controller.movement_actions.UpAction;
 import model.Maze;
@@ -41,20 +43,36 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/*
+	 * Actions used to make player move
+	 */
 	private final DownAction downAction;
 	private final LeftAction leftAction;
 	private final RightAction rightAction;
 	private final UpAction upAction;
+
+	/*
+	 * Buttons to allow player to click and move through maze
+	 */
 	final JButton up;
 	final JButton down;
 	final JButton left;
 	final JButton right;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+
+	/**
+	 * Maze used to move in
+	 */
 	private final Maze myMaze;
+
+	/*
+	 * The panel this control panel resides on
+	 */
 	private final PokemonPanel myPanel;
 
 	/**
-	 * Create the panel.
+	 * Create the control panel.
 	 * 
 	 * @param pokemonPanel
 	 */
@@ -66,62 +84,78 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		myMaze = Maze.getInstance();
 		myPanel = thePanel;
 
+		// set panel settings
 		setOpaque(false);
 		setPreferredSize(new Dimension(300, 300));
 		setLayout(new GridLayout(0, 3, 0, 0));
 
+		// build buttons for the control panel
+		// NOTE: the empty jlabels are here to format the buttons with the grid layout
 		final JLabel label = new JLabel("");
 		add(label);
 
-		up = new JButton("");
-		up.setHideActionText(true);
-		buttonGroup.add(up);
-		up.setAction(upAction);
-		up.setBorder(null);
+		up = buildButton(upAction);
 		add(up);
 
 		final JLabel label_1 = new JLabel("");
 		add(label_1);
 
-		left = new JButton("");
-		left.setHideActionText(true);
-		buttonGroup.add(left);
-		left.setAction(leftAction);
-		left.setBorder(null);
+		left = buildButton(leftAction);
 		add(left);
 
-		final JLabel player = new JLabel("");
+		final JLabel player = buildPlayer();
+		add(player);
+
+		right = buildButton(rightAction);
+		add(right);
+
+		final JLabel label_3 = new JLabel("");
+		add(label_3);
+
+		down = buildButton(downAction);
+		add(down);
+
+		final JLabel label_4 = new JLabel("");
+		add(label_4);
+
+		addListeners();
+	}
+
+	/**
+	 * Builder to make an action button
+	 * 
+	 * @param theAction to give the button
+	 * @return formatted jbutton with associated action
+	 */
+	private JButton buildButton(final AbstractAction theAction) {
+		JButton jb = new JButton("");
+		jb.setHideActionText(true);
+		buttonGroup.add(jb);
+		jb.setAction(theAction);
+		jb.setBorder(null);
+		return jb;
+
+	}
+
+	/**
+	 * Builds a jlabel with the player model
+	 * 
+	 * @return player jlabel
+	 */
+	private JLabel buildPlayer() {
+		JLabel player = new JLabel("");
 		player.setInheritsPopupMenu(false);
 		player.setIconTextGap(0);
 		final ImageIcon imageIcon = new ImageIcon(new ImageIcon(
 				ControlPanel.class.getResource("/other/Player.png")).getImage()
 						.getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 		player.setIcon(imageIcon);
-		add(player);
-
-		right = new JButton("");
-		right.setHideActionText(true);
-		buttonGroup.add(right);
-		right.setAction(rightAction);
-		right.setBorder(null);
-		add(right);
-
-		final JLabel label_3 = new JLabel("");
-		add(label_3);
-
-		down = new JButton("");
-		down.setHideActionText(true);
-		buttonGroup.add(down);
-		down.setAction(downAction);
-		down.setBorder(null);
-		add(down);
-
-		final JLabel label_4 = new JLabel("");
-		add(label_4);
-		addListeners();
-		// firePropertyChange("newpos", null, null);
+		return player;
 	}
 
+	/*
+	 * Add listeners for buttons on the control panel
+	 */
 	private void addListeners() {
 		// TODO Auto-generated method stub
 		addPropertyChangeListener(this);
@@ -134,6 +168,14 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Change which buttons are visible based on position in maze.
+	 * 
+	 * Ensures player cannot click on a button and go out of bounds
+	 * 
+	 * @param i
+	 * @param num
+	 */
 	private void changeButtonState(final int i, final int num) {
 		// TODO Auto-generated method stub
 		if (i == 0) {
@@ -154,6 +196,13 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Check room in the direction for if they can enter
+	 * the room.
+	 * 
+	 * @param theDir
+	 * @return if player can move in that direction
+	 */
 	private Boolean checkRooms(final String theDir) {
 		Boolean res = null;
 		final int[] currRoom = myMaze.getPlayerLocation();
@@ -180,6 +229,9 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		return res;
 	}
 
+	/*
+	 * Update other components
+	 */
 	@Override
 	public void propertyChange(final PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
@@ -193,16 +245,21 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			repaint();
 		}
 	}
+	
+	/*
+	 * Inner classes
+	 */
 
 	/*
 	 * Highlight the button when user hovers over it
 	 */
 	public class HoverListener extends MouseAdapter {
-		private final Color B_COLOR = new Color(58,175,220); //highlighter blue
+		private final Color B_COLOR = new Color(58, 175, 220); // highlighter
+																// blue
 		final Border BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
 		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
 		private final JButton myButton;
-		
+
 		public HoverListener(final JButton theButton) {
 			myButton = theButton;
 		}
@@ -211,8 +268,8 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		 * Add border if user hovers mouse
 		 */
 		@Override
-                public void mouseEntered(final MouseEvent me) {
-			//System.out.println("hovering");
+		public void mouseEntered(final MouseEvent me) {
+			// System.out.println("hovering");
 			myButton.setBorder(BORDER);
 		}
 
@@ -220,8 +277,8 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		 * Remove border after user scrolls off
 		 */
 		@Override
-                public void mouseExited(final MouseEvent me) {
-			//System.out.println("not hovering");
+		public void mouseExited(final MouseEvent me) {
+			// System.out.println("not hovering");
 			myButton.setBorder(EMPTY_BORDER);
 		}
 	}

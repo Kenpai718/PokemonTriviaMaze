@@ -19,8 +19,6 @@ public class LeftAction extends MovementAction {
 	private static final String NAME = "LEFT";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/left.png");
 	
-	//to control the maze
-	//private final Maze myMaze;
 	
 	public LeftAction(final PokemonPanel thePanel) {
 		super("", ICON, thePanel);
