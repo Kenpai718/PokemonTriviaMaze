@@ -411,7 +411,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		// current supported pokemon generations
 		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)",
 				"Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
-				"Gen 6 (649-721)", "Gen 7 (721-809)" };
+				"Gen 6 (649-721)", "Gen 7 (721-804)" };
 
 		myGenBoxList = new ArrayList<JCheckBox>();
 

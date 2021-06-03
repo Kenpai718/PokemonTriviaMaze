@@ -223,6 +223,7 @@ public class Pokedex implements Serializable {
 	 */
 	public void addAllGensToDex() {
 		resetPokedex();
+		mySelectedGens.clear();
 		for (int i = 1; i <= MAX_GEN; i++) {
 			try {
 				addGenToDex(i);
@@ -231,6 +232,8 @@ public class Pokedex implements Serializable {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println(myCounter);
 	}
 
 	/**
@@ -292,6 +295,8 @@ public class Pokedex implements Serializable {
 		myNameDex.clear();
 		myCounter = 0;
 	}
+	
+	
 
 	/**
 	 * Add a pokemon to the pokedex map and the name map
