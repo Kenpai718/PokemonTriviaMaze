@@ -773,14 +773,12 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 					} catch (final Exception e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						myBox.setSelected(true);
+						myMsg = "Cannot remove Gen " + myGen
+								+ " because at least one generation must be selected to play!";
+						JOptionPane.showMessageDialog(null, myMsg);
+						//e1.printStackTrace();
 					}
-				} else { // cannot remove condition
-					myBox.setSelected(true);
-					myMsg = "Cannot remove Gen " + myGen
-							+ " because at least one generation must be selected to play!";
-					JOptionPane.showMessageDialog(null, myMsg);
-
 				}
 			}
 
