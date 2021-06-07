@@ -70,6 +70,11 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * The panel this control panel resides on
 	 */
 	private final PokemonPanel myPanel;
+	
+	/*
+	 * Action selected after a click 
+	 */
+	private MovementAction myAction;
 
 	/**
 	 * Create the control panel.
@@ -120,6 +125,14 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 
 		addListeners();
 	}
+	
+	/**
+	 * 
+	 * @return direction clicked on
+	 */
+	public MovementAction getDirection() {
+		return myAction;
+	}
 
 	/**
 	 * Builder to make an action button
@@ -163,7 +176,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
-			temp.addMouseListener(new HoverListener(temp));
+			temp.addMouseListener(new UserMouseListener(temp));
 
 		}
 	}
@@ -252,15 +265,16 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 
 	/*
 	 * Highlight the button when user hovers over it
+	 * Sets the action after clicking a button
 	 */
-	public class HoverListener extends MouseAdapter {
+	public class UserMouseListener extends MouseAdapter {
 		private final Color B_COLOR = new Color(58, 175, 220); // highlighter
 																// blue
 		final Border BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
 		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
 		private final JButton myButton;
 
-		public HoverListener(final JButton theButton) {
+		public UserMouseListener(final JButton theButton) {
 			myButton = theButton;
 		}
 
@@ -272,6 +286,14 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			// System.out.println("hovering");
 			myButton.setBorder(BORDER);
 		}
+		
+		/**
+		 * Set the chosen direction after a click
+		 */
+		@Override
+		public void mousePressed(final MouseEvent me) {
+			myAction = (MovementAction) myButton.getAction();
+		}
 
 		/*
 		 * Remove border after user scrolls off
@@ -282,4 +304,5 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			myButton.setBorder(EMPTY_BORDER);
 		}
 	}
+	
 }

@@ -58,20 +58,27 @@ public class LabelPanel extends JPanel {
 	 * Maze
 	 */
 	private final Maze myMaze;
+	
+	private final ControlPanel myCP;
+	
+	private final String CURRENT = "Current Room: ";
+	private final String DIRECTION = "Chosen Direction: ";
+	private final String ANSWER = "Answer: ";
 
 	/**
 	 * Constructor
 	 */
-	public LabelPanel() {
+	public LabelPanel(final ControlPanel theCP) {
 		// TODO Auto-generated constructor stub
 		myMaze = Maze.getInstance();
+		myCP = theCP;
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(320, 110));
 
-		myRoomLbl = buildLabel("Current Room: " + myMaze.getCurrRoom());
-		myDirLbl = buildLabel("Attempted Room: None");
-		myAnsLbl = buildLabel("Room Answer: N/A");
+		myRoomLbl = buildLabel(CURRENT + myMaze.getCurrRoom());
+		myDirLbl = buildLabel(DIRECTION + "NONE");
+		myAnsLbl = buildLabel(ANSWER + "N/A");
 
 		add(myRoomLbl);
 		add(myDirLbl);
@@ -122,19 +129,18 @@ public class LabelPanel extends JPanel {
 	 * Main use is for debugging
 	 */
 	public void updateLabels() {
-		myRoomLbl.setText("Currently in: Room " + myMaze.getCurrRoom());
+		myRoomLbl.setText(CURRENT + myMaze.getCurrRoom());
 		if (myMaze.hasNotMoved()) {
-			myDirLbl.setText("Chosen Direction: None");
+			myDirLbl.setText(DIRECTION + "NONE");
 		} else {
-			myDirLbl.setText(
-					"Attempting to go to: Room " + myMaze.getAttemptRoom());
+			myDirLbl.setText(DIRECTION + myCP.getDirection());
 		}
 
 		if (!myMaze.isAtStart()) {
 			myAnsLbl.setText(
-					"Answer is: " + myMaze.getAttemptRoom().getAnswer());
+					ANSWER + myMaze.getAttemptRoom().getAnswer());
 		} else {
-			myAnsLbl.setText("Answer is: N/A");
+			myAnsLbl.setText(ANSWER + "N/A");
 		}
 	}
 

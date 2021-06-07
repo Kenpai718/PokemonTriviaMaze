@@ -205,7 +205,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myMazeGUI = new MazeGUI();
 		myMazeModel = (MazeModel) getTable().getModel();
 		myControlPanel = new ControlPanel(this);
-		myLabelPanel = new LabelPanel();
+		myLabelPanel = new LabelPanel(myControlPanel);
 		myQuestPanels = new QuestionModePanel(this);
 
 		// listeners
