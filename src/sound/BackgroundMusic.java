@@ -15,7 +15,7 @@ public class BackgroundMusic {
 	public static void loadMusic() {	   
 		try {
 	         // Open an audio input stream.
-	    	 File soundFile = new File("Background.wav");
+	    	 File soundFile = new File("./music/PokemonTheme.wav");
 	         AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
 	         // Get a sound clip resource.
 	         myClip = AudioSystem.getClip();
