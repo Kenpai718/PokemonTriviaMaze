@@ -29,6 +29,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import controller.maze_game_state.PlayerMover;
 import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
@@ -126,7 +127,6 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 * menubar
 	 */
 	private void addListeners() {
-		// TODO Auto-generated method stub
 		this.addPropertyChangeListener(myPanel);
 		this.addPropertyChangeListener(myPanel.getMazeGUI());
 		this.addPropertyChangeListener(myPanel.getMyControlPanel());
@@ -462,7 +462,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			count++;
 		}
 
-		firePropertyChange("model", null, myMaze.getMatrix());
+		//firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
 
@@ -480,7 +480,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			box.setSelected(text.contains(String.valueOf(myMaze.getRows())));
 		}
 
-		firePropertyChange("model", null, myMaze.getMatrix());
+		//firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
 
@@ -489,7 +489,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 */
 	private void resetAll() {
 		myMaze.reset();
-		firePropertyChange("model", null, myMaze.getMatrix());
+		//firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
 	
@@ -1040,12 +1040,28 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
-				myMaze.setPlayerLocation(pos);
+				PlayerMover move = new PlayerMover();
+				move.teleportPlayer(pos);
 				myPanel.refreshGUI();
+				checkWinLoseCondition();
 			}
 			
 			firePropertyChange("tele", null, false);
 		}
+		
+        /*
+         * Fire property changes for if the player has won or lost
+         */
+        private void checkWinLoseCondition() {
+                if (myMaze.hasWon()) {
+                        //System.out.println("in win panel");
+                        firePropertyChange("win", null, null);
+                } else if (myMaze.hasLost()) {
+                        //System.out.println("in lose panel"); 
+                        firePropertyChange("lose", null, null); 
+                }
+
+        }
 
 	}
 

@@ -71,8 +71,8 @@ public class TutorialPanel extends JPanel{
 		myMaze = Maze.getInstance();
 		setPreferredSize(SIZE);
 		setMaximumSize(SIZE);
-		myTutorialSum = myPanel.readImage(TUT_PATH);
-		myTutorialSum = myPanel.getScaledImage(myTutorialSum, W, H);
+		myTutorialSum = ImageUtility.readImage(TUT_PATH);
+		myTutorialSum = ImageUtility.getScaledImage(myTutorialSum, W, H);
 		
 		this.repaint();
 		this.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, BORDER_COLOR));

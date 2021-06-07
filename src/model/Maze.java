@@ -31,7 +31,7 @@ public class Maze implements Serializable {
 	private final static int DEFAULT_ROWS = 5;
 	private final static int DEFAULT_COLS = 5;
 	private final static int START = 0;
-	private final static int[] STARTLOCATION = new int[] {START, START};
+	private final static int[] STARTLOCATION = new int[] { START, START };
 	private int[] myWinLocation;
 
 	/*
@@ -82,7 +82,6 @@ public class Maze implements Serializable {
 	 * Singleton maze instantiation
 	 */
 	private static Maze singleMaze = null;
-
 
 	/**
 	 * Constructor for maze
@@ -144,29 +143,45 @@ public class Maze implements Serializable {
 
 	/**
 	 * Returns if the player has won yet
+	 * Sets the win variable based on the check.
 	 * 
 	 * @return boolean t = win, f = not won
 	 */
-	public boolean isWinCondition() {
+	public void setWinCondition() {
 		final boolean result = myPlayerLocation[0] == myWinLocation[0]
 				&& myPlayerLocation[1] == myWinLocation[1];
 		myWinCondition = result;
-		return result;
+	}
+	
+	/**
+	 * 
+	 * @return boolean if player has reached the end goal
+	 */
+	public Boolean hasWon() {
+		return myWinCondition;
 	}
 
 	/**
-	 * Returns if the player has lost or not
+	 *
+	 * Sets the lose variable based on the check.
 	 * 
 	 * @return boolean t = win, f = not won
 	 */
-	public boolean isLoseCondition() {
-		//invert because the path finder returns true if there is a path
-		//we only say lost if it returns false
+	public void setLoseCondition() {
+		// invert because the path finder returns true if there is a path
+		// we only say lost if it returns false
 		final boolean result = !MazePathFinder.checkForPath(myPlayerLocation,
 				myWinLocation);
-		myLoseCondition = result;
 		
-		return result;
+		myLoseCondition = result;
+	}
+	
+	/**
+	 * 
+	 * @return boolean if player has lost and all paths are blocked
+	 */
+	public Boolean hasLost() {
+		return myLoseCondition;
 	}
 
 	/**
@@ -189,8 +204,7 @@ public class Maze implements Serializable {
 	}
 
 	/**
-	 * Sets location of the player. Also verifies if the player is in the
-	 * winning location or has lost.
+	 * Sets location of the player.
 	 * 
 	 * @param int[] theNewPos [0] = row, [1] = col
 	 */
@@ -215,9 +229,9 @@ public class Maze implements Serializable {
 			getCurrRoom().setVisited(true);
 		}
 
-		myAttemptLocation = myPlayerLocation.clone(); // set because of the
-														// teleport cheat
+		myAttemptLocation = myPlayerLocation.clone();
 	}
+
 
 	/*
 	 * Return current room player is in
@@ -259,7 +273,6 @@ public class Maze implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * Check if the player has attempted to move to a new room or not
@@ -370,22 +383,6 @@ public class Maze implements Serializable {
 	public int getCols() {
 		// return myMatrix[0].length;
 		return myCols;
-	}
-
-	/**
-	 * 
-	 * @return boolean if player has reached the end goal
-	 */
-	public Boolean hasWon() {
-		return myWinCondition;
-	}
-
-	/**
-	 * 
-	 * @return boolean if player has lost and all paths are blocked
-	 */
-	public Boolean hasLost() {
-		return myLoseCondition;
 	}
 
 	/**

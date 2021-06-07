@@ -22,7 +22,9 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
-import view.viewHelper.BrightnessUtility;
+import view.Win_Lose.LosePane;
+import view.Win_Lose.WinPane;
+import view.viewHelper.ImageUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
@@ -203,13 +205,13 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myMazeGUI = new MazeGUI();
 		myMazeModel = (MazeModel) getTable().getModel();
 		myControlPanel = new ControlPanel(this);
-		addPropertyChangeListener(myControlPanel);
 		myLabelPanel = new LabelPanel();
 		myQuestPanels = new QuestionModePanel(this);
 
 		// listeners
 		addPropertyChangeListener(this);
-		addListener(myMazeGUI);
+		addPropertyChangeListener(myControlPanel);
+		this.addPropertyChangeListener(myMazeGUI);
 
 		/// initialize panel
 		setupPanel();
@@ -274,17 +276,18 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public void setupPictures() {
 
 		// initialize player avatar
-		myAvatar = getScaledImage(readImage(PLAYER_M), POKE_W, POKE_H);
+		myAvatar = ImageUtility.readImage(PLAYER_M);
+		myAvatar = ImageUtility.getScaledImage(myAvatar, POKE_W, POKE_H);
 
 		// iconic question mark
-		myQuestionImg = readImage("./src/images/other/questionmark.png");
+		myQuestionImg = ImageUtility.readImage("./src/images/other/questionmark.png");
 		if (myQuestionImg != null) {
 			myQuestW = myQuestionImg.getWidth();
 			myQuestH = myQuestionImg.getHeight();
 		}
 
 		// sparkly thing behind a pokemon
-		myShine = readImage("./src/images/other/sparkle_formatted.png");
+		myShine = ImageUtility.readImage("./src/images/other/sparkle_formatted.png");
 		if (myShine != null) {
 			myShineW = myShine.getWidth();
 			myShineH = myShine.getHeight();
@@ -313,10 +316,10 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
 				|| myPokeLight.getWidth() > POKE_W
 				|| myPokeLight.getHeight() > POKE_H) {
-			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
+			myPokeLight = ImageUtility.getScaledImage(myPokeLight, POKE_W, POKE_H);
 		}
 
-		myPokeDark = (BufferedImage) BrightnessUtility.setToBlack(myPokeLight);
+		myPokeDark = (BufferedImage) ImageUtility.setToBlack(myPokeLight);
 		myPoke = myDark ? myPokeDark : myPokeLight;
 
 		repaint();
@@ -503,10 +506,14 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		} else {
 			if ("win".equals(prop)) {
 				// TODO: add more to this win message
-				JOptionPane.showMessageDialog(null, "You win!");
+				//JOptionPane.showMessageDialog(null, "You win!");
+				WinPane win = new WinPane(this);
+				win.showCondition();
 			} else if ("lose".equals(prop)) {
 				// TODO: add more to this lose message
-				JOptionPane.showMessageDialog(null, "You lose!");
+				//JOptionPane.showMessageDialog(null, "You lose!");
+				LosePane lose = new LosePane(this);
+				lose.showCondition();
 			} else if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// setImgBrightness();
 				showAnswerImage();
@@ -515,62 +522,5 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		}
 
 	}
-	
-	//image methods below
 
-	/**
-	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It
-	 * is scaled this way to prevent the picture from looking blurry.
-	 * 
-	 * SOURCE:
-	 * https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
-	 * 
-	 * @param srcImg - source image to scale
-	 * @param w      - desired width
-	 * @param h      - desired height
-	 * @return - the new resized image
-	 */
-	public BufferedImage getScaledImage(final Image srcImg, final int w,
-			final int h) {
-
-		// Create a new image with good size that contains or might contain
-		// arbitrary alpha values between and including 0.0 and 1.0.
-		final BufferedImage resizedImg = new BufferedImage(w, h,
-				BufferedImage.TRANSLUCENT);
-
-		// Create a device-independant object to draw the resized image
-		final Graphics2D g2 = resizedImg.createGraphics();
-
-		// improve quality of rendering
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-		// Finally draw the source image in the Graphics2D with the desired
-		// size.
-		g2.drawImage(srcImg, 0, 0, w, h, null);
-
-		// Disposes of this graphics context and releases any system resources
-		// that it is using
-		g2.dispose();
-
-		// Return the image used to create the Graphics2D
-		return resizedImg;
-	}
-
-	/**
-	 * Helper method to read an Image given a filepath
-	 * 
-	 * @param String theLocation filepath
-	 * @return BufferedImage the new image
-	 */
-	public BufferedImage readImage(final String theLocation) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File(theLocation));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-
-		return img;
-	}
 }

@@ -112,10 +112,10 @@ public abstract class AbstractQuestionPanel extends JPanel {
          * Fire property changes for if the player has won or lost
          */
         private void checkWinLoseCondition() {
-                if (myMaze.isWinCondition()) {
+                if (myMaze.hasWon()) {
                         //System.out.println("in win panel");
                         firePropertyChange("win", null, null);
-                } else if (myMaze.isLoseCondition()) {
+                } else if (myMaze.hasLost()) {
                         //System.out.println("in lose panel"); 
                         firePropertyChange("lose", null, null); 
                 }

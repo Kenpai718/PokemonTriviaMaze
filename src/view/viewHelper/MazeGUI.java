@@ -139,7 +139,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		myRowSize = SIZE / myMaze.getRows();
 		myFont = new Font("PKMN RBYGSC", Font.PLAIN,
 				(int) (myRowSize / FONT_SIZE));
-		myGrassBG = readImage(myGrassPath);
+		myGrassBG = ImageUtility.readImage(myGrassPath);
 		myTable = new JTable();
 		myModel = new MazeModel();
 		myRenderer = new Renderer();
@@ -184,23 +184,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 		// set player icon, blocked, room names
 		fillTable();
-	}
-
-	/**
-	 * Helper method to read an Image given a filepath
-	 * 
-	 * @param String theLocation filepath
-	 * @return BufferedImage the new image
-	 */
-	public BufferedImage readImage(final String theLocation) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File(theLocation));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-
-		return img;
 	}
 
 	/**
