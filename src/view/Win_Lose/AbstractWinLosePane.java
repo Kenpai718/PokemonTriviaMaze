@@ -118,9 +118,11 @@ public abstract class AbstractWinLosePane extends Container {
 		JOptionPane.showMessageDialog(null, "The game has been reset!");
 	}
 
+	/**
+	 * Close the software
+	 */
 	protected void exitGame() {
-		JOptionPane.showMessageDialog(null,
-				"Game will now close. Thanks for playing!");
+		JOptionPane.showMessageDialog(null, "Thanks for playing!", "Game will now exit.", JOptionPane.INFORMATION_MESSAGE);
 		System.exit(0);
 	}
 

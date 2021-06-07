@@ -10,6 +10,7 @@ import view.PokemonPanel;
 
 /**
  * Used to tell player they won
+ * 
  * @author Kenneth Ahrens
  *
  */
@@ -18,11 +19,11 @@ public class WinPane extends AbstractWinLosePane {
 	/*
 	 * Constants that represent winning messages
 	 */
-	private final String FIN = "You reached the end!\nGood job!";
-	private final String CLEAR_ALL = "Wow, you cleared every room in the maze!"
-			+ "\nYou really are a Pokemon master!";
-	private final String TITLE = "You win!";
-	
+	private final String FIN = "You reached the end!";
+	private final String CLEAR_ALL = "Wow, you really are a Pokemon master! Congratulations!";
+	private final String TITLE = "You won!";
+	private final String CLEAR_TITLE = "You cleared the whole maze! You're a living Pokedex!";
+
 	/*
 	 * Icons that represent winning
 	 */
@@ -30,7 +31,7 @@ public class WinPane extends AbstractWinLosePane {
 	private final ImageIcon myWin;
 	private final String myWinPath = "./src/images/win_lose/win_trophy.png";
 	private final ImageIcon myWinAll;
-	private final String myWinAllPath = "./src/images/win_lose/pikadance.gif";
+	private final String myWinAllPath = "./src/images/win_lose/pikachucheer.gif";
 
 	/**
 	 * 
@@ -38,9 +39,7 @@ public class WinPane extends AbstractWinLosePane {
 	 */
 	public WinPane(final PokemonPanel thePanel) {
 		super(thePanel);
-		ImageIcon win = new ImageIcon(myWinPath);
-		myWin = new ImageIcon(win.getImage().getScaledInstance(DEFAULT_SIZE,
-				DEFAULT_SIZE, Image.SCALE_DEFAULT));
+		myWin = new ImageIcon(myWinPath);
 
 		myWinAll = new ImageIcon(myWinAllPath);
 
@@ -55,12 +54,15 @@ public class WinPane extends AbstractWinLosePane {
 
 		if (cleared) {
 			if (clearedAll) {
-				JOptionPane.showMessageDialog(null, CLEAR_ALL, TITLE,
-						JOptionPane.PLAIN_MESSAGE, myWinAll);
+			
+				PanePanelMaker winAllPanel = new PanePanelMaker(myWinAll, CLEAR_ALL);
+				JOptionPane.showMessageDialog(null, winAllPanel, CLEAR_TITLE,
+						JOptionPane.PLAIN_MESSAGE, null);
 
 			} else {
-				JOptionPane.showMessageDialog(null, FIN, TITLE,
-						JOptionPane.PLAIN_MESSAGE, myWin);
+				PanePanelMaker winPanel = new PanePanelMaker(myWin, FIN);
+				JOptionPane.showMessageDialog(null, winPanel, TITLE,
+						JOptionPane.PLAIN_MESSAGE, null);
 			}
 
 			super.promptPlayAgain();

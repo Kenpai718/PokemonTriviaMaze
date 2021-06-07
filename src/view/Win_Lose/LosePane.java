@@ -19,13 +19,14 @@ public class LosePane extends AbstractWinLosePane {
 	 * Constants to represent losing messages
 	 */
 	private final String LOST_MSG = "Looks like you should have brought HM Cut with you!";
-	private final String LOST_TITLE = "You lost!";
+	private final String LOST_TITLE = "All paths are blocked... you lost!";
 	
 	/*
 	 * Icons shown upon losing
 	 */
 	private final ImageIcon myLose;
-	private final String myLosePath = "./src/images/win_lose/mocking.gif";
+	private final String myLosePath = "./src/images/win_lose/pikachulaugh.gif";
+	//private final String myLosePath = "./src/images/win_lose/mocking.gif";
 	
 
 	/**
@@ -45,8 +46,8 @@ public class LosePane extends AbstractWinLosePane {
 		boolean lost = super.hasLost();
 
 		if (lost) {
-
-			JOptionPane.showMessageDialog(null, LOST_MSG, LOST_TITLE, JOptionPane.PLAIN_MESSAGE, myLose);
+			PanePanelMaker losePane = new PanePanelMaker(myLose, LOST_MSG);
+			JOptionPane.showMessageDialog(null, losePane, LOST_TITLE, JOptionPane.PLAIN_MESSAGE, null);
 
 			super.promptPlayAgain();
 		} else {
