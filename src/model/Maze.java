@@ -31,6 +31,7 @@ public class Maze implements Serializable {
 	private final static int DEFAULT_ROWS = 5;
 	private final static int DEFAULT_COLS = 5;
 	private final static int START = 0;
+	private final static int[] STARTLOCATION = new int[] {START, START};
 	private int[] myWinLocation;
 
 	/*
@@ -147,7 +148,7 @@ public class Maze implements Serializable {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		boolean result = myPlayerLocation[0] == myWinLocation[0]
+		final boolean result = myPlayerLocation[0] == myWinLocation[0]
 				&& myPlayerLocation[1] == myWinLocation[1];
 		myWinCondition = result;
 		return result;
@@ -161,7 +162,7 @@ public class Maze implements Serializable {
 	public boolean isLoseCondition() {
 		//invert because the path finder returns true if there is a path
 		//we only say lost if it returns false
-		boolean result = !MazePathFinder.checkForPath(myPlayerLocation,
+		final boolean result = !MazePathFinder.checkForPath(STARTLOCATION,
 				myWinLocation);
 		myLoseCondition = result;
 		

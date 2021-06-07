@@ -42,22 +42,22 @@ public class LabelPanel extends JPanel {
 	/*
 	 * Label of the current room name
 	 */
-	private JLabel myRoomLbl;
+	private final JLabel myRoomLbl;
 
 	/*
 	 * Label of the attempted room name
 	 */
-	private JLabel myDirLbl;
+	private final JLabel myDirLbl;
 
 	/*
 	 * Label of the answer to the room
 	 */
-	private JLabel myAnsLbl;
+	private final JLabel myAnsLbl;
 
 	/*
 	 * Maze
 	 */
-	private Maze myMaze;
+	private final Maze myMaze;
 
 	/**
 	 * Constructor
@@ -89,9 +89,9 @@ public class LabelPanel extends JPanel {
 	 * @return formatted JLabel
 	 */
 	private JLabel buildLabel(final String theTitle) {
-		JLabel lbl = new JLabel(theTitle);
+		final JLabel lbl = new JLabel(theTitle);
 		lbl.setPreferredSize(new Dimension(315, 30));
-		Border aBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
+		final Border aBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
 		lbl.setBorder(aBorder);
 		lbl.setBackground(BG_COLOR);
 		lbl.setOpaque(true);
@@ -130,7 +130,7 @@ public class LabelPanel extends JPanel {
 					"Attempting to go to: Room " + myMaze.getAttemptRoom());
 		}
 
-		if (myMaze.isAtStart()) {
+		if (!myMaze.isAtStart()) {
 			myAnsLbl.setText(
 					"Answer is: " + myMaze.getAttemptRoom().getAnswer());
 		} else {
