@@ -162,7 +162,7 @@ public class Maze implements Serializable {
 	public boolean isLoseCondition() {
 		//invert because the path finder returns true if there is a path
 		//we only say lost if it returns false
-		final boolean result = !MazePathFinder.checkForPath(STARTLOCATION,
+		final boolean result = !MazePathFinder.checkForPath(myPlayerLocation,
 				myWinLocation);
 		myLoseCondition = result;
 		
