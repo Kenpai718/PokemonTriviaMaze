@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import controller.maze_game_state.PlayerMover;
 import model.Maze;
 import model.Room;
 import view.PokemonPanel;
@@ -37,6 +38,11 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 * Game panel
 	 */
 	private final PokemonPanel myPP;
+	
+	/*
+	 * Class that moves the player after an answer
+	 */
+	private final PlayerMover myMover;
 
 	/**
 	 * Constructor
@@ -47,6 +53,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		super();
 		myPP = thePP;
 		myMaze = Maze.getInstance();
+		myMover = new PlayerMover();
 	}
 
 	/**
@@ -86,42 +93,15 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		}
 		
 
-		// call method to change the maze
-		doUserAnswer(isCorrect);
+		// call method to change the player's position in maze
+		myMover.movePlayer(isCorrect);
 		
 		//disable the buttons after the user answers
 		this.enableButtons(false);	
 		myPP.refreshGUI(); //one full refresh of the gui
-		checkWinLoseCondition(); 
-
-
-	}
-
-	/**
-	 * User answered from a room panel question gui. Read a boolean for if they
-	 * were right/wrong. Update player/attempt statuses and locations in maze
-	 * based on answer result.
-	 * 
-	 * 
-	 * @param Boolean theRes true = user answered correctly set curr and attempt
-	 *                room to visited, false = incorrect, set visited false and
-	 *                block the room
-	 */
-	private void doUserAnswer(final Boolean theResult) {
-
-		final Room curr = myMaze.getCurrRoom();
-		final Room attempt = myMaze.getAttemptRoom();
-		if (theResult) { // answered correctly
-			// set current player room and attempted room to visited
-			curr.setVisited(theResult);
-			attempt.setVisited(theResult);
-			myMaze.setPlayerLocation(myMaze.getAttemptedLocation());
-		} else { // answered incorrectly
-			attempt.setEntry(false); // block that room
-			// reset attempt location to default
-			myMaze.setAttemptLocation(myMaze.getPlayerLocation());
-		}
 		
+		//fire a win or lose condition based on current position after the answer
+		checkWinLoseCondition(); 
 
 
 	}
@@ -131,14 +111,18 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 */
 	private void checkWinLoseCondition() {
 		if (myMaze.isWinCondition()) {
+			//System.out.println("in win panel");
 			firePropertyChange("win", null, null);
+		} else if (myMaze.isLoseCondition()) {
+			//System.out.println("in lose panel");
+			firePropertyChange("lose", null, null);
 		}
-
-		// TODO: if maze isLoseCondition() fire lose
 	}
 
 	/**
 	 * Enable or disable the answer fields
+	 * 
+	 * @param theBool if the user input buttons/fields should be enabled
 	 */
 	public abstract void enableButtons(Boolean theBool);
 

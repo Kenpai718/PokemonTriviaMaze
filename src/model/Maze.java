@@ -73,13 +73,15 @@ public class Maze implements Serializable {
 	private transient boolean myWinCondition;
 
 	/*
+	 * Boolean to verify when the player has lost the game
+	 */
+	private transient boolean myLoseCondition;
+
+	/*
 	 * Singleton maze instantiation
 	 */
 	private static Maze singleMaze = null;
 
-	// TODO Current win condition is that the player needs to get to the
-	// opposite corner that they are in.
-	// TODO: private final boolean winCondition;
 
 	/**
 	 * Constructor for maze
@@ -92,11 +94,13 @@ public class Maze implements Serializable {
 		myMatrix = fillRooms();
 		myPlayerLocation = new int[] { START, START };
 		myAttemptLocation = myPlayerLocation.clone();
-		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of maze;
+		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of
+																	// maze;
 		myPokemonList = fillPokemonList();
 		// TODO: test stuff delete later
 		myMatrix[START][START].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
+		myLoseCondition = false;
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[START][START].setVisited(true);
@@ -143,7 +147,25 @@ public class Maze implements Serializable {
 	 * @return boolean t = win, f = not won
 	 */
 	public boolean isWinCondition() {
-		return myPlayerLocation[0] == myWinLocation[0] && myPlayerLocation[1] == myWinLocation[1];
+		boolean result = myPlayerLocation[0] == myWinLocation[0]
+				&& myPlayerLocation[1] == myWinLocation[1];
+		myWinCondition = result;
+		return result;
+	}
+
+	/**
+	 * Returns if the player has lost or not
+	 * 
+	 * @return boolean t = win, f = not won
+	 */
+	public boolean isLoseCondition() {
+		//invert because the path finder returns true if there is a path
+		//we only say lost if it returns false
+		boolean result = !MazePathFinder.checkForPath(myPlayerLocation,
+				myWinLocation);
+		myLoseCondition = result;
+		
+		return result;
 	}
 
 	/**
@@ -158,26 +180,29 @@ public class Maze implements Serializable {
 	/**
 	 * Returns the players current location
 	 * 
-	 * @return int[] an integer array of the players current location 0 = row, 1 =
-	 *         col
+	 * @return int[] an integer array of the players current location 0 = row, 1
+	 *         = col
 	 */
 	public int[] getPlayerLocation() {
 		return myPlayerLocation;
 	}
 
 	/**
-	 * Sets location of the player Also verifies if the player is in the winning
-	 * location
+	 * Sets location of the player. Also verifies if the player is in the
+	 * winning location or has lost.
 	 * 
 	 * @param int[] theNewPos [0] = row, [1] = col
 	 */
 	public void setPlayerLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows()
+					|| theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set player location at ["
+						+ theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 
-				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
+				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]]
+						.setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
@@ -188,7 +213,7 @@ public class Maze implements Serializable {
 		if (!getCurrRoom().hasVisited()) {
 			getCurrRoom().setVisited(true);
 		}
-		myWinCondition = isWinCondition();
+
 		myAttemptLocation = myPlayerLocation.clone(); // set because of the
 														// teleport cheat
 	}
@@ -222,8 +247,10 @@ public class Maze implements Serializable {
 
 	public void setAttemptLocation(final int[] theNewPos) {
 		try { // error checking location
-			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
+			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows()
+					|| theNewPos[1] > getCols()) {
+				throw new Exception("Cannot set attempt location at ["
+						+ theNewPos[0] + ", " + theNewPos[1] + "]");
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
@@ -231,13 +258,15 @@ public class Maze implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	
 
 	/**
 	 * Check if the player has attempted to move to a new room or not
 	 * 
 	 */
 	public boolean hasNotMoved() {
-		return myPlayerLocation[0] == myAttemptLocation[0] && myPlayerLocation[1] == myAttemptLocation[1];
+		return myPlayerLocation[0] == myAttemptLocation[0]
+				&& myPlayerLocation[1] == myAttemptLocation[1];
 	}
 
 	/**
@@ -251,7 +280,8 @@ public class Maze implements Serializable {
 	public Room getRoom(final int theR, final int theC) throws Exception {
 		Room res = null;
 		if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
-			throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
+			throw new Exception(
+					"Room does not exist at [" + theR + ", " + theC + "]");
 		} else {
 			res = myMatrix[theR][theC];
 		}
@@ -266,10 +296,12 @@ public class Maze implements Serializable {
 	 * @param theR the row index
 	 * @param theC the col index
 	 */
-	public void setRoomInMatrix(final Room theRoom, final int theR, final int theC) {
+	public void setRoomInMatrix(final Room theRoom, final int theR,
+			final int theC) {
 		try {
 			if (theR < 0 || theC < 0 || theR > getRows() || theC > getCols()) {
-				throw new Exception("Room does not exist at [" + theR + ", " + theC + "]");
+				throw new Exception(
+						"Room does not exist at [" + theR + ", " + theC + "]");
 			} else {
 				System.out.println("added" + theRoom.getAnswer());
 				myMatrix[theR][theC] = theRoom;
@@ -281,6 +313,7 @@ public class Maze implements Serializable {
 
 	/**
 	 * Make a list of pokemon that are currently put in the maze
+	 * 
 	 * @return list of pokemon
 	 */
 	private ArrayList<Pokemon> fillPokemonList() {
@@ -339,12 +372,29 @@ public class Maze implements Serializable {
 	}
 
 	/**
+	 * 
+	 * @return boolean if player has reached the end goal
+	 */
+	public Boolean hasWon() {
+		return myWinCondition;
+	}
+
+	/**
+	 * 
+	 * @return boolean if player has lost and all paths are blocked
+	 */
+	public Boolean hasLost() {
+		return myLoseCondition;
+	}
+
+	/**
 	 * If player is at the start of the game
 	 * 
 	 * @return boolean true/false
 	 */
 	public boolean isAtStart() {
-		return myPlayerLocation[0] == START && myPlayerLocation[1] == START && myAttemptLocation[0] == START
+		return myPlayerLocation[0] == START && myPlayerLocation[1] == START
+				&& myAttemptLocation[0] == START
 				&& myAttemptLocation[1] == START;
 	}
 
@@ -361,13 +411,13 @@ public class Maze implements Serializable {
 	}
 
 	/**
-	 * Reset the maze to default and instantiate new rooms Make a new instance of
-	 * the maze
+	 * Reset the maze to default and instantiate new rooms Make a new instance
+	 * of the maze
 	 */
 	public void reset() {
 
 		// singleMaze = new Maze();
-	        myMatrix[0][0].clearUsed();
+		myMatrix[0][0].clearUsed();
 		roomCounter = 0;
 		// clearMatrix();
 		myMatrix = fillRooms();
@@ -376,12 +426,12 @@ public class Maze implements Serializable {
 
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
+		myLoseCondition = false;
 
 		// set the first room to be visited since we dont play that room
 		myMatrix[0][0].setVisited(true);
 		myPokemonList.clear();
 		myPokemonList = fillPokemonList();
-		
 
 	}
 

@@ -113,12 +113,13 @@ public class Pokedex implements Serializable {
 	 * a jigglypuff seen from above.
 	 * 
 	 * Fans will know this joke and it can be found in the maze
-	 * to prank players playing in user input mode.
+	 * to prank players playing in user input mode. Set to only
+	 * show up in the first generation.
 	 * 
 	 */
 	private void addJokeEntry() {
 		// joke addition easter egg: "a jigglypuff seen from above" final
-		if(!myNameDex.containsKey("meme")) {
+		if(mySelectedGens.contains(DEFAULT_GEN) && !myNameDex.containsKey("meme")) {
 			myCounter++;
 			final ArrayList<String> joke = new ArrayList<String>();
 			joke.add(0, "999");
