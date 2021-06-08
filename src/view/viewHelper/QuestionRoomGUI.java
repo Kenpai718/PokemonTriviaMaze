@@ -172,22 +172,17 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 */
 	public void setButtons() {
 		// set answers if its a room already visited
-		if (myMaze.getAttemptRoom().hasVisited()) {
-			setButtonsAnswer();
-		} else {
-			myButtonGroup.clearSelection();
-			final Maze maze = Maze.getInstance();
-			final ArrayList<String> choices = maze.getAttemptRoom()
-					.getChoices();
-			final Enumeration<AbstractButton> buttons = myButtonGroup
-					.getElements();
-			int i = 0;
-			while (buttons.hasMoreElements()) {
-				final JRadioButton temp = (JRadioButton) buttons.nextElement();
-				temp.setText(choices.get(i));
-				temp.setForeground(Color.BLACK);
-				i++;
-			}
+		myButtonGroup.clearSelection();
+		final Maze maze = Maze.getInstance();
+		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
+		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
+		int i = 0;
+		while (buttons.hasMoreElements()) {
+			final JRadioButton temp = (JRadioButton) buttons.nextElement();
+			temp.setText(choices.get(i));
+			temp.setForeground(Color.BLACK);
+			i++;
+
 		}
 	}
 
@@ -205,7 +200,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
 			temp.setText(choices.get(i));
 			if (i == answerIndex) {
-				temp.setSelected(true);
 				temp.setForeground(Color.GREEN);
 			} else {
 				temp.setForeground(Color.RED);
