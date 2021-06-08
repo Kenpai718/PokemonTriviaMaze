@@ -171,23 +171,29 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 * Put multiple choice text on the buttons
 	 */
 	public void setButtons() {
-		// TODO Auto-generated method stub
-		myButtonGroup.clearSelection();
-		final Maze maze = Maze.getInstance();
-		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
-		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
-		int i = 0;
-		while (buttons.hasMoreElements()) {
-			final JRadioButton temp = (JRadioButton) buttons.nextElement();
-			temp.setText(choices.get(i));
-			temp.setForeground(Color.BLACK);
-			i++;
+		// set answers if its a room already visited
+		if (myMaze.getAttemptRoom().hasVisited()) {
+			setButtonsAnswer();
+		} else {
+			myButtonGroup.clearSelection();
+			final Maze maze = Maze.getInstance();
+			final ArrayList<String> choices = maze.getAttemptRoom()
+					.getChoices();
+			final Enumeration<AbstractButton> buttons = myButtonGroup
+					.getElements();
+			int i = 0;
+			while (buttons.hasMoreElements()) {
+				final JRadioButton temp = (JRadioButton) buttons.nextElement();
+				temp.setText(choices.get(i));
+				temp.setForeground(Color.BLACK);
+				i++;
+			}
 		}
 	}
 
 	/*
-	 * Set the color of the text after the user answers
-	 * Green = correct, red = incorrect
+	 * Set the color of the text after the user answers Green = correct, red =
+	 * incorrect
 	 */
 	public void setButtonsAnswer() {
 		final Maze maze = Maze.getInstance();
@@ -199,6 +205,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
 			temp.setText(choices.get(i));
 			if (i == answerIndex) {
+				temp.setSelected(true);
 				temp.setForeground(Color.GREEN);
 			} else {
 				temp.setForeground(Color.RED);
@@ -230,7 +237,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	/**
 	 * Set all multiple choice buttons state on or off
 	 * 
-	 * @boolean the state of buttons 
+	 * @boolean the state of buttons
 	 */
 	@Override
 	public void enableButtons(Boolean theBool) {
@@ -246,8 +253,8 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		}
 
 	}
-	
-	//inner class called when user clicks an answer button
+
+	// inner class called when user clicks an answer button
 	class AnswerDisplay implements ActionListener {
 
 		@Override

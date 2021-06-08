@@ -119,7 +119,7 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 				 * if(myUserAns.getText().isEmpty()) {
 				 * myUserAns.setText(PUT_TEXT); }
 				 */
-				
+
 			}
 
 		});
@@ -143,17 +143,21 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 	}
 
 	/**
-	 * Startup settings of user input field
+	 * Startup settings of user input field Makes textbox focused for convience
 	 * 
 	 */
 	@Override
 	public void setButtons() {
-		myUserAns.setText(PUT_TEXT);
-		myUserAns.requestFocusInWindow();
+		// myUserAns.setText(PUT_TEXT);
+		if (myMaze.getAttemptRoom().hasVisited()) {
+			myUserAns.setText(myMaze.getAttemptRoom().getAnswer());
+		} else {
+			myUserAns.requestFocusInWindow();
+		}
 
 	}
 
-	//inner class that checks for when user enters an answer
+	// inner class that checks for when user enters an answer
 	public class EnterListener extends KeyAdapter {
 
 		@Override
@@ -161,9 +165,8 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 			if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
 				verifyAnswer(myUserAns.getText());
-				
-				
-				//remove focus so the movement keybinds still work
+
+				// remove focus so the movement keybinds still work
 				myPP.requestFocusInWindow();
 			}
 		}

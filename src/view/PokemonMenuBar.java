@@ -232,8 +232,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		about.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 		about.addActionListener(new ActionListener() {
-
-			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
+			private final String version = "Pokemon Trivia Maze v1.0";
+			private final String aboutMessage = version + "\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
 					+ "\nSpring 2021\n" + "\nDISCLAIMER:\n"
 					+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime."
 					+ "\nWe are not affliated or endorsed with the Pokemon company. All copyright belongs to Nintendo/Gamefreak.";
