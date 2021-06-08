@@ -63,7 +63,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 * Color used for the font
 	 */
 	final Color FONT_COLOR = Color.WHITE;
-	
+
 	/*
 	 * Background color of border: dark green
 	 */
@@ -78,7 +78,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 * Border of jpanel
 	 */
 	final Border BORDER = BorderFactory.createLineBorder(BORDER_COLOR, 5);
-	
+
 	/*
 	 * Fields
 	 */
@@ -205,10 +205,10 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			myTable.getColumnModel().getColumn(i).setCellRenderer(myRenderer);
 		}
 	}
-	
+
 	/*
-	 * ------------------------------------------------------
-	 * Inner classes to help build the maze gui visual
+	 * ------------------------------------------------------ Inner classes to
+	 * help build the maze gui visual
 	 * ------------------------------------------------------
 	 */
 
@@ -326,6 +326,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		private final ImageIcon POKEBALL = new ImageIcon(
 				"./src/images/maze_gui/visited_icon.png");
 
+		/*
+		 * Border used on selected attempt rooms
+		 */
+		final Border SELECT_BORDER = BorderFactory
+				.createLineBorder(new Color(51, 153, 204), 3);
+
 		/**
 		 * Constructor
 		 * 
@@ -336,7 +342,9 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		}
 
 		/**
-		 * Draws the icons for each cell of the maze
+		 * Checks the logic to choose which
+		 * icons used for each cell of the maze visual
+		 *	
 		 */
 		@Override
 		public Component getTableCellRendererComponent(final JTable table,
@@ -350,6 +358,9 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 			final int grassSize = iconSize + 10;
 			final int visitedSize = iconSize / 2;
 
+			/*
+			 * Logic to choose which image to draw to the cell
+			 */
 			if (r.isPlayerHere()) { // player at this cell put player icon
 				lbl = makeImageLabel(PLAYER, iconSize);
 			} else if (!r.canEnter()) { // blocked room icon
@@ -364,16 +375,22 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 					lbl = makeImageLabel(POKEBALL, visitedSize);
 				} else { // tall grass for unvisited rooms
 					lbl = makeImageLabel(GRASS, grassSize);
+					if (r == myMaze.getAttemptRoom()) {
+						// selection border to show player is attempting to
+						// enter this room
+						lbl.setBorder(SELECT_BORDER);
+					}
 				}
-			} else {
+				
+			} else { //show the room names instead of icons
 				final int[] winpos = myMaze.getWinLocation();
 
 				if (r == myMatrix[winpos[0]][winpos[1]]) {
 					// winning location icon
 					lbl = makeImageLabel(WIN, iconSize);
-				} else if (r.hasVisited()) { // pokeball for unvisited rooms
+				} else if (r.hasVisited()) { 
 					lbl = makeTextLabel(name, VISITED);
-				} else { // tall grass for unvisited rooms
+				} else { 
 					lbl = makeTextLabel(name, DARK);
 				}
 			}
