@@ -149,6 +149,7 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 	@Override
 	public void setButtons() {
 		myUserAns.setText(PUT_TEXT);
+		myUserAns.requestFocusInWindow();
 
 	}
 
