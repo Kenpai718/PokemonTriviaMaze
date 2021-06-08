@@ -36,6 +36,7 @@ import model.Maze;
 import model.Pokedex;
 import model.Pokemon;
 import model.Room;
+import sound.BackgroundMusic;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.TutorialPanel;
 
@@ -102,6 +103,13 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	private final PokemonPanel myPanel;
 	private final TutorialPanel myTutorial;
 
+	/*
+	 * Sound
+	 */
+	private BackgroundMusic myMusicPlayer;
+	private JMenu myMusicMenu;
+	private ButtonGroup mySongButtons;
+
 	// private JMenu myGamemodeMenu;
 	// private ButtonGroup myGamemodes;
 
@@ -118,6 +126,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myPanel = theFrame.getPanel();
 		myMaze = Maze.getInstance();
 		myPokedex = Pokedex.getInstance();
+		myMusicPlayer = BackgroundMusic.getInstance();
 		myTutorial = new TutorialPanel(myPanel);
 		setupMenuBar();
 		addListeners();
@@ -149,6 +158,11 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myHelpMenu.setMnemonic(KeyEvent.VK_H);
 		setupHelpMenu();
 		this.add(myHelpMenu);
+		
+		myMusicMenu = new JMenu("Music");
+		myMusicMenu.setMnemonic(KeyEvent.VK_M);
+		setupMusicMenu();
+		this.add(myMusicMenu);
 
 		myDifficultySelectMenu = new JMenu("Difficulty");
 		myDifficultySelectMenu.setMnemonic(KeyEvent.VK_D);
@@ -159,6 +173,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myGenSelectMenu.setMnemonic(KeyEvent.VK_G);
 		setupGenSelectMenu();
 		this.add(myGenSelectMenu);
+
 
 		/*
 		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
@@ -461,6 +476,37 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myGenSelectMenu.add(mySelectAllGen);
 	}
 
+	/**
+	 * Setups menu that controls the song being played
+	 */
+	private void setupMusicMenu() {
+		final ArrayList<String> mySongs = myMusicPlayer.getSongList();
+		/*
+		 * Ensure only one button can be selected at a time
+		 */
+		mySongButtons = new ButtonGroup();
+		// build buttons
+		for (String song : mySongs) {
+			String name = song.replace(".wav", "");
+			final JRadioButton songOption = new JRadioButton(name);
+			songOption.addActionListener(
+					new SongSelectListener(songOption, song));
+			mySongButtons.add(songOption);
+			myMusicMenu.add(songOption);
+
+			// set normal as default selected
+			if (song.equals(myMusicPlayer.DEFAULT_SONG)) {
+				songOption.setSelected(true);
+			}
+		}
+
+		myMusicMenu.addSeparator();
+		JMenuItem muteButton = new JMenuItem("Mute music");
+		muteButton.addActionListener(new MuteSongListener(muteButton));
+		myMusicMenu.add(muteButton);
+
+	}
+
 	/*
 	 * Update all the main menubar settings
 	 */
@@ -487,16 +533,15 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			count++;
 		}
 
-		//firePropertyChange("model", null, myMaze.getMatrix());
+		// firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
 
 	/*
-	 * Update difficulty setting menu. Iterate through each button until it finds
-	 * the correct maze size stored in the tool tip
+	 * Update difficulty setting menu. Iterate through each button until it
+	 * finds the correct maze size stored in the tool tip
 	 */
 	private void updateDifficultySetting() {
-		
 
 		for (final Enumeration<AbstractButton> buttons = myDifficultyButtons
 				.getElements(); buttons.hasMoreElements();) {
@@ -505,7 +550,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			box.setSelected(text.contains(String.valueOf(myMaze.getRows())));
 		}
 
-		//firePropertyChange("model", null, myMaze.getMatrix());
+		// firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
 
@@ -514,15 +559,14 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 */
 	private void resetAll() {
 		myMaze.reset();
-		//firePropertyChange("model", null, myMaze.getMatrix());
+		// firePropertyChange("model", null, myMaze.getMatrix());
 		myPanel.refreshGUI();
 	}
-	
-	
-	/* 
-	 * ---------------------------------------------------------------- 
-	 * Listener classes to change maze/game state below
-	 * ---------------------------------------------------------------- 
+
+	/*
+	 * ---------------------------------------------------------------- Listener
+	 * classes to change maze/game state below
+	 * ----------------------------------------------------------------
 	 */
 
 	/*
@@ -601,7 +645,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Objects to be saved
 		 */
-		private void saveHelper(final ObjectOutputStream objOut) throws IOException {
+		private void saveHelper(final ObjectOutputStream objOut)
+				throws IOException {
 			objOut.writeObject(myMaze);
 			objOut.writeObject(myPokedex);
 		}
@@ -802,7 +847,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 						myMsg = "Cannot remove Gen " + myGen
 								+ " because at least one generation must be selected to play!";
 						JOptionPane.showMessageDialog(null, myMsg);
-						//e1.printStackTrace();
+						// e1.printStackTrace();
 					}
 				}
 			}
@@ -910,19 +955,20 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-		        
-		        final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
 
-                                @Override
-                                protected Void doInBackground() throws Exception {
-                                        // System.out.println("Executing");
-                                        resetAll();
-                                        JOptionPane.showMessageDialog(null, "The game has been reset!");
-                                        return null;
-                                }
-                        };
-                        mySwingWorker.execute();
-			
+			final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+
+				@Override
+				protected Void doInBackground() throws Exception {
+					// System.out.println("Executing");
+					resetAll();
+					JOptionPane.showMessageDialog(null,
+							"The game has been reset!");
+					return null;
+				}
+			};
+			mySwingWorker.execute();
+
 		}
 
 	}
@@ -983,7 +1029,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 					putPokemon(myPos, myNewMon);
 				}
 			}
-			
+
 			firePropertyChange("tele", null, false);
 
 		}
@@ -1057,9 +1103,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-		        
+
 			// TODO Auto-generated method stub
-		        firePropertyChange("tele", null, true);
+			firePropertyChange("tele", null, true);
 			final String message = "Please enter a new room to teleport"
 					+ " to.\n(Room Name)";
 			final int[] pos = readRoomName(message, myTeleportIcon);
@@ -1070,23 +1116,23 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				myPanel.refreshGUI();
 				checkWinLoseCondition();
 			}
-			
+
 			firePropertyChange("tele", null, false);
 		}
-		
-        /*
-         * Fire property changes for if the player has won or lost
-         */
-        private void checkWinLoseCondition() {
-                if (myMaze.hasWon()) {
-                        //System.out.println("in win panel");
-                        firePropertyChange("win", null, null);
-                } else if (myMaze.hasLost()) {
-                        //System.out.println("in lose panel"); 
-                        firePropertyChange("lose", null, null); 
-                }
 
-        }
+		/*
+		 * Fire property changes for if the player has won or lost
+		 */
+		private void checkWinLoseCondition() {
+			if (myMaze.hasWon()) {
+				// System.out.println("in win panel");
+				firePropertyChange("win", null, null);
+			} else if (myMaze.hasLost()) {
+				// System.out.println("in lose panel");
+				firePropertyChange("lose", null, null);
+			}
+
+		}
 
 	}
 
@@ -1141,60 +1187,66 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		return res;
 	}
 
-	// /**
-	// * Helper method to read the input from the Input Dialog Used for the
-	// teleport
-	// * cheat
-	// *
-	// * @param theInput a string of the input
-	// * @param icon for the option pane
-	// * @return an int[] of the two numbers input
-	// */
-	// private int[] readCordinateInput(final String theMessage, final ImageIcon
-	// theIcon) {
-	// final String input = (String) JOptionPane.showInputDialog(null,
-	// theMessage,
-	// "Choose Location",
-	// JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
-	// int[] res = myMaze.getPlayerLocation().clone();
-	// final Scanner scan;
-	// if (input != null && !input.isEmpty()) {
-	// if (!(input.length() < 3)) {
-	// scan = new Scanner(input.toString());
-	// try {
-	// for (int i = 0; i < 2; i++) {
-	// final int num = scan.nextInt() - 1;
-	// if (num < myMaze.getRows() && num < myMaze.getCols() && num >= 0) {
-	// res[i] = num;
-	//
-	// } else {
-	// res = readCordinateInput("One or more numbers out " + "of range of
-	// maze\n(X
-	// Y):", theIcon);
-	// break;
-	// }
-	// }
-	// } catch (final InputMismatchException e) {
-	// if (input.toLowerCase().strip().equals("here")) {
-	// /*
-	// * Quick shortcut with "here" to put it at player pos
-	// */
-	// res = myMaze.getAttemptedLocation();
-	// } else {
-	// res = readCordinateInput("Please use integers only.\n(X Y):", theIcon);
-	// }
-	// }
-	// scan.close();
-	// } else {
-	// res = readCordinateInput("Invalid Input\n(X Y):", theIcon);
-	// }
-	// } else {
-	// // put -1 to signify user canceled
-	// res = new int[] { -1, -1 };
-	// }
-	//
-	// return res;
-	//
-	// }
+	/**
+	 * Select the song to play
+	 */
+	class SongSelectListener implements ActionListener {
+
+		private final JRadioButton myBox;
+		private final String myName;
+
+		public SongSelectListener(final JRadioButton theBox,
+				String theSongName) {
+			myBox = theBox;
+			myName = theSongName;
+
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+
+			if (myBox.isSelected()) { 
+				myMusicPlayer.loadNewSong(myName);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Mutes or unmutes the song
+	 */
+	class MuteSongListener implements ActionListener {
+
+		private final JMenuItem myBox;
+		/*
+		 * false = not muted, true = muted
+		 */
+		private boolean myChange;
+
+		public MuteSongListener(final JMenuItem theBox) {
+			myBox = theBox;
+			myChange = false;
+
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+
+			if (!myChange) {
+				myMusicPlayer.stopMusic();
+				myBox.setText("Unmute music");
+				myChange = true;
+			} else {
+
+				myMusicPlayer.playMusic();
+				myBox.setText("Mute music");
+				myChange = false;
+			}
+
+		}
+
+	}
 
 }
