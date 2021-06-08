@@ -8,9 +8,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import model.Maze;
 import view.PokemonPanel;
+import view.viewHelper.LabelPanel;
 
 /**
  * Controls player movement in the maze
@@ -20,17 +22,32 @@ import view.PokemonPanel;
  * @author Katlyn Malone
  * @version Spring 2021
  */
-public class MovementAction extends AbstractAction {
+public abstract class AbstractMovementAction extends AbstractAction {
 
 	/*
 	 * What needs to be updated after doing this action
 	 */
 	protected Maze myMaze = Maze.getInstance();
+	/*
+	 * Game panel that holds everything
+	 */
 	private final PokemonPanel myPanel;
 
-	protected MovementAction(final String theName, final ImageIcon theIcon,
-			final PokemonPanel thePanel) {
+	/*
+	 * Icon of the action
+	 */
+	private final ImageIcon myIcon;
+
+	/**
+	 * 
+	 * @param theName
+	 * @param theIcon
+	 * @param thePanel
+	 */
+	protected AbstractMovementAction(final String theName,
+			final ImageIcon theIcon, final PokemonPanel thePanel) {
 		super(theName, theIcon);
+		myIcon = theIcon;
 		myPanel = thePanel;
 	}
 
@@ -41,7 +58,7 @@ public class MovementAction extends AbstractAction {
 	}
 
 	/**
-	 * Move player in given direction
+	 * Move player/attempted location in given direction
 	 * 
 	 * @param theMove the directions to move [0] row, [1] = col
 	 */
@@ -71,8 +88,16 @@ public class MovementAction extends AbstractAction {
 	private void updateGUI() {
 
 //		firePropertyChange("newpos", null, null);
+		myPanel.getLabelPanel().setDir(this.getName());
 		myPanel.refreshGUI();
 
 	}
+
+	/*
+	 * To get the assigned keystroke of the movement
+	 */
+	public abstract KeyStroke getMovementKey();
+
+	public abstract String getName();
 
 }

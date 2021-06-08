@@ -204,8 +204,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myShowQMark = false;
 		myMazeGUI = new MazeGUI();
 		myMazeModel = (MazeModel) getTable().getModel();
+		myLabelPanel = new LabelPanel();
 		myControlPanel = new ControlPanel(this);
-		myLabelPanel = new LabelPanel(myControlPanel);
 		myQuestPanels = new QuestionModePanel(this);
 
 		// listeners
@@ -228,6 +228,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		setBackground(BG_COLOR);
 		setPreferredSize(PANEL_SIZE);
 		setLayout(springLayout);
+		setFocusable(true);
 
 		// position panel components
 

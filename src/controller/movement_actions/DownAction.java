@@ -1,8 +1,10 @@
 package controller.movement_actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 
 import view.PokemonPanel;
 
@@ -15,13 +17,17 @@ import view.PokemonPanel;
  * @version Spring 2021
  */
 
-public class DownAction extends MovementAction {
+public class DownAction extends AbstractMovementAction {
 	private static final String NAME = "DOWN";
 	private static final ImageIcon ICON = new ImageIcon("./src/images/arrows/down.png");
 	
+	/**Down arrow key*/
+	private final KeyStroke myKey;
+	
 	
 	public DownAction(final PokemonPanel thePanel) {
-		super("", ICON, thePanel);
+		super("", ICON,thePanel);
+		myKey = KeyStroke.getKeyStroke(NAME);
 	}
 
 	@Override
@@ -33,6 +39,18 @@ public class DownAction extends MovementAction {
 	
 	@Override
 	public String toString() {
+		return NAME;
+	}
+
+	@Override
+	public KeyStroke getMovementKey() {
+		// TODO Auto-generated method stub
+		return myKey;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
 		return NAME;
 	}
 

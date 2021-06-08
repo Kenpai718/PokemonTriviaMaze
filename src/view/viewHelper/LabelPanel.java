@@ -48,6 +48,8 @@ public class LabelPanel extends JPanel {
 	 * Label of the attempted room name
 	 */
 	private final JLabel myDirLbl;
+	
+	private String myDir;
 
 	/*
 	 * Label of the answer to the room
@@ -59,8 +61,6 @@ public class LabelPanel extends JPanel {
 	 */
 	private final Maze myMaze;
 	
-	private final ControlPanel myCP;
-	
 	private final String CURRENT = "Current Room: ";
 	private final String DIRECTION = "Chosen Direction: ";
 	private final String ANSWER = "Answer: ";
@@ -68,10 +68,9 @@ public class LabelPanel extends JPanel {
 	/**
 	 * Constructor
 	 */
-	public LabelPanel(final ControlPanel theCP) {
+	public LabelPanel() {
 		// TODO Auto-generated constructor stub
 		myMaze = Maze.getInstance();
-		myCP = theCP;
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(320, 110));
@@ -133,7 +132,7 @@ public class LabelPanel extends JPanel {
 		if (myMaze.hasNotMoved()) {
 			myDirLbl.setText(DIRECTION + "NONE");
 		} else {
-			myDirLbl.setText(DIRECTION + myCP.getDirection());
+			myDirLbl.setText(DIRECTION + myDir);
 		}
 
 		if (!myMaze.isAtStart()) {
@@ -142,6 +141,14 @@ public class LabelPanel extends JPanel {
 		} else {
 			myAnsLbl.setText(ANSWER + "N/A");
 		}
+	}
+	
+	/**
+	 * Sets the string representation of direction
+	 * @param theDir
+	 */
+	public void setDir(String theDir) {
+		myDir = theDir;
 	}
 
 	/**

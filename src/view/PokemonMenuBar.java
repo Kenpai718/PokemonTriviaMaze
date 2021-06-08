@@ -2,6 +2,7 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -139,18 +141,22 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	private void setupMenuBar() {
 
 		myFileMenu = new JMenu("File");
+		myFileMenu.setMnemonic(KeyEvent.VK_F);
 		setupFileMenu();
 		this.add(myFileMenu);
 
 		myHelpMenu = new JMenu("Help");
+		myHelpMenu.setMnemonic(KeyEvent.VK_H);
 		setupHelpMenu();
 		this.add(myHelpMenu);
 
 		myDifficultySelectMenu = new JMenu("Difficulty");
+		myDifficultySelectMenu.setMnemonic(KeyEvent.VK_D);
 		setupDifficultySelectMenu();
 		this.add(myDifficultySelectMenu);
 
 		myGenSelectMenu = new JMenu("Select Pokemon Generation(s)");
+		myGenSelectMenu.setMnemonic(KeyEvent.VK_G);
 		setupGenSelectMenu();
 		this.add(myGenSelectMenu);
 
@@ -167,10 +173,16 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	private void setupFileMenu() {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
+		save.setMnemonic(KeyEvent.VK_S);
+		save.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		save.addActionListener(new SaveListener());
 		myFileMenu.add(save);
 
 		final JMenuItem load = new JMenuItem("Load");
+		load.setMnemonic(KeyEvent.VK_L);
+		load.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.addActionListener(new LoadListener());
 		load.addPropertyChangeListener(myPanel.getMyControlPanel());
 		myFileMenu.add(load);
@@ -178,12 +190,18 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myFileMenu.addSeparator();
 
 		final JMenuItem reset = new JMenuItem("Reset");
+		reset.setMnemonic(KeyEvent.VK_R);
+		reset.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		reset.addActionListener(new ResetListener());
 		myFileMenu.add(reset);
 
 		myFileMenu.addSeparator();
 
 		final JMenuItem exit = new JMenuItem("Exit");
+		exit.setMnemonic(KeyEvent.VK_X);
+		exit.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 		exit.addActionListener(theEvent -> System.exit(0));
 		myFileMenu.add(exit);
 	}
@@ -195,6 +213,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		// TODO Auto-generated method stub
 
 		final JMenuItem about = new JMenuItem("About");
+		about.setMnemonic(KeyEvent.VK_A);
+		about.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 		about.addActionListener(new ActionListener() {
 
 			private final String aboutMessage = "Pokemon Trivia Maze\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
@@ -213,6 +234,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myHelpMenu.add(about);
 
 		final JMenuItem tutorial = new JMenuItem("Tutorial");
+		tutorial.setMnemonic(KeyEvent.VK_T);
+		tutorial.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -231,6 +255,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 */
 	private void setUpCheats() {
 		myCheatsMenu = new JMenu("Cheats");
+		myCheatsMenu.setMnemonic(KeyEvent.VK_C);
 		myHelpMenu.add(myCheatsMenu);
 
 		myRevealCheat = new JCheckBoxMenuItem("Reveal Pokemon");

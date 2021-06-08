@@ -68,6 +68,7 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 	 */
 	public TextRoomGUI(PokemonPanel thePP) {
 		super(thePP);
+		myPP = thePP;
 		setBackground(BORDER_COLOR);
 		setPreferredSize(SIZE);
 		setMaximumSize(SIZE);
@@ -118,7 +119,7 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 				 * if(myUserAns.getText().isEmpty()) {
 				 * myUserAns.setText(PUT_TEXT); }
 				 */
-
+				
 			}
 
 		});
@@ -159,8 +160,10 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 			if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
 				verifyAnswer(myUserAns.getText());
-
-				myUserAns.setText(""); // return to default
+				
+				
+				//remove focus so the movement keybinds still work
+				myPP.requestFocusInWindow();
 			}
 		}
 
