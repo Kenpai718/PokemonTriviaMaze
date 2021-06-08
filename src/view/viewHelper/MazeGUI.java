@@ -375,11 +375,11 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 					lbl = makeImageLabel(POKEBALL, visitedSize);
 				} else { // tall grass for unvisited rooms
 					lbl = makeImageLabel(GRASS, grassSize);
-					if (r == myMaze.getAttemptRoom()) {
-						// selection border to show player is attempting to
-						// enter this room
-						lbl.setBorder(SELECT_BORDER);
-					}
+				}
+				
+				//selection border for attempted room
+				if (r == myMaze.getAttemptRoom()) {
+					lbl.setBorder(SELECT_BORDER);
 				}
 				
 			} else { //show the room names instead of icons
