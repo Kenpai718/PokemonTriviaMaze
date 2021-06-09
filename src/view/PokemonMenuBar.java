@@ -26,6 +26,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
@@ -38,6 +39,7 @@ import model.Pokemon;
 import model.Room;
 import sound.BackgroundMusic;
 import view.viewHelper.LabelPanel;
+import view.viewHelper.PokedexScrollList;
 import view.viewHelper.TutorialPanel;
 
 /**
@@ -114,8 +116,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	// private ButtonGroup myGamemodes;
 
 	/**
-	 * The constructor for the Menu Bar that sets up the the fields and starts
-	 * the menubar gui setup
+	 * The constructor for the Menu Bar that sets up the the fields and starts the
+	 * menubar gui setup
 	 * 
 	 * @param theFrame
 	 */
@@ -158,7 +160,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		myHelpMenu.setMnemonic(KeyEvent.VK_H);
 		setupHelpMenu();
 		this.add(myHelpMenu);
-		
+
 		myMusicMenu = new JMenu("Music");
 		myMusicMenu.setMnemonic(KeyEvent.VK_M);
 		setupMusicMenu();
@@ -174,7 +176,6 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		setupGenSelectMenu();
 		this.add(myGenSelectMenu);
 
-
 		/*
 		 * myGamemodeMenu = new JMenu("Gamemode"); setupGamemodesMenu();
 		 * this.add(myGamemodeMenu);
@@ -189,15 +190,13 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		// TODO Auto-generated method stub
 		final JMenuItem save = new JMenuItem("Save");
 		save.setMnemonic(KeyEvent.VK_S);
-		save.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		save.addActionListener(new SaveListener());
 		myFileMenu.add(save);
 
 		final JMenuItem load = new JMenuItem("Load");
 		load.setMnemonic(KeyEvent.VK_L);
-		load.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.addActionListener(new LoadListener());
 		load.addPropertyChangeListener(myPanel.getMyControlPanel());
 		myFileMenu.add(load);
@@ -206,8 +205,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		final JMenuItem reset = new JMenuItem("Reset");
 		reset.setMnemonic(KeyEvent.VK_R);
-		reset.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		reset.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		reset.addActionListener(new ResetListener());
 		myFileMenu.add(reset);
 
@@ -215,8 +213,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		final JMenuItem exit = new JMenuItem("Exit");
 		exit.setMnemonic(KeyEvent.VK_X);
-		exit.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
+		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.CTRL_MASK));
 		exit.addActionListener(theEvent -> System.exit(0));
 		myFileMenu.add(exit);
 	}
@@ -229,8 +226,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		final JMenuItem about = new JMenuItem("About");
 		about.setMnemonic(KeyEvent.VK_A);
-		about.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+		about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, ActionEvent.CTRL_MASK));
 		about.addActionListener(new ActionListener() {
 			private final String version = "Pokemon Trivia Maze v1.0";
 			private final String aboutMessage = version + "\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
@@ -241,8 +237,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(myFrame, aboutMessage, "About Us",
-						JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, aboutMessage, "About Us", JOptionPane.PLAIN_MESSAGE);
 			}
 
 		});
@@ -250,13 +245,11 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		final JMenuItem tutorial = new JMenuItem("Tutorial");
 		tutorial.setMnemonic(KeyEvent.VK_T);
-		tutorial.setAccelerator(
-				KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
+		tutorial.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, ActionEvent.CTRL_MASK));
 		tutorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
-				JOptionPane.showMessageDialog(myFrame, myTutorial,
-						"How to play", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(myFrame, myTutorial, "How to play", JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 		myHelpMenu.add(tutorial);
@@ -265,8 +258,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	}
 
 	/**
-	 * Sets up the myCheatsMenu menu for all of the dev myCheatsMenu for
-	 * debugging
+	 * Sets up the myCheatsMenu menu for all of the dev myCheatsMenu for debugging
 	 */
 	private void setUpCheats() {
 		myCheatsMenu = new JMenu("Cheats");
@@ -426,12 +418,10 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			final String name = difficulty[i];
 			final int size = sizeSetting[i];
 			final JRadioButton difficultyOption = new JRadioButton(name);
-			final String sizeTip = name + ", Maze Size: " + size + "-by-"
-					+ size;
+			final String sizeTip = name + ", Maze Size: " + size + "-by-" + size;
 			difficultyOption.setToolTipText(sizeTip);
 
-			difficultyOption.addActionListener(
-					new DifficultySelectListener(size, difficultyOption));
+			difficultyOption.addActionListener(new DifficultySelectListener(size, difficultyOption));
 			myDifficultyButtons.add(difficultyOption);
 			myDifficultySelectMenu.add(difficultyOption);
 
@@ -449,9 +439,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	private void setupGenSelectMenu() {
 
 		// current supported pokemon generations
-		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)",
-				"Gen 3 (251-386)", "Gen 4 (386-493)", "Gen 5 (493-649)",
-				"Gen 6 (649-721)", "Gen 7 (721-804)" };
+		final String[] gens = { "Gen 1 (1-151)", "Gen 2 (151-251)", "Gen 3 (251-386)", "Gen 4 (386-493)",
+				"Gen 5 (493-649)", "Gen 6 (649-721)", "Gen 7 (721-804)" };
 
 		myGenBoxList = new ArrayList<JCheckBox>();
 
@@ -471,9 +460,24 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		// mass add or remove gen
 		mySelectAllGen = new JMenuItem("Play All Gens");
-		mySelectAllGen
-				.addActionListener(new GenSelectAllListener(mySelectAllGen));
+		mySelectAllGen.addActionListener(new GenSelectAllListener(mySelectAllGen));
 		myGenSelectMenu.add(mySelectAllGen);
+		
+		//show pokemon in pokedex
+		JMenuItem pokemonList = new JMenuItem("See List of Pokemon");
+		pokemonList.setToolTipText("See what Pokemon are currently in the Pokedex");
+		pokemonList.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JPanel pokemons = new PokedexScrollList();
+				JOptionPane.showMessageDialog(myFrame, pokemons, "Current Pokemon in Pokedex", JOptionPane.PLAIN_MESSAGE);
+				
+			}
+			
+		});
+		myGenSelectMenu.add(pokemonList);
 	}
 
 	/**
@@ -489,8 +493,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		for (String song : mySongs) {
 			String name = song.replace(".wav", "");
 			final JRadioButton songOption = new JRadioButton(name);
-			songOption.addActionListener(
-					new SongSelectListener(songOption, song));
+			songOption.addActionListener(new SongSelectListener(songOption, song));
 			mySongButtons.add(songOption);
 			myMusicMenu.add(songOption);
 
@@ -538,13 +541,13 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	}
 
 	/*
-	 * Update difficulty setting menu. Iterate through each button until it
-	 * finds the correct maze size stored in the tool tip
+	 * Update difficulty setting menu. Iterate through each button until it finds
+	 * the correct maze size stored in the tool tip
 	 */
 	private void updateDifficultySetting() {
 
-		for (final Enumeration<AbstractButton> buttons = myDifficultyButtons
-				.getElements(); buttons.hasMoreElements();) {
+		for (final Enumeration<AbstractButton> buttons = myDifficultyButtons.getElements(); buttons
+				.hasMoreElements();) {
 			final AbstractButton box = buttons.nextElement();
 			final String text = box.getToolTipText();
 			box.setSelected(text.contains(String.valueOf(myMaze.getRows())));
@@ -595,8 +598,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 					saveFile = new File(left_side_of_dot[0] + ".maze");
 					if (saveFile.exists()) {
-						final int n = JOptionPane.showConfirmDialog(this,
-								"Do You Want to Overwrite File?",
+						final int n = JOptionPane.showConfirmDialog(this, "Do You Want to Overwrite File?",
 								"Confirm Overwrite", JOptionPane.YES_NO_OPTION);
 
 						if (n == JOptionPane.YES_OPTION)
@@ -606,12 +608,10 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 						super.approveSelection();
 				}
 			};
-			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(
-					"Pokemon Trivia Maze Files", "maze"));
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
 			// read the file from file chooser
-			if (fileChooser
-					.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showSaveDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
 				// get the save file name and add a suffix to it to denote
 				// is it a a game file
 				// for this maze
@@ -622,10 +622,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 				saveFile = new File(left_side_of_dot[0] + ".maze");
 
-				try (final FileOutputStream fileOut = new FileOutputStream(
-						saveFile);
-						final ObjectOutputStream objOut = new ObjectOutputStream(
-								fileOut);) {
+				try (final FileOutputStream fileOut = new FileOutputStream(saveFile);
+						final ObjectOutputStream objOut = new ObjectOutputStream(fileOut);) {
 
 					// use serialization to write the maze
 					saveHelper(objOut);
@@ -645,8 +643,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Objects to be saved
 		 */
-		private void saveHelper(final ObjectOutputStream objOut)
-				throws IOException {
+		private void saveHelper(final ObjectOutputStream objOut) throws IOException {
 			objOut.writeObject(myMaze);
 			objOut.writeObject(myPokedex);
 		}
@@ -656,13 +653,11 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		private void showState(final String theFileName) {
 			final String curr = "Player is at Room " + myMaze.getCurrRoom();
-			final String attempt = "Player is attempting to enter Room "
-					+ myMaze.getAttemptRoom();
+			final String attempt = "Player is attempting to enter Room " + myMaze.getAttemptRoom();
 			final String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
-			final String stateMessage = "Pokemon Trivia save has been Saved: "
-					+ theFileName + "\n" + playerLocation
-					+ "\nDifficulty Setting = " + mySelectedDifficulty
-					+ "\nGens Selected = Gens: " + myPokedex.getSelectedGens();
+			final String stateMessage = "Pokemon Trivia has been Saved: " + theFileName + "\n" + playerLocation
+					+ "\nDifficulty Setting = " + mySelectedDifficulty + "\nGens Selected = Gens: "
+					+ myPokedex.getSelectedGens();
 			JOptionPane.showMessageDialog(null, stateMessage);
 		}
 
@@ -681,11 +676,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 		private void doLoad() {
 			final JFileChooser fileChooser = new JFileChooser("Load");
-			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(
-					"Pokemon Trivia Maze Files", "maze"));
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
-			if (fileChooser
-					.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
+			if (fileChooser.showOpenDialog(myFrame) == JFileChooser.APPROVE_OPTION) {
 				// get the save file name and check if it has the right
 				// suffix
 				final String fileName = fileChooser.getSelectedFile().getName();
@@ -697,10 +690,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 					// final File saveFile = new
 					// File(fileChooser.getSelectedFile() + ".maze");
 
-					try (final FileInputStream file = new FileInputStream(
-							fileChooser.getSelectedFile());
-							final ObjectInputStream in = new ObjectInputStream(
-									file);) {
+					try (final FileInputStream file = new FileInputStream(fileChooser.getSelectedFile());
+							final ObjectInputStream in = new ObjectInputStream(file);) {
 						// System.out.println("Start Load: " + myMaze);
 						// System.out.println("before: " + myPokedex);
 						// objects to be loaded in
@@ -719,8 +710,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 						e1.printStackTrace();
 					}
 				} else { // wrong file type inform user
-					JOptionPane.showMessageDialog(null, "Cannot load "
-							+ fileName + " because it is not a \".maze\" file");
+					JOptionPane.showMessageDialog(null,
+							"Cannot load " + fileName + " because it is not a \".maze\" file");
 				}
 			}
 		}
@@ -728,8 +719,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Load the objects we want
 		 */
-		private void loadObjectsHelper(final ObjectInputStream in)
-				throws ClassNotFoundException, IOException {
+		private void loadObjectsHelper(final ObjectInputStream in) throws ClassNotFoundException, IOException {
 			myMaze = (Maze) in.readObject();
 			myPokedex = (Pokedex) in.readObject();
 
@@ -740,13 +730,11 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		 */
 		private void showState(final String fileName) {
 			final String curr = "Player is at Room " + myMaze.getCurrRoom();
-			final String attempt = "Player is attempting to enter Room "
-					+ myMaze.getAttemptRoom();
+			final String attempt = "Player is attempting to enter Room " + myMaze.getAttemptRoom();
 			final String playerLocation = myMaze.hasNotMoved() ? curr : attempt;
-			final String stateMessage = "Pokemon Trivia save has been loaded: "
-					+ fileName + "\n" + playerLocation
-					+ "\nDifficulty Setting = " + mySelectedDifficulty
-					+ "\nGens Selected = Gens: " + myPokedex.getSelectedGens();
+			final String stateMessage = "Pokemon Trivia save has been loaded: " + fileName + "\n" + playerLocation
+					+ "\nDifficulty Setting = " + mySelectedDifficulty + "\nGens Selected = Gens: "
+					+ myPokedex.getSelectedGens();
 			JOptionPane.showMessageDialog(null, stateMessage);
 		}
 
@@ -761,8 +749,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		private final String myName;
 		private final int myMazeSize;
 
-		public DifficultySelectListener(final int theNum,
-				final JRadioButton theBox) {
+		public DifficultySelectListener(final int theNum, final JRadioButton theBox) {
 			myMazeSize = theNum;
 			myBox = theBox;
 			myName = theBox.getText();
@@ -781,8 +768,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 			firePropertyChange("model", null, myMaze.getMatrix());
 			myPanel.refreshGUI();
 			JOptionPane.showMessageDialog(null,
-					"Difficulty is now set to \"" + myName + "\", Size: ["
-							+ myMazeSize + ", " + myMazeSize + "]");
+					"Difficulty is now set to \"" + myName + "\", Size: [" + myMazeSize + ", " + myMazeSize + "]");
 
 		}
 
@@ -812,7 +798,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 					// System.out.println("Executing");
 					resetAll();
 					Thread.sleep(750);
-					JOptionPane.showMessageDialog(null, myMsg);
+					JOptionPane.showMessageDialog(null, myMsg, "Game reset!", JOptionPane.INFORMATION_MESSAGE);
 					return null;
 				}
 			};
@@ -821,8 +807,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 
 				try {
 					myPokedex.addGenToDex(myGen);
-					myMsg = "Gen " + myGen
-							+ " Pokemon can now be encountered! Game has been reset.";
+					myMsg = "Gen " + myGen + " Pokemon can now be encountered!" + "\nSelected Gens: "
+							+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: " + myPokedex.getCount();
 					// resetAll();
 					mySwingWorker.execute();
 					// JOptionPane.showMessageDialog(null, myMsg);
@@ -835,8 +821,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				if (myPokedex.canRemoveGen()) { // remove pokemon gen
 					try {
 						myPokedex.removeGenFromDex(myGen);
-						myMsg = "Gen " + myGen
-								+ " Pokemon have been removed. Game reset!";
+						myMsg = "Gen " + myGen + " Pokemon have been removed." + "\nSelected Gens: "
+								+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: "
+								+ myPokedex.getCount();
 						// resetAll();
 						mySwingWorker.execute();
 						// JOptionPane.showMessageDialog(null, myMsg);
@@ -846,7 +833,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 						myBox.setSelected(true);
 						myMsg = "Cannot remove Gen " + myGen
 								+ " because at least one generation must be selected to play!";
-						JOptionPane.showMessageDialog(null, myMsg);
+						JOptionPane.showMessageDialog(null, myMsg, "Cannot remove!", JOptionPane.ERROR_MESSAGE);
 						// e1.printStackTrace();
 					}
 				}
@@ -884,30 +871,33 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				protected Void doInBackground() throws Exception {
 					// System.out.println("Executing");
 					resetAll();
-					JOptionPane.showMessageDialog(null, myMsg);
+					JOptionPane.showMessageDialog(null, myMsg, "Game reset!", JOptionPane.INFORMATION_MESSAGE);
 					return null;
 				}
 			};
 
 			if (!myStateChange) { // add all gens
 				myStateChange = true;
-				myMsg = "Pokemon from all generations will now be loaded in."
-						+ "\nThis may take a while. " + "Please press \"OK\".";
-				JOptionPane.showMessageDialog(null, myMsg);
+				myMsg = "Pokemon from all generations will now be loaded in." + "\nThis may take a while. "
+						+ "Please press \"OK\".";
+				JOptionPane.showMessageDialog(null, myMsg, "Loading...", JOptionPane.INFORMATION_MESSAGE);
 
 				myPokedex.addAllGensToDex();
-				myMsg = "All Pokemon generations have been loaded in. Game has been reset.";
+				myMsg = "All Pokemon generations have been loaded in. " + "\nSelected Gens: "
+						+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: " + myPokedex.getCount();
 				// resetAll();
 				mySwingWorker.execute();
 				// JOptionPane.showMessageDialog(null, myMsg);
 
-				myChangeButton.setText("Unselect all gens except Gen1");
+				myChangeButton.setText("Reset Gens to Default");
 				myStateChange = true;
 
 			} else { // remove all gens
 				myStateChange = false;
 				myPokedex.restoreGensToDefault();
-				myMsg = "All Pokemon generations except Gen 1 has been removed. Game has been reset.";
+				myMsg = "All Pokemon generations except Gen " + myPokedex.DEFAULT_GEN + " has been removed."
+						+ "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: "
+						+ myPokedex.getCount();
 				// resetAll();
 				mySwingWorker.execute();
 				// JOptionPane.showMessageDialog(null, myMsg);
@@ -925,8 +915,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/**
 		 * Select all gen box buttons depending on state
 		 * 
-		 * @param theState true = all boxes selected, false = all unselected
-		 *                 excpet gen 1
+		 * @param theState true = all boxes selected, false = all unselected excpet gen
+		 *                 1
 		 */
 		private void selectButtons(final Boolean theState) {
 			for (final JCheckBox box : myGenBoxList) {
@@ -950,8 +940,8 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	class ResetListener implements ActionListener {
 
 		/**
-		 * Displays a input dialog that reads the new location and moves the
-		 * player to that location
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
@@ -962,8 +952,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				protected Void doInBackground() throws Exception {
 					// System.out.println("Executing");
 					resetAll();
-					JOptionPane.showMessageDialog(null,
-							"The game has been reset!");
+					JOptionPane.showMessageDialog(null, "The game has been reset!");
 					return null;
 				}
 			};
@@ -974,8 +963,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	}
 
 	/**
-	 * The action listener to add a new Pokemon to the maze at a specified
-	 * location
+	 * The action listener to add a new Pokemon to the maze at a specified location
 	 * 
 	 * @author Kenneth Ahrens
 	 *
@@ -985,14 +973,12 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Icon for ditto
 		 */
-		private final ImageIcon myDittoIcon = new ImageIcon(
-				"./src/images/other/dittoicon.gif");
+		private final ImageIcon myDittoIcon = new ImageIcon("./src/images/other/dittoicon.gif");
 
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/*
 		 * Data map
@@ -1053,15 +1039,13 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		}
 
 		/**
-		 * Prompt user for a pokemon and looks for that pokemon name in the
-		 * pokedex
+		 * Prompt user for a pokemon and looks for that pokemon name in the pokedex
 		 * 
 		 * @param theMsg
 		 * @return user inputed Pokemon if found
 		 */
 		public Pokemon readNewPokemonInput(final String theMsg) {
-			final String input = (String) JOptionPane.showInputDialog(null,
-					theMsg, "Type a Pokemon name to insert",
+			final String input = (String) JOptionPane.showInputDialog(null, theMsg, "Type a Pokemon name to insert",
 					JOptionPane.INFORMATION_MESSAGE, myDittoIcon, null, "");
 			Pokemon res = myMaze.getAttemptRoom().getPokemon(); // leave as
 			// default in
@@ -1071,8 +1055,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				if (myPokedex.hasPokemon(input)) {
 					res = myPokedex.findPokemon(input);
 				} else {
-					res = readNewPokemonInput(input
-							+ " does not exist in Pokedex. Try again with a new name!");
+					res = readNewPokemonInput(input + " does not exist in Pokedex. Try again with a new name!");
 				}
 			} else {
 				myCancel = true;
@@ -1094,20 +1077,18 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		/*
 		 * Abra icon to represent teleport
 		 */
-		private final ImageIcon myTeleportIcon = new ImageIcon(
-				"./src/images/other/abra_teleport.gif");
+		private final ImageIcon myTeleportIcon = new ImageIcon("./src/images/other/abra_teleport.gif");
 
 		/**
-		 * Displays a input dialog that reads the new location and moves the
-		 * player to that location
+		 * Displays a input dialog that reads the new location and moves the player to
+		 * that location
 		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
 			// TODO Auto-generated method stub
 			firePropertyChange("tele", null, true);
-			final String message = "Please enter a new room to teleport"
-					+ " to.\n(Room Name)";
+			final String message = "Please enter a new room to teleport" + " to.\n(Room Name)";
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
@@ -1143,11 +1124,9 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 	 * @param theIcon
 	 * @return int[]
 	 */
-	private int[] readRoomName(final String theMessage,
-			final ImageIcon theIcon) {
-		final String input = (String) JOptionPane.showInputDialog(null,
-				theMessage, "Choose Location", JOptionPane.INFORMATION_MESSAGE,
-				theIcon, null, "");
+	private int[] readRoomName(final String theMessage, final ImageIcon theIcon) {
+		final String input = (String) JOptionPane.showInputDialog(null, theMessage, "Choose Location",
+				JOptionPane.INFORMATION_MESSAGE, theIcon, null, "");
 		int[] res = myMaze.getPlayerLocation().clone();
 		// final Scanner scan;
 		if (input != null && !input.isEmpty()) {
@@ -1162,23 +1141,18 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 				boolean moved = false;
 				for (int i = 0; i < myMaze.getRows(); i++) {
 					for (int j = 0; j < myMaze.getCols(); j++) {
-						if (myMaze.getMatrix()[i][j].toString()
-								.equals(roomName)) {
+						if (myMaze.getMatrix()[i][j].toString().equals(roomName)) {
 							res = new int[] { i, j };
 							moved = true;
 						}
 					}
 				}
 				if (!moved) {
-					res = readRoomName(
-							"Please Input a valid Room Name" + "\n(Room Num):",
-							theIcon);
+					res = readRoomName("Please Input a valid Room Name" + "\n(Room Num):", theIcon);
 				}
 
 			} else {
-				res = readRoomName(
-						"Please Input a valid Room Name\n(Room Num), Ex: \'1\':",
-						theIcon);
+				res = readRoomName("Please Input a valid Room Name\n(Room Num), Ex: \'1\':", theIcon);
 			}
 		} else {
 			// put -1 to signify user canceled
@@ -1195,8 +1169,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		private final JRadioButton myBox;
 		private final String myName;
 
-		public SongSelectListener(final JRadioButton theBox,
-				String theSongName) {
+		public SongSelectListener(final JRadioButton theBox, String theSongName) {
 			myBox = theBox;
 			myName = theSongName;
 
@@ -1205,7 +1178,7 @@ public class PokemonMenuBar extends JMenuBar implements Serializable {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
-			if (myBox.isSelected()) { 
+			if (myBox.isSelected()) {
 				myMusicPlayer.loadNewSong(myName);
 
 			}

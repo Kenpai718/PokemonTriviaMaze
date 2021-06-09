@@ -235,12 +235,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		// maze gui
 		springLayout.putConstraint(SpringLayout.NORTH, myMazeGUI, 10, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, myMazeGUI, 1350, SpringLayout.WEST, this);
-		;
-
-		// question panel
-		springLayout.putConstraint(SpringLayout.NORTH, myQuestPanels, 553, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, myQuestPanels, -36, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, -130, SpringLayout.EAST, this);
 
 		// label panel
 		springLayout.putConstraint(SpringLayout.NORTH, myLabelPanel, 10, SpringLayout.NORTH, this);
@@ -249,6 +243,11 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		// control panel
 		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -150, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, 0, SpringLayout.EAST, myLabelPanel);
+		
+		// question panel
+		springLayout.putConstraint(SpringLayout.NORTH, myQuestPanels, 515, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myQuestPanels, -30, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, 455, SpringLayout.EAST, myControlPanel);
 
 		// add all components to panel
 		add(myMazeGUI);
@@ -279,7 +278,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		}
 
 		// sparkly thing behind a pokemon
-		myShine = ImageUtility.readImage("./src/images/other/sparkle_formatted.png");
+		myShine = ImageUtility.readImage("./src/images/other/sparkle_formatted2.png");
 		if (myShine != null) {
 			myShineW = myShine.getWidth();
 			myShineH = myShine.getHeight();

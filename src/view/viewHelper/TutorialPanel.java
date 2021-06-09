@@ -71,6 +71,7 @@ public class TutorialPanel extends JPanel{
 		myMaze = Maze.getInstance();
 		setPreferredSize(SIZE);
 		setMaximumSize(SIZE);
+		setBackground(new Color(51,51, 51));
 		myTutorialSum = ImageUtility.readImage(TUT_PATH);
 		myTutorialSum = ImageUtility.getScaledImage(myTutorialSum, W, H);
 		

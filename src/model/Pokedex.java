@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -38,12 +39,12 @@ public class Pokedex implements Serializable {
 	/*
 	 * Maximum supported pokemon generations
 	 */
-	final int MAX_GEN = 7;
+	public final int MAX_GEN = 7;
 
 	/*
 	 * Default gen to play on reset or startup
 	 */
-	final int DEFAULT_GEN = 1;
+	public final int DEFAULT_GEN = 1;
 
 	/*
 	 * Singleton pokedex
@@ -472,11 +473,34 @@ public class Pokedex implements Serializable {
 	}
 
 	/**
+	 * 
+	 * List official pokedex number and pokemon name per line
+	 * 
 	 * @return names of all pokemon currently in the pokedex
 	 */
 	@Override
 	public String toString() {
-		return myNameDex.keySet().toString();
+		ArrayList<String> pokemonList = new ArrayList<String>();
+		String fullInfo;
+		
+		//add all pokemon to an arraylist
+		for(int i : myPokedex.keySet()) {
+			ArrayList info = myPokedex.get(i);
+			fullInfo = info.get(0) + " " + info.get(1);
+			pokemonList.add(fullInfo);
+		}
+		
+		//sort the list from smallest to highest num
+		pokemonList.remove("999 JigglypuffSeenFromAbove"); //dont let user see joke easter egg
+		Collections.sort(pokemonList);
+		
+		//print each pokemon in order
+		StringBuilder sb = new StringBuilder();
+		for(String pkmn : pokemonList) {
+			sb.append(pkmn + "\n");
+		}
+		
+		return sb.toString();
 	}
 
 }
