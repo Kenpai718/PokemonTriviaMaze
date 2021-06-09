@@ -108,6 +108,8 @@ public class QuestionModePanel extends JPanel {
 		 * This panel setup
 		 */
 		this.setSize(SIZE);
+		this.setPreferredSize(SIZE);
+		this.setMaximumSize(SIZE);
 		this.setLayout(new BorderLayout());
 		this.setOpaque(false);
 

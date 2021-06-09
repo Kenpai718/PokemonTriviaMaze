@@ -1,9 +1,12 @@
 package view.viewHelper;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import java.awt.event.ActionEvent;
@@ -13,13 +16,19 @@ import java.awt.image.BufferedImage;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
@@ -39,28 +48,41 @@ import view.PokemonPanel;
 public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	/**
-	 * constants
+	 * constants that make the components
 	 */
 	private static final long serialVersionUID = 1L;
-	final Color MAZE_BG = new Color(51, 51, 51);
-	private final ButtonGroup myButtonGroup = new ButtonGroup();
+	private final Color TRANSPARENT = new Color(1f, 0f, 0f, .5f);
+	private final int NUM_CHOICES = 4;
+	private final int W = 350;
+	private final int H = 500;
+	private final Dimension PANEL_DIM = new Dimension(W, H);
+	private final int COMP_H = 75;
+	private final Dimension COMP_DIM = new Dimension(W, COMP_H);
 
-	// private QuestionAnswer myQA;
-	private JTextPane myQPane;
-	private SpringLayout myLayout;
-
-	/*
-	 * Multiple choice buttons
-	 */
-	private JRadioButton myA1;
-	private JRadioButton myA2;
-	private JRadioButton myA3;
-	private JRadioButton myA4;
 
 	/*
 	 * Maze
 	 */
 	private Maze myMaze;
+
+	/*
+	 * Panel that says "Who's that Pokemon?"
+	 */
+	private JPanel myTitlePanel;
+	/*
+	 * Panel that holds multiple choice option
+	 */
+	private JPanel myMCPanel;
+	
+	/*
+	 * Label that hols the title
+	 */
+	private JLabel myTitleLabel;
+
+	/*
+	 * Multiple choice buttons
+	 */
+	private final ButtonGroup myButtonGroup;
 
 	/**
 	 * Create the panel.
@@ -71,41 +93,71 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		// myChoices = theRoom.getChoices();
 
 		myMaze = Maze.getInstance();
+		myButtonGroup = new ButtonGroup();
+
+		// make components for the panel
 		setupGUI();
+		myTitlePanel = makeTitlePanel();
+		myTitleLabel = makeQuestionLabel();
+		myTitlePanel.add(myTitleLabel);
+		setupQuestions();
+
+		// positioning
+		this.add(myTitlePanel, BorderLayout.NORTH);
+		this.add(myMCPanel, BorderLayout.CENTER);
 
 	}
 
 	/*
-	 * Make the multiple choice gui
+	 * Initializes this JPanel settings
 	 */
 	@SuppressWarnings("static-access")
 	private void setupGUI() {
 		setBorder(new LineBorder(Color.BLACK, 5, true));
 		setBackground(Color.WHITE);
-		setPreferredSize(new Dimension(350, 500));
-		setMaximumSize(new Dimension(350, 500));
-		myLayout = new SpringLayout();
-		setLayout(myLayout);
+		setPreferredSize(PANEL_DIM);
+		setMaximumSize(PANEL_DIM);
 		this.setBackground(Color.WHITE);
+		this.setLayout(new BorderLayout());
 
-		myQPane = new JTextPane();
-		myLayout.putConstraint(myLayout.NORTH, myQPane, 22, myLayout.NORTH,
-				this);
-		myLayout.putConstraint(myLayout.SOUTH, myQPane, 68, myLayout.NORTH,
-				this);
-		myLayout.putConstraint(myLayout.EAST, myQPane, -10, myLayout.EAST,
-				this);
-		myQPane.setRequestFocusEnabled(false);
-		myQPane.setText("Who's that Pokemon?");
-		myQPane.setOpaque(false);
-		myQPane.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
-		myQPane.setFocusable(false);
-		myQPane.setEnabled(false);
-		myQPane.setDisabledTextColor(Color.BLACK);
-		myQPane.setBorder(null);
-		add(myQPane);
+		// Scrollpane in case the user can't see all choices
+		JScrollPane scrollPane = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(0, 0, W, H);
 
-		setupQuestions();
+	}
+
+	/**
+	 * 
+	 * @return JTextPane formatted for text
+	 */
+	private JLabel makeQuestionLabel() {
+		JLabel lbl = new JLabel("Who's that Pokemon?", SwingConstants.CENTER);
+		lbl.setRequestFocusEnabled(false);
+		lbl.setOpaque(false);
+		lbl.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
+		lbl.setFocusable(false);
+		lbl.setBorder(null);
+		lbl.setSize(COMP_DIM);
+		lbl.setForeground(Color.BLACK);
+
+		return lbl;
+	}
+
+	/**
+	 * 
+	 * @return JPanel formatted for TitlePanel
+	 */
+	private JPanel makeTitlePanel() {
+		JPanel titlePanel = new JPanel();
+		titlePanel = new JPanel();
+		titlePanel.setLayout(new GridBagLayout()); // to center text
+		titlePanel.setSize(COMP_DIM);
+		titlePanel.setForeground(Color.WHITE);
+		titlePanel.setBackground(Color.LIGHT_GRAY);
+		// titlePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+
+		return titlePanel;
 
 	}
 
@@ -115,61 +167,46 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	@SuppressWarnings("static-access")
 	private void setupQuestions() {
 
-		myA1 = buildButton('1');
-		myLayout.putConstraint(myLayout.NORTH, myA1, 29, myLayout.SOUTH,
-				myQPane);
-		myLayout.putConstraint(myLayout.WEST, myQPane, -24, myLayout.WEST,
-				myA1);
-		myLayout.putConstraint(myLayout.WEST, myA1, 34, myLayout.WEST, this);
-		myLayout.putConstraint(myLayout.EAST, myA1, 0, myLayout.EAST, this);
-		myButtonGroup.add(myA1);
-		add(myA1);
+		//make mc panel
+		myMCPanel = new JPanel();
+		myMCPanel.setLayout(new BorderLayout());
+		myMCPanel.setSize(W, H - COMP_H);
+		myMCPanel.setForeground(TRANSPARENT);
+		myMCPanel.setBackground(Color.WHITE);
+		myMCPanel.setLayout(new GridLayout(NUM_CHOICES, 1));
 
-		final JRadioButton myA2 = buildButton('2');
-		myLayout.putConstraint(myLayout.SOUTH, myA1, -37, myLayout.NORTH, myA2);
-		myLayout.putConstraint(myLayout.NORTH, myA2, 179, myLayout.NORTH, this);
-		myLayout.putConstraint(myLayout.WEST, myA2, 34, myLayout.WEST, this);
-		myLayout.putConstraint(myLayout.EAST, myA2, 0, myLayout.EAST, this);
-		myButtonGroup.add(myA2);
-		add(myA2);
+		//make buttons
+		for (int i = 1; i <= NUM_CHOICES; i++) {
+			char mnemonic = Character.forDigit(i, 10);
+			JRadioButton choice = buildButton(mnemonic);
+			myButtonGroup.add(choice);
+		}
 
-		final JRadioButton myA3 = buildButton('3');
-		myLayout.putConstraint(myLayout.WEST, myA3, 34, myLayout.WEST, this);
-		myLayout.putConstraint(myLayout.EAST, myA3, 0, myLayout.EAST, this);
-		myLayout.putConstraint(myLayout.SOUTH, myA2, -42, myLayout.NORTH, myA3);
-		myLayout.putConstraint(myLayout.NORTH, myA3, 276, myLayout.NORTH, this);
-		myButtonGroup.add(myA3);
-		add(myA3);
-
-		final JRadioButton myA4 = buildButton('4');
-		myLayout.putConstraint(myLayout.NORTH, myA4, 47, myLayout.SOUTH, myA3);
-		myLayout.putConstraint(myLayout.WEST, myA4, 34, myLayout.WEST, this);
-		myLayout.putConstraint(myLayout.SOUTH, myA4, -55, myLayout.SOUTH, this);
-		myLayout.putConstraint(myLayout.EAST, myA4, 0, myLayout.EAST, this);
-		myButtonGroup.add(myA4);
-
+		//enable the text on the buttons
 		setButtons();
-		add(myA4);
 	}
 
 	/**
-	 * Builder for a radio button
+	 * Builder for a multiple choice radio button
 	 * 
 	 * @return multiple choice button
 	 */
 	private JRadioButton buildButton(final char theMnemonic) {
-		final JRadioButton myMC = new JRadioButton("");
-		myMC.setOpaque(false);
-		myMC.setMnemonic(theMnemonic);
-		myMC.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
-		myMC.addActionListener(new AnswerDisplay());
-		return myMC;
+		final JRadioButton mc = new JRadioButton("");
+		mc.setSize(COMP_DIM);
+		mc.setOpaque(false);
+		mc.setMnemonic(theMnemonic);
+		mc.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
+		mc.addActionListener(new AnswerDisplay());
+		myMCPanel.add(mc, BorderLayout.CENTER);
+		return mc;
 
 	}
 
 	/**
 	 * Put multiple choice text on the buttons
 	 */
+	@Override
 	public void setButtons() {
 		// set answers if its a room already visited
 		myButtonGroup.clearSelection();
@@ -216,8 +253,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
-		for (Enumeration<AbstractButton> buttons = myButtonGroup
-				.getElements(); buttons.hasMoreElements();) {
+		for (Enumeration<AbstractButton> buttons = myButtonGroup.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
 				userAns = button.getText();

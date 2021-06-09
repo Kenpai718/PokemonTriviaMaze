@@ -11,6 +11,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
+import javax.swing.JTextPane;
 
 /**
  * Contains labels that tell user about important game state such as what room
@@ -74,7 +75,7 @@ public class LabelPanel extends JPanel {
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(320, 110));
-
+		
 		myRoomLbl = buildLabel(CURRENT + myMaze.getCurrRoom());
 		myDirLbl = buildLabel(DIRECTION + "NONE");
 		myAnsLbl = buildLabel(ANSWER + "N/A");

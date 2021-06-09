@@ -119,7 +119,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	private final int myRowSize;
 
 	/**
-	 * 
+	 * State of user using teleport cheat
 	 */
 	private boolean myTeleport;
 

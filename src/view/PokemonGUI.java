@@ -24,7 +24,7 @@ public class PokemonGUI {
 	/**
 	 * Aspect Ratio of JFrame
 	 */
-	final int WIDTH = 1920, HEIGHT = 1080;
+	final int WIDTH = 1280, HEIGHT = 720;
 
 	/* Fields */
 
