@@ -479,7 +479,7 @@ public class PokemonMenuBar extends JMenuBar {
 		//button to activate mega pokemon
 		myMegaButton = new JCheckBox("Enable Megas");
 		myMegaButton
-				.setToolTipText("Allows mega pokemon to be encounterable.\nCheck to enable and uncheck to disable.");
+				.setToolTipText("Allows mega pokemon to be encounterable or not.");
 		myGenSelectMenu.add(myMegaButton);
 		myMegaButton.addActionListener(new MegaSelectListener(myMegaButton));
 		myGenSelectMenu.addSeparator();

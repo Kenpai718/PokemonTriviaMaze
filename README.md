@@ -28,5 +28,5 @@ If that doesn't work launch "RunGame.bat" in the source TriviaMaze folder.
 As a last resort import the project to an IDE and run it there.
 
 Install to machine:
-To install the game onto your machine run the setup in the installation folder.
+If available, to install the game onto your machine run the setup in the installation folder.
 Please follow the "HowToInstall.txt" for more information.
