@@ -305,7 +305,7 @@ public class Pokedex implements Serializable {
 	 */
 	public void addPokemon(final String theID, final String theName, final int theGenNum) {
 		final String pkmnName = theName;
-		final String formatName = AnswerFormatter.formatInputAnswer(theName);
+		final String formatName = AnswerFormatter.formatAnswer(theName);
 		myCounter++;
 
 		// store pokemon field info
@@ -383,10 +383,10 @@ public class Pokedex implements Serializable {
 	 * @return Pokemon with that name
 	 */
 	public Pokemon findPokemon(final String theName) throws MissingPokemonException {
-		final String formatName = AnswerFormatter.formatInputAnswer(theName);
+		final String formatName = AnswerFormatter.formatAnswer(theName);
 		Pokemon res = myMissingPokemon;
 		if (myNameDex.containsKey(formatName)) {
-			final int theID = myNameDex.get(theName);
+			final int theID = myNameDex.get(formatName);
 			final ArrayList<String> pokemonInfo = myPokedex.get(theID);
 			try {
 				res = new Pokemon(pokemonInfo.get(0), pokemonInfo.get(1), Integer.parseInt(pokemonInfo.get(2)));
@@ -446,8 +446,16 @@ public class Pokedex implements Serializable {
 	 * @return boolean if that pokemon is in pokedex
 	 */
 	public Boolean hasPokemon(final String theName) {
-		final String formatName = AnswerFormatter.formatInputAnswer(theName);
+		final String formatName = AnswerFormatter.formatAnswer(theName);
 		return myNameDex.containsKey(formatName);
+	}
+	
+	/**
+	 * 
+	 * @return myNameDex
+	 */
+	public Map getNameDex() {
+		return myNameDex;
 	}
 
 	/**

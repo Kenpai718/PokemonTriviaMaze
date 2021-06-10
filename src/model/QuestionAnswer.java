@@ -111,7 +111,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private void fillChoices() {
 		myChoices.clear();
-		myChoices.add(myPokemon.getName());
+		myChoices.add(AnswerFormatter.formatMultipleChoiceAnswer(myPokemon.getName()));
 		for (int i = 1; i < NUM_CHOICES; i++) {
 			// randomly generate a pokemon with ID 1-151
 			final String aName = makeName();

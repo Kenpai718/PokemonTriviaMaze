@@ -49,7 +49,8 @@ public class TestingClass{
 		 */
 		
 		myPokedex.addGenToDex(1);
-		printAll();
+		System.out.println(myPokedex.getNameDex());
+		//printAll();
 		
 	}
 	

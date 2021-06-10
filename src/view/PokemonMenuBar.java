@@ -1025,8 +1025,7 @@ public class PokemonMenuBar extends JMenuBar {
 		public void actionPerformed(final ActionEvent e) {
 			final String promptCords = "Where to put a new Pokemon in maze? "
 					+ "\nRoom Name (Ex: '3') or \"here\" to put at your location.";
-			final String promptPokemon = "What is the name of the Pokemon?"
-					+ "\nNOTE: If the pokemon has a space in the name use a \"_\". If it has a form use a \"-\"";
+			final String promptPokemon = "What is the name of the Pokemon?";
 
 			firePropertyChange("tele", null, true);
 			myPos = readRoomName(promptCords, myTeleportIcon);
