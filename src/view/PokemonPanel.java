@@ -22,12 +22,14 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
-import view.viewHelper.BrightnessUtility;
+import view.Win_Lose.LosePane;
+import view.Win_Lose.WinPane;
+import view.viewHelper.ImageUtility;
 import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.MazeGUI.MazeModel;
-import view.viewHelper.QuestionModePanel;
+import view.viewHelper.QuestionPanels.QuestionModePanel;
 
 /**
  * Main visual of the gameplay. Setups playable game visuals on a panel such as
@@ -180,8 +182,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	private boolean myDark;
 
 	/*
-	 * Constant in the case where the reveal cheat is used to keep pokemon shown
-	 * all the time
+	 * Constant in the case where the reveal cheat is used to keep pokemon shown all
+	 * the time
 	 */
 	private Boolean myReveal;
 
@@ -202,14 +204,14 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myShowQMark = false;
 		myMazeGUI = new MazeGUI();
 		myMazeModel = (MazeModel) getTable().getModel();
-		myControlPanel = new ControlPanel(this);
-		addPropertyChangeListener(myControlPanel);
 		myLabelPanel = new LabelPanel();
+		myControlPanel = new ControlPanel(this);
 		myQuestPanels = new QuestionModePanel(this);
 
 		// listeners
 		addPropertyChangeListener(this);
-		addListener(myMazeGUI);
+		addPropertyChangeListener(myControlPanel);
+		this.addPropertyChangeListener(myMazeGUI);
 
 		/// initialize panel
 		setupPanel();
@@ -226,35 +228,26 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		setBackground(BG_COLOR);
 		setPreferredSize(PANEL_SIZE);
 		setLayout(springLayout);
+		setFocusable(true);
 
 		// position panel components
 
 		// maze gui
-		springLayout.putConstraint(SpringLayout.NORTH, myMazeGUI, 10,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, myMazeGUI, 1350,
-				SpringLayout.WEST, this);
-		;
-
-		// question panel
-		springLayout.putConstraint(SpringLayout.NORTH, myQuestPanels, 553,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, myQuestPanels, -36,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, -130,
-				SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, myMazeGUI, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, myMazeGUI, 1350, SpringLayout.WEST, this);
 
 		// label panel
-		springLayout.putConstraint(SpringLayout.NORTH, myLabelPanel, 10,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myLabelPanel, -22,
-				SpringLayout.WEST, myMazeGUI);
+		springLayout.putConstraint(SpringLayout.NORTH, myLabelPanel, 10, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myLabelPanel, -22, SpringLayout.WEST, myMazeGUI);
 
 		// control panel
-		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -150,
-				SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, 0,
-				SpringLayout.EAST, myLabelPanel);
+		springLayout.putConstraint(SpringLayout.SOUTH, myControlPanel, -150, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myControlPanel, 0, SpringLayout.EAST, myLabelPanel);
+		
+		// question panel
+		springLayout.putConstraint(SpringLayout.NORTH, myQuestPanels, 515, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, myQuestPanels, -30, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, myQuestPanels, 455, SpringLayout.EAST, myControlPanel);
 
 		// add all components to panel
 		add(myMazeGUI);
@@ -274,25 +267,25 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	public void setupPictures() {
 
 		// initialize player avatar
-		myAvatar = getScaledImage(readImage(PLAYER_M), POKE_W, POKE_H);
+		myAvatar = ImageUtility.readImage(PLAYER_M);
+		myAvatar = ImageUtility.getScaledImage(myAvatar, POKE_W, POKE_H);
 
 		// iconic question mark
-		myQuestionImg = readImage("./src/images/other/questionmark.png");
+		myQuestionImg = ImageUtility.readImage("./src/images/other/questionmark.png");
 		if (myQuestionImg != null) {
 			myQuestW = myQuestionImg.getWidth();
 			myQuestH = myQuestionImg.getHeight();
 		}
 
 		// sparkly thing behind a pokemon
-		myShine = readImage("./src/images/other/sparkle_formatted.png");
+		myShine = ImageUtility.readImage("./src/images/other/sparkle_formatted2.png");
 		if (myShine != null) {
 			myShineW = myShine.getWidth();
 			myShineH = myShine.getHeight();
 		}
 
 		/*
-		 * // draw the pokemon for the room we are in/attempting to go to
-		 * setImage();
+		 * // draw the pokemon for the room we are in/attempting to go to setImage();
 		 */
 		// draw the player avatar since we are starting the game for the first
 		// time and
@@ -302,21 +295,20 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Set pokemon pictures for dark and light depending on the current room.
-	 * Resize them if they are not 600x600px
+	 * Set pokemon pictures for dark and light depending on the current room. Resize
+	 * them if they are not 600x600px
 	 * 
 	 */
 	private void setImage() {
 
 		myPokeLight = myMaze.getAttemptRoom().getPokemon().getPNG();
 		// resize if not the correct width or height
-		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H
-				|| myPokeLight.getWidth() > POKE_W
+		if (myPokeLight.getWidth() < POKE_W || myPokeLight.getHeight() < POKE_H || myPokeLight.getWidth() > POKE_W
 				|| myPokeLight.getHeight() > POKE_H) {
-			myPokeLight = getScaledImage(myPokeLight, POKE_W, POKE_H);
+			myPokeLight = ImageUtility.getScaledImage(myPokeLight, POKE_W, POKE_H);
 		}
 
-		myPokeDark = (BufferedImage) BrightnessUtility.setToBlack(myPokeLight);
+		myPokeDark = (BufferedImage) ImageUtility.setToBlack(myPokeLight);
 		myPoke = myDark ? myPokeDark : myPokeLight;
 
 		repaint();
@@ -335,8 +327,8 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/*
-	 * Full refresh that updates all important components for the Pokemon Panel
-	 * gui visuals
+	 * Full refresh that updates all important components for the Pokemon Panel gui
+	 * visuals
 	 */
 	public void refreshGUI() {
 
@@ -350,7 +342,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		if (myMaze.isAtStart()) {
 			myQuestPanels.showTutorial();
 			setStartRoomPicture();
-		} else { //show current question panel
+		} else { // show current question panel
 			myQuestPanels.setCurrentGamemode();
 			myQuestPanels.updateQP();
 		}
@@ -382,8 +374,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		theG.drawImage(myShine, 0, 0, myShineW, myShineH, this);
 		theG.drawImage(myPoke, X_OFFSET, Y_OFFSET, POKE_W, POKE_H, this);
 		if (myShowQMark) {
-			theG.drawImage(myQuestionImg, X_OFFSET_QUEST, Y_OFFSET_QUEST,
-					myQuestW, myQuestH, this);
+			theG.drawImage(myQuestionImg, X_OFFSET_QUEST, Y_OFFSET_QUEST, myQuestW, myQuestH, this);
 		}
 
 	}
@@ -394,8 +385,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private void setImgBrightness() {
 		myDark = !(myReveal
-				|| (myMaze.hasNotMoved() ? myMaze.getCurrRoom().hasVisited()
-						: myMaze.getAttemptRoom().hasVisited()));
+				|| (myMaze.hasNotMoved() ? myMaze.getCurrRoom().hasVisited() : myMaze.getAttemptRoom().hasVisited()));
 	}
 
 	/**
@@ -503,10 +493,14 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		} else {
 			if ("win".equals(prop)) {
 				// TODO: add more to this win message
-				JOptionPane.showMessageDialog(null, "You win!");
+				// JOptionPane.showMessageDialog(null, "You win!");
+				WinPane win = new WinPane(this);
+				win.showCondition();
 			} else if ("lose".equals(prop)) {
 				// TODO: add more to this lose message
-				JOptionPane.showMessageDialog(null, "You lose!");
+				// JOptionPane.showMessageDialog(null, "You lose!");
+				LosePane lose = new LosePane(this);
+				lose.showCondition();
 			} else if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// setImgBrightness();
 				showAnswerImage();
@@ -515,62 +509,5 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		}
 
 	}
-	
-	//image methods below
 
-	/**
-	 * Resizes an image using a Graphics2D object backed by a BufferedImage. It
-	 * is scaled this way to prevent the picture from looking blurry.
-	 * 
-	 * SOURCE:
-	 * https://riptutorial.com/java/example/28299/how-to-scale-a-bufferedimage
-	 * 
-	 * @param srcImg - source image to scale
-	 * @param w      - desired width
-	 * @param h      - desired height
-	 * @return - the new resized image
-	 */
-	public BufferedImage getScaledImage(final Image srcImg, final int w,
-			final int h) {
-
-		// Create a new image with good size that contains or might contain
-		// arbitrary alpha values between and including 0.0 and 1.0.
-		final BufferedImage resizedImg = new BufferedImage(w, h,
-				BufferedImage.TRANSLUCENT);
-
-		// Create a device-independant object to draw the resized image
-		final Graphics2D g2 = resizedImg.createGraphics();
-
-		// improve quality of rendering
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-		// Finally draw the source image in the Graphics2D with the desired
-		// size.
-		g2.drawImage(srcImg, 0, 0, w, h, null);
-
-		// Disposes of this graphics context and releases any system resources
-		// that it is using
-		g2.dispose();
-
-		// Return the image used to create the Graphics2D
-		return resizedImg;
-	}
-
-	/**
-	 * Helper method to read an Image given a filepath
-	 * 
-	 * @param String theLocation filepath
-	 * @return BufferedImage the new image
-	 */
-	public BufferedImage readImage(final String theLocation) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File(theLocation));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-
-		return img;
-	}
 }

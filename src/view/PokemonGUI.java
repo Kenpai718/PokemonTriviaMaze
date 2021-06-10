@@ -24,7 +24,7 @@ public class PokemonGUI {
 	/**
 	 * Aspect Ratio of JFrame
 	 */
-	final int WIDTH = 1920, HEIGHT = 1080;
+	final int WIDTH = 1280, HEIGHT = 720;
 
 	/* Fields */
 
@@ -49,6 +49,11 @@ public class PokemonGUI {
 	 * Menubar
 	 */
 	private final PokemonMenuBar myMB;
+	
+	/*
+	 * background music player
+	 */
+	private final BackgroundMusic myMusic;
 
 	/**
 	 * Array holding actions for controls
@@ -68,13 +73,14 @@ public class PokemonGUI {
 		myPanel = new PokemonPanel();
 		myMB = new PokemonMenuBar(this);
 		myPanel.addListener(myMB);
+		myMusic = BackgroundMusic.getInstance();
+		myMusic.playMusic();
 
 //                myControlActions = new ArrayList<Action>();
 //                myControlButtons = new ButtonGroup();
 
 		setupGUI();
 		setupControlButtons();
-		BackgroundMusic.loadMusic();
 	}
 
 	

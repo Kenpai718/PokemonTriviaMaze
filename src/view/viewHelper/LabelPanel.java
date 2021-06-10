@@ -11,6 +11,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
+import javax.swing.JTextPane;
 
 /**
  * Contains labels that tell user about important game state such as what room
@@ -42,22 +43,28 @@ public class LabelPanel extends JPanel {
 	/*
 	 * Label of the current room name
 	 */
-	private JLabel myRoomLbl;
+	private final JLabel myRoomLbl;
 
 	/*
 	 * Label of the attempted room name
 	 */
-	private JLabel myDirLbl;
+	private final JLabel myDirLbl;
+	
+	private String myDir;
 
 	/*
 	 * Label of the answer to the room
 	 */
-	private JLabel myAnsLbl;
+	private final JLabel myAnsLbl;
 
 	/*
 	 * Maze
 	 */
-	private Maze myMaze;
+	private final Maze myMaze;
+	
+	private final String CURRENT = "Current Room: ";
+	private final String DIRECTION = "Chosen Direction: ";
+	private final String ANSWER = "Answer: ";
 
 	/**
 	 * Constructor
@@ -68,10 +75,10 @@ public class LabelPanel extends JPanel {
 
 		setOpaque(false);
 		setPreferredSize(new Dimension(320, 110));
-
-		myRoomLbl = buildLabel("Current Room: " + myMaze.getCurrRoom());
-		myDirLbl = buildLabel("Attempted Room: None");
-		myAnsLbl = buildLabel("Room Answer: N/A");
+		
+		myRoomLbl = buildLabel(CURRENT + myMaze.getCurrRoom());
+		myDirLbl = buildLabel(DIRECTION + "NONE");
+		myAnsLbl = buildLabel(ANSWER + "N/A");
 
 		add(myRoomLbl);
 		add(myDirLbl);
@@ -89,9 +96,9 @@ public class LabelPanel extends JPanel {
 	 * @return formatted JLabel
 	 */
 	private JLabel buildLabel(final String theTitle) {
-		JLabel lbl = new JLabel(theTitle);
+		final JLabel lbl = new JLabel(theTitle);
 		lbl.setPreferredSize(new Dimension(315, 30));
-		Border aBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
+		final Border aBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
 		lbl.setBorder(aBorder);
 		lbl.setBackground(BG_COLOR);
 		lbl.setOpaque(true);
@@ -122,20 +129,27 @@ public class LabelPanel extends JPanel {
 	 * Main use is for debugging
 	 */
 	public void updateLabels() {
-		myRoomLbl.setText("Currently in: Room " + myMaze.getCurrRoom());
+		myRoomLbl.setText(CURRENT + myMaze.getCurrRoom());
 		if (myMaze.hasNotMoved()) {
-			myDirLbl.setText("Chosen Direction: None");
+			myDirLbl.setText(DIRECTION + "NONE");
 		} else {
-			myDirLbl.setText(
-					"Attempting to go to: Room " + myMaze.getAttemptRoom());
+			myDirLbl.setText(DIRECTION + myDir);
 		}
 
-		if (myMaze.isAtStart()) {
+		if (!myMaze.isAtStart()) {
 			myAnsLbl.setText(
-					"Answer is: " + myMaze.getAttemptRoom().getAnswer());
+					ANSWER + myMaze.getAttemptRoom().getAnswer());
 		} else {
-			myAnsLbl.setText("Answer is: N/A");
+			myAnsLbl.setText(ANSWER + "N/A");
 		}
+	}
+	
+	/**
+	 * Sets the string representation of direction
+	 * @param theDir
+	 */
+	public void setDir(String theDir) {
+		myDir = theDir;
 	}
 
 	/**

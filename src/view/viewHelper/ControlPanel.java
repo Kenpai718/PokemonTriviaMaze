@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -16,13 +18,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import controller.movement_actions.DownAction;
 import controller.movement_actions.LeftAction;
-import controller.movement_actions.MovementAction;
+import controller.movement_actions.AbstractMovementAction;
 import controller.movement_actions.RightAction;
 import controller.movement_actions.UpAction;
 import model.Maze;
@@ -71,6 +74,11 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 */
 	private final PokemonPanel myPanel;
 
+	/*
+	 * Action selected after a click
+	 */
+	private AbstractMovementAction myAction;
+
 	/**
 	 * Create the control panel.
 	 * 
@@ -90,29 +98,30 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		setLayout(new GridLayout(0, 3, 0, 0));
 
 		// build buttons for the control panel
-		// NOTE: the empty jlabels are here to format the buttons with the grid layout
+		// NOTE: the empty jlabels are here to format the buttons with the grid
+		// layout
 		final JLabel label = new JLabel("");
 		add(label);
 
-		up = buildButton(upAction);
+		up = buildMoveButton(upAction);
 		add(up);
 
 		final JLabel label_1 = new JLabel("");
 		add(label_1);
 
-		left = buildButton(leftAction);
+		left = buildMoveButton(leftAction);
 		add(left);
 
 		final JLabel player = buildPlayer();
 		add(player);
 
-		right = buildButton(rightAction);
+		right = buildMoveButton(rightAction);
 		add(right);
 
 		final JLabel label_3 = new JLabel("");
 		add(label_3);
 
-		down = buildButton(downAction);
+		down = buildMoveButton(downAction);
 		add(down);
 
 		final JLabel label_4 = new JLabel("");
@@ -122,17 +131,33 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Builder to make an action button
+	 * 
+	 * @return direction clicked on
+	 */
+	public AbstractMovementAction getDirection() {
+		return myAction;
+	}
+
+	/**
+	 * Builder to make a movement action button
+	 * Also assigns the keybind.
 	 * 
 	 * @param theAction to give the button
 	 * @return formatted jbutton with associated action
 	 */
-	private JButton buildButton(final AbstractAction theAction) {
+	private JButton buildMoveButton(final AbstractMovementAction theAction) {
 		JButton jb = new JButton("");
 		jb.setHideActionText(true);
 		buttonGroup.add(jb);
 		jb.setAction(theAction);
 		jb.setBorder(null);
+		jb.setFocusable(true);
+		
+		//set keybind to movement action
+		String actionTitle = theAction.toString() + "_ACTION";
+		jb.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(theAction.getMovementKey(), actionTitle);
+		jb.getActionMap().put(actionTitle, theAction);
+		
 		return jb;
 
 	}
@@ -157,13 +182,13 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * Add listeners for buttons on the control panel
 	 */
 	private void addListeners() {
-		// TODO Auto-generated method stub
 		addPropertyChangeListener(this);
 		final Enumeration<AbstractButton> buttons = buttonGroup.getElements();
 		while (buttons.hasMoreElements()) {
 			final JButton temp = (JButton) buttons.nextElement();
 			temp.addPropertyChangeListener(this);
-			temp.addMouseListener(new HoverListener(temp));
+			temp.addMouseListener(new UserMouseListener(temp));
+
 
 		}
 	}
@@ -197,8 +222,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Check room in the direction for if they can enter
-	 * the room.
+	 * Check room in the direction for if they can enter the room.
 	 * 
 	 * @param theDir
 	 * @return if player can move in that direction
@@ -245,22 +269,23 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			repaint();
 		}
 	}
-	
+
 	/*
 	 * Inner classes
 	 */
 
 	/*
-	 * Highlight the button when user hovers over it
+	 * Highlight the button when user hovers over it Sets the action after
+	 * clicking a button
 	 */
-	public class HoverListener extends MouseAdapter {
+	public class UserMouseListener extends MouseAdapter {
 		private final Color B_COLOR = new Color(58, 175, 220); // highlighter
 																// blue
 		final Border BORDER = BorderFactory.createLineBorder(B_COLOR, 5);
 		final Border EMPTY_BORDER = BorderFactory.createEmptyBorder();
 		private final JButton myButton;
 
-		public HoverListener(final JButton theButton) {
+		public UserMouseListener(final JButton theButton) {
 			myButton = theButton;
 		}
 
@@ -273,6 +298,14 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			myButton.setBorder(BORDER);
 		}
 
+		/**
+		 * Set the chosen direction after a click
+		 */
+		@Override
+		public void mousePressed(final MouseEvent me) {
+			myAction = (AbstractMovementAction) myButton.getAction();
+		}
+
 		/*
 		 * Remove border after user scrolls off
 		 */
@@ -282,4 +315,5 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 			myButton.setBorder(EMPTY_BORDER);
 		}
 	}
+
 }

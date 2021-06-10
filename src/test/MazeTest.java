@@ -34,10 +34,11 @@ class MazeTest {
 
         @Test
         void testIsWinCondition() {
-                assertFalse(myMaze.isWinCondition());
+                assertFalse(myMaze.hasWon());
                 final int[] pos = new int[] {DEFAULT_ROWS - 1, DEFAULT_COLS - 1};
+                myMaze.setWinCondition();
                 myMaze.setPlayerLocation(pos);
-                assertTrue(myMaze.isWinCondition());
+                assertTrue(myMaze.hasWon());
         }
 
         @Test
