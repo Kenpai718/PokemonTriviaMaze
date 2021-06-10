@@ -1,4 +1,4 @@
-package view.viewHelper;
+package view.viewHelper.QuestionPanels;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import model.Maze;
 import view.PokemonPanel;
+import view.viewHelper.AbstractQuestionPanel;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

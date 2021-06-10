@@ -41,7 +41,7 @@ import model.Room;
 import sound.BackgroundMusic;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.PokedexScrollList;
-import view.viewHelper.TutorialPanel;
+import view.viewHelper.QuestionPanels.TutorialPanel;
 
 /**
  * Menubar for the trivia game has file, help, DIFFICULTY_OPTIONS and gen select

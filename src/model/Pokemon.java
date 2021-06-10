@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 
+import controller.AnswerFormatter;
 import exceptions.MissingPokemonPictureException;
 import view.viewHelper.ImageUtility;
 
@@ -90,7 +91,7 @@ public class Pokemon implements Serializable {
 		}
 		
 		myGenNum = theGenNum;
-		myName = theName.replaceAll("_", "").trim(); // i.e: Mr._Mime -> Mr.Mime
+		myName = AnswerFormatter.formatMultipleChoiceAnswer(theName); 
 		myFileName = PATH + myGenNum + "/" + theID + theName + ".png";
 
 		try {

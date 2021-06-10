@@ -1,4 +1,4 @@
-package view.viewHelper;
+package view.viewHelper.QuestionPanels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,6 +35,7 @@ import model.Maze;
 import model.Room;
 import view.PokemonGUI;
 import view.PokemonPanel;
+import view.viewHelper.AbstractQuestionPanel;
 
 /**
  * Has the multiple choice question for the room
@@ -53,11 +54,13 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	private static final long serialVersionUID = 1L;
 	private final Color TRANSPARENT = new Color(1f, 0f, 0f, .5f);
 	private final int NUM_CHOICES = 4;
-	private final int W = 350;
-	private final int H = 500;
-	private final Dimension PANEL_DIM = new Dimension(W, H);
-	private final int COMP_H = 75;
-	private final Dimension COMP_DIM = new Dimension(W, COMP_H);
+	private final int CHOICE_HEIGHT = 75;
+	
+	/*
+	 * Size of the panels
+	 */
+	private final Dimension mySize;
+	private final Dimension myChoiceSize;
 
 
 	/*
@@ -89,6 +92,8 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 */
 	public QuestionRoomGUI(PokemonPanel thePP) {
 		super(thePP);
+		mySize = super.DEFAULT_DIM;
+		myChoiceSize = new Dimension(super.DEFAULT_WIDTH, CHOICE_HEIGHT);
 		// myCurrRoom = theRoom;
 		// myChoices = theRoom.getChoices();
 
@@ -115,15 +120,10 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	private void setupGUI() {
 		setBorder(new LineBorder(Color.BLACK, 5, true));
 		setBackground(Color.WHITE);
-		setPreferredSize(PANEL_DIM);
-		setMaximumSize(PANEL_DIM);
+		setPreferredSize(mySize);
+		setMaximumSize(mySize);
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
-
-		// Scrollpane in case the user can't see all choices
-		JScrollPane scrollPane = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(0, 0, W, H);
 
 	}
 
@@ -138,7 +138,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		lbl.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
 		lbl.setFocusable(false);
 		lbl.setBorder(null);
-		lbl.setSize(COMP_DIM);
+		lbl.setSize(myChoiceSize);
 		lbl.setForeground(Color.BLACK);
 
 		return lbl;
@@ -152,7 +152,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		JPanel titlePanel = new JPanel();
 		titlePanel = new JPanel();
 		titlePanel.setLayout(new GridBagLayout()); // to center text
-		titlePanel.setSize(COMP_DIM);
+		titlePanel.setSize(myChoiceSize);
 		titlePanel.setForeground(Color.WHITE);
 		titlePanel.setBackground(Color.LIGHT_GRAY);
 		// titlePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
@@ -169,11 +169,15 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 		//make mc panel
 		myMCPanel = new JPanel();
-		myMCPanel.setLayout(new BorderLayout());
-		myMCPanel.setSize(W, H - COMP_H);
+		myMCPanel.setSize(mySize);
 		myMCPanel.setForeground(TRANSPARENT);
 		myMCPanel.setBackground(Color.WHITE);
-		myMCPanel.setLayout(new GridLayout(NUM_CHOICES, 1));
+		myMCPanel.setLayout(new GridLayout(NUM_CHOICES, 1)); //to places buttons in order top to bot
+		
+		// Scrollpane in case the user can't see all choices
+		JScrollPane scrollPane = new JScrollPane(myMCPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(0, 0, super.DEFAULT_WIDTH, super.DEFAULT_HEIGHT);
 
 		//make buttons
 		for (int i = 1; i <= NUM_CHOICES; i++) {
@@ -193,7 +197,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 */
 	private JRadioButton buildButton(final char theMnemonic) {
 		final JRadioButton mc = new JRadioButton("");
-		mc.setSize(COMP_DIM);
+		mc.setSize(myChoiceSize);
 		mc.setOpaque(false);
 		mc.setMnemonic(theMnemonic);
 		mc.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 15));
@@ -219,7 +223,6 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 			temp.setText(choices.get(i));
 			temp.setForeground(Color.BLACK);
 			i++;
-
 		}
 	}
 

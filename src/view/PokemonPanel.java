@@ -29,7 +29,7 @@ import view.viewHelper.ControlPanel;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.MazeGUI.MazeModel;
-import view.viewHelper.QuestionModePanel;
+import view.viewHelper.QuestionPanels.QuestionModePanel;
 
 /**
  * Main visual of the gameplay. Setups playable game visuals on a panel such as

@@ -10,8 +10,11 @@ package controller;
 public class AnswerFormatter {
 
 	/**
-	 * Formats the answers the same removes all whitespace, replaces - and _ with "
-	 * ". Makes all toLowercase.
+	 * Formats the answers the same removes all non alphabetical characters
+	 * and makes it lowercase.
+	 * 
+	 * The use is to compare user input and make sure the user can input it
+	 * slightly wrong and still get it right.
 	 * 
 	 *
 	 * @param theString to format
@@ -20,14 +23,14 @@ public class AnswerFormatter {
 	 */
 	public static String formatAnswer(final String theString) {
 
-		return theString.toLowerCase().strip().replaceAll(" ", "").replaceAll("-", "").replaceAll("_", "");
+		return theString.toLowerCase().strip().replaceAll("[^a-zA-Z0-9]", "");  
 	}
 
 	/**
-	 * Same formatting as formatAnswer but without toLowercase and "-" remover
+	 * remove trailing white space and make _ a space
 	 * 
 	 * @param theString
-	 * @return
+	 * @return formatted string
 	 */
 	public static String formatMultipleChoiceAnswer(final String theString) {
 		return theString.strip().replaceAll("_", " "); 
