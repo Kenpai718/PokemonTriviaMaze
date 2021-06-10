@@ -48,8 +48,7 @@ public class TestingClass{
 		 * = {rows - 1, cols - 1}; pf.checkForPath(start, target);
 		 */
 		
-		myPokedex.addGenToDex(1);
-		System.out.println(myPokedex.getNameDex());
+		System.out.println(myPokedex);
 		//printAll();
 		
 	}

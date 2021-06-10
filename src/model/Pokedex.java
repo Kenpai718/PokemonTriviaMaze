@@ -64,7 +64,6 @@ public class Pokedex implements Serializable {
 	 * Used for look ups for pokemon based on random generation
 	 */
 	private Map<Integer, ArrayList<String>> myPokedex;
-	// private final Map<String, String> myPokedex;
 
 	/*
 	 * Alternative map for looking up the name
@@ -77,22 +76,32 @@ public class Pokedex implements Serializable {
 	private Map<String, Integer> myNameDex;
 
 	/*
+	 * Holds list of all pokemon added. Maninly used for the toString method.
+	 * Format: ID + " " + NAME + " " + GEN
+	 */
+	private ArrayList<String> myPokemonList;
+
+	/*
 	 * Generations that have been selected to play on
 	 */
 	private Set<Integer> mySelectedGens;
 
 	/*
-	 * How many pokemon currently in pokedex Also used as an id number for when
+	 * How many pokemon currently in pokedex. Also used as an id number for when
 	 * pokemon are added into the maps.
 	 *
 	 */
 	private int myCounter;
 
-
 	/*
 	 * Missingno
 	 */
 	private final ArrayList<String> myMissing;
+	
+	/*
+	 * Controls if mega pokemon should be added to pokedex
+	 */
+	private boolean myUseMegas;
 
 	/**
 	 * Constructor to initialize pokedex
@@ -100,7 +109,9 @@ public class Pokedex implements Serializable {
 	private Pokedex() {
 		myPokedex = new HashMap<Integer, ArrayList<String>>();
 		myNameDex = new HashMap<String, Integer>();
+		myPokemonList = new ArrayList<String>();
 		mySelectedGens = new HashSet<Integer>();
+		myUseMegas = false;
 		myCounter = 0;
 
 		// "empty" pokemon used in the case where there is no pokemon found
@@ -116,7 +127,6 @@ public class Pokedex implements Serializable {
 		myMissing.add(1, "MissingNo");
 		myMissing.add(2, "0");
 
-
 		// fill pokedex with database
 		try {
 			addGenToDex(DEFAULT_GEN); // gen 1 by default
@@ -126,7 +136,6 @@ public class Pokedex implements Serializable {
 		}
 
 	}
-
 
 	/*
 	 * Singleton instantiation
@@ -138,12 +147,16 @@ public class Pokedex implements Serializable {
 		return singleDex;
 	}
 
-	/*
+	/**
 	 * Read from the pokedex database file with SQLite to create pokemon objects to
 	 * add to the pokedex map.
 	 * 
-	 * Reads off of Gen#Pokedex.db file Adds a specific pokemon generation number
-	 * 1-7 to the pokedex
+	 * Reads off of Gen#Pokedex.db file.Adds a specific pokemon generation number
+	 * 1-7 to the pokedex.
+	 * 
+	 * Makes the database if it does not exist
+	 * 
+	 * @param theNum generation number
 	 * 
 	 */
 	private void fillPokedex(final int theNum) throws Exception {
@@ -154,14 +167,13 @@ public class Pokedex implements Serializable {
 
 		SQLiteDataSource ds = null;
 		final String databaseName = "Gen" + theNum + "Pokedex";
-		
-		//make a new database if it does not exist
+
+		// make a new database if it does not exist
 		File database = new File(databaseName + ".db");
-		if(!database.exists()) {
+		if (!database.exists()) {
 			System.out.println(databaseName + "does not exist! Now making the database...");
 			SQLPokedexFiller.buildDatabase(databaseName, theNum);
 		}
-
 
 		// establish connection (creates db file if it does not exist :-)
 		try {
@@ -191,10 +203,18 @@ public class Pokedex implements Serializable {
 			while (rs.next()) {
 				final String id = rs.getString("ID");
 				final String name = rs.getString("NAME");
+				final boolean isMega = name.toLowerCase().contains("mega");
+				
+				//don't add mega pokemon unless myUseMegas is true
+				//anything else is fair game
+				if(!isMega) {
+					addPokemon(id, name, theNum);
+				} else if (myUseMegas && isMega) {
+					//System.out.println("adding a mega " + name);
+					addPokemon(id, name, theNum);
+				}
 
-				addPokemon(id, name, theNum);
 			}
-
 
 			// System.out.println("Finished adding pokemon from " + databaseName
 			// + "\n");
@@ -264,6 +284,17 @@ public class Pokedex implements Serializable {
 
 		}
 	}
+	
+	/**
+	 * Refreshes pokedex and adds all gen pokemon still in the game
+	 * @throws Exception
+	 */
+	public void refreshSelectGens() throws Exception {
+		resetPokedex();
+		for (final int i : mySelectedGens) {
+			fillPokedex(i);
+		}
+	}
 
 	/*
 	 * Restores pokedex map to default Map will only have gen 1 pokemon.
@@ -294,8 +325,11 @@ public class Pokedex implements Serializable {
 	private void resetPokedex() {
 		myPokedex.clear();
 		myNameDex.clear();
+		myPokemonList.clear();
 		myCounter = 0;
 	}
+	
+	
 
 	/**
 	 * Add a pokemon to the pokedex map and the name map
@@ -311,14 +345,16 @@ public class Pokedex implements Serializable {
 		// store pokemon field info
 		final String id = AnswerFormatter.idConverter(theID);
 		final ArrayList<String> pokemonInfo = new ArrayList<String>();
+		final String fullInfo = id + " " + pkmnName + " " + theGenNum;
+
 		pokemonInfo.add(0, id);
 		pokemonInfo.add(1, theName);
 		pokemonInfo.add(2, String.valueOf(theGenNum));
 
 		myPokedex.put(myCounter, pokemonInfo);
 		myNameDex.put(formatName, myCounter);
+		myPokemonList.add(fullInfo);
 	}
-
 
 	/**
 	 * Pokedex getter
@@ -348,13 +384,11 @@ public class Pokedex implements Serializable {
 		return mySelectedGens;
 	}
 
-
-
 	/**
 	 * Lookup pokemon based on id number in map. If not found return missingno.
 	 * 
 	 * @return Pokemon at that ID number
-	 * @throws MissingPokemonException 
+	 * @throws MissingPokemonException
 	 */
 	public Pokemon findPokemon(final int theID) throws MissingPokemonException {
 
@@ -367,7 +401,7 @@ public class Pokedex implements Serializable {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 
+			}
 		} else {
 			res = myMissingPokemon; // missingno in case not found
 			throw new MissingPokemonException();
@@ -449,13 +483,21 @@ public class Pokedex implements Serializable {
 		final String formatName = AnswerFormatter.formatAnswer(theName);
 		return myNameDex.containsKey(formatName);
 	}
-	
+
 	/**
 	 * 
 	 * @return myNameDex
 	 */
 	public Map getNameDex() {
 		return myNameDex;
+	}
+	
+	/**
+	 * Enable/disable mega pokemon in the pokedex
+	 * @param theState
+	 */
+	public void setUseMegas(final boolean theState) {
+		myUseMegas = theState;
 	}
 
 	/**
@@ -475,28 +517,45 @@ public class Pokedex implements Serializable {
 
 	/**
 	 * 
-	 * List official pokedex number and pokemon name per line
+	 * List official pokedex number, pokemon name and gen per line
 	 * 
-	 * @return names of all pokemon currently in the pokedex
+	 * @return every pokemon's info currently in the pokedex
 	 */
 	@Override
 	public String toString() {
-		ArrayList<String> pokemonList = new ArrayList<String>();
-		String fullInfo;
 
-		// add all pokemon to an arraylist
-		for (int i : myPokedex.keySet()) {
-			ArrayList info = myPokedex.get(i);
-			fullInfo = info.get(0) + " | " + info.get(1) + " [Gen" + info.get(2) + "]";
-			pokemonList.add(fullInfo);
-		}
-		Collections.sort(pokemonList);
+		StringBuilder sb = new StringBuilder();
+		String line = "-------------------------------------\n";
+		String id;
+		String name;
+		String gen;
+		String format = String.format("%-6s%-27s%3s", " ID", "Pokemon Name", " Gen");
+		sb.append(format + "\n");
+		sb.append(line);
 
 		// print each pokemon in order
-		StringBuilder sb = new StringBuilder();
-		for (String pkmn : pokemonList) {
-			sb.append(pkmn + "\n");
+		Collections.sort(myPokemonList);
+		int count = 1;
+		for (String pkmn : myPokemonList) {
+			// in list they are separated by spaces
+			String[] info = pkmn.split(" ");
+			id = info[0];
+			name = info[1];
+			gen = info[2];
+
+			// put a intersection between new generations
+			if (count != Integer.parseInt(gen)) {
+				count = Integer.parseInt(gen);
+				sb.append(line);
+			}
+
+			format = String.format("%-6s%-27s%3s", id, name, gen);
+			sb.append(format + "\n");
 		}
+
+		sb.append(line);
+		format = String.format("%36s", "Total Entries: " + myCounter);
+		sb.append(format);
 
 		return sb.toString();
 	}

@@ -49,11 +49,11 @@ public class TextRoomGUI extends AbstractQuestionPanel {
 			+ "\n will be ignored."
 			+ "\n*Press \"enter\" on keyboard to submit." 
 			+ "\n\nUnique Cases:" 
-			+ "\n*Mega: \"mega\" + \"Pokemon Name\""
+			+ "\n*Mega: \"Mega\" + \"Pokemon Name\""
 			+ "\n EX: Mega Mewtwo X"
-			+ "\n*Form: \"Pokemon Name\" + \"form name\""
+			+ "\n*Form: \"Pokemon Name\" + \"Form Name\""
 			+ "\n EX: Shaymin Sky"
-			+ "\n*Regional: \"Pokemon Name\" + \"region\"" 
+			+ "\n*Regional: \"Pokemon Name\" + \"Region\"" 
 			+ "\n EX: Vulpix Alolan"
 			+ "\n*You don't need to specify gender.";
 

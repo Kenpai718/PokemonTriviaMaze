@@ -28,9 +28,7 @@ public class SQLPokedexFiller {
 	 * Where all the pokemon images are stored. Just add the number at the end
 	 */
 	private final static String IMAGE_PATH = "./src/images/pokedex/Gen";
-	 
-	
-	
+
 	/**
 	 * Make the database given the name and the folder that has the images
 	 * 
@@ -42,7 +40,7 @@ public class SQLPokedexFiller {
 		setupSQL(databaseName);
 		createTable(databaseName, imageFolder);
 		printTable(databaseName);
-		System.out.println(databaseName +  " has been created!" + "\n");
+		System.out.println(databaseName + " has been created!" + "\n");
 
 	}
 
@@ -126,20 +124,53 @@ public class SQLPokedexFiller {
 	 */
 	public static void fillDatabase(String databaseName, final File theFolder) {
 		for (final File fileEntry : theFolder.listFiles()) {
-			String fileName = fileEntry.getName();
-			String id = fileName.substring(0, 3);
-			String pokemonName = fileName.substring(3).replace(".png", "");
-			//System.out.println(pokemonName);
-			String query1 = "INSERT INTO " + databaseName + " ( ID, NAME ) VALUES ( '" + id.trim() + "', '"
-					+ pokemonName.trim() + "' )";
 
-			try (Connection conn = ds.getConnection(); Statement stmt = conn.createStatement();) {
-				int rv = stmt.executeUpdate(query1);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.exit(0);
+			String fileName = fileEntry.getName();
+			// only add the file if it is correct
+			if (fileName.endsWith(".png")) {
+				String id = fileName.substring(0, 3);
+				//only add if the file has a valid id signature
+				if (verifyID(id)) {
+					String pokemonName = fileName.substring(3).replace(".png", "");
+					verifyID(fileName);
+
+					String query1 = "INSERT INTO " + databaseName + " ( ID, NAME ) VALUES ( '" + id.trim() + "', '"
+							+ pokemonName.trim() + "' )";
+
+					try (Connection conn = ds.getConnection(); Statement stmt = conn.createStatement();) {
+						int rv = stmt.executeUpdate(query1);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						System.exit(0);
+					}
+				}
 			}
 		}
+	}
+
+	/**
+	 * Checks if an id is the proper number format
+	 * Ex: theID = "000" = true
+	 * 	   theID = "hey" = false
+	 * 
+	 * @return false if any char is not a number
+	 */
+	private static boolean verifyID(final String theID) {
+		boolean result = true;
+		for (int i = 0; i < theID.length(); i++) {
+			String c = "" + theID.charAt(i);
+			try {
+				int num = Integer.parseInt(c);
+			} catch (NumberFormatException e) {
+				// not a number
+				result = false;
+				break;
+			}
+
+		}
+
+		return result;
+
 	}
 
 }

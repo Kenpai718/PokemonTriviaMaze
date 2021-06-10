@@ -28,7 +28,7 @@ import java.awt.Color;
 public class PokedexScrollList extends JPanel {
 
 	private final Pokedex myPokedex;
-	private final Dimension DIM = new Dimension(300, 500);
+	private final Dimension DIM = new Dimension(350, 600);
 
 	/*
 	 * Constructor

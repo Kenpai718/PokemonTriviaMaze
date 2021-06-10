@@ -63,7 +63,7 @@ public class PokemonMenuBar extends JMenuBar {
 	/*
 	 * Version number used in about
 	 */
-	private final String VERSION = "Pokemon Trivia Maze v1.02";
+	private final String VERSION = "Pokemon Trivia Maze v1.03";
 	private final String ABOUT_MESSAGE = VERSION + "\nCreated by: AJ Downey, Kenneth Ahrens, and Katelyn Malone"
 			+ "\nSpring 2021\n" + "\nDISCLAIMER:\n"
 			+ "This is a fan-made-non-profit project based on the \"Who's that Pokemon?\" segment from the original Pokemon anime."
@@ -110,6 +110,7 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	private ArrayList<JCheckBox> myGenBoxList;
 	private JMenuItem mySelectAllGen;
+	private JCheckBox myMegaButton;
 
 	/*
 	 * Changeable state buttons for DIFFICULTY_OPTIONS select menu
@@ -473,7 +474,14 @@ public class PokemonMenuBar extends JMenuBar {
 				genBox.setSelected(true); // gen 1 selected by defau;t
 			}
 		}
+		myGenSelectMenu.addSeparator();
 
+		//button to activate mega pokemon
+		myMegaButton = new JCheckBox("Enable Megas");
+		myMegaButton
+				.setToolTipText("Allows mega pokemon to be encounterable.\nCheck to enable and uncheck to disable.");
+		myGenSelectMenu.add(myMegaButton);
+		myMegaButton.addActionListener(new MegaSelectListener(myMegaButton));
 		myGenSelectMenu.addSeparator();
 
 		// mass add or remove gen
@@ -496,7 +504,9 @@ public class PokemonMenuBar extends JMenuBar {
 			}
 
 		});
+
 		myGenSelectMenu.add(pokemonList);
+
 	}
 
 	/**
@@ -827,7 +837,7 @@ public class PokemonMenuBar extends JMenuBar {
 				try {
 					myPokedex.addGenToDex(myGen);
 					myMsg = "Gen " + myGen + " Pokemon can now be encountered!" + "\nSelected Gens: "
-							+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: " + myPokedex.getCount();
+							+ myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: " + myPokedex.getCount();
 					// resetAll();
 					mySwingWorker.execute();
 					// JOptionPane.showMessageDialog(null, myMsg);
@@ -841,7 +851,7 @@ public class PokemonMenuBar extends JMenuBar {
 					try {
 						myPokedex.removeGenFromDex(myGen);
 						myMsg = "Gen " + myGen + " Pokemon have been removed." + "\nSelected Gens: "
-								+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: " + myPokedex.getCount();
+								+ myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: " + myPokedex.getCount();
 						// resetAll();
 						mySwingWorker.execute();
 						// JOptionPane.showMessageDialog(null, myMsg);
@@ -902,7 +912,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 				myPokedex.addAllGensToDex();
 				myMsg = "All Pokemon generations have been loaded in. " + "\nSelected Gens: "
-						+ myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: " + myPokedex.getCount();
+						+ myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: " + myPokedex.getCount();
 				// resetAll();
 				mySwingWorker.execute();
 				// JOptionPane.showMessageDialog(null, myMsg);
@@ -914,14 +924,13 @@ public class PokemonMenuBar extends JMenuBar {
 				myStateChange = false;
 				myPokedex.restoreGensToDefault();
 				myMsg = "All Pokemon generations except Gen " + myPokedex.DEFAULT_GEN + " has been removed."
-						+ "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Pokemon in Pokedex: "
+						+ "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: "
 						+ myPokedex.getCount();
 				// resetAll();
 				mySwingWorker.execute();
 				// JOptionPane.showMessageDialog(null, myMsg);
 
 				myChangeButton.setText("Play All Gens");
-				myStateChange = false;
 			}
 
 			// initialize box selection based on the action
@@ -947,6 +956,65 @@ public class PokemonMenuBar extends JMenuBar {
 			}
 		}
 
+	}
+
+	/**
+	 * enable or disables megapokemon from pokedex
+	 */
+	class MegaSelectListener implements ActionListener {
+
+		private final JCheckBox myChangeButton;
+		/*
+		 * If user has clicked this button once to add all pokemon
+		 */
+		private boolean myStateChange;
+
+		private String myMsg;
+
+		public MegaSelectListener(final JCheckBox theChangeButton) {
+			myChangeButton = theChangeButton;
+			myStateChange = false;
+			myMsg = "";
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+
+			final SwingWorker<Void, Void> mySwingWorker = new SwingWorker<Void, Void>() {
+
+				@Override
+				protected Void doInBackground() throws Exception {
+					// System.out.println("Executing");
+					myPokedex.refreshSelectGens();
+					resetAll();
+					String info = "\nSelected Gens: " + myPokedex.getSelectedGens()
+					+ "\nTotal Entries in Pokedex: " + myPokedex.getCount();
+					JOptionPane.showMessageDialog(null, myMsg + info, "Game reset!", JOptionPane.INFORMATION_MESSAGE);
+					return null;
+				}
+			};
+
+			myPokedex.setUseMegas(myChangeButton.isSelected());
+
+			if (!myStateChange) { // did an enable
+				myStateChange = true;
+
+				myMsg = "Mega Pokemon are now encounterable!";
+				// resetAll();
+				mySwingWorker.execute();
+				// JOptionPane.showMessageDialog(null, myMsg);
+
+				myChangeButton.setText("Disable Megas");
+				myStateChange = true;
+
+			} else { // did a disable
+				myStateChange = false;
+				myMsg = "Mega Pokemon are no longer encounterable!";
+				mySwingWorker.execute();
+				myChangeButton.setText("Enable Megas");
+			}
+
+		}
 	}
 
 	/**
