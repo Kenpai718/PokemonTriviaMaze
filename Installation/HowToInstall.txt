@@ -1,0 +1,20 @@
+Thank you downloading this game!
+
+Requirements:
+Install Java
+Install Java JDK 15: https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html
+Install the "PKMN RBYGSC" font in the /installation/fonts folder
+
+System Requirements:
+Should be able to run on a potato, but please at least have a 1080p resolution screen.
+The game is designed to always be at 1080p so having a smaller screen size will break the visuals!
+
+Installation Process:
+To install the game onto your machine launch "Pokemon Trivia Setup".
+Follow the instructions from the setup to install the game.
+This will install the game to Program Files x86 and add a shortcut to your desktop!
+To play launch the "Pokemon Trivia Maze.jar".
+If that doesn't work launch "RunGame.bat" in the source folder.
+
+As a last resort, if the program won't run on the jar/bat file then you could try importing the
+project folder to Eclipse Java IDE which we developed the game on. Then run from that.

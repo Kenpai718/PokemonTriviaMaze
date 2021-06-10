@@ -482,7 +482,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myGenSelectMenu.add(mySelectAllGen);
 
 		// show pokemon in pokedex
-		JMenuItem pokemonList = new JMenuItem("See List of Pokemon");
+		JMenuItem pokemonList = new JMenuItem("See Pokedex");
 		pokemonList.setToolTipText("See what Pokemon are currently in the Pokedex");
 		pokemonList.addActionListener(new ActionListener() {
 
