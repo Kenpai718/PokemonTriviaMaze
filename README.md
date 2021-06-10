@@ -1,5 +1,5 @@
 # **Pokemon Trivia Maze** 
-**VERSION 1.0** \
+**VERSION 1.03** \
 Created by: AJ Downey, Kenneth Ahrens, and Katelyn Malone \
 Spring 2021
 
@@ -32,19 +32,21 @@ Should be able to run on a potato, but please at least have a 1080p
 resolution screen. The game is designed to always play at 1920x1080 so 
 having a smaller size will break the visuals or make it unplayable! 
 
-**How to run/install the game:** \
+**How to run/install the game:**
 
-*Option 1 Steps:*
-1) Download the source code zip from the main branch of this github repository: https://github.com/Grandalfy/TriviaMaze/
-2) [Download the corresponding "installer" zip for this version](https://drive.google.com/drive/folders/1GLWMmvT_H0PknEwhKPYHoRAeGjuu27yb?usp=sharing). Generally just download the latest installer support files.
-4) Drag and drop contents of "installer folder" from the Google Drive into the local Trivia Maze project source folder on your machine
-5) Read the "How to use installer.txt" for more in depth steps on the setup
-6) You can also install the game to your machine from the installation folder. Read "HowToInstall.txt" for more info
-7) Or run the "Pokemon Trivia Maze.jar" or "RunGame.bat" to launch the game without an IDE
+*Option 1 Steps:* **(PREFERRED METHOD)**
+1) Download the source code .zip from the main branch of this github repository: https://github.com/Grandalfy/TriviaMaze/
+2) Unzip the .zip project file to somewhere on your machine
+3) [Download the corresponding "installer.zip" for this version](https://drive.google.com/drive/folders/1GLWMmvT_H0PknEwhKPYHoRAeGjuu27yb?usp=sharing). Generally just download the latest installer support files. These will provide an executable ".jar" and a "setup.exe" to run/install the game.
+4) Unzip the installer files to somewhere on your machine
+5) **Please refer to the "Installation Help" document on the Google Drive for indepth instructions on the setup**
+6) Drag and drop contents of "installer" folder from the Google Drive into your local Trivia Maze project source folder
+7) You can also install the game to your machine from the installation folder. Read "HowToInstall.txt" for more info
+8) Or run the "Pokemon Trivia Maze.jar" or "RunGame.bat" to launch the game without an IDE
 
 *Option 2 Steps:*
 1) Download and import this project to a Java IDE like Eclipse
-2) Run PkmnTriviaMain.java
+2) Find and run PkmnTriviaMain.java
 3) Play game
 4) Profit
 
