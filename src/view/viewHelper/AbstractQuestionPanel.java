@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import controller.AnswerFormatter;
 import controller.maze_game_state.PlayerMover;
 import model.Maze;
 import model.Room;
@@ -69,8 +70,8 @@ public abstract class AbstractQuestionPanel extends JPanel {
                 final String correct = correctAns + " was the correct answer!";
 
                 // format answer to prevent errors
-                correctAns = correctAns.toLowerCase().strip();
-                final String userAns = theUserAns.toLowerCase().replaceAll(" ", "");
+                correctAns = AnswerFormatter.formatAnswer(correctAns);
+                final String userAns = AnswerFormatter.formatAnswer(theUserAns);
                 final Boolean isCorrect = userAns.equals(correctAns);
 
                 //myPP.setShowQMark(); //turn off q mark because the user answered

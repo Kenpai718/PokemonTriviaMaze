@@ -19,7 +19,7 @@ public class TestingClass{
 	static QuestionAnswer myQA;
 	
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws Exception {
 		myPokedex = Pokedex.getInstance();
 		//myQA = new QuestionAnswer();
 		myMaze = Maze.getInstance();
@@ -38,28 +38,34 @@ public class TestingClass{
 		 */
 		
 		//quick and dirty path find test
-		MazePathFinder pf = new MazePathFinder();
+		/*
+		 * MazePathFinder pf = new MazePathFinder();
+		 * 
+		 * Room[][] maze = myMaze.getMatrix(); int rows = myMaze.getRows(); int cols =
+		 * myMaze.getCols();
+		 * 
+		 * maze[rows - 1][cols - 1].setEntry(false); int[] start = {0, 0}; int[] target
+		 * = {rows - 1, cols - 1}; pf.checkForPath(start, target);
+		 */
 		
-		Room[][] maze = myMaze.getMatrix();
-		int rows = myMaze.getRows();
-		int cols = myMaze.getCols();
-		
-		maze[rows - 1][cols - 1].setEntry(false);
-		int[] start = {0, 0};
-		int[] target = {rows - 1, cols - 1};
-		pf.checkForPath(start, target);
+		myPokedex.addGenToDex(1);
+		printAll();
 		
 	}
 	
 	public static void printAll() {
-		for(int i = 0; i < myPokedex.getCount(); i ++) {
+		boolean noErrors = true;
+		for(int i = 1; i < myPokedex.getCount(); i ++) {
 			try {
 				final Pokemon p = myPokedex.findPokemon(i);
 				System.out.println(p.getName());
 			} catch (final Exception e) {
 				System.out.println(i + " not found");
+				noErrors = false;
 			}
 		}
+		
+		System.out.println(noErrors);
 	}
 	
 	

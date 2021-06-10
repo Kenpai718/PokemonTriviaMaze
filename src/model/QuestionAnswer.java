@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import controller.AnswerFormatter;
+import exceptions.MissingPokemonException;
+
 /**
  * Randomly creates multiple choices for a Pokemon quiz. Provides the answers
  * and the questions.
@@ -128,12 +131,13 @@ public class QuestionAnswer implements Serializable {
 		final int num = myRand.nextInt(myUpper) + 1;
 		// TODO Auto-generated method stub
 		String name = myPokedex.findPokemonName(num);
+		String formatName = AnswerFormatter.formatMultipleChoiceAnswer(name);
 		// check if the name was used
-		if (myChoices.contains(name)) {
-			name = makeName();
+		if (myChoices.contains(name) || myChoices.contains(formatName)) {
+			formatName = makeName();
 		}
 
-		return name;
+		return formatName;
 	}
 
 	/**
@@ -144,7 +148,14 @@ public class QuestionAnswer implements Serializable {
 	private Pokemon generatePokemonHelper() {
 		myUpper = myPokedex.getCount();
 		final int num = myRand.nextInt(myUpper) + 1;
-		return myPokedex.findPokemon(num);
+		Pokemon poke;
+		try {
+			poke = myPokedex.findPokemon(num);
+		} catch (MissingPokemonException e) {
+
+			poke = generatePokemonHelper();
+		}
+		return poke;
 	}
 
 	/**
@@ -158,28 +169,11 @@ public class QuestionAnswer implements Serializable {
 		// final Maze maze = Maze.getInstance();
 		Pokemon pkmn = generatePokemonHelper();
 
-		// TODO:
-		// clear the pokemon list if it gets full so it does not throw
-		// stack overflow error
 		final String name = pkmn.getName();
 		if (USED.contains(name)) {
 			pkmn = generatePokemon();
 		}
 		USED.add(name);
-		// try {
-		// if (USED.contains(pkmn)) {
-		// pkmn = generatePokemon();
-		// }
-		// USED.add(pkmn);
-		// } catch (final StackOverflowError e) {
-		// // System.out.println("USED list is full. It will now be
-		// cleared.\n");
-		// // System.out.println("OLD USED: " + USED);
-		// USED.clear();
-		// pkmn = generatePokemon();
-		// // System.out.println("NEW USED: " + USED);
-		//
-		// }
 
 		return pkmn;
 	}
