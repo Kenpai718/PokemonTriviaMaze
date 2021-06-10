@@ -1,32 +1,50 @@
-# TriviaMaze
-"Pokemon Trivia Maze v1.0"
-Created by: AJ Downey, Kenneth Ahrens, and Katelyn Malone
+# **TriviaMaze** 
+**Pokemon Trivia Maze v1.0** \
+Created by: AJ Downey, Kenneth Ahrens, and Katelyn Malone \
 Spring 2021
 
-What is this project?:
+**What is this project?:** \
 This is a fan-made-non-profit project based on the "Who's that Pokemon?"
 segment from the original Pokemon anime. The objective is to move through
 the maze by answering "Who's that Pokemon?" and reach the end goal.
+There is currently support for all Pokemon up to Generation 7 (Sun/Moon),
+so 800+ encounterable pokemon can be quized on. There is a multiple choice
+or user input gamemode. Music, difficulty and generation can all be customized!
 
-DISCLAIMER:
+![Demo](https://cdn.discordapp.com/attachments/201810246715310081/852370235469987850/unknown.png)
+
+
+**DISCLAIMER:**
 We are not affliated or endorsed with the Pokemon company.
 All copyright belongs to Nintendo/Gamefreak.
 
-Requirements to run:
-Install Java
-Install Java JDK 15: https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html
-Install the "PKMN RBYGSC" font in the /installation/fonts folder
+**Requirements to run:** 
+1) Make sure Java is installed onto your machine 
+2) Install Java JDK 15: https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html 
+3) Install the "PKMN RBYGSC" font: https://www.dafont.com/pkmn-rbygsc.font 
 
-System Requirements:
-Should be able to run on a potato, but please at least have a 1080p
-resolution screen. The game is designed to always be at 1080p so 
-having a smaller size will break the visuals!
+**System Requirements:**\
+Should be able to run on a potato, but please at least have a 1080p 
+resolution screen. The game is designed to always play at 1920x1080 so 
+having a smaller size will break the visuals or make it unplayable! 
 
-Instructions to run:
-To play the game please launch the "Pokemon Trivia Maze.jar".
-If that doesn't work launch "RunGame.bat" in the source TriviaMaze folder.
-As a last resort import the project to an IDE and run it there.
+**Options to run the game:** \
+Option 1 Steps: 
+1) Download and import this project to a Java IDE like Eclipse
+2) Run PkmnTriviaMain.java
+3) Play game
+4) Profit
 
-Install to machine:
-If available, to install the game onto your machine run the setup in the installation folder.
-Please follow the "HowToInstall.txt" for more information.
+Option 2 Steps:
+1) Download the source code zip from the main branch of github
+2) [Download the corresponding "installer" zip for this version](https://drive.google.com/drive/folders/1GLWMmvT_H0PknEwhKPYHoRAeGjuu27yb?usp=sharing)
+3) Drag and drop contents of installer folder into the Trivia Maze project source folder
+4) Read the "How to use installer.txt" for more info on how to use
+5) You can also install the game to your machine from the installation folder. Read "HowToInstall.txt" for more info
+6) Run the "Pokemon Trivia Maze.jar" or "RunGame.bat" to launch the game without an IDE
+
+**Gameplay Screenshots:** \
+![Tutorial](https://i.imgur.com/q3j5imQ.png)
+![Multiple Choice](https://i.imgur.com/5TKTn7k.png)
+![Multiple Choice Answer](https://i.imgur.com/aJ9KrFb.png)
+![User Input](https://i.imgur.com/aEiugXa.png)
