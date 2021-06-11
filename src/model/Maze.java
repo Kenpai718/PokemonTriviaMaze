@@ -92,7 +92,7 @@ public class Maze implements Serializable {
 		myCols = DEFAULT_COLS;
 
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { START, START };
+		myPlayerLocation = STARTLOCATION;
 		myAttemptLocation = myPlayerLocation.clone();
 		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of
 																	// maze;
@@ -124,22 +124,44 @@ public class Maze implements Serializable {
 	 * 
 	 * @return Room[][] matrix of instantiated rooms
 	 */
-	private Room[][] fillRooms() {
-		// TODO Auto-generated method stub
-		Room[][] res = new Room[myRows][myCols];
-		;
-		if (myMatrix != null) {
-			res = new Room[getRows()][getCols()];
-		}
+//	private Room[][] fillRooms() {
+//		// TODO Auto-generated method stub
+//		Room[][] res = new Room[myRows][myCols];
+//		;
+//		if (myMatrix != null) {
+//			res = new Room[getRows()][getCols()];
+//		}
+//
+//		for (int i = 0; i < res.length; i++) {
+//			for (int j = 0; j < res[0].length; j++) {
+//				res[i][j] = new Room(roomCounter);
+//				roomCounter++;
+//			}
+//		}
+//		return res;
+//	}
+	
+	/**
+         * Public version of above method for unit testing.
+         * 
+         * @return Room[][] matrix of instantiated rooms
+         */
+        public Room[][] fillRooms() {
+                // TODO Auto-generated method stub
+                Room[][] res = new Room[myRows][myCols];
+                ;
+                if (myMatrix != null) {
+                        res = new Room[getRows()][getCols()];
+                }
 
-		for (int i = 0; i < res.length; i++) {
-			for (int j = 0; j < res[0].length; j++) {
-				res[i][j] = new Room(roomCounter);
-				roomCounter++;
-			}
-		}
-		return res;
-	}
+                for (int i = 0; i < res.length; i++) {
+                        for (int j = 0; j < res[0].length; j++) {
+                                res[i][j] = new Room(roomCounter);
+                                roomCounter++;
+                        }
+                }
+                return res;
+        }
 
 	/**
 	 * Returns if the player has won yet
@@ -419,7 +441,7 @@ public class Maze implements Serializable {
 		roomCounter = 0;
 		// clearMatrix();
 		myMatrix = fillRooms();
-		myPlayerLocation = new int[] { START, START };
+		myPlayerLocation = STARTLOCATION;
 		myAttemptLocation = myPlayerLocation.clone();
 
 		myMatrix[0][0].setPlayer(true); // put player location at 0,0
@@ -450,6 +472,11 @@ public class Maze implements Serializable {
 		Arrays.stream(myMatrix).forEach(x -> Arrays.fill(x, null));
 	}
 
+	/**
+	 * Method for serialization to work. Returns an instance of the new object
+	 * 
+	 * @return
+	 */
 	private Object readResolve() {
 		final Maze instance = getInstance();
 		instance.myMatrix = myMatrix;

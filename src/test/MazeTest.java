@@ -3,6 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -14,12 +15,15 @@ import org.junit.jupiter.api.Test;
 
 import model.Maze;
 import model.Pokemon;
+import model.Room;
 
 class MazeTest {
         
         private static final int DEFAULT_ROWS = 5;
         
         private static final int DEFAULT_COLS = 5;
+        
+        private static final int[] RANDOM_LOCAL = new int[] {2, 3};
         private Maze myMaze;
 
         @BeforeEach
@@ -30,6 +34,9 @@ class MazeTest {
         @Test
         void testGetInstance() {
                 assertNotNull(myMaze);
+                // Test that singleton pattern is working
+                final Maze newMaze = Maze.getInstance();
+                assertSame(myMaze, newMaze, "Singleton is not working correctly");
         }
 
         @Test
@@ -43,7 +50,8 @@ class MazeTest {
 
         @Test
         void testGetWinLocation() {
-                fail("Not yet implemented");
+                final int[] exp = new int[] {DEFAULT_ROWS - 1, DEFAULT_COLS - 1};
+                assertEquals(exp[0], myMaze.getWinLocation()[0], "Win location is incorrect");
         }
 
         @Test
@@ -126,7 +134,14 @@ class MazeTest {
 
         @Test
         void testSetMatrix() {
-                fail("Not yet implemented");
+                final Room[][] initMatrix = myMaze.getMatrix();
+                final Room[][] newMatrix = myMaze.fillRooms();
+                myMaze.setMatrix(newMatrix);
+//                for (int i = 0; i < myMaze.getRows(); i++) {
+//                        assertArrayEquals()
+//                }
+                
+                
         }
 
         @Test
@@ -154,7 +169,8 @@ class MazeTest {
 
         @Test
         void testReset() {
-                fail("Not yet implemented");
+
+
         }
 
 
