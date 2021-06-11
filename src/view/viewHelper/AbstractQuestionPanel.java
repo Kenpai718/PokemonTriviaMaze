@@ -26,7 +26,6 @@ import view.PokemonPanel;
  */
 
 public abstract class AbstractQuestionPanel extends JPanel {
-	
 	/*
 	 * Sizes to be shared amongst question panels
 	 */
@@ -128,7 +127,6 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		}
 
 	}
-	
 
 	/**
 	 * Enable or disable the answer fields
@@ -141,6 +139,5 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 * alter the answer fields to the default
 	 */
 	public abstract void setButtons();
-	
 
 }

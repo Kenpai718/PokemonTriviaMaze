@@ -97,7 +97,7 @@ public class Pokedex implements Serializable {
 	 * Missingno
 	 */
 	private final ArrayList<String> myMissing;
-	
+
 	/*
 	 * Controls if mega pokemon should be added to pokedex
 	 */
@@ -204,13 +204,13 @@ public class Pokedex implements Serializable {
 				final String id = rs.getString("ID");
 				final String name = rs.getString("NAME");
 				final boolean isMega = name.toLowerCase().contains("mega");
-				
-				//don't add mega pokemon unless myUseMegas is true
-				//anything else is fair game
-				if(!isMega) {
+
+				// don't add mega pokemon unless myUseMegas is true
+				// anything else is fair game
+				if (!isMega) {
 					addPokemon(id, name, theNum);
 				} else if (myUseMegas && isMega) {
-					//System.out.println("adding a mega " + name);
+					// System.out.println("adding a mega " + name);
 					addPokemon(id, name, theNum);
 				}
 
@@ -284,9 +284,10 @@ public class Pokedex implements Serializable {
 
 		}
 	}
-	
+
 	/**
 	 * Refreshes pokedex and adds all gen pokemon still in the game
+	 * 
 	 * @throws Exception
 	 */
 	public void refreshSelectGens() throws Exception {
@@ -328,8 +329,6 @@ public class Pokedex implements Serializable {
 		myPokemonList.clear();
 		myCounter = 0;
 	}
-	
-	
 
 	/**
 	 * Add a pokemon to the pokedex map and the name map
@@ -491,9 +490,10 @@ public class Pokedex implements Serializable {
 	public Map getNameDex() {
 		return myNameDex;
 	}
-	
+
 	/**
 	 * Enable/disable mega pokemon in the pokedex
+	 * 
 	 * @param theState
 	 */
 	public void setUseMegas(final boolean theState) {
@@ -521,6 +521,7 @@ public class Pokedex implements Serializable {
 	 * 
 	 * @return every pokemon's info currently in the pokedex
 	 */
+
 	@Override
 	public String toString() {
 

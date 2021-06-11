@@ -12,16 +12,15 @@ import model.Pokemon;
 import model.QuestionAnswer;
 import model.Room;
 
-public class TestingClass{
-	
+public class TestingClass {
+
 	static Pokedex myPokedex;
 	static Maze myMaze;
 	static QuestionAnswer myQA;
-	
 
 	public static void main(final String[] args) throws Exception {
 		myPokedex = Pokedex.getInstance();
-		//myQA = new QuestionAnswer();
+		// myQA = new QuestionAnswer();
 		myMaze = Maze.getInstance();
 		/*
 		 * Room r = myMaze.getCurrRoom(); String[] choices = r.getChoices();
@@ -36,8 +35,6 @@ public class TestingClass{
 		 * System.out.println(myPokedex.findPokemon(25));
 		 * System.out.println(myPokedex.getPokedex().size());
 		 */
-		
-		//quick and dirty path find test
 		/*
 		 * MazePathFinder pf = new MazePathFinder();
 		 * 
@@ -47,15 +44,15 @@ public class TestingClass{
 		 * maze[rows - 1][cols - 1].setEntry(false); int[] start = {0, 0}; int[] target
 		 * = {rows - 1, cols - 1}; pf.checkForPath(start, target);
 		 */
-		
+
 		System.out.println(myPokedex);
 		//printAll();
-		
-	}
 	
+	}
+
 	public static void printAll() {
 		boolean noErrors = true;
-		for(int i = 1; i < myPokedex.getCount(); i ++) {
+		for (int i = 1; i < myPokedex.getCount(); i++) {
 			try {
 				final Pokemon p = myPokedex.findPokemon(i);
 				System.out.println(p.getName());
@@ -64,10 +61,8 @@ public class TestingClass{
 				noErrors = false;
 			}
 		}
-		
+
 		System.out.println(noErrors);
 	}
-	
-	
 
 }
