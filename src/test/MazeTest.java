@@ -326,55 +326,36 @@ class MazeTest {
                 assertEquals(DEFAULT_SIZE - 1, myMaze.getCols());
                 myMaze.setMatrixSize(DEFAULT_SIZE, DEFAULT_SIZE);
         }
-
+        
         @Test
-        void testResetMatrix() throws InvalidMovementException {
+        void testReset() throws InvalidMovementException {
                 final Room[][] initMatrix = myMaze.getMatrix();
-                myMaze.reset();
-                assertNotEquals(initMatrix, myMaze.getMatrix(), "Matrix was not reset");
-
-        }
-
-        @Test
-        void testResetList() throws InvalidMovementException {
+                
+                
                 final List<Pokemon> initList = myMaze.getPokemonList();
-                myMaze.reset();
-                assertNotEquals(initList, myMaze.getPokemonList(),
-                                "Matrix was not reset");
-
-        }
-
-        @Test
-        void testResetPos() throws InvalidMovementException {
+                
                 myMaze.setPlayerLocation(RANDOM_LOCAL);
                 myMaze.setAttemptLocation(RANDOM_LOCAL);
-                myMaze.reset();
-                assertEquals(START, myMaze.getPlayerLocation()[0]);
-                assertEquals(START, myMaze.getAttemptedLocation()[0]);
-
-        }
-
-        @Test
-        void testResetLose() {
+                
                 final int finalRoom = DEFAULT_SIZE - 1;
                 assertFalse(myMaze.hasLost());
                 myMaze.getMatrix()[finalRoom][finalRoom].setEntry(false);
                 myMaze.setLoseCondition();
                 assertTrue(myMaze.hasLost(), "Lose condition never set");
-                myMaze.reset();
-                assertFalse(myMaze.hasLost(), "Lose condtion was not reset");
-
-        }
-
-        @Test
-        void testResetWin() throws InvalidMovementException {
+                
                 final int[] pos = new int[] { DEFAULT_SIZE - 1, DEFAULT_SIZE - 1 };
                 myMaze.setPlayerLocation(pos);
                 myMaze.setWinCondition();
                 assertTrue(myMaze.hasWon(), "Maze win condition never set");
+                
                 myMaze.reset();
+                assertNotEquals(initMatrix, myMaze.getMatrix(), "Matrix was not reset");;
+                assertEquals(START, myMaze.getPlayerLocation()[0]);
+                assertEquals(START, myMaze.getAttemptedLocation()[0]);
+                assertFalse(myMaze.hasLost(), "Lose condtion was not reset");
                 assertFalse(myMaze.hasWon(), "Maze win condition was not reset");
 
         }
+        
 
 }
