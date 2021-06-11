@@ -3,10 +3,15 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import model.Room;
 
 /**
  * @author ajdow
@@ -14,11 +19,14 @@ import org.junit.jupiter.api.Test;
  */
 class RoomTest {
 
+        private Room myRoom;
+
         /**
          * @throws java.lang.Exception
          */
         @BeforeEach
         void setUp() throws Exception {
+                myRoom = new Room(0);
         }
 
         /**
@@ -26,23 +34,26 @@ class RoomTest {
          */
         @Test
         void testRoomInt() {
-                fail("Not yet implemented"); // TODO
+                assertNotNull(myRoom, "Room not initialized");
+                assertEquals("1", myRoom.toString(), "Room not initialized - toString");
         }
 
-        /**
-         * Test method for {@link model.Room#Room(int, model.Pokemon)}.
-         */
-        @Test
-        void testRoomIntPokemon() {
-                fail("Not yet implemented"); // TODO
-        }
+//        /**
+//         * Test method for {@link model.Room#Room(int, model.Pokemon)}.
+//         */
+//        @Test
+//        void testRoomIntPokemon() {
+//                fail("Not yet implemented"); // TODO
+//        }
 
         /**
          * Test method for {@link model.Room#setEntry(java.lang.Boolean)}.
          */
         @Test
         void testSetEntry() {
-                fail("Not yet implemented"); // TODO
+                assertTrue(myRoom.canEnter(), "Initially true");
+                myRoom.setEntry(false);
+                assertFalse(myRoom.canEnter(), "Not set to false");
         }
 
         /**
@@ -50,7 +61,9 @@ class RoomTest {
          */
         @Test
         void testSetVisited() {
-                fail("Not yet implemented"); // TODO
+                assertFalse(myRoom.hasVisited(), "Initially false");
+                myRoom.setVisited(true);
+                assertTrue(myRoom.hasVisited(), "Not set to true");
         }
 
         /**
@@ -58,7 +71,9 @@ class RoomTest {
          */
         @Test
         void testCanEnter() {
-                fail("Not yet implemented"); // TODO
+                assertTrue(myRoom.canEnter(), "Initially true");
+                myRoom.setEntry(false);
+                assertFalse(myRoom.canEnter(), "Not set to false");
         }
 
         /**
@@ -66,7 +81,10 @@ class RoomTest {
          */
         @Test
         void testSetPlayer() {
-                fail("Not yet implemented"); // TODO
+                
+                assertFalse(myRoom.isPlayerHere(), "Initially false");
+                myRoom.setPlayer(true);
+                assertTrue(myRoom.isPlayerHere(), "Not set to true");
         }
 
         /**
@@ -74,7 +92,9 @@ class RoomTest {
          */
         @Test
         void testIsPlayerHere() {
-                fail("Not yet implemented"); // TODO
+                assertFalse(myRoom.isPlayerHere(), "Initially false");
+                myRoom.setPlayer(true);
+                assertTrue(myRoom.isPlayerHere(), "Not set to true");
         }
 
         /**
@@ -82,7 +102,9 @@ class RoomTest {
          */
         @Test
         void testHasVisited() {
-                fail("Not yet implemented"); // TODO
+                assertFalse(myRoom.hasVisited(), "Initially false");
+                myRoom.setVisited(true);
+                assertTrue(myRoom.hasVisited(), "Not set to true");
         }
 
         /**
@@ -90,7 +112,7 @@ class RoomTest {
          */
         @Test
         void testGetRoomName() {
-                fail("Not yet implemented"); // TODO
+                assertEquals("1", myRoom.getRoomName());
         }
 
         /**
@@ -98,7 +120,7 @@ class RoomTest {
          */
         @Test
         void testToString() {
-                fail("Not yet implemented"); // TODO
+                assertEquals("1", myRoom.toString());
         }
 
 }
