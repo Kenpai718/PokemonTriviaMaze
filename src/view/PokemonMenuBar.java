@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
@@ -134,7 +133,7 @@ public class PokemonMenuBar extends JMenuBar {
 	/*
 	 * Sound
 	 */
-	private BackgroundMusic myMusicPlayer;
+	private final BackgroundMusic myMusicPlayer;
 	private JMenu myMusicMenu;
 	private ButtonGroup mySongButtons;
 
@@ -490,20 +489,22 @@ public class PokemonMenuBar extends JMenuBar {
 		myGenSelectMenu.add(mySelectAllGen);
 
 		// show pokemon in pokedex
-		JMenuItem pokemonList = new JMenuItem("See Pokedex");
+		final JMenuItem pokemonList = new JMenuItem("See Pokedex");
 		pokemonList.setToolTipText("See what Pokemon are currently in the Pokedex");
 		pokemonList.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
-				JPanel pokemons = new PokedexScrollList();
+				final JPanel pokemons = new PokedexScrollList();
 				JOptionPane.showMessageDialog(myFrame, pokemons, "Current Pokemon in Pokedex",
 						JOptionPane.PLAIN_MESSAGE);
 
 			}
 
-	});
+		});
+                myGenSelectMenu.add(pokemonList);
+        }
 
 	/**
 	 * Setups menu that controls the song being played
@@ -515,8 +516,8 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		mySongButtons = new ButtonGroup();
 		// build buttons
-		for (String song : mySongs) {
-			String name = song.replace(".wav", "");
+		for (final String song : mySongs) {
+			final String name = song.replace(".wav", "");
 			final JRadioButton songOption = new JRadioButton(name);
 			songOption.addActionListener(new SongSelectListener(songOption, song));
 			mySongButtons.add(songOption);
@@ -529,7 +530,7 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		myMusicMenu.addSeparator();
-		JMenuItem muteButton = new JMenuItem("Mute music");
+		final JMenuItem muteButton = new JMenuItem("Mute music");
 		muteButton.addActionListener(new MuteSongListener(muteButton));
 		myMusicMenu.add(muteButton);
 
@@ -984,7 +985,7 @@ public class PokemonMenuBar extends JMenuBar {
 					// System.out.println("Executing");
 					myPokedex.refreshSelectGens();
 					resetAll();
-					String info = "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: "
+					final String info = "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: "
 							+ myPokedex.getCount();
 					JOptionPane.showMessageDialog(null, myMsg + info, "Game reset!", JOptionPane.INFORMATION_MESSAGE);
 					return null;
@@ -1140,9 +1141,9 @@ public class PokemonMenuBar extends JMenuBar {
 				if (myPokedex.hasPokemon(input)) {
 					try {
 						res = myPokedex.findPokemon(input);
-					} catch (MissingPokemonException e) {
+					} catch (final MissingPokemonException e) {
 						res = readNewPokemonInput(input + " cannot be found. Try again with a new name!");
-					} catch (NullPointerException e) {
+					} catch (final NullPointerException e) {
 						res = readNewPokemonInput(input + " cannot be found. Try again with a new name!");
 					}
 				} else {
@@ -1183,7 +1184,7 @@ public class PokemonMenuBar extends JMenuBar {
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
-				PlayerMover move = new PlayerMover();
+				final PlayerMover move = new PlayerMover();
 				move.teleportPlayer(pos);
 				myPanel.refreshGUI();
 				checkWinLoseCondition();
@@ -1260,7 +1261,7 @@ public class PokemonMenuBar extends JMenuBar {
 		private final JRadioButton myBox;
 		private final String myName;
 
-		public SongSelectListener(final JRadioButton theBox, String theSongName) {
+		public SongSelectListener(final JRadioButton theBox, final String theSongName) {
 			myBox = theBox;
 			myName = theSongName;
 

@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+import exceptions.InvalidMovementException;
 import model.Maze;
 import view.PokemonPanel;
 import view.viewHelper.LabelPanel;
@@ -71,10 +72,15 @@ public abstract class AbstractMovementAction extends AbstractAction {
 		}
 
 		// set the attempted move location of the direction pressed
-		myMaze.setAttemptLocation(newPos);
-		if (myMaze.getAttemptRoom().hasVisited()) {
-			myMaze.setPlayerLocation(newPos);
-		}
+		try {
+                        myMaze.setAttemptLocation(newPos);
+                        if (myMaze.getAttemptRoom().hasVisited()) {
+                        	myMaze.setPlayerLocation(newPos);
+                        }
+                } catch (InvalidMovementException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
 
 		updateGUI();
 

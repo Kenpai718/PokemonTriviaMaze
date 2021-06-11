@@ -2,7 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import exceptions.InvalidMovementException;
 
 /**
  * Maze composing of rooms with Pokemon questions; represented by a 2D matrix.
@@ -124,44 +125,23 @@ public class Maze implements Serializable {
 	 * 
 	 * @return Room[][] matrix of instantiated rooms
 	 */
-	// private Room[][] fillRooms() {
-	// // TODO Auto-generated method stub
-	// Room[][] res = new Room[myRows][myCols];
-	// ;
-	// if (myMatrix != null) {
-	// res = new Room[getRows()][getCols()];
-	// }
-	//
-	// for (int i = 0; i < res.length; i++) {
-	// for (int j = 0; j < res[0].length; j++) {
-	// res[i][j] = new Room(roomCounter);
-	// roomCounter++;
-	// }
-	// }
-	// return res;
-	// }
+	private Room[][] fillRooms() {
+	        // TODO Auto-generated method stub
+	        Room[][] res = new Room[myRows][myCols];
+	        ;
+	        if (myMatrix != null) {
+	                res = new Room[getRows()][getCols()];
+	        }
 
-	/**
-	 * Public version of above method for unit testing.
-	 * 
-	 * @return Room[][] matrix of instantiated rooms
-	 */
-	public Room[][] fillRooms() {
-		// TODO Auto-generated method stub
-		Room[][] res = new Room[myRows][myCols];
-		;
-		if (myMatrix != null) {
-			res = new Room[getRows()][getCols()];
-		}
-
-		for (int i = 0; i < res.length; i++) {
-			for (int j = 0; j < res[0].length; j++) {
-				res[i][j] = new Room(roomCounter);
-				roomCounter++;
-			}
-		}
-		return res;
+	        for (int i = 0; i < res.length; i++) {
+	                for (int j = 0; j < res[0].length; j++) {
+	                        res[i][j] = new Room(roomCounter);
+	                        roomCounter++;
+	                }
+	        }
+	        return res;
 	}
+
 
 	/**
 	 * Returns if the player has won yet Sets the win variable based on the check.
@@ -181,23 +161,6 @@ public class Maze implements Serializable {
 		return myWinCondition;
 	}
 
-	/**
-	 * Returns if the player has won yet Sets the win variable based on the check.
-	 * 
-	 * @return boolean t = win, f = not won
-	 */
-	public void setWinCondition() {
-		final boolean result = myPlayerLocation[0] == myWinLocation[0] && myPlayerLocation[1] == myWinLocation[1];
-		myWinCondition = result;
-	}
-
-	/**
-	 * 
-	 * @return boolean if player has reached the end goal
-	 */
-	public Boolean hasWon() {
-		return myWinCondition;
-	}
 
 	/**
 	 *
@@ -244,20 +207,17 @@ public class Maze implements Serializable {
 	 * Sets location of the player.
 	 * 
 	 * @param int[] theNewPos [0] = row, [1] = col
+	 * @throws InvalidMovementException 
 	 */
-	public void setPlayerLocation(final int[] theNewPos) {
-		try { // error checking location
+	public void setPlayerLocation(final int[] theNewPos) throws InvalidMovementException {
 			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set player location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
+			        throw new InvalidMovementException("player", theNewPos);
 			} else {
 
 				myMatrix[myPlayerLocation[0]][myPlayerLocation[1]].setPlayer(false);
 				myMatrix[theNewPos[0]][theNewPos[1]].setPlayer(true);
 				myPlayerLocation = theNewPos.clone();
 			}
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
 		// System.out.println(Arrays.toString(getPlayerLocation()));
 		if (!getCurrRoom().hasVisited()) {
 			getCurrRoom().setVisited(true);
@@ -291,18 +251,15 @@ public class Maze implements Serializable {
 	 * Sets the attempted location to move to
 	 * 
 	 * @param int[] theNewPos [0] = row, [1] = col
+	 * @throws InvalidMovementException 
 	 */
 
-	public void setAttemptLocation(final int[] theNewPos) {
-		try { // error checking location
+	public void setAttemptLocation(final int[] theNewPos) throws InvalidMovementException {
 			if (theNewPos[0] < 0 || theNewPos[1] < 0 || theNewPos[0] > getRows() || theNewPos[1] > getCols()) {
-				throw new Exception("Cannot set attempt location at [" + theNewPos[0] + ", " + theNewPos[1] + "]");
+				throw new InvalidMovementException("attemmpt", theNewPos);
 			} else {
 				myAttemptLocation = theNewPos.clone();
 			}
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -381,7 +338,7 @@ public class Maze implements Serializable {
 	 * @return room[][]
 	 */
 	public Room[][] getMatrix() {
-		return myMatrix;
+		return myMatrix.clone();
 	}
 
 	/**
@@ -459,22 +416,6 @@ public class Maze implements Serializable {
 
 	}
 
-	// private void changeRooms() {
-	// // TODO Auto-generated method stub
-	// for (int i = 0; i < getCols; i++) {
-	// for (int j = 0; j < res[0].length; j++) {
-	// myMatrix[i][j]
-	// }
-	// }
-	// }
-
-	/**
-	 * Fully reset the matrix
-	 */
-	private void clearMatrix() {
-		// TODO Auto-generated method stub
-		Arrays.stream(myMatrix).forEach(x -> Arrays.fill(x, null));
-	}
 
 	/**
 	 * Method for serialization to work. Returns an instance of the new object
@@ -491,22 +432,22 @@ public class Maze implements Serializable {
 		return instance;
 	}
 
-	// TODO: DELETE LATER
-	// used to visually check which rooms are set to blocked
-	// not sure why but when answering incorrect all rooms are blocked off
-	public void printBlockedDebugger() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append("What rooms are blocked?");
-		for (int i = 0; i < myRows; i++) {
-			sb.append("\n");
-			for (int j = 0; j < myCols; j++) {
-				final Room r = myMatrix[i][j];
-				sb.append(r.getRoomName() + " " + r.canEnter() + ", ");
-			}
-		}
-
-		System.out.println(sb);
-
-	}
+//	// TODO: DELETE LATER
+//	// used to visually check which rooms are set to blocked
+//	// not sure why but when answering incorrect all rooms are blocked off
+//	public void printBlockedDebugger() {
+//		final StringBuilder sb = new StringBuilder();
+//		sb.append("What rooms are blocked?");
+//		for (int i = 0; i < myRows; i++) {
+//			sb.append("\n");
+//			for (int j = 0; j < myCols; j++) {
+//				final Room r = myMatrix[i][j];
+//				sb.append(r.getRoomName() + " " + r.canEnter() + ", ");
+//			}
+//		}
+//
+//		System.out.println(sb);
+//
+//	}
 
 }
