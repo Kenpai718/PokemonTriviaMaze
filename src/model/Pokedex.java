@@ -317,7 +317,7 @@ public class Pokedex implements Serializable {
 	 * @return boolean
 	 */
 	public boolean canRemoveGen() {
-		return mySelectedGens.size() >= 1;
+		return mySelectedGens.size() > 1;
 	}
 
 	/*
@@ -492,7 +492,6 @@ public class Pokedex implements Serializable {
 	}
 
 	/**
-	 * Enable/disable mega pokemon in the pokedex
 	 * 
 	 * @param theState
 	 */

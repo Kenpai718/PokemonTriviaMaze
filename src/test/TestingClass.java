@@ -1,8 +1,9 @@
 package test;
 /*
  * TODO: Delete this class for submission
+ * Not used for JUNIT testing
  * 
- * Only used to test parts of the program
+ * Only used to do quick and dirty test parts of the program
  */
 
 import model.Maze;
@@ -46,8 +47,8 @@ public class TestingClass {
 		 */
 
 		System.out.println(myPokedex);
-		//printAll();
-	
+		// printAll();
+
 	}
 
 	public static void printAll() {
