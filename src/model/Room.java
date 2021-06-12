@@ -60,25 +60,6 @@ public class Room extends QuestionAnswer implements Serializable {
 		hasPlayer = false;
 		myVisit = false;
 	}
-	// TODO: KEN CHECK THIS!!!!
-//	/**
-//	 * Manually add a pokemon to the room
-//	 * 
-//	 * @param theRoomNumber how much to increment the room name letter
-//	 * @param thePokemon    the pokemon to put in this room
-//	 */
-//	public Room(final int theRoomNumber, final Pokemon thePokemon) {
-//		super(); // put a pokemon and question in this room
-//
-//		// increment the starting letter for each room to go from A-Z
-////		(char) (theRoomNumber + START_LETTER);
-////		myRoomName = setName(theRoomNumber);
-//		myRoomName = "" + (theRoomNumber + 1);
-//		setEntry(true);
-//		hasPlayer = false;
-//		myVisit = false;
-//
-//	}
 
 
 	/**
