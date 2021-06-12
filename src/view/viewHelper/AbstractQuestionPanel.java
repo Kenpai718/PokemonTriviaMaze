@@ -27,7 +27,7 @@ import view.PokemonPanel;
 
 public abstract class AbstractQuestionPanel extends JPanel {
 	
-	/*
+        /**
 	 * Sizes to be shared amongst question panels
 	 */
 	public final int DEFAULT_WIDTH = 350;
@@ -115,7 +115,7 @@ public abstract class AbstractQuestionPanel extends JPanel {
 
 	}
 
-	/*
+	/**
 	 * Fire property changes for if the player has won or lost
 	 */
 	private void checkWinLoseCondition() {
@@ -128,7 +128,6 @@ public abstract class AbstractQuestionPanel extends JPanel {
 		}
 
 	}
-	
 
 	/**
 	 * Enable or disable the answer fields
@@ -141,6 +140,5 @@ public abstract class AbstractQuestionPanel extends JPanel {
 	 * alter the answer fields to the default
 	 */
 	public abstract void setButtons();
-	
 
 }

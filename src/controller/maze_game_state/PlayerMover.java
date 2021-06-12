@@ -1,5 +1,6 @@
 package controller.maze_game_state;
 
+import exceptions.InvalidMovementException;
 import model.Maze;
 import model.Room;
 
@@ -9,6 +10,7 @@ import model.Room;
  * everytime a player is moved.
  * 
  * @author Kenneth Ahrens
+ * @author AJ Downey
  *
  */
 public class PlayerMover {
@@ -44,8 +46,13 @@ public class PlayerMover {
 	 * @param thePos
 	 * 
 	 */
-	public void teleportPlayer(int[] thePos) {
-		myMaze.setPlayerLocation(thePos);
+	public void teleportPlayer(final int[] thePos) {
+	        try {
+                        myMaze.setPlayerLocation(thePos);
+                } catch (final InvalidMovementException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
 		myMaze.setWinCondition();
 		myMaze.setLoseCondition();
 	}
@@ -59,7 +66,12 @@ public class PlayerMover {
 		final Room attempt = myMaze.getAttemptRoom();
 		curr.setVisited(true);
 		attempt.setVisited(true);
-		myMaze.setPlayerLocation(myMaze.getAttemptedLocation());
+		try {
+                        myMaze.setPlayerLocation(myMaze.getAttemptedLocation());
+                } catch (final InvalidMovementException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
 		myMaze.setWinCondition();
 	}
 
@@ -72,7 +84,11 @@ public class PlayerMover {
 		final Room attempt = myMaze.getAttemptRoom();
 		attempt.setEntry(false); // block that room
 		// reset attempt location to default
-		myMaze.setAttemptLocation(myMaze.getPlayerLocation());
+		try {
+                        myMaze.setAttemptLocation(myMaze.getPlayerLocation());
+                } catch (final InvalidMovementException e) {
+                        e.printStackTrace();
+                }
 		myMaze.setLoseCondition();
 
 	}

@@ -19,9 +19,9 @@ import exceptions.MissingPokemonException;
 
 public class QuestionAnswer implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 6521846190481286645L;
 
 	/*
@@ -34,7 +34,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private static List<String> USED = new ArrayList<String>();
 
-	/*
+        /*
 	 * Question/answer pokemon
 	 */
 	private Pokemon myPokemon;
@@ -42,7 +42,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Multiple choice answers
 	 */
-	private final List<String> myChoices;
+	private ArrayList<String> myChoices;
 
 	/*
 	 * index of the answer in choices
@@ -69,7 +69,6 @@ public class QuestionAnswer implements Serializable {
 	 * 
 	 */
 	public QuestionAnswer() {
-		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
 		myRand = new Random();
 		myChoices = new ArrayList<String>();
@@ -86,20 +85,30 @@ public class QuestionAnswer implements Serializable {
 	 * @param Pokemon that represents the question
 	 */
 	public QuestionAnswer(final Pokemon thePokemon) {
-		// TODO Auto-generated constructor stub
-		myPokedex = Pokedex.getInstance();
-		myRand = new Random();
-		myChoices = new ArrayList<String>();
-		myUpper = myPokedex.getCount();
+	        this();
 		myPokemon = thePokemon;
 		createMC();
 
 	}
+	
+	/**
+         * Manually add a pokemon, and the questions for a question.
+         * Mostly used for unit Testing
+         * 
+         * @param Pokemon that represents the question
+         */
+        public QuestionAnswer(final Pokemon thePokemon, final ArrayList<String> theChoices) {
+                this(thePokemon);
+                myChoices = theChoices;
+                myAnswerIndex = myChoices.indexOf(this.getAnswer());
 
-	/*
+        }
+	
+
+	/**
 	 * Create multiple choice answers
 	 */
-	public void createMC() {
+	private void createMC() {
 		fillChoices();
 		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 	}
@@ -129,8 +138,7 @@ public class QuestionAnswer implements Serializable {
 	private String makeName() {
 		myUpper = myPokedex.getCount();
 		final int num = myRand.nextInt(myUpper) + 1;
-		// TODO Auto-generated method stub
-		String name = myPokedex.findPokemonName(num);
+		final String name = myPokedex.findPokemonName(num);
 		String formatName = AnswerFormatter.formatMultipleChoiceAnswer(name);
 		// check if the name was used
 		if (myChoices.contains(name) || myChoices.contains(formatName)) {
@@ -151,7 +159,7 @@ public class QuestionAnswer implements Serializable {
 		Pokemon poke;
 		try {
 			poke = myPokedex.findPokemon(num);
-		} catch (MissingPokemonException e) {
+		} catch (final MissingPokemonException e) {
 
 			poke = generatePokemonHelper();
 		}
@@ -212,10 +220,11 @@ public class QuestionAnswer implements Serializable {
 	 */
 	public ArrayList<String> getChoices() {
 
-		return (ArrayList<String>) myChoices;
+		return myChoices;
 	}
 
 	/**
+	 * Returns the Index of the answer in the Choices list
 	 * 
 	 * @return index of the answer to this multiple choice question
 	 */
@@ -230,6 +239,15 @@ public class QuestionAnswer implements Serializable {
 	public void clearUsed() {
 		USED.clear();
 	}
+	
+	/**
+	 * Returns the USED Array list for unit testing
+	 * 
+         * @return the uSED
+         */
+        public static List<String> getUSED() {
+                return USED;
+        }
 
 	/**
 	 * Formats to a string the choices for debugging
@@ -245,5 +263,6 @@ public class QuestionAnswer implements Serializable {
 
 		return sb.toString();
 	}
+	
 
 }

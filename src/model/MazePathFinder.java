@@ -45,8 +45,6 @@ public final class MazePathFinder {
 		// System.out.println("now checking for a path if player has lost");
 		final boolean result = hasPath(mazeRooms, vistedRooms, start, target);
 
-		// TODO: delete this print
-		// printResult(result);
 		return result;
 
 	}
@@ -79,14 +77,11 @@ public final class MazePathFinder {
 		// visited is all false by default and same size as theMaze
 		// it is used to track which rooms the dfs has visited
 		final Set<Room> vistedRooms = new HashSet<Room>();
-		// final boolean[][] visited = new boolean[rows][cols];
 
 		// print results for debugging
-		printAllRoomStatus(theMaze);
-		System.out.println("now checking for a path if player has lost");
 		final boolean result = hasPath(theMaze, vistedRooms, start, target);
 
-		printResult(result);
+		//printResult(result);
 		return result;
 
 	}
@@ -156,14 +151,7 @@ public final class MazePathFinder {
 	 */
 	private static Set<Room> markPresent(final Room[][] theMaze,
 			final Set<Room> vistedRooms, final int[] current) {
-		// deep copy so each one has a unique visited list
-		// final boolean[][] copy = new
-		// boolean[vistedRooms.length][vistedRooms[0].length];
-		// for (int i = 0; i < copy.length; i++) {
-		// copy[i] = Arrays.copyOf(vistedRooms[i], vistedRooms[i].length);
-		// }
-		//
-		// copy[current[0]][current[1]] = true; // mark current location visited
+	        // Adds Room to set, Since it is a set no duplicates are added
 		vistedRooms.add(theMaze[current[0]][current[1]]);
 		return vistedRooms;
 	}
@@ -177,11 +165,6 @@ public final class MazePathFinder {
 	 */
 	private static boolean isBlocked(final Room[][] theMaze, final int[] pos) {
 		final Room r = theMaze[pos[0]][pos[1]];
-		/*
-		 * if (!r.canEnter()) { //TODO: delete println once guaranteed it works
-		 * System.out.println(pos[0] + ", " + pos[1] + " is blocked."); //
-		 * return true; }
-		 */
 		return !r.canEnter();
 	}
 
@@ -247,16 +230,22 @@ public final class MazePathFinder {
 	/*
 	 * Debugger to check all rooms for blocked or unblocked
 	 */
-	public static void printAllRoomStatus(final Room[][] theMaze) {
+	public static String getRoomStatus(final Room[][] theMaze) {
 		final int rows = theMaze.length;
 		final int cols = theMaze[0].length;
+		final StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < rows; i++) {
-			System.out.println();
+			sb.append("\n");
 			for (int j = 0; j < cols; j++) {
-				System.out.print(theMaze[i][j].canEnter() + " ");
+				if(theMaze[i][j].canEnter()) {
+					sb.append("T ");
+				} else {
+					sb.append("F ");
+				}
 			}
 		}
+		return sb.toString();
 	}
 
 }

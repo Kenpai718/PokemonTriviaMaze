@@ -22,9 +22,9 @@ import view.viewHelper.ImageUtility;
 
 public class Pokemon implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = -647364516676291280L;
 
 	/*
@@ -75,7 +75,7 @@ public class Pokemon implements Serializable {
 	 * @param theGenNum what game generation this pokemon is from
 	 * @throws Exception
 	 */
-	public Pokemon(final String theID, final String theName, final int theGenNum) throws Exception {
+	public Pokemon(final String theID, final String theName, final int theGenNum) throws IllegalArgumentException {
 		if (theID.length() != ID_LENGTH) {
 			throw new IllegalArgumentException("ID must be length " + ID_LENGTH);
 		}
@@ -96,7 +96,7 @@ public class Pokemon implements Serializable {
 
 		try {
 			myPNG = readImage(myFileName);
-		} catch (MissingPokemonPictureException e) {
+		} catch (final MissingPokemonPictureException e) {
 			System.out.println(myName + " is missing a picture! Missingno will be used.");
 			myPNG = ImageUtility.readImage(MISSING);
 		}
@@ -160,7 +160,7 @@ public class Pokemon implements Serializable {
 		if (myPNG == null) {
 			try {
 				myPNG = readImage(myFileName);
-			} catch (MissingPokemonPictureException e) {
+			} catch (final MissingPokemonPictureException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -178,7 +178,7 @@ public class Pokemon implements Serializable {
 		int res = -1;
 		if (theObj instanceof Pokemon) {
 			if (((Pokemon) theObj).getNum() == this.myIDNum) {
-				if (((Pokemon) theObj).getName() == this.myName) {
+				if (((Pokemon) theObj).getName().equals(this.myName)) {
 					res = 1;
 				}
 			}
@@ -186,6 +186,9 @@ public class Pokemon implements Serializable {
 		return res;
 	}
 
+	/**
+	 * toString Method for a Pokemon, 00#PokemonName
+	 */
 	@Override
 	public String toString() {
 		return myID + myName;

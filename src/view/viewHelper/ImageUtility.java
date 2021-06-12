@@ -25,21 +25,25 @@ import javax.imageio.ImageIO;
  */
 public final class ImageUtility {
 
-	// private constructor to prevent instantiation
 
 	/**
 	 * Darkens image to black
 	 */
-	private final static float MIN_BRIGHT = (float) 0.0f;
+	private final static float MIN_BRIGHT = 0.0f;
 
+	/**
+	 * private constructor to prevent instantiation
+	 */
 	private ImageUtility() {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * @param Image                source
-	 * @param brightnessPercentage
-	 * @return
+	 * Adjusts the brightness of the image to Darken it.
+	 * 
+	 * @param Image the iamge to change
+	 * @param brightnessPercentage the alpha value to change to
+	 * @return the Image darkened
 	 */
 	public static Image adjustBrighness(final Image theSource,
 			final float theBrightnessPercentage) {

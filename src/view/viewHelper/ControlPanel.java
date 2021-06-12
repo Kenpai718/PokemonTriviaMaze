@@ -4,15 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 
-import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -23,9 +20,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import controller.movement_actions.AbstractMovementAction;
 import controller.movement_actions.DownAction;
 import controller.movement_actions.LeftAction;
-import controller.movement_actions.AbstractMovementAction;
 import controller.movement_actions.RightAction;
 import controller.movement_actions.UpAction;
 import model.Maze;
@@ -42,9 +39,10 @@ import view.PokemonPanel;
  */
 
 public class ControlPanel extends JPanel implements PropertyChangeListener {
-	/**
-	 * 
-	 */
+        
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 1L;
 
 	/*
@@ -146,7 +144,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * @return formatted jbutton with associated action
 	 */
 	private JButton buildMoveButton(final AbstractMovementAction theAction) {
-		JButton jb = new JButton("");
+		final JButton jb = new JButton("");
 		jb.setHideActionText(true);
 		buttonGroup.add(jb);
 		jb.setAction(theAction);
@@ -154,7 +152,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		jb.setFocusable(true);
 		
 		//set keybind to movement action
-		String actionTitle = theAction.toString() + "_ACTION";
+		final String actionTitle = theAction.toString() + "_ACTION";
 		jb.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(theAction.getMovementKey(), actionTitle);
 		jb.getActionMap().put(actionTitle, theAction);
 		
@@ -168,7 +166,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 	 * @return player jlabel
 	 */
 	private JLabel buildPlayer() {
-		JLabel player = new JLabel("");
+		final JLabel player = new JLabel("");
 		player.setInheritsPopupMenu(false);
 		player.setIconTextGap(0);
 		final ImageIcon imageIcon = new ImageIcon(new ImageIcon(
@@ -178,7 +176,7 @@ public class ControlPanel extends JPanel implements PropertyChangeListener {
 		return player;
 	}
 
-	/*
+	/**
 	 * Add listeners for buttons on the control panel
 	 */
 	private void addListeners() {

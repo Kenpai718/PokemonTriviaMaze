@@ -11,7 +11,6 @@ import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import model.Maze;
-import javax.swing.JTextPane;
 
 /**
  * Contains labels that tell user about important game state such as what room
@@ -108,7 +107,7 @@ public class LabelPanel extends JPanel {
 		return lbl;
 	}
 
-	/*
+	/**
 	 * Positioning of labels
 	 */
 	private void format() {
@@ -124,7 +123,7 @@ public class LabelPanel extends JPanel {
 				SpringLayout.NORTH, myDirLbl);
 	}
 
-	/*
+	/**
 	 * Labels that show progression in game such as where player is
 	 * Main use is for debugging
 	 */
@@ -148,7 +147,7 @@ public class LabelPanel extends JPanel {
 	 * Sets the string representation of direction
 	 * @param theDir
 	 */
-	public void setDir(String theDir) {
+	public void setDir(final String theDir) {
 		myDir = theDir;
 	}
 

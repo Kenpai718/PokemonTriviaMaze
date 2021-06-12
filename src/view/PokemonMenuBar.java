@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
@@ -134,7 +133,7 @@ public class PokemonMenuBar extends JMenuBar {
 	/*
 	 * Sound
 	 */
-	private BackgroundMusic myMusicPlayer;
+	private final BackgroundMusic myMusicPlayer;
 	private JMenu myMusicMenu;
 	private ButtonGroup mySongButtons;
 
@@ -161,7 +160,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/*
+	/**
 	 * Put listeners for important classes that should listen for changes in the
 	 * menubar
 	 */
@@ -379,49 +378,6 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	// /**
-	// * Sets up the gamemode menu for changing the gamemode
-	// */
-	// private void setupGamemodesMenu() {
-	//
-	// myGamemodes = new ButtonGroup();
-	// final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple
-	// Choice");
-	// myGamemodeMenu.add(choice);
-	// myGamemodes.add(choice);
-	// choice.addActionListener(new ActionListener() {
-	//
-	// @Override
-	// public void actionPerformed(final ActionEvent e) {
-	// // System.out.println("action fired");
-	// // myPanel.setPanels(true);
-	// firePropertyChange("changegm", null, 1);
-	//
-	// }
-	//
-	// });
-	//
-	// final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User
-	// Input");
-	// myGamemodeMenu.add(input);
-	// myGamemodes.add(input);
-	// input.addActionListener(new ActionListener() {
-	//
-	// @Override
-	// public void actionPerformed(final ActionEvent e) {
-	// // System.out.println("action fired");
-	// // myPanel.setPanels(false);
-	// firePropertyChange("changegm", null, 2);
-	//
-	// }
-	//
-	// });
-	//
-	// // set initial gamemodechoice
-	// choice.setSelected(true);
-	//
-	// }
-
 	/**
 	 * Setups DIFFICULTY_OPTIONS settings menu
 	 */
@@ -490,14 +446,17 @@ public class PokemonMenuBar extends JMenuBar {
 		myGenSelectMenu.add(mySelectAllGen);
 
 		// show pokemon in pokedex
-		JMenuItem pokemonList = new JMenuItem("See Pokedex");
+
+		final JMenuItem pokemonList = new JMenuItem("See Pokedex");
 		pokemonList.setToolTipText("See what Pokemon are currently in the Pokedex");
 		pokemonList.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
-				JPanel pokemons = new PokedexScrollList();
+
+				final JPanel pokemons = new PokedexScrollList();
+
 				JOptionPane.showMessageDialog(myFrame, pokemons, "Current Pokemon in Pokedex",
 						JOptionPane.PLAIN_MESSAGE);
 
@@ -509,6 +468,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
+
 	/**
 	 * Setups menu that controls the song being played
 	 */
@@ -519,8 +479,8 @@ public class PokemonMenuBar extends JMenuBar {
 		 */
 		mySongButtons = new ButtonGroup();
 		// build buttons
-		for (String song : mySongs) {
-			String name = song.replace(".wav", "");
+		for (final String song : mySongs) {
+			final String name = song.replace(".wav", "");
 			final JRadioButton songOption = new JRadioButton(name);
 			songOption.addActionListener(new SongSelectListener(songOption, song));
 			mySongButtons.add(songOption);
@@ -533,13 +493,13 @@ public class PokemonMenuBar extends JMenuBar {
 		}
 
 		myMusicMenu.addSeparator();
-		JMenuItem muteButton = new JMenuItem("Mute music");
+		final JMenuItem muteButton = new JMenuItem("Mute music");
 		muteButton.addActionListener(new MuteSongListener(muteButton));
 		myMusicMenu.add(muteButton);
 
 	}
 
-	/*
+	/**
 	 * Update all the main menubar settings
 	 */
 	private void updateMenuBarSettings() {
@@ -548,7 +508,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/*
+	/**
 	 * Update gen select menu
 	 */
 	private void updateGenSelect() {
@@ -569,7 +529,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myPanel.refreshGUI();
 	}
 
-	/*
+	/**
 	 * Update DIFFICULTY_OPTIONS setting menu. Iterate through each button until it
 	 * finds the correct maze size stored in the tool tip
 	 */
@@ -596,21 +556,27 @@ public class PokemonMenuBar extends JMenuBar {
 	}
 
 	/*
-	 * ---------------------------------------------------------------- Listener
-	 * classes to change maze/game state below
+	 * ---------------------------------------------------------------- 
+	 * Listener classes to change maze/game state below
 	 * ----------------------------------------------------------------
 	 */
 
-	/*
+	/**
 	 * Save game state
 	 */
 	class SaveListener implements ActionListener {
 
+		/**
+		 * does the save action if user clicks
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			doSave();
 		}
 
+		/**
+		 * Saves a .maze file of the current game state
+		 */
 		private void doSave() {
 			final JFileChooser fileChooser = new JFileChooser("Save") {
 				/**
@@ -697,12 +663,18 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class LoadListener implements ActionListener {
 
+		/**
+		 *	Does the load action when the user clicks
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			doLoad();
 
 		}
 
+		/**
+		 * Loads a .maze file to play a previous game state
+		 */
 		private void doLoad() {
 			final JFileChooser fileChooser = new JFileChooser("Load");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
@@ -774,10 +746,23 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class DifficultySelectListener implements ActionListener {
 
+		/**
+		 * The radio button the listener is attached too
+		 */
 		private final JRadioButton myBox;
+		/**
+		 * Name of the difficulty
+		 */
 		private final String myName;
+		/**
+		 * Size of the maze difficulty
+		 */
 		private final int myMazeSize;
 
+		/**
+		 * @param theNum
+		 * @param theBox
+		 */
 		public DifficultySelectListener(final int theNum, final JRadioButton theBox) {
 			myMazeSize = theNum;
 			myBox = theBox;
@@ -785,6 +770,10 @@ public class PokemonMenuBar extends JMenuBar {
 
 		}
 
+		/**
+		 *	Set the difficulty setting and change the maze
+		 *  size. Then reset.
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -808,16 +797,32 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class GenSelectListener implements ActionListener {
 
+		/**
+		 * JCheckBox the listener is attached too
+		 */
 		private final JCheckBox myBox;
+		/**
+		 * The generation number
+		 */
 		private final int myGen;
+		/**
+		 * Dynamically changing message used in option panes
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theNum
+		 * @param theBox
+		 */
 		public GenSelectListener(final int theNum, final JCheckBox theBox) {
 			myGen = theNum;
 			myBox = theBox;
 			myMsg = "";
 		}
 
+		/**
+		 * Adds/removes the selected generation the the pokedex if possible
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
@@ -876,20 +881,33 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class GenSelectAllListener implements ActionListener {
 
+		/**
+		 * The select all button attached to this listener
+		 */
 		private final JMenuItem myChangeButton;
 		/*
-		 * If user has clicked this button once to add all pokemon
+		 * If user has clicked this button once to add all pokemon.
+		 * True = add all, false = set to default
 		 */
 		private boolean myStateChange;
 
+		/**
+		 * Dynamically changing message for option pane
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theChangeButton
+		 */
 		public GenSelectAllListener(final JMenuItem theChangeButton) {
 			myChangeButton = theChangeButton;
 			myStateChange = false;
 			myMsg = "";
 		}
 
+		/**
+		 *	Adds all gens or removes all gens if the user clicks
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -963,20 +981,33 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class MegaSelectListener implements ActionListener {
 
+		/**
+		 * The checkbox attached to this listener
+		 */
 		private final JCheckBox myChangeButton;
-		/*
-		 * If user has clicked this button once to add all pokemon
+		/**
+		 * Keeps track of how the user has interacted with this button.
+		 * False = disable megas, true = enable megas
 		 */
 		private boolean myStateChange;
 
+		/**
+		 * Dynamically changing msg for option pane
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theChangeButton
+		 */
 		public MegaSelectListener(final JCheckBox theChangeButton) {
 			myChangeButton = theChangeButton;
 			myStateChange = false;
 			myMsg = "";
 		}
 
+		/**
+		 * Enables/disables mega pokemon if user clicks
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -987,8 +1018,8 @@ public class PokemonMenuBar extends JMenuBar {
 					// System.out.println("Executing");
 					myPokedex.refreshSelectGens();
 					resetAll();
-					String info = "\nSelected Gens: " + myPokedex.getSelectedGens()
-					+ "\nTotal Entries in Pokedex: " + myPokedex.getCount();
+					final String info = "\nSelected Gens: " + myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: "
+							+ myPokedex.getCount();
 					JOptionPane.showMessageDialog(null, myMsg + info, "Game reset!", JOptionPane.INFORMATION_MESSAGE);
 					return null;
 				}
@@ -1143,9 +1174,9 @@ public class PokemonMenuBar extends JMenuBar {
 				if (myPokedex.hasPokemon(input)) {
 					try {
 						res = myPokedex.findPokemon(input);
-					} catch (MissingPokemonException e) {
+					} catch (final MissingPokemonException e) {
 						res = readNewPokemonInput(input + " cannot be found. Try again with a new name!");
-					} catch (NullPointerException e) {
+					} catch (final NullPointerException e) {
 						res = readNewPokemonInput(input + " cannot be found. Try again with a new name!");
 					}
 				} else {
@@ -1186,7 +1217,7 @@ public class PokemonMenuBar extends JMenuBar {
 			final int[] pos = readRoomName(message, myTeleportIcon);
 
 			if (pos[0] != -1) {
-				PlayerMover move = new PlayerMover();
+				final PlayerMover move = new PlayerMover();
 				move.teleportPlayer(pos);
 				myPanel.refreshGUI();
 				checkWinLoseCondition();
@@ -1260,15 +1291,28 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class SongSelectListener implements ActionListener {
 
+		/**
+		 * The box attached to this listener
+		 */
 		private final JRadioButton myBox;
+		/**
+		 * Name of the song
+		 */
 		private final String myName;
 
-		public SongSelectListener(final JRadioButton theBox, String theSongName) {
+		/**
+		 * @param theBox
+		 * @param theSongName
+		 */
+		public SongSelectListener(final JRadioButton theBox, final String theSongName) {
 			myBox = theBox;
 			myName = theSongName;
 
 		}
 
+		/**
+		 * Load the new song into the music player
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -1286,18 +1330,27 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class MuteSongListener implements ActionListener {
 
+		/**
+		 * The menuitem attached to this listener
+		 */
 		private final JMenuItem myBox;
 		/*
 		 * false = not muted, true = muted
 		 */
 		private boolean myChange;
 
+		/**
+		 * @param theBox
+		 */
 		public MuteSongListener(final JMenuItem theBox) {
 			myBox = theBox;
 			myChange = false;
 
 		}
 
+		/**
+		 *	Mutes/Unmutes the song
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 

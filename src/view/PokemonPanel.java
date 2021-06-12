@@ -4,18 +4,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SpringLayout;
@@ -24,8 +17,8 @@ import javax.swing.border.Border;
 import model.Maze;
 import view.Win_Lose.LosePane;
 import view.Win_Lose.WinPane;
-import view.viewHelper.ImageUtility;
 import view.viewHelper.ControlPanel;
+import view.viewHelper.ImageUtility;
 import view.viewHelper.LabelPanel;
 import view.viewHelper.MazeGUI;
 import view.viewHelper.MazeGUI.MazeModel;
@@ -52,7 +45,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	/*
 	 * Player full avatar used in the starting room
-	 * 
 	 */
 	private final String PLAYER_M = "./src/images/other/PLAYER_M.png";
 	private final String PLAYER_F = "./src/images/other/PLAYER_F.png";
@@ -262,7 +254,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	/**
 	 * Put initial pictures on the panel
-	 * 
 	 */
 	public void setupPictures() {
 
@@ -297,7 +288,6 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 	/**
 	 * Set pokemon pictures for dark and light depending on the current room. Resize
 	 * them if they are not 600x600px
-	 * 
 	 */
 	private void setImage() {
 
@@ -315,7 +305,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	}
 
-	/*
+	/**
 	 * Put a player avatar instead of a pokemon for the first room picture
 	 */
 	private void setStartRoomPicture() {
@@ -326,7 +316,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		repaint();
 	}
 
-	/*
+	/**
 	 * Full refresh that updates all important components for the Pokemon Panel gui
 	 * visuals
 	 */
@@ -355,7 +345,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 
 	}
 
-	/*
+	/**
 	 * Refreshes the image of the pokemon on the panel. For instance
 	 * reveals/unreveals or new pokemon image.
 	 */
@@ -395,7 +385,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		myReveal = theReveal;
 	}
 
-	/*
+	/**
 	 * Take off the question mark from the paint panel if the question has been
 	 * answered already
 	 */
@@ -404,7 +394,7 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 		repaint();
 	}
 
-	/*
+	/**
 	 * Reveal image when the user answers Expected refreshGUI will be called
 	 * afterwards for the next question.
 	 */
@@ -494,12 +484,12 @@ public class PokemonPanel extends JPanel implements PropertyChangeListener {
 			if ("win".equals(prop)) {
 				// TODO: add more to this win message
 				// JOptionPane.showMessageDialog(null, "You win!");
-				WinPane win = new WinPane(this);
+				final WinPane win = new WinPane(this);
 				win.showCondition();
 			} else if ("lose".equals(prop)) {
 				// TODO: add more to this lose message
 				// JOptionPane.showMessageDialog(null, "You lose!");
-				LosePane lose = new LosePane(this);
+				final LosePane lose = new LosePane(this);
 				lose.showCondition();
 			} else if ("showpkmn".equals(prop)) { // reveal or hide the pokemon
 				// setImgBrightness();

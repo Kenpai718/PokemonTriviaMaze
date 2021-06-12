@@ -76,11 +76,7 @@ public class PokemonGUI {
 		myMusic = BackgroundMusic.getInstance();
 		myMusic.playMusic();
 
-//                myControlActions = new ArrayList<Action>();
-//                myControlButtons = new ButtonGroup();
-
 		setupGUI();
-		setupControlButtons();
 	}
 
 	
@@ -109,22 +105,6 @@ public class PokemonGUI {
 		myFrame.setResizable(false);
 	}
 
-	/**
-	 * Sets up the Control Buttons for the maze
-	 */
-	private void setupControlButtons() {
-//                myControlActions.add(new LeftAction());
-//                myControlActions.add(new RightAction());
-//                myControlActions.add(new UpAction());
-//                myControlActions.add(new DownAction());
-//                
-//                for (final Action act : myControlActions) {
-//                        final JToggleButton tb = new JToggleButton(act);
-//                        myControlButtons.add(tb);
-//
-//                }
-
-	}
         /**
          * @return the myMB
          */

@@ -14,9 +14,9 @@ import java.io.Serializable;
 
 public class Room extends QuestionAnswer implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 575983420176798332L;
 
 	/*
@@ -61,40 +61,6 @@ public class Room extends QuestionAnswer implements Serializable {
 		myVisit = false;
 	}
 
-	/**
-	 * Manually add a pokemon to the room
-	 * 
-	 * @param theRoomNumber how much to increment the room name letter
-	 * @param thePokemon    the pokemon to put in this room
-	 */
-	public Room(final int theRoomNumber, final Pokemon thePokemon) {
-		super(); // put a pokemon and question in this room
-
-		// increment the starting letter for each room to go from A-Z
-//		(char) (theRoomNumber + START_LETTER);
-//		myRoomName = setName(theRoomNumber);
-		myRoomName = "" + (theRoomNumber + 1);
-		setEntry(true);
-		hasPlayer = false;
-		myVisit = false;
-
-	}
-
-	/**
-	 * Make the room name alphabetical
-	 * 
-	 * @param int room number increment
-	 * @char room name incremented
-	 */
-	private char setName(final int theRoomNumber) {
-		char res = START_LETTER;
-		if (theRoomNumber + START_LETTER <= 'Z') {
-			res = (char) (theRoomNumber + START_LETTER);
-		} else {
-
-		}
-		return res;
-	}
 
 	/**
 	 * Setter for blocked room
@@ -128,7 +94,7 @@ public class Room extends QuestionAnswer implements Serializable {
 	 * 
 	 * @param boolean T = player in room, F = not in room
 	 */
-	protected void setPlayer(final Boolean theBool) {
+	public void setPlayer(final Boolean theBool) {
 		hasPlayer = theBool;
 	}
 
@@ -158,6 +124,9 @@ public class Room extends QuestionAnswer implements Serializable {
 		return myRoomName;
 	}
 
+	/**
+	 * Room roString, just the Name -> "##"
+	 */
 	@Override
 	public String toString() {
 		return "" + myRoomName;
