@@ -1,8 +1,9 @@
 package test;
 /*
  * TODO: Delete this class for submission
+ * Not used for JUNIT testing
  * 
- * Only used to test parts of the program
+ * Only used to do quick and dirty test parts of the program
  */
 
 import model.Maze;
@@ -35,8 +36,6 @@ public class TestingClass {
 		 * System.out.println(myPokedex.findPokemon(25));
 		 * System.out.println(myPokedex.getPokedex().size());
 		 */
-
-		// quick and dirty path find test
 		/*
 		 * MazePathFinder pf = new MazePathFinder();
 		 * 

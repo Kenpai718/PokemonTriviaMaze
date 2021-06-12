@@ -75,7 +75,7 @@ public class Pokemon implements Serializable {
 	 * @param theGenNum what game generation this pokemon is from
 	 * @throws Exception
 	 */
-	public Pokemon(final String theID, final String theName, final int theGenNum) throws Exception {
+	public Pokemon(final String theID, final String theName, final int theGenNum) throws IllegalArgumentException {
 		if (theID.length() != ID_LENGTH) {
 			throw new IllegalArgumentException("ID must be length " + ID_LENGTH);
 		}
@@ -178,7 +178,7 @@ public class Pokemon implements Serializable {
 		int res = -1;
 		if (theObj instanceof Pokemon) {
 			if (((Pokemon) theObj).getNum() == this.myIDNum) {
-				if (((Pokemon) theObj).getName() == this.myName) {
+				if (((Pokemon) theObj).getName().equals(this.myName)) {
 					res = 1;
 				}
 			}

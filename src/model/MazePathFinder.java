@@ -82,11 +82,9 @@ public final class MazePathFinder {
 		// final boolean[][] visited = new boolean[rows][cols];
 
 		// print results for debugging
-		printAllRoomStatus(theMaze);
-		System.out.println("now checking for a path if player has lost");
 		final boolean result = hasPath(theMaze, vistedRooms, start, target);
 
-		printResult(result);
+		//printResult(result);
 		return result;
 
 	}
@@ -247,16 +245,22 @@ public final class MazePathFinder {
 	/*
 	 * Debugger to check all rooms for blocked or unblocked
 	 */
-	public static void printAllRoomStatus(final Room[][] theMaze) {
+	public static String getRoomStatus(final Room[][] theMaze) {
 		final int rows = theMaze.length;
 		final int cols = theMaze[0].length;
+		StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < rows; i++) {
-			System.out.println();
+			sb.append("\n");
 			for (int j = 0; j < cols; j++) {
-				System.out.print(theMaze[i][j].canEnter() + " ");
+				if(theMaze[i][j].canEnter()) {
+					sb.append("T ");
+				} else {
+					sb.append("F ");
+				}
 			}
 		}
+		return sb.toString();
 	}
 
 }

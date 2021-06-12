@@ -26,7 +26,6 @@ import view.PokemonPanel;
  */
 
 public abstract class AbstractQuestionPanel extends JPanel {
-
 	/*
 	 * Sizes to be shared amongst question panels
 	 */

@@ -489,6 +489,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myGenSelectMenu.add(mySelectAllGen);
 
 		// show pokemon in pokedex
+
 		final JMenuItem pokemonList = new JMenuItem("See Pokedex");
 		pokemonList.setToolTipText("See what Pokemon are currently in the Pokedex");
 		pokemonList.addActionListener(new ActionListener() {
@@ -496,15 +497,20 @@ public class PokemonMenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// TODO Auto-generated method stub
+
 				final JPanel pokemons = new PokedexScrollList();
+
 				JOptionPane.showMessageDialog(myFrame, pokemons, "Current Pokemon in Pokedex",
 						JOptionPane.PLAIN_MESSAGE);
 
 			}
 
 		});
-                myGenSelectMenu.add(pokemonList);
-        }
+
+		myGenSelectMenu.add(pokemonList);
+
+	}
+
 
 	/**
 	 * Setups menu that controls the song being played
@@ -834,7 +840,6 @@ public class PokemonMenuBar extends JMenuBar {
 				try {
 					myPokedex.addGenToDex(myGen);
 					myMsg = "Gen " + myGen + " Pokemon can now be encountered!" + "\nSelected Gens: "
-
 							+ myPokedex.getSelectedGens() + "\nTotal Entries in Pokedex: " + myPokedex.getCount();
 					// resetAll();
 					mySwingWorker.execute();
