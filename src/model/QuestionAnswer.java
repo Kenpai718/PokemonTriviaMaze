@@ -34,7 +34,9 @@ public class QuestionAnswer implements Serializable {
 	 */
 	private static List<String> USED = new ArrayList<String>();
 
-	/*
+	
+
+        /*
 	 * Question/answer pokemon
 	 */
 	private Pokemon myPokemon;
@@ -42,7 +44,7 @@ public class QuestionAnswer implements Serializable {
 	/*
 	 * Multiple choice answers
 	 */
-	private final List<String> myChoices;
+	private ArrayList<String> myChoices;
 
 	/*
 	 * index of the answer in choices
@@ -87,8 +89,22 @@ public class QuestionAnswer implements Serializable {
 	public QuestionAnswer(final Pokemon thePokemon) {
 	        this();
 		myPokemon = thePokemon;
+		createMC();
 
 	}
+	
+	/**
+         * Manually add a pokemon, and the questions for a question
+         * 
+         * @param Pokemon that represents the question
+         */
+        public QuestionAnswer(final Pokemon thePokemon, final ArrayList<String> theChoices) {
+                this(thePokemon);
+                myChoices = theChoices;
+                myAnswerIndex = myChoices.indexOf(this.getAnswer());
+
+        }
+	
 
 	/*
 	 * Create multiple choice answers
@@ -205,7 +221,7 @@ public class QuestionAnswer implements Serializable {
 	 */
 	public ArrayList<String> getChoices() {
 
-		return (ArrayList<String>) myChoices;
+		return myChoices;
 	}
 
 	/**
@@ -223,6 +239,15 @@ public class QuestionAnswer implements Serializable {
 	public void clearUsed() {
 		USED.clear();
 	}
+	
+	/**
+	 * Returns the USED Array list for unit testing
+	 * 
+         * @return the uSED
+         */
+        public static List<String> getUSED() {
+                return USED;
+        }
 
 	/**
 	 * Formats to a string the choices for debugging
@@ -239,15 +264,5 @@ public class QuestionAnswer implements Serializable {
 		return sb.toString();
 	}
 	
-	@Override
-        public String toString() {
-	        final StringBuilder sb = new StringBuilder();
-	        sb.append(getChoicesStr());
-	        sb.append(myAnswerIndex + "\n");
-	        sb.append(myPokemon.toString() + "\n");
-	        
-                return sb.toString();
-	        
-	}
 
 }

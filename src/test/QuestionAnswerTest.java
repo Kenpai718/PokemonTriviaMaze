@@ -4,8 +4,12 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +24,35 @@ import model.QuestionAnswer;
  *
  */
 class QuestionAnswerTest {
-
+        
+        /*
+         * 
+         */
+        private static final int TESTS = 50;
+        
+        /*
+         * 
+         */
+        private Pokemon myPoke;
+        
+        /*
+         * 
+         */
         private Pokedex myPokedex;
+        
+        /*
+         * 
+         */
         private QuestionAnswer myQA;
+        
+        /*
+         * 
+         */
         private QuestionAnswer myQAP;
+
+        private QuestionAnswer myQAPQ;
+
+        private ArrayList<String> myTest;
 
         /**
          * @throws java.lang.Exception
@@ -31,8 +60,15 @@ class QuestionAnswerTest {
         @BeforeEach
         void setUp() throws Exception {
                 myPokedex = Pokedex.getInstance();
+                myPoke = myPokedex.findPokemon(1);
                 myQA = new QuestionAnswer();
-                myQAP = new QuestionAnswer(myPokedex.findPokemon(1));
+                myQAP = new QuestionAnswer(myPoke);
+                myTest = new ArrayList<String>();
+                myTest.add("Bob");
+                myTest.add(myPoke.getName());
+                myTest.add("Smith");
+                myTest.add("John");
+                myQAPQ = new QuestionAnswer(myPoke, myTest);
         }
 
         /**
@@ -76,10 +112,17 @@ class QuestionAnswerTest {
 
         /**
          * Test method for {@link model.QuestionAnswer#setNewPokemon(model.Pokemon)}.
+         * @throws MissingPokemonException 
          */
         @Test
-        void testSetNewPokemon() {
-                fail("Not yet implemented"); // TODO
+        void testSetNewPokemon() throws MissingPokemonException {
+                final Pokemon first = myPokedex.findPokemon(1);
+                final Pokemon exp = myPokedex.findPokemon(2);
+                myQAP.setNewPokemon(exp);
+                assertNotEquals(first.getName(), myQAP.getPokemon().getName(), "Get pokemon returned the wrong"
+                                + "one");
+                assertEquals(exp.getName(), myQAP.getPokemon().getName(), "Get pokemon returned the wrong"
+                                + "one");
         }
 
         /**
@@ -87,7 +130,14 @@ class QuestionAnswerTest {
          */
         @Test
         void testGetChoices() {
-                fail("Not yet implemented"); // TODO
+                final String list = myQA.getChoicesStr();
+                final String[] s = list.split("[\\n\\s]");
+                final ArrayList<String> exp = new ArrayList<String>();
+                for (int i = 0; i < s.length; i++) {
+                        if (i % 2 == 1)
+                                exp.add(s[i]);
+                }
+                assertEquals(exp, myQA.getChoices(), "Choices are not equal"); 
         }
 
         /**
@@ -95,7 +145,17 @@ class QuestionAnswerTest {
          */
         @Test
         void testGetAnswerIndex() {
-                fail("Not yet implemented"); // TODO
+                
+                
+                boolean done = false;
+                int index = 0;
+                for (int i = 0; i < myTest.size() && !done; i++) {
+                        if (myPoke.getName().equals(myTest.get(i))) {
+                                done = true;
+                                index = i;
+                        }
+                }
+                assertEquals(index, myQAPQ.getAnswerIndex());
         }
 
         /**
@@ -103,7 +163,12 @@ class QuestionAnswerTest {
          */
         @Test
         void testClearUsed() {
-                fail("Not yet implemented"); // TODO
+                for (int i = 0; i < TESTS; i++) {
+                        myQA = new QuestionAnswer();
+                }
+                assertFalse(QuestionAnswer.getUSED().isEmpty(), "USED list was never filled up");
+                myQA.clearUsed();
+                assertTrue(QuestionAnswer.getUSED().isEmpty(),"USED list was never cleared"); 
         }
 
         /**
@@ -111,7 +176,11 @@ class QuestionAnswerTest {
          */
         @Test
         void testGetChoicesStr() {
-                fail("Not yet implemented"); // TODO
+                final String exp = "1) Bob\n"
+                                + "2) Bulbasaur\n"
+                                + "3) Smith\n"
+                                + "4) John\n";
+                assertEquals(exp, myQAPQ.getChoicesStr(), "Choices String not equal");
         }
 
 }
