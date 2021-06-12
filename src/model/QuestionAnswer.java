@@ -69,7 +69,6 @@ public class QuestionAnswer implements Serializable {
 	 * 
 	 */
 	public QuestionAnswer() {
-		// TODO Auto-generated constructor stub
 		myPokedex = Pokedex.getInstance();
 		myRand = new Random();
 		myChoices = new ArrayList<String>();
@@ -86,20 +85,15 @@ public class QuestionAnswer implements Serializable {
 	 * @param Pokemon that represents the question
 	 */
 	public QuestionAnswer(final Pokemon thePokemon) {
-		// TODO Auto-generated constructor stub
-		myPokedex = Pokedex.getInstance();
-		myRand = new Random();
-		myChoices = new ArrayList<String>();
-		myUpper = myPokedex.getCount();
+	        this();
 		myPokemon = thePokemon;
-		createMC();
 
 	}
 
 	/*
 	 * Create multiple choice answers
 	 */
-	public void createMC() {
+	private void createMC() {
 		fillChoices();
 		myAnswerIndex = myChoices.indexOf(this.getAnswer());
 	}
@@ -129,8 +123,7 @@ public class QuestionAnswer implements Serializable {
 	private String makeName() {
 		myUpper = myPokedex.getCount();
 		final int num = myRand.nextInt(myUpper) + 1;
-		// TODO Auto-generated method stub
-		String name = myPokedex.findPokemonName(num);
+		final String name = myPokedex.findPokemonName(num);
 		String formatName = AnswerFormatter.formatMultipleChoiceAnswer(name);
 		// check if the name was used
 		if (myChoices.contains(name) || myChoices.contains(formatName)) {
@@ -151,7 +144,7 @@ public class QuestionAnswer implements Serializable {
 		Pokemon poke;
 		try {
 			poke = myPokedex.findPokemon(num);
-		} catch (MissingPokemonException e) {
+		} catch (final MissingPokemonException e) {
 
 			poke = generatePokemonHelper();
 		}
@@ -244,6 +237,17 @@ public class QuestionAnswer implements Serializable {
 		}
 
 		return sb.toString();
+	}
+	
+	@Override
+        public String toString() {
+	        final StringBuilder sb = new StringBuilder();
+	        sb.append(getChoicesStr());
+	        sb.append(myAnswerIndex + "\n");
+	        sb.append(myPokemon.toString() + "\n");
+	        
+                return sb.toString();
+	        
 	}
 
 }

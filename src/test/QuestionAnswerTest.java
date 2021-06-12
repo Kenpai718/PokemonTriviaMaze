@@ -3,10 +3,17 @@
  */
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import exceptions.MissingPokemonException;
+import model.Pokedex;
+import model.Pokemon;
+import model.QuestionAnswer;
 
 /**
  * @author ajdow
@@ -14,11 +21,18 @@ import org.junit.jupiter.api.Test;
  */
 class QuestionAnswerTest {
 
+        private Pokedex myPokedex;
+        private QuestionAnswer myQA;
+        private QuestionAnswer myQAP;
+
         /**
          * @throws java.lang.Exception
          */
         @BeforeEach
         void setUp() throws Exception {
+                myPokedex = Pokedex.getInstance();
+                myQA = new QuestionAnswer();
+                myQAP = new QuestionAnswer(myPokedex.findPokemon(1));
         }
 
         /**
@@ -26,7 +40,7 @@ class QuestionAnswerTest {
          */
         @Test
         void testQuestionAnswer() {
-                fail("Not yet implemented"); // TODO
+                assertNotNull(myQA, "QA not initialized");
         }
 
         /**
@@ -34,31 +48,30 @@ class QuestionAnswerTest {
          */
         @Test
         void testQuestionAnswerPokemon() {
-                fail("Not yet implemented"); // TODO
+                assertNotNull(myQAP, "QA (Pokemon) not initialized");
         }
 
-        /**
-         * Test method for {@link model.QuestionAnswer#createMC()}.
-         */
-        @Test
-        void testCreateMC() {
-                fail("Not yet implemented"); // TODO
-        }
 
         /**
          * Test method for {@link model.QuestionAnswer#getAnswer()}.
+         * @throws MissingPokemonException 
          */
         @Test
-        void testGetAnswer() {
-                fail("Not yet implemented"); // TODO
+        void testGetAnswer() throws MissingPokemonException {
+                final Pokemon exp = myPokedex.findPokemon(1);
+                assertEquals(exp.getName(), myQAP.getAnswer(), "Get pokemon returned the wrong"
+                                + "one"); // TODO
         }
 
         /**
          * Test method for {@link model.QuestionAnswer#getPokemon()}.
+         * @throws MissingPokemonException 
          */
         @Test
-        void testGetPokemon() {
-                fail("Not yet implemented"); // TODO
+        void testGetPokemon() throws MissingPokemonException {
+                final Pokemon exp = myPokedex.findPokemon(1);
+                assertEquals(exp.getName(), myQAP.getPokemon().getName(), "Get pokemon returned the wrong"
+                                + "one");
         }
 
         /**
