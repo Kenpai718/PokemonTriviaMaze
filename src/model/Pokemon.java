@@ -22,9 +22,9 @@ import view.viewHelper.ImageUtility;
 
 public class Pokemon implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = -647364516676291280L;
 
 	/*
@@ -96,7 +96,7 @@ public class Pokemon implements Serializable {
 
 		try {
 			myPNG = readImage(myFileName);
-		} catch (MissingPokemonPictureException e) {
+		} catch (final MissingPokemonPictureException e) {
 			System.out.println(myName + " is missing a picture! Missingno will be used.");
 			myPNG = ImageUtility.readImage(MISSING);
 		}
@@ -160,7 +160,7 @@ public class Pokemon implements Serializable {
 		if (myPNG == null) {
 			try {
 				myPNG = readImage(myFileName);
-			} catch (MissingPokemonPictureException e) {
+			} catch (final MissingPokemonPictureException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -186,6 +186,9 @@ public class Pokemon implements Serializable {
 		return res;
 	}
 
+	/**
+	 * toString Method for a Pokemon, 00#PokemonName
+	 */
 	@Override
 	public String toString() {
 		return myID + myName;

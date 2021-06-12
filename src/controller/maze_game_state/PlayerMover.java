@@ -10,6 +10,7 @@ import model.Room;
  * everytime a player is moved.
  * 
  * @author Kenneth Ahrens
+ * @author AJ Downey
  *
  */
 public class PlayerMover {

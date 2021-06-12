@@ -22,16 +22,24 @@ import exceptions.InvalidMovementException;
 public class Maze implements Serializable {
 
 	/**
-	     * 
-	     */
+	 * The serialized ID for Serialization
+	 */
 	private static final long serialVersionUID = -1781677412081562393L;
 
 	/*
 	 * Constants
 	 */
+	
+	/* Default Row Size */
 	private final static int DEFAULT_ROWS = 5;
+	
+	/* Default Column Size */
 	private final static int DEFAULT_COLS = 5;
+	
+	/* The Start Position indicator */
 	private final static int START = 0;
+	
+	/* The Start Position */
 	private final static int[] STARTLOCATION = new int[] { START, START };
 	private int[] myWinLocation;
 
@@ -95,10 +103,9 @@ public class Maze implements Serializable {
 		myMatrix = fillRooms();
 		myPlayerLocation = STARTLOCATION;
 		myAttemptLocation = myPlayerLocation.clone();
-		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of
-																	// maze;
+		myWinLocation = new int[] { (myRows - 1), (myCols - 1) }; // end of maze;
+																	
 		myPokemonList = fillPokemonList();
-		// TODO: test stuff delete later
 		myMatrix[START][START].setPlayer(true); // put player location at 0,0
 		myWinCondition = false;
 		myLoseCondition = false;
@@ -126,7 +133,6 @@ public class Maze implements Serializable {
 	 * @return Room[][] matrix of instantiated rooms
 	 */
 	private Room[][] fillRooms() {
-	        // TODO Auto-generated method stub
 	        Room[][] res = new Room[myRows][myCols];
 	        ;
 	        if (myMatrix != null) {
@@ -226,7 +232,7 @@ public class Maze implements Serializable {
 		myAttemptLocation = myPlayerLocation.clone();
 	}
 
-	/*
+	/**
 	 * Return current room player is in
 	 */
 	public Room getCurrRoom() {
@@ -240,7 +246,7 @@ public class Maze implements Serializable {
 		return myMatrix[myAttemptLocation[0]][myAttemptLocation[1]];
 	}
 
-	/*
+	/**
 	 * Current location in maze the player is trying to move to
 	 */
 	public int[] getAttemptedLocation() {
@@ -315,7 +321,6 @@ public class Maze implements Serializable {
 	 * @return list of pokemon
 	 */
 	private ArrayList<Pokemon> fillPokemonList() {
-		// TODO Auto-generated method stub
 		final ArrayList<Pokemon> res = new ArrayList<>();
 		for (int i = 0; i < myRows; i++) {
 			for (int j = 0; j < myCols; j++) {
@@ -431,23 +436,5 @@ public class Maze implements Serializable {
 		instance.myCols = myCols;
 		return instance;
 	}
-
-//	// TODO: DELETE LATER
-//	// used to visually check which rooms are set to blocked
-//	// not sure why but when answering incorrect all rooms are blocked off
-//	public void printBlockedDebugger() {
-//		final StringBuilder sb = new StringBuilder();
-//		sb.append("What rooms are blocked?");
-//		for (int i = 0; i < myRows; i++) {
-//			sb.append("\n");
-//			for (int j = 0; j < myCols; j++) {
-//				final Room r = myMatrix[i][j];
-//				sb.append(r.getRoomName() + " " + r.canEnter() + ", ");
-//			}
-//		}
-//
-//		System.out.println(sb);
-//
-//	}
 
 }

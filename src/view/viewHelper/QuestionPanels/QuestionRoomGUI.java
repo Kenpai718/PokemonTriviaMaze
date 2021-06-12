@@ -4,36 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import model.Maze;
-import model.Room;
-import view.PokemonGUI;
 import view.PokemonPanel;
 import view.viewHelper.AbstractQuestionPanel;
 
@@ -66,12 +53,12 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	/*
 	 * Maze
 	 */
-	private Maze myMaze;
+	private final Maze myMaze;
 
 	/*
 	 * Panel that says "Who's that Pokemon?"
 	 */
-	private JPanel myTitlePanel;
+	private final JPanel myTitlePanel;
 	/*
 	 * Panel that holds multiple choice option
 	 */
@@ -80,7 +67,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	/*
 	 * Label that hols the title
 	 */
-	private JLabel myTitleLabel;
+	private final JLabel myTitleLabel;
 
 	/*
 	 * Multiple choice buttons
@@ -90,7 +77,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	/**
 	 * Create the panel.
 	 */
-	public QuestionRoomGUI(PokemonPanel thePP) {
+	public QuestionRoomGUI(final PokemonPanel thePP) {
 		super(thePP);
 		mySize = super.DEFAULT_DIM;
 		myChoiceSize = new Dimension(super.DEFAULT_WIDTH, CHOICE_HEIGHT);
@@ -113,7 +100,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
-	/*
+	/**
 	 * Initializes this JPanel settings
 	 */
 	@SuppressWarnings("static-access")
@@ -132,7 +119,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 * @return JTextPane formatted for text
 	 */
 	private JLabel makeQuestionLabel() {
-		JLabel lbl = new JLabel("Who's that Pokemon?", SwingConstants.CENTER);
+		final JLabel lbl = new JLabel("Who's that Pokemon?", SwingConstants.CENTER);
 		lbl.setRequestFocusEnabled(false);
 		lbl.setOpaque(false);
 		lbl.setFont(new Font("PKMN RBYGSC", Font.PLAIN, 19));
@@ -161,7 +148,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
-	/*
+	/**
 	 * Make the questions the panel uses
 	 */
 	@SuppressWarnings("static-access")
@@ -175,14 +162,14 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		myMCPanel.setLayout(new GridLayout(NUM_CHOICES, 1)); //to places buttons in order top to bot
 		
 		// Scrollpane in case the user can't see all choices
-		JScrollPane scrollPane = new JScrollPane(myMCPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		final JScrollPane scrollPane = new JScrollPane(myMCPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBounds(0, 0, super.DEFAULT_WIDTH, super.DEFAULT_HEIGHT);
 
 		//make buttons
 		for (int i = 1; i <= NUM_CHOICES; i++) {
-			char mnemonic = Character.forDigit(i, 10);
-			JRadioButton choice = buildButton(mnemonic);
+			final char mnemonic = Character.forDigit(i, 10);
+			final JRadioButton choice = buildButton(mnemonic);
 			myButtonGroup.add(choice);
 		}
 
@@ -226,7 +213,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		}
 	}
 
-	/*
+	/**
 	 * Set the color of the text after the user answers Green = correct, red =
 	 * incorrect
 	 */
@@ -234,7 +221,7 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
 		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
-		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
+		final int answerIndex = maze.getAttemptRoom().getAnswerIndex();
 		int i = 0;
 		while (buttons.hasMoreElements()) {
 			final JRadioButton temp = (JRadioButton) buttons.nextElement();
@@ -255,9 +242,9 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 		String userAns = "";
 		final Maze maze = Maze.getInstance();
 		final ArrayList<String> choices = maze.getAttemptRoom().getChoices();
-		int answerIndex = maze.getAttemptRoom().getAnswerIndex();
-		for (Enumeration<AbstractButton> buttons = myButtonGroup.getElements(); buttons.hasMoreElements();) {
-			AbstractButton button = buttons.nextElement();
+		final int answerIndex = maze.getAttemptRoom().getAnswerIndex();
+		for (final Enumeration<AbstractButton> buttons = myButtonGroup.getElements(); buttons.hasMoreElements();) {
+			final AbstractButton button = buttons.nextElement();
 			if (button.isSelected()) {
 				userAns = button.getText();
 			}
@@ -273,10 +260,10 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 	 * @boolean the state of buttons
 	 */
 	@Override
-	public void enableButtons(Boolean theBool) {
+	public void enableButtons(final Boolean theBool) {
 		final Enumeration<AbstractButton> buttons = myButtonGroup.getElements();
 		while (buttons.hasMoreElements()) {
-			JRadioButton temp = (JRadioButton) buttons.nextElement();
+			final JRadioButton temp = (JRadioButton) buttons.nextElement();
 			if (theBool) {
 				temp.setEnabled(true);
 			} else {
@@ -287,11 +274,21 @@ public class QuestionRoomGUI extends AbstractQuestionPanel {
 
 	}
 
-	// inner class called when user clicks an answer button
+	/**
+	 * inner class called when user clicks an answer button
+	 * 
+	 * @author Kenneth Ahrens
+         * @author AJ Downey
+         * @author Katlyn Malone
+         * @version Spring 2021
+	 */
 	class AnswerDisplay implements ActionListener {
 
+		/**
+		 * changes States of the GUI
+		 */
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			setButtonsAnswer();
 			answerPopUp();
 		}

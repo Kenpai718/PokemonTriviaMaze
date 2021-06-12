@@ -31,9 +31,9 @@ import exceptions.MissingPokemonException;
 
 public class Pokedex implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 1230447359362563837L;
 
 	/*
@@ -79,7 +79,7 @@ public class Pokedex implements Serializable {
 	 * Holds list of all pokemon added. Maninly used for the toString method.
 	 * Format: ID + " " + NAME + " " + GEN
 	 */
-	private ArrayList<String> myPokemonList;
+	private final ArrayList<String> myPokemonList;
 
 	/*
 	 * Generations that have been selected to play on
@@ -118,7 +118,7 @@ public class Pokedex implements Serializable {
 		myMissingPokemon = null;
 		try {
 			myMissingPokemon = new Pokemon("000", "MissingNo", 0);
-		} catch (Exception e1) {
+		} catch (final Exception e1) {
 			e1.printStackTrace();
 		}
 
@@ -137,7 +137,7 @@ public class Pokedex implements Serializable {
 
 	}
 
-	/*
+	/**
 	 * Singleton instantiation
 	 */
 	public static Pokedex getInstance() {
@@ -169,7 +169,7 @@ public class Pokedex implements Serializable {
 		final String databaseName = "Gen" + theNum + "Pokedex";
 
 		// make a new database if it does not exist
-		File database = new File(databaseName + ".db");
+		final File database = new File(databaseName + ".db");
 		if (!database.exists()) {
 			System.out.println(databaseName + "does not exist! Now making the database...");
 			SQLPokedexFiller.buildDatabase(databaseName, theNum);
@@ -240,7 +240,7 @@ public class Pokedex implements Serializable {
 		}
 	}
 
-	/*
+	/**
 	 * Add all gens to the pokedex
 	 * 
 	 */
@@ -297,7 +297,7 @@ public class Pokedex implements Serializable {
 		}
 	}
 
-	/*
+	/**
 	 * Restores pokedex map to default Map will only have gen 1 pokemon.
 	 * 
 	 */
@@ -396,9 +396,9 @@ public class Pokedex implements Serializable {
 			final ArrayList<String> info = myPokedex.get(theID);
 			try {
 				res = new Pokemon(info.get(0), info.get(1), Integer.parseInt(info.get(2)));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				e.printStackTrace();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		} else {
@@ -423,10 +423,10 @@ public class Pokedex implements Serializable {
 			final ArrayList<String> pokemonInfo = myPokedex.get(theID);
 			try {
 				res = new Pokemon(pokemonInfo.get(0), pokemonInfo.get(1), Integer.parseInt(pokemonInfo.get(2)));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				e.printStackTrace();
 				res = myMissingPokemon;
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 				res = myMissingPokemon;
 			}
@@ -457,12 +457,6 @@ public class Pokedex implements Serializable {
 		return res;
 	}
 
-	/*
-	 * private String getKeyByValue(final String theName) { // TODO Auto-generated
-	 * method stub String res = "000"; for (final Entry<String, String> entry :
-	 * myPokedex.entrySet()) { if (Objects.equals(theName, entry.getValue())) { res
-	 * = entry.getKey(); } } return res; }
-	 */
 
 	/**
 	 * Lookup pokemon based on name in map. If not found return false
@@ -524,8 +518,8 @@ public class Pokedex implements Serializable {
 	@Override
 	public String toString() {
 
-		StringBuilder sb = new StringBuilder();
-		String line = "-------------------------------------\n";
+		final StringBuilder sb = new StringBuilder();
+		final String line = "-------------------------------------\n";
 		String id;
 		String name;
 		String gen;
@@ -536,9 +530,9 @@ public class Pokedex implements Serializable {
 		// print each pokemon in order
 		Collections.sort(myPokemonList);
 		int count = 1;
-		for (String pkmn : myPokemonList) {
+		for (final String pkmn : myPokemonList) {
 			// in list they are separated by spaces
-			String[] info = pkmn.split(" ");
+			final String[] info = pkmn.split(" ");
 			id = info[0];
 			name = info[1];
 			gen = info[2];

@@ -160,7 +160,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/*
+	/**
 	 * Put listeners for important classes that should listen for changes in the
 	 * menubar
 	 */
@@ -378,49 +378,6 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	// /**
-	// * Sets up the gamemode menu for changing the gamemode
-	// */
-	// private void setupGamemodesMenu() {
-	//
-	// myGamemodes = new ButtonGroup();
-	// final JRadioButtonMenuItem choice = new JRadioButtonMenuItem("Multiple
-	// Choice");
-	// myGamemodeMenu.add(choice);
-	// myGamemodes.add(choice);
-	// choice.addActionListener(new ActionListener() {
-	//
-	// @Override
-	// public void actionPerformed(final ActionEvent e) {
-	// // System.out.println("action fired");
-	// // myPanel.setPanels(true);
-	// firePropertyChange("changegm", null, 1);
-	//
-	// }
-	//
-	// });
-	//
-	// final JRadioButtonMenuItem input = new JRadioButtonMenuItem("User
-	// Input");
-	// myGamemodeMenu.add(input);
-	// myGamemodes.add(input);
-	// input.addActionListener(new ActionListener() {
-	//
-	// @Override
-	// public void actionPerformed(final ActionEvent e) {
-	// // System.out.println("action fired");
-	// // myPanel.setPanels(false);
-	// firePropertyChange("changegm", null, 2);
-	//
-	// }
-	//
-	// });
-	//
-	// // set initial gamemodechoice
-	// choice.setSelected(true);
-	//
-	// }
-
 	/**
 	 * Setups DIFFICULTY_OPTIONS settings menu
 	 */
@@ -542,7 +499,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/*
+	/**
 	 * Update all the main menubar settings
 	 */
 	private void updateMenuBarSettings() {
@@ -551,7 +508,7 @@ public class PokemonMenuBar extends JMenuBar {
 
 	}
 
-	/*
+	/**
 	 * Update gen select menu
 	 */
 	private void updateGenSelect() {
@@ -572,7 +529,7 @@ public class PokemonMenuBar extends JMenuBar {
 		myPanel.refreshGUI();
 	}
 
-	/*
+	/**
 	 * Update DIFFICULTY_OPTIONS setting menu. Iterate through each button until it
 	 * finds the correct maze size stored in the tool tip
 	 */
@@ -604,16 +561,22 @@ public class PokemonMenuBar extends JMenuBar {
 	 * ----------------------------------------------------------------
 	 */
 
-	/*
+	/**
 	 * Save game state
 	 */
 	class SaveListener implements ActionListener {
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			doSave();
 		}
 
+		/**
+		 * 
+		 */
 		private void doSave() {
 			final JFileChooser fileChooser = new JFileChooser("Save") {
 				/**
@@ -700,12 +663,18 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class LoadListener implements ActionListener {
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			doLoad();
 
 		}
 
+		/**
+		 * 
+		 */
 		private void doLoad() {
 			final JFileChooser fileChooser = new JFileChooser("Load");
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Pokemon Trivia Maze Files", "maze"));
@@ -777,10 +746,23 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class DifficultySelectListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JRadioButton myBox;
+		/**
+		 * 
+		 */
 		private final String myName;
+		/**
+		 * 
+		 */
 		private final int myMazeSize;
 
+		/**
+		 * @param theNum
+		 * @param theBox
+		 */
 		public DifficultySelectListener(final int theNum, final JRadioButton theBox) {
 			myMazeSize = theNum;
 			myBox = theBox;
@@ -788,6 +770,9 @@ public class PokemonMenuBar extends JMenuBar {
 
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -811,16 +796,32 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class GenSelectListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JCheckBox myBox;
+		/**
+		 * 
+		 */
 		private final int myGen;
+		/**
+		 * 
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theNum
+		 * @param theBox
+		 */
 		public GenSelectListener(final int theNum, final JCheckBox theBox) {
 			myGen = theNum;
 			myBox = theBox;
 			myMsg = "";
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 			// TODO Auto-generated method stub
@@ -879,20 +880,32 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class GenSelectAllListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JMenuItem myChangeButton;
 		/*
 		 * If user has clicked this button once to add all pokemon
 		 */
 		private boolean myStateChange;
 
+		/**
+		 * 
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theChangeButton
+		 */
 		public GenSelectAllListener(final JMenuItem theChangeButton) {
 			myChangeButton = theChangeButton;
 			myStateChange = false;
 			myMsg = "";
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -966,20 +979,35 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class MegaSelectListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JCheckBox myChangeButton;
 		/*
 		 * If user has clicked this button once to add all pokemon
 		 */
+		/**
+		 * 
+		 */
 		private boolean myStateChange;
 
+		/**
+		 * 
+		 */
 		private String myMsg;
 
+		/**
+		 * @param theChangeButton
+		 */
 		public MegaSelectListener(final JCheckBox theChangeButton) {
 			myChangeButton = theChangeButton;
 			myStateChange = false;
 			myMsg = "";
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -1263,15 +1291,28 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class SongSelectListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JRadioButton myBox;
+		/**
+		 * 
+		 */
 		private final String myName;
 
+		/**
+		 * @param theBox
+		 * @param theSongName
+		 */
 		public SongSelectListener(final JRadioButton theBox, final String theSongName) {
 			myBox = theBox;
 			myName = theSongName;
 
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 
@@ -1289,18 +1330,27 @@ public class PokemonMenuBar extends JMenuBar {
 	 */
 	class MuteSongListener implements ActionListener {
 
+		/**
+		 * 
+		 */
 		private final JMenuItem myBox;
 		/*
 		 * false = not muted, true = muted
 		 */
 		private boolean myChange;
 
+		/**
+		 * @param theBox
+		 */
 		public MuteSongListener(final JMenuItem theBox) {
 			myBox = theBox;
 			myChange = false;
 
 		}
 
+		/**
+		 *
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent e) {
 

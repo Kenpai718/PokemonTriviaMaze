@@ -19,9 +19,9 @@ import exceptions.MissingPokemonException;
 
 public class QuestionAnswer implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 6521846190481286645L;
 
 	/*
@@ -33,8 +33,6 @@ public class QuestionAnswer implements Serializable {
 	 * Static list shared to prevent duplicate Pokemon in rooms
 	 */
 	private static List<String> USED = new ArrayList<String>();
-
-	
 
         /*
 	 * Question/answer pokemon
@@ -94,7 +92,8 @@ public class QuestionAnswer implements Serializable {
 	}
 	
 	/**
-         * Manually add a pokemon, and the questions for a question
+         * Manually add a pokemon, and the questions for a question.
+         * Mostly used for unit Testing
          * 
          * @param Pokemon that represents the question
          */
@@ -106,7 +105,7 @@ public class QuestionAnswer implements Serializable {
         }
 	
 
-	/*
+	/**
 	 * Create multiple choice answers
 	 */
 	private void createMC() {
@@ -225,6 +224,7 @@ public class QuestionAnswer implements Serializable {
 	}
 
 	/**
+	 * Returns the Index of the answer in the Choices list
 	 * 
 	 * @return index of the answer to this multiple choice question
 	 */

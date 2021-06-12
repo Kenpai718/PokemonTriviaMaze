@@ -128,7 +128,6 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	/**
 	 * Constructor that create the maze visual
 	 */
-
 	public MazeGUI() {
 		// initialize fields
 		myMaze = Maze.getInstance();
@@ -147,7 +146,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	}
 
-	/*
+	/**
 	 * Setup the gui for this jpanel
 	 */
 	private void prepareGUI() {
@@ -162,7 +161,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	}
 
-	/*
+	/**
 	 * Setup jtable visual of the maze Using Custom TableModel to correctly
 	 * refresh the table when changes are made
 	 */
@@ -211,6 +210,12 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 
 	// inner class that creates a custom implementation of AbstractTableModel
 	// for the maze
+	/**
+	 * Inner class that creates a custom implementation of AbstractTableModel
+         * for the maze
+	 * 
+	 * @author AJ Downey
+	 */
 	public class MazeModel extends AbstractTableModel {
 
 		/** Serial Version ID */
@@ -219,7 +224,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		private Object[][] myData = myMatrix;
 
 		/**
-		 *
+		 * Gets Row count of Data
 		 */
 		@Override
 		public int getRowCount() {
@@ -228,7 +233,7 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		}
 
 		/**
-		 *
+		 * Gets Col count of Data
 		 */
 		@Override
 		public int getColumnCount() {
@@ -237,24 +242,26 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 		}
 
 		/**
-		 *
+		 * Gets value at Position, theRowIndex, Col index
 		 */
 		@Override
-		public Object getValueAt(final int rowIndex, final int columnIndex) {
-			return myData[rowIndex][columnIndex];
+		public Object getValueAt(final int theRowIndex, final int theColumnIndex) {
+			return myData[theRowIndex][theColumnIndex];
 		}
 
 		/**
 		 *
 		 */
 		@Override
-		public void setValueAt(final Object theRoom, final int rowIndex,
-				final int columnIndex) {
-			myData[rowIndex][columnIndex] = theRoom;
-			fireTableCellUpdated(rowIndex, columnIndex);
+		public void setValueAt(final Object theRoom, final int theRowIndex,
+				final int theColumnIndex) {
+			myData[theRowIndex][theColumnIndex] = theRoom;
+			fireTableCellUpdated(theRowIndex, theColumnIndex);
 		}
 
 		/**
+		 * Custom method for Model, does the refresh of the Maze with a new Matrix
+		 *  
 		 * @param theUpdate
 		 */
 		public void refresh(final Object[][] theUpdate) {
@@ -283,9 +290,9 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	 */
 	class Renderer extends DefaultTableCellRenderer {
 
-		/**
-		         * 
-		         */
+	        /**
+	         * The serialized ID for Serialization
+	         */
 		private static final long serialVersionUID = -2696460913971414868L;
 
 		/*
@@ -438,6 +445,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
+	 * Returns the JTable of the Maze
+	 * 
 	 * @return jtable
 	 */
 	public JTable getTable() {
@@ -445,6 +454,8 @@ public class MazeGUI extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
+	 * Returns the Row size, Pixel height to display correctly
+	 * 
 	 * @return size to scale for based on the matrix length
 	 */
 	private int getRowSize() {

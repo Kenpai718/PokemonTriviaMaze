@@ -1,10 +1,15 @@
 package sound;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 /**
@@ -42,6 +47,10 @@ public class BackgroundMusic {
 	 */
 	public static BackgroundMusic mySinglePlayer = null;
 	
+	/**
+	 * Constructor that initiailizes the song list and builds it. Private for Singleton
+	 * Pattern
+	 */
 	private BackgroundMusic() {
 		mySongList = new ArrayList<String>();
 		fillSongList();
@@ -52,15 +61,13 @@ public class BackgroundMusic {
 	 * Fill song list based on what songs are in the music folder
 	 */
 	private void fillSongList() {
-		File folder = new File(MUSIC_FOLDER);
+		final File folder = new File(MUSIC_FOLDER);
 		for (final File fileEntry : folder.listFiles()) {
-			String fileName = fileEntry.getName();
+			final String fileName = fileEntry.getName();
 			//only add .wav songs
 			if(fileName.endsWith(".wav")) {
 				mySongList.add(fileName);
 			}
-			
-
 		}
 	}
 	
@@ -81,26 +88,26 @@ public class BackgroundMusic {
 	 * @param theSongName
 	 * @return
 	 */
-	private void setMusic(String theSongName) {
+	private void setMusic(final String theSongName) {
 		Clip clip = null;
 		try {
 			// Open an audio input stream.
-			String filePath = "./music/" + theSongName;
-			File soundFile = new File(filePath);
-			AudioInputStream audioIn = AudioSystem
+			final String filePath = "./music/" + theSongName;
+			final File soundFile = new File(filePath);
+			final AudioInputStream audioIn = AudioSystem
 					.getAudioInputStream(soundFile);
 			// Get a sound clip resource.
 			clip = AudioSystem.getClip();
 			// Open audio clip and load samples from the audio input stream.
 			clip.open(audioIn);
-			FloatControl gainControl = (FloatControl) clip
+			final FloatControl gainControl = (FloatControl) clip
 					.getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-20.0f);
-		} catch (UnsupportedAudioFileException e) {
+		} catch (final UnsupportedAudioFileException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
-		} catch (LineUnavailableException e) {
+		} catch (final LineUnavailableException e) {
 			e.printStackTrace();
 		}
 

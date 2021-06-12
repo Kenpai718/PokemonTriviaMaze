@@ -7,13 +7,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import exceptions.InvalidMovementException;
 import model.Maze;
 import view.PokemonPanel;
-import view.viewHelper.LabelPanel;
 
 /**
  * Controls player movement in the maze
@@ -52,6 +50,9 @@ public abstract class AbstractMovementAction extends AbstractAction {
 		myPanel = thePanel;
 	}
 
+	/**
+	 * Does nothing, since the child classes are handling it
+	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -77,7 +78,7 @@ public abstract class AbstractMovementAction extends AbstractAction {
                         if (myMaze.getAttemptRoom().hasVisited()) {
                         	myMaze.setPlayerLocation(newPos);
                         }
-                } catch (InvalidMovementException e) {
+                } catch (final InvalidMovementException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                 }
@@ -104,6 +105,11 @@ public abstract class AbstractMovementAction extends AbstractAction {
 	 */
 	public abstract KeyStroke getMovementKey();
 
+	/**
+	 * Returns the name of the action
+	 * 
+	 * @return the name of the action
+	 */
 	public abstract String getName();
 
 }

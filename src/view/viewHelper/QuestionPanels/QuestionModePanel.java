@@ -1,23 +1,20 @@
 package view.viewHelper.QuestionPanels;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import model.Maze;
-import view.PokemonPanel;
-import view.viewHelper.AbstractQuestionPanel;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import model.Maze;
+import view.PokemonPanel;
+import view.viewHelper.AbstractQuestionPanel;
 
 /**
  * Holds all the panels that the user interacts with to answer questions. Allows
@@ -81,8 +78,8 @@ public class QuestionModePanel extends JPanel {
 	/*
 	 * Buttons to switch gamemodes on the panel
 	 */
-	private JButton myTextSwitch;
-	private JButton myMCSwitch;
+	private final JButton myTextSwitch;
+	private final JButton myMCSwitch;
 
 	/*
 	 * Keeps track of which gamemode is being used
@@ -187,7 +184,7 @@ public class QuestionModePanel extends JPanel {
 	 * @return formatted container jpanel
 	 */
 	private JPanel buildContainer() {
-		JPanel aPanel = new JPanel();
+		final JPanel aPanel = new JPanel();
 		aPanel.setPreferredSize(SIZE);
 		aPanel.setLayout(new BorderLayout());
 		aPanel.setLayout(new BorderLayout());
@@ -221,7 +218,7 @@ public class QuestionModePanel extends JPanel {
 
 	}
 
-	/*
+	/**
 	 * Shows the tutorial panel, but dont set it as a gamemode because it is not
 	 * one
 	 */
@@ -229,14 +226,14 @@ public class QuestionModePanel extends JPanel {
 		C1.show(myFullContainer, "0");
 	}
 
-	/*
+	/**
 	 * Switch the panel to whatever the current gamemode is set to
 	 */
 	public void setCurrentGamemode() {
 		C1.show(myFullContainer, String.valueOf(myGamemode));
 	}
 
-	/*
+	/**
 	 * Updates all the question panels
 	 */
 	public void updateQP() {
@@ -263,7 +260,7 @@ public class QuestionModePanel extends JPanel {
 
 	}
 	
-	/*
+	/**
 	 * Add listeners to the pokemon panel for the gamemode panels
 	 */
 	private void addListenersToPokemonPanel() {
@@ -272,7 +269,7 @@ public class QuestionModePanel extends JPanel {
 
 	}
 	
-	/*
+	/**
 	 * Inner classes
 	 */
 

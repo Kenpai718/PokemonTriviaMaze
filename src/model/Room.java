@@ -14,9 +14,9 @@ import java.io.Serializable;
 
 public class Room extends QuestionAnswer implements Serializable {
 
-	/**
-	     * 
-	     */
+        /**
+         * The serialized ID for Serialization
+         */
 	private static final long serialVersionUID = 575983420176798332L;
 
 	/*
@@ -60,7 +60,7 @@ public class Room extends QuestionAnswer implements Serializable {
 		hasPlayer = false;
 		myVisit = false;
 	}
-
+	// TODO: KEN CHECK THIS!!!!
 //	/**
 //	 * Manually add a pokemon to the room
 //	 * 
@@ -143,6 +143,9 @@ public class Room extends QuestionAnswer implements Serializable {
 		return myRoomName;
 	}
 
+	/**
+	 * Room roString, just the Name -> "##"
+	 */
 	@Override
 	public String toString() {
 		return "" + myRoomName;
