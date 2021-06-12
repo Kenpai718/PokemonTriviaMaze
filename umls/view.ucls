@@ -2,489 +2,422 @@
 <class-diagram version="1.2.4" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="view.PokemonMenuBar.DifficultySelectListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="222" x="2590" y="1143"/>    
+  <class id="1" language="java" name="view.viewHelper.QuestionPanels.QuestionModePanel.TextPanelListener" 
+    project="TriviaMaze" file="/TriviaMaze/src/view/viewHelper/QuestionPanels/QuestionModePanel.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="276" y="500"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="view.PokemonMenuBar.GenSelectAllListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="171" width="194" x="1356" y="1143"/>    
+  <class id="2" language="java" name="view.viewHelper.ControlPanel" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/ControlPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="423" width="274" x="275" y="2807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="view.PokemonGUI" project="TriviaMaze" file="/TriviaMaze/src/view/PokemonGUI.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="243" width="155" x="1005" y="37"/>    
+  <class id="3" language="java" name="view.viewHelper.MazeGUI.Renderer" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/MazeGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="421" x="1016" y="3432"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="view.PokemonPanel" project="TriviaMaze" 
+  <class id="4" language="java" name="view.Win_Lose.AbstractWinLosePane" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/Win_Lose/AbstractWinLosePane.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="211" x="280" y="1341"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="view.viewHelper.QuestionPanels.QuestionModePanel.MCPanelListener" 
+    project="TriviaMaze" file="/TriviaMaze/src/view/viewHelper/QuestionPanels/QuestionModePanel.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="42" y="500"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="view.PokemonPanel" project="TriviaMaze" 
     file="/TriviaMaze/src/view/PokemonPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="981" width="240" x="807" y="1570"/>    
+    <position height="945" width="240" x="781" y="1822"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="view.PokemonMenuBar.LoadListener" project="TriviaMaze" 
+  <class id="7" language="java" name="view.Win_Lose.LosePane" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/Win_Lose/LosePane.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="151" x="155" y="1822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="view.PokemonGUI" project="TriviaMaze" file="/TriviaMaze/src/view/PokemonGUI.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="160" x="1277" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="view.PokemonMenuBar" project="TriviaMaze" 
     file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="233" x="2083" y="1143"/>    
+    <position height="801" width="213" x="1043" y="500"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="view.PokemonMenuBar.TeleportListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="117" width="194" x="2356" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="view.PokemonMenuBar.GenSelectListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="194" x="2852" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="view.PokemonMenuBar.SaveListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="209" x="1107" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="9" language="java" name="view.PokemonMenuBar.ResetListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="194" x="1849" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="view.PokemonMenuBar" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="603" width="213" x="1590" y="500"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="11" language="java" name="view.PokemonMenuBar.InsertListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/PokemonMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="243" width="219" x="1590" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="12" language="java" name="view.viewHelper.ControlPanel" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/ControlPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="387" width="240" x="1087" y="2591"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="13" language="java" name="view.viewHelper.MazeGUI.Renderer" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/MazeGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="421" x="976" y="3234"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="14" language="java" name="view.viewHelper.TutorialPanel" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/TutorialPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="243" width="178" x="868" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="15" language="java" name="view.viewHelper.TextRoomGUI.EnterListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/TextRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="160" x="598" y="1570"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="16" language="java" name="view.viewHelper.LabelPanel" project="TriviaMaze" 
+  <class id="10" language="java" name="view.viewHelper.LabelPanel" project="TriviaMaze" 
     file="/TriviaMaze/src/view/viewHelper/LabelPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="197" x="549" y="2591"/>    
+    <position height="369" width="197" x="589" y="2807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="view.viewHelper.QuestionModePanel" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/QuestionModePanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="423" width="200" x="765" y="37"/>    
+  <class id="11" language="java" name="view.viewHelper.QuestionPanels.TutorialPanel" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/QuestionPanels/TutorialPanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="178" x="1057" y="1341"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="view.viewHelper.TextRoomGUI" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/TextRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="167" x="598" y="1143"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="19" language="java" name="view.viewHelper.QuestionRoomGUI.AnswerDisplay" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/QuestionRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="194" x="347" y="1570"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="20" language="java" name="view.viewHelper.AbstractQuestionPanel" project="TriviaMaze" 
+  <class id="12" language="java" name="view.viewHelper.AbstractQuestionPanel" project="TriviaMaze" 
     file="/TriviaMaze/src/view/viewHelper/AbstractQuestionPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="225" width="214" x="530" y="500"/>    
+    <position height="279" width="214" x="531" y="500"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="21" language="java" name="view.viewHelper.QuestionModePanel.TextPanelListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/QuestionModePanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="194" x="41" y="500"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="22" language="java" name="view.viewHelper.MazeGUI.MazeModel" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/MazeGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="615" y="3086"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="23" language="java" name="view.viewHelper.ControlPanel.HoverListener" project="TriviaMaze" 
+  <class id="13" language="java" name="view.viewHelper.ControlPanel.UserMouseListener" project="TriviaMaze" 
     file="/TriviaMaze/src/view/viewHelper/ControlPanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="189" width="185" x="1437" y="3234"/>    
+    <position height="207" width="188" x="275" y="3432"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="24" language="java" name="view.viewHelper.MazeGUI" project="TriviaMaze" 
+  <class id="14" language="java" name="view.viewHelper.QuestionPanels.TextRoomGUI.EnterListener" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/QuestionPanels/TextRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="160" x="531" y="1822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="view.viewHelper.QuestionPanels.QuestionRoomGUI" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/QuestionPanels/QuestionRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="441" width="190" x="827" y="1341"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="view.viewHelper.MazeGUI.MazeModel" project="TriviaMaze" 
     file="/TriviaMaze/src/view/viewHelper/MazeGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="603" width="240" x="807" y="2591"/>    
+    <position height="207" width="169" x="807" y="3432"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="25" language="java" name="view.viewHelper.QuestionRoomGUI" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/QuestionRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="387" width="190" x="347" y="1143"/>    
+  <class id="17" language="java" name="view.viewHelper.MazeGUI" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/MazeGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="585" width="240" x="847" y="2807"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="26" language="java" name="view.viewHelper.QuestionModePanel.MCPanelListener" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/QuestionModePanel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="194" x="275" y="500"/>    
+  <class id="18" language="java" name="view.viewHelper.QuestionPanels.QuestionModePanel" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/QuestionPanels/QuestionModePanel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="423" width="200" x="766" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="27" language="java" name="view.viewHelper.BrightnessUtility" project="TriviaMaze" 
-    file="/TriviaMaze/src/view/viewHelper/BrightnessUtility.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="135" width="195" x="285" y="37"/>    
+  <class id="19" language="java" name="view.Win_Lose.WinPane" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/Win_Lose/WinPane.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="145" x="346" y="1822"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <generalization id="28">    
-    <end type="SOURCE" refId="25"/>    
-    <end type="TARGET" refId="20"/>  
-  </generalization>  
-  <association id="29">    
-    <end type="SOURCE" refId="24" navigable="false">      
-      <attribute id="30" name="myModel"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
+  <class id="20" language="java" name="view.viewHelper.QuestionPanels.QuestionRoomGUI.AnswerDisplay" 
+    project="TriviaMaze" file="/TriviaMaze/src/view/viewHelper/QuestionPanels/QuestionRoomGUI.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="1061" y="1822"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="view.viewHelper.QuestionPanels.TextRoomGUI" project="TriviaMaze" 
+    file="/TriviaMaze/src/view/viewHelper/QuestionPanels/TextRoomGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="168" x="531" y="1341"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="22">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="23" name="myControlPanel"/>      
+      <multiplicity id="24" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="32">    
-    <bendpoint x="858" y="500"/>    
-    <bendpoint x="837" y="1143"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="33" name="myPanel"/>      
-      <multiplicity id="34" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="36" name="myLabelPanel"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="38">    
-    <end type="SOURCE" refId="24"/>    
-    <end type="TARGET" refId="22"/>  
-  </nesting>  
-  <nesting id="39">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <nesting id="40">    
-    <end type="SOURCE" refId="25"/>    
-    <end type="TARGET" refId="19"/>  
-  </nesting>  
-  <association id="41">    
+  <association id="25">    
     <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="42" name="myQuestionPanels"/>      
-      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
+      <attribute id="26" name="myRenderer"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="44">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="1"/>  
-  </nesting>  
-  <association id="45">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="46" name="myMazeGUI"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
+  <association id="28">    
+    <bendpoint x="1265" y="1341"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="29" name="myPanel"/>      
+      <multiplicity id="30" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="49" name="myTutorial"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="51">    
-    <bendpoint x="776" y="2591"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="52" name="myMazeModel"/>      
-      <multiplicity id="53" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="54">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="55" name="myPanel"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="57">    
-    <bendpoint x="816" y="1143"/>    
-    <bendpoint x="816" y="500"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="58" name="myQuestPanels"/>      
-      <multiplicity id="59" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="60">    
-    <bendpoint x="837" y="500"/>    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="61" name="myTP"/>      
-      <multiplicity id="62" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="63">    
-    <bendpoint x="774" y="500"/>    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="64" name="myTR"/>      
-      <multiplicity id="65" minimum="0" maximum="1"/>    
+  <association id="31">    
+    <bendpoint x="796" y="1341"/>    
+    <bendpoint x="796" y="500"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="32" name="myQuestPanels"/>      
+      <multiplicity id="33" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="66">    
-    <end type="SOURCE" refId="24"/>    
+  <association id="34">    
+    <bendpoint x="1286" y="500"/>    
+    <bendpoint x="1286" y="1341"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="35" name="myPanel"/>      
+      <multiplicity id="36" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="37">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="38" name="myPP"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="40">    
+    <bendpoint x="729" y="1341"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="41" name="myPP"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="43">    
+    <bendpoint x="817" y="500"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="44" name="myMC"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="46">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <nesting id="47">    
+    <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="13"/>  
   </nesting>  
-  <nesting id="67">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="26"/>  
+  <generalization id="48">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <nesting id="49">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="5"/>  
   </nesting>  
-  <association id="68">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="69" name="myControlPanel"/>      
-      <multiplicity id="70" minimum="0" maximum="1"/>    
+  <association id="50">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="51" name="myMB"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <bendpoint x="500" y="500"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="54" name="myTR"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <bendpoint x="920" y="500"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="57" name="myTP"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="59">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="20"/>  
+  </nesting>  
+  <association id="60">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="61" name="myPanel"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="64" name="myQuestionPanels"/>      
+      <multiplicity id="65" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="71">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="8"/>  
+  <nesting id="66">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="14"/>  
   </nesting>  
-  <nesting id="72">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="9"/>  
-  </nesting>  
-  <association id="73">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="74" name="myPP"/>      
-      <multiplicity id="75" minimum="0" maximum="1"/>    
+  <association id="67">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="68" name="myPanel"/>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="76">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="77" name="myPanel"/>      
-      <multiplicity id="78" minimum="0" maximum="1"/>    
+  <association id="70">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="71" name="myMazeGUI"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="79">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </nesting>  
-  <association id="80">    
-    <bendpoint x="795" y="500"/>    
-    <bendpoint x="795" y="1143"/>    
+  <generalization id="73">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <association id="74">    
     <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="81" name="myPP"/>      
+      <attribute id="75" name="myModel"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="77">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="78" name="myTutorial"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="80">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="81" name="myPanel"/>      
       <multiplicity id="82" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="83">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="21"/>  
-  </nesting>  
+  <generalization id="83">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
   <association id="84">    
-    <bendpoint x="499" y="500"/>    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="85" name="myMC"/>      
+    <bendpoint x="816" y="2807"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="85" name="myMazeModel"/>      
       <multiplicity id="86" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="25" navigable="true"/>    
+    <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="87">    
-    <bendpoint x="567" y="1143"/>    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="88" name="myPP"/>      
-      <multiplicity id="89" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="90">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="23"/>  
+  <nesting id="87">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="1"/>  
   </nesting>  
-  <association id="91">    
-    <bendpoint x="1076" y="1143"/>    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="92" name="myPanel"/>      
-      <multiplicity id="93" minimum="0" maximum="1"/>    
+  <association id="88">    
+    <bendpoint x="775" y="500"/>    
+    <bendpoint x="775" y="1341"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="89" name="myPP"/>      
+      <multiplicity id="90" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="94">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="95" name="myMB"/>      
-      <multiplicity id="96" minimum="0" maximum="1"/>    
+  <nesting id="91">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <generalization id="92">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <association id="93">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="94" name="myLabelPanel"/>      
+      <multiplicity id="95" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="97">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="5"/>  
-  </nesting>  
-  <association id="98">    
-    <end type="SOURCE" refId="24" navigable="false">      
-      <attribute id="99" name="myRenderer"/>      
-      <multiplicity id="100" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="101">    
-    <end type="SOURCE" refId="18"/>    
-    <end type="TARGET" refId="20"/>  
-  </generalization>  
-  <nesting id="102">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="6"/>  
-  </nesting>  
-  <nesting id="103">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="11"/>  
-  </nesting>  
-  <nesting id="104">    
-    <end type="SOURCE" refId="18"/>    
-    <end type="TARGET" refId="15"/>  
-  </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
