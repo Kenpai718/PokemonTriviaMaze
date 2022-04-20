@@ -35,14 +35,8 @@ having a smaller size will break the visuals or make it unplayable!
 **How to run/install the game:**
 
 *Option 1 Steps:* **(PREFERRED METHOD)**
-1) Download the source code .zip from the main branch of this github repository: https://github.com/Grandalfy/TriviaMaze/
-2) Unzip the .zip project file to somewhere on your machine
-3) [Download the corresponding "installer.zip" for this version](https://drive.google.com/drive/folders/1GLWMmvT_H0PknEwhKPYHoRAeGjuu27yb?usp=sharing). Generally just download the latest installer support files. These will provide an executable ".jar" and a "setup.exe" to run/install the game.
-4) Unzip the installer files to somewhere on your machine
-5) [Please refer to the "Installation Help" document on the Google Drive for indepth instructions on the setup](https://docs.google.com/document/d/1Ps-t6R_rHC3YxM7ygBJ0UWUg0g89DyYjojQx-0WHPhM/edit?usp=sharing)
-6) Drag and drop contents of "installer" folder from the Google Drive into your local Trivia Maze project source folder
-7) You can also install the game to your machine from the installation folder. Read "HowToInstall.txt" for more info
-8) Or run the "Pokemon Trivia Maze.jar" or "RunGame.bat" to launch the game without an IDE
+1) Navigate to the releases/tags on the GitHub repo and download the latest installer.
+2) Run the installer and follow the steps to install and launch the software
 
 *Option 2 Steps:* (For developers)
 1) Download and import this project to a Java IDE like Eclipse
